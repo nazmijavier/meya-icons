@@ -10,6 +10,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const rel = (...p) => path.join(root, ...p);
 const VERSION = JSON.parse(fs.readFileSync(rel("package.json"), "utf8")).version.replace(/\.0$/, "");
 const REPO = "https://github.com/nazmijavier/meya-icons";
+const SITE = "https://icons.meyalab.com";
 // The sponsor page is finished but not open yet: flip this to true to publish docs/sponsor.html.
 const PUBLISH_SPONSOR_PAGE = false;
 
@@ -108,7 +109,7 @@ fs.writeFileSync(
   rel("docs/pixel.html"),
   `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n${pixel.slice(0, pSplit).replaceAll("__SITE__", "./")}\n</head>\n<body>\n${pixel.slice(pSplit).trim().replaceAll("__SITE__", "./")}\n</body>\n</html>\n`
 );
-if (process.argv[3]) fs.writeFileSync(process.argv[3], pixel.replaceAll("__SITE__", "https://nazmijavier.github.io/meya-icons/"));
+if (process.argv[3]) fs.writeFileSync(process.argv[3], pixel.replaceAll("__SITE__", SITE + "/"));
 
 if (PUBLISH_SPONSOR_PAGE) {
   // ---------- Sponsor page (docs/sponsor.html) ----------
