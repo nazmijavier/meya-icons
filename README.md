@@ -11,7 +11,7 @@ Meya Icons is a free, open-source set of <!--count-->572<!--/count--> icons draw
 [![Version](https://img.shields.io/badge/version-1.0-1BA4FF?style=flat-square)](https://github.com/nazmijavier/meya-icons/releases)
 [![License](https://img.shields.io/badge/license-MIT-737373?style=flat-square)](./LICENSE)
 
-**[Browse and copy the icons](https://nazmijavier.github.io/meya-icons/)** · **[Figma plugin](#figma-plugin)** · **[Hire Meya Lab](https://meyalab.com/contact)**
+**[Browse and copy the icons](https://nazmijavier.github.io/meya-icons/)** · **[Hire Meya Lab](https://meyalab.com/contact)**
 
 <!--previews-->
 <picture>
@@ -42,7 +42,6 @@ Every style uses `currentColor`. Duotone tints use `fill-opacity`, so both tones
 ## Get the icons
 
 - **Copy one icon.** Open the [website](https://nazmijavier.github.io/meya-icons/), choose a style, search, pick an icon, and copy it as SVG or as a React component. You can change the stroke width and size before you copy.
-- **Use them in Figma.** Load the [Figma plugin](#figma-plugin) and place icons straight onto the canvas.
 
 ## Usage
 
@@ -73,20 +72,6 @@ import HomeIcon from "./icons/home.svg?react";
 ### Figma
 
 Drag any SVG from [`icons/`](./icons) onto the canvas. Strokes and tints stay editable.
-
-## Figma plugin
-
-[`figma-plugin/`](./figma-plugin) is a Figma plugin for dropping Meya Icons straight onto the canvas. It runs offline — every icon is bundled inside it — and works in Figma, FigJam and Slides.
-
-- Search by name or category, and switch between styles
-- Click to place an icon, or drag it onto the canvas
-- Set the size (16–48), stroke width and color before you insert
-- Select a Meya icon on the canvas to swap it for another one, keeping its position and layer order
-- Layers are named `meya/<style>/<category>/<name>`
-
-**To install it**, in Figma desktop: **Plugins → Development → Import plugin from manifest…**, then pick `figma-plugin/manifest.json` from this repository.
-
-Run `node scripts/build.mjs` after changing icons to refresh the plugin's copy of them.
 
 ## Design specs
 
