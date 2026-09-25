@@ -76,15 +76,22 @@ fs.writeFileSync(
 );
 if (process.argv[2]) fs.writeFileSync(process.argv[2], fragment);
 
-// ---------- Figma plugin UI (figma-plugin/ui.html) ----------
-// Same icon data as the site; the plugin runs offline, so everything is inlined.
-const figmaUi = fs
-  .readFileSync(rel("site/figma.html"), "utf8")
-  .replace("/*__DATA__*/", `window.MEYA=${JSON.stringify({ categories, styles, icons: siteIcons })};`);
-fs.writeFileSync(
-  rel("figma-plugin/ui.html"),
-  `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n${figmaUi.slice(0, figmaUi.indexOf("</style>") + 8)}\n</head>\n<body>\n${figmaUi.slice(figmaUi.indexOf("</style>") + 8).trim()}\n</body>\n</html>\n`
-);
+// ---------- Figma plugin UI (kept outside this repo) ----------
+// The plugin lives in ../meya-icons-pro/figma-plugin, so this step is skipped when it is not there.
+const pluginDir = rel("../meya-icons-pro/figma-plugin");
+const pluginTpl = path.join(pluginDir, "ui-template.html");
+let builtPlugin = false;
+if (fs.existsSync(pluginTpl)) {
+  const figmaUi = fs
+    .readFileSync(pluginTpl, "utf8")
+    .replace("/*__DATA__*/", `window.MEYA=${JSON.stringify({ categories, styles, icons: siteIcons })};`);
+  const at = figmaUi.indexOf("</style>") + 8;
+  fs.writeFileSync(
+    path.join(pluginDir, "ui.html"),
+    `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n${figmaUi.slice(0, at)}\n</head>\n<body>\n${figmaUi.slice(at).trim()}\n</body>\n</html>\n`
+  );
+  builtPlugin = true;
+}
 
 // ---------- Pixel Lab (docs/pixel.html) ----------
 // Converts Outline icons to pixel-grid icons in the browser. Keeps real stroke widths.
@@ -172,4 +179,4 @@ if (fs.existsSync(readmePath)) {
   fs.writeFileSync(readmePath, md);
 }
 
-console.log(`Built ${total} icons + Figma plugin UI (${styles.map((st) => `${st.label} ${st.count}`).join(", ")}) in ${categories.length} categories → docs/index.html (${(fragment.length / 1024).toFixed(0)} KB), README assets updated.`);
+console.log(`Built ${total} icons${builtPlugin ? " + Figma plugin UI" : ""} (${styles.map((st) => `${st.label} ${st.count}`).join(", ")}) in ${categories.length} categories → docs/index.html (${(fragment.length / 1024).toFixed(0)} KB), README assets updated.`);
