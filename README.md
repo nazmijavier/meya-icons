@@ -43,6 +43,12 @@ Every style uses `currentColor`. Duotone tints use `fill-opacity`, so both tones
 
 - **Copy one icon.** Open the [website](https://icons.meyalab.com/), choose a style, search, pick an icon, and copy it as SVG or as a React component. You can change the stroke width and size before you copy.
 
+- **Install the package.**
+
+  ```bash
+  npm i meya-icons
+  ```
+
 ## Usage
 
 ### HTML
@@ -60,14 +66,16 @@ Paste the SVG inline. The icon takes the color of its parent.
 
 ### React
 
-Copy the React version from the website, or import the file with an SVG loader such as SVGR:
-
 ```jsx
-// home.svg copied from icons/outline/general/
-import HomeIcon from "./icons/home.svg?react";
+import { Home, Search } from "meya-icons/react/outline";
+import { Heart } from "meya-icons/react/duotone";
 
-<HomeIcon className="text-neutral-900" width={20} height={20} />
+<Home />                          // 24px, inherits the text color
+<Search size={20} strokeWidth={2} />
+<Heart color="#0071E3" />
 ```
+
+Components forward a ref and take any SVG prop, so `className`, `onClick` and `aria-label` all work. Where a name appears in more than one category the first keeps the plain name and the rest carry theirs, so `camera` is `Camera`, `MediaDevicesCamera` and `SecurityCamera`.
 
 ### Figma
 
@@ -126,6 +134,14 @@ Drag any SVG from [`icons/`](./icons) onto the canvas. Strokes and tints stay ed
    ```bash
    node scripts/build.mjs
    ```
+
+Rebuild the npm package with:
+
+```bash
+node scripts/package.mjs
+```
+
+It writes `dist/`, which is what gets published.
 
 The website is a single file at [`docs/index.html`](./docs/index.html), served by GitHub Pages.
 
