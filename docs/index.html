@@ -109,6 +109,7 @@ button { cursor: pointer; }
 /* ---------- Toolbar ---------- */
 .toolbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: rgba(255, 255, 255, 0.86); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
 .toolbar .wrap { transition: padding-right 300ms var(--ease-drawer); }
+body.color-open .toolbar { z-index: 50; }
 .toolbar-row { display: flex; align-items: center; gap: 8px; padding-block: 12px 0; }
 .field { position: relative; flex: 1; min-width: 0; }
 .field > svg { position: absolute; left: 16px; top: 50%; translate: 0 -50%; width: 17px; height: 17px; stroke-width: 1.5; color: var(--steel); pointer-events: none; }
@@ -184,7 +185,7 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
 /* Sponsor rail: a 32px vertical stack of circles, per the Figma frame. */
 /* The grid gives up a 32px column so the sponsors stay in view while scrolling, at every width. */
 main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px; align-items: start; }
-.rail { position: sticky; top: calc(env(safe-area-inset-top, 0px) + var(--toolbar-h, 166px) + 20px); }
+.rail { position: sticky; z-index: 1; top: calc(env(safe-area-inset-top, 0px) + var(--toolbar-h, 166px) + 20px); }
 .rail-tiles { display: flex; flex-direction: column; gap: 8px; }
 .section + .section { margin-top: 48px; }
 .section-head { display: flex; align-items: baseline; gap: 8px; margin: 0 2px 14px; }
@@ -384,7 +385,7 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
         <svg class="sponsor-mark" viewBox="0 0 480 480" fill="none" aria-hidden="true"><rect width="480" height="480" rx="76" fill="#1BA4FF"/>
   <path d="M354.6 99.1 L357.4 99.1 L359.9 101.6 L359.9 256.4 L358.6 257.9 L355.1 258.9 L352.1 256.4 L339.9 208.4 L337.9 204.9 L334.6 204.1 L331.4 206.4 L213.9 326.6 L210.9 326.9 L209.4 325.9 L208.1 322.6 L225.1 258.1 L224.9 253.6 L223.4 252.1 L221.1 251.6 L212.1 257.1 L84.4 348.9 L79.9 350.1 L77.4 348.1 L77.1 345.1 L85.1 332.4 L215.9 132.4 L218.9 131.6 L221.9 133.6 L239.9 194.4 L242.4 197.1 L245.9 197.1Z" fill="#032439"/></svg>
       </a>
-      <a class="sponsor-add" href="https://meyalab.com/contact" target="_blank" rel="noopener" data-tip="Become a sponsor" aria-label="Become a sponsor"><span data-ico="shapes:plus"></span></a>
+      <a class="sponsor-add" href="sponsor.html" data-tip="Become a sponsor" aria-label="Become a sponsor"><span data-ico="shapes:plus"></span></a>
     </div>
   </aside>
 </main>
@@ -664,7 +665,7 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
   });
   $("#color-reset").addEventListener("click", () => setColor(INK));
   const popBtn = $("#color-btn"), popEl = $("#color-pop");
-  function openPop(on) { popEl.hidden = !on; popBtn.setAttribute("aria-expanded", String(on)); }
+  function openPop(on) { popEl.hidden = !on; popBtn.setAttribute("aria-expanded", String(on)); document.body.classList.toggle("color-open", on); }
   popBtn.addEventListener("click", () => openPop(popEl.hidden));
   document.addEventListener("pointerdown", (e) => { if (!popEl.hidden && !e.target.closest(".color-ctl")) openPop(false); });
   setColor(INK);

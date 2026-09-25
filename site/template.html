@@ -104,6 +104,7 @@ button { cursor: pointer; }
 /* ---------- Toolbar ---------- */
 .toolbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: rgba(255, 255, 255, 0.86); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
 .toolbar .wrap { transition: padding-right 300ms var(--ease-drawer); }
+body.color-open .toolbar { z-index: 50; }
 .toolbar-row { display: flex; align-items: center; gap: 8px; padding-block: 12px 0; }
 .field { position: relative; flex: 1; min-width: 0; }
 .field > svg { position: absolute; left: 16px; top: 50%; translate: 0 -50%; width: 17px; height: 17px; stroke-width: 1.5; color: var(--steel); pointer-events: none; }
@@ -179,7 +180,7 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
 /* Sponsor rail: a 32px vertical stack of circles, per the Figma frame. */
 /* The grid gives up a 32px column so the sponsors stay in view while scrolling, at every width. */
 main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px; align-items: start; }
-.rail { position: sticky; top: calc(env(safe-area-inset-top, 0px) + var(--toolbar-h, 166px) + 20px); }
+.rail { position: sticky; z-index: 1; top: calc(env(safe-area-inset-top, 0px) + var(--toolbar-h, 166px) + 20px); }
 .rail-tiles { display: flex; flex-direction: column; gap: 8px; }
 .section + .section { margin-top: 48px; }
 .section-head { display: flex; align-items: baseline; gap: 8px; margin: 0 2px 14px; }
@@ -376,7 +377,7 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
       <a class="sponsor-tile" href="https://meyalab.com/" target="_blank" rel="noopener" data-tip="Meya Lab Studio" aria-label="Meya Lab Studio">
         <svg class="sponsor-mark" viewBox="0 0 480 480" fill="none" aria-hidden="true">__SPONSOR_LOGO__</svg>
       </a>
-      <a class="sponsor-add" href="https://meyalab.com/contact" target="_blank" rel="noopener" data-tip="Become a sponsor" aria-label="Become a sponsor"><span data-ico="shapes:plus"></span></a>
+      <a class="sponsor-add" href="sponsor.html" data-tip="Become a sponsor" aria-label="Become a sponsor"><span data-ico="shapes:plus"></span></a>
     </div>
   </aside>
 </main>
@@ -656,7 +657,7 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
   });
   $("#color-reset").addEventListener("click", () => setColor(INK));
   const popBtn = $("#color-btn"), popEl = $("#color-pop");
-  function openPop(on) { popEl.hidden = !on; popBtn.setAttribute("aria-expanded", String(on)); }
+  function openPop(on) { popEl.hidden = !on; popBtn.setAttribute("aria-expanded", String(on)); document.body.classList.toggle("color-open", on); }
   popBtn.addEventListener("click", () => openPop(popEl.hidden));
   document.addEventListener("pointerdown", (e) => { if (!popEl.hidden && !e.target.closest(".color-ctl")) openPop(false); });
   setColor(INK);

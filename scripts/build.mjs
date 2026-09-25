@@ -108,6 +108,21 @@ fs.writeFileSync(
 );
 if (process.argv[3]) fs.writeFileSync(process.argv[3], pixel.replaceAll("__SITE__", "https://nazmijavier.github.io/meya-icons/"));
 
+// ---------- Sponsor page (docs/sponsor.html) ----------
+const sponsor = fs
+  .readFileSync(rel("site/sponsor.html"), "utf8")
+  .replace("/*__DATA__*/", `window.MEYA=${JSON.stringify({ icons: siteIcons.filter((i) => i.c === "shapes") })};`)
+  .replaceAll("__VERSION__", VERSION)
+  .replaceAll("__COUNT__", total.toLocaleString("en-US"))
+  .replaceAll("__REPO__", REPO)
+  .replaceAll("__FAVICON__", `data:image/png;base64,${fs.readFileSync(rel("assets/favicon.png")).toString("base64")}`)
+  .replace("__CLICK_SOUND__", fs.readFileSync(rel("assets/click.wav")).toString("base64"));
+const sAt = sponsor.indexOf("</style>") + 8;
+fs.writeFileSync(
+  rel("docs/sponsor.html"),
+  `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n${sponsor.slice(0, sAt)}\n</head>\n<body>\n${sponsor.slice(sAt).trim()}\n</body>\n</html>\n`
+);
+
 // ---------- README images ----------
 // Official app-icon mark (vector trace of Logos/Main Logo.png), drawn inline so GitHub renders it.
 const LOGO = fs.readFileSync(rel("assets/logo.svg"), "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim();
