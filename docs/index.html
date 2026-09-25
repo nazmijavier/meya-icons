@@ -201,7 +201,7 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
 .tile[aria-current="true"] { background: var(--white); box-shadow: inset 0 0 0 1.5px var(--ink); }
 .tile svg { width: var(--size); height: var(--size); stroke-width: var(--sw); margin-block: auto; flex: none; color: var(--icon, var(--ink)); }
 .spon-tile { text-decoration: none; }
-.spon-tile .sponsor-mark { width: 44px; height: 44px; border-radius: 50%; margin-block: auto; flex: none; }
+.spon-tile .sponsor-mark { width: var(--size); height: var(--size); border-radius: 50%; margin-block: auto; flex: none; }
 .tile .name { font-size: 12px; line-height: 1.25; color: var(--slate); text-align: center; overflow-wrap: anywhere; }
 .tile:hover .name, .tile[aria-current="true"] .name { color: var(--ink); }
 .empty { text-align: center; padding: 80px 16px; }
