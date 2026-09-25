@@ -253,6 +253,38 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
 .toast svg { width: 16px; height: 16px; stroke-width: 1.8; color: var(--brand); flex: none; }
 .toast #toast-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 
+/* ---------- Pricing ---------- */
+.pricing { padding-block: 40px 96px; }
+.pricing-head { text-align: center; margin-bottom: 36px; }
+.pricing-head h2 { margin: 0 0 10px; font-size: clamp(30px, 4vw, 44px); font-weight: 500; letter-spacing: -0.035em; line-height: 1.08; text-wrap: balance; }
+.pricing-head p { margin: 0; font-size: 16px; color: var(--slate); }
+.plans { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; max-width: 980px; margin-inline: auto; }
+.plan { display: flex; flex-direction: column; padding: 36px; border-radius: 28px; background: var(--mist); }
+.plan-pro { background: var(--ink); color: #fff; }
+.plan-label { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--steel); }
+.plan-pro .plan-label { color: rgba(255, 255, 255, 0.55); }
+.plan-price { display: flex; align-items: baseline; gap: 6px; margin-top: 22px; font-size: 56px; font-weight: 500; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
+.plan-price small { font-size: 17px; font-weight: 400; letter-spacing: -0.01em; color: var(--steel); }
+.plan-pro .plan-price small { color: rgba(255, 255, 255, 0.55); }
+.plan-alt { margin-top: 10px; font-size: 14px; color: var(--steel); min-height: 20px; }
+.plan-pro .plan-alt { color: rgba(255, 255, 255, 0.55); }
+.plan-desc { margin: 20px 0 0; font-size: 16px; color: var(--slate); }
+.plan-pro .plan-desc { color: rgba(255, 255, 255, 0.72); }
+.plan ul { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 12px; }
+.plan li { display: flex; gap: 10px; font-size: 15px; }
+.plan li svg { width: 18px; height: 18px; flex: none; margin-top: 2px; stroke-width: 1.6; }
+.plan-preview { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 24px; }
+.plan-preview span { display: grid; place-items: center; aspect-ratio: 1; border-radius: 10px; background: rgba(255, 255, 255, 0.08); }
+.plan-preview svg { width: 20px; height: 20px; color: #fff; }
+.plan-cta { display: flex; align-items: center; justify-content: center; height: 52px; margin-top: auto; border: 0; border-radius: 9999px; font-size: 15px; font-weight: 500; text-decoration: none; transition-property: background-color, scale; transition-duration: 150ms; }
+.plan-cta:active { scale: 0.98; }
+.plan .spacer { flex: 1; min-height: 28px; }
+.plan:not(.plan-pro) .plan-cta { background: var(--white); color: var(--ink); box-shadow: 0 0 0 1px var(--control); }
+.plan:not(.plan-pro) .plan-cta:hover { background: var(--frost); }
+.plan-pro .plan-cta { background: var(--white); color: var(--ink); }
+.plan-pro .plan-cta:hover { background: var(--mist-2); }
+@media (max-width: 860px) { .plans { grid-template-columns: minmax(0, 1fr); } .plan { padding: 28px 24px; } .plan-price { font-size: 46px; } }
+
 /* ---------- Footer ---------- */
 .footer { background: var(--mist); padding-block: 28px 36px; transition: padding-right 300ms var(--ease-drawer); }
 .footer .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; }
@@ -306,7 +338,7 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
   <nav class="nav" aria-label="Site">
     <a class="brand" href="#top">Meya Icons <span class="pro">__VERSION__</span></a>
     <div class="nav-actions">
-      <button class="pill pill-soon soon below" type="button" aria-disabled="true" data-tip="Coming soon" aria-label="Buy icons, coming soon">Buy Icons</button>
+      <a class="pill pill-ink" href="#pricing">Buy Icons</a>
     </div>
   </nav>
 </div>
@@ -417,6 +449,44 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
     </dl>
   </div>
 </aside>
+
+<section class="pricing" id="pricing" aria-labelledby="pricing-title">
+  <div class="wrap">
+    <div class="pricing-head">
+      <h2 id="pricing-title">Simple pricing.</h2>
+      <p>Two styles free forever. Every style with Pro.</p>
+    </div>
+    <div class="plans">
+      <div class="plan">
+        <span class="plan-label">Free</span>
+        <div class="plan-price">$0</div>
+        <div class="plan-alt"></div>
+        <p class="plan-desc">Everything you need to design with Meya Icons today.</p>
+        <ul>
+          <li><span data-ico="shapes:check"></span>Outline and Duotone, __COUNT__ icons</li>
+          <li><span data-ico="shapes:check"></span>Copy as SVG or React</li>
+          <li><span data-ico="shapes:check"></span>npm package, MIT license</li>
+        </ul>
+        <div class="spacer"></div>
+        <a class="plan-cta" href="#icons">Browse free icons</a>
+      </div>
+      <div class="plan plan-pro">
+        <span class="plan-label">Pro</span>
+        <div class="plan-price">$9<small>/mo</small></div>
+        <div class="plan-alt">or $90/yr</div>
+        <p class="plan-desc">Every style, one flat rate.</p>
+        <ul>
+          <li><span data-ico="shapes:check"></span>Sharp, Filled and Pixel, __PRO_COUNT__ icons</li>
+          <li><span data-ico="shapes:check"></span>Everything in Free</li>
+          <li><span data-ico="shapes:check"></span>New icons as they ship</li>
+        </ul>
+        <div class="plan-preview" aria-hidden="true">__PRO_PREVIEW__</div>
+        <div class="spacer"></div>
+        <a href="#pricing" class="plan-cta soon" id="get-pro" data-tip="Coming soon">Get Pro</a>
+      </div>
+    </div>
+  </div>
+</section>
 
 <div class="toast" id="toast" role="status" aria-live="polite"><span data-ico="shapes:check"></span><span id="toast-text">Copied</span></div>
 

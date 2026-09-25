@@ -58,6 +58,26 @@ const categories = CATEGORIES.map(([id, label]) => ({
   counts: Object.fromEntries(styles.map((st) => [st.id, icons.filter((i) => i.c === id && i.v[st.id]).length])),
 })).filter((c) => c.count);
 
+// ---------- Pro teaser (the full PRO sets stay in ../meya-icons-pro) ----------
+// Paste the Polar checkout link here to switch "Get Pro" on.
+const POLAR_CHECKOUT = "";
+const PRO_DIR = rel("../meya-icons-pro");
+const PRO_STYLES = ["sharp", "filled", "pixel"];
+const TEASER = ["general/home", "general/heart", "communication/chat", "files/folder", "general/settings", "general/star"];
+let proCount = 0, proPreview = "";
+for (const st of PRO_STYLES) {
+  const dir = path.join(PRO_DIR, st);
+  if (!fs.existsSync(dir)) continue;
+  for (const c of fs.readdirSync(dir)) if (fs.statSync(path.join(dir, c)).isDirectory()) proCount += fs.readdirSync(path.join(dir, c)).filter((f) => f.endsWith(".svg")).length;
+}
+for (const n of TEASER) {
+  // one teaser icon per slot, cycling through the three styles
+  const st = PRO_STYLES[TEASER.indexOf(n) % 3], f = path.join(PRO_DIR, st, n + ".svg");
+  if (!fs.existsSync(f)) continue;
+  const t = fs.readFileSync(f, "utf8"), attrs = st === "pixel" ? ' shape-rendering="crispEdges"' : "";
+  proPreview += `<span><svg viewBox="0 0 24 24" fill="none"${attrs}>${t.replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim()}</svg></span>`;
+}
+
 // ---------- Website ----------
 // On the site, default 1.3 strokes inherit from the root so the stroke slider can drive them.
 const strip = (b) => b.replace(/\s*stroke-width="1\.3"/g, "");
@@ -68,6 +88,9 @@ const fragment = fs
   .replaceAll("__SPONSOR_LOGO__", fs.readFileSync(rel("assets/logo.svg"), "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim())
   .replace("__CLICK_SOUND__", fs.readFileSync(rel("assets/click.wav")).toString("base64"))
   .replaceAll("__COUNT__", total.toLocaleString("en-US"))
+  .replaceAll("__PRO_COUNT__", proCount.toLocaleString("en-US"))
+  .replace("__PRO_PREVIEW__", proPreview)
+  .replace('href="#pricing" class="plan-cta soon" id="get-pro" data-tip="Coming soon"', POLAR_CHECKOUT ? `href="${POLAR_CHECKOUT}" class="plan-cta" id="get-pro" target="_blank" rel="noopener"` : 'href="#pricing" class="plan-cta soon" id="get-pro" data-tip="Coming soon"')
   .replaceAll("__STYLECOUNT__", String(ready.length))
   .replaceAll("__CATS__", String(categories.length))
   .replaceAll("__VERSION__", VERSION)

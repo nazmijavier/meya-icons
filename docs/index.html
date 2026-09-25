@@ -258,6 +258,38 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
 .toast svg { width: 16px; height: 16px; stroke-width: 1.8; color: var(--brand); flex: none; }
 .toast #toast-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 
+/* ---------- Pricing ---------- */
+.pricing { padding-block: 40px 96px; }
+.pricing-head { text-align: center; margin-bottom: 36px; }
+.pricing-head h2 { margin: 0 0 10px; font-size: clamp(30px, 4vw, 44px); font-weight: 500; letter-spacing: -0.035em; line-height: 1.08; text-wrap: balance; }
+.pricing-head p { margin: 0; font-size: 16px; color: var(--slate); }
+.plans { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; max-width: 980px; margin-inline: auto; }
+.plan { display: flex; flex-direction: column; padding: 36px; border-radius: 28px; background: var(--mist); }
+.plan-pro { background: var(--ink); color: #fff; }
+.plan-label { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--steel); }
+.plan-pro .plan-label { color: rgba(255, 255, 255, 0.55); }
+.plan-price { display: flex; align-items: baseline; gap: 6px; margin-top: 22px; font-size: 56px; font-weight: 500; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
+.plan-price small { font-size: 17px; font-weight: 400; letter-spacing: -0.01em; color: var(--steel); }
+.plan-pro .plan-price small { color: rgba(255, 255, 255, 0.55); }
+.plan-alt { margin-top: 10px; font-size: 14px; color: var(--steel); min-height: 20px; }
+.plan-pro .plan-alt { color: rgba(255, 255, 255, 0.55); }
+.plan-desc { margin: 20px 0 0; font-size: 16px; color: var(--slate); }
+.plan-pro .plan-desc { color: rgba(255, 255, 255, 0.72); }
+.plan ul { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 12px; }
+.plan li { display: flex; gap: 10px; font-size: 15px; }
+.plan li svg { width: 18px; height: 18px; flex: none; margin-top: 2px; stroke-width: 1.6; }
+.plan-preview { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 24px; }
+.plan-preview span { display: grid; place-items: center; aspect-ratio: 1; border-radius: 10px; background: rgba(255, 255, 255, 0.08); }
+.plan-preview svg { width: 20px; height: 20px; color: #fff; }
+.plan-cta { display: flex; align-items: center; justify-content: center; height: 52px; margin-top: auto; border: 0; border-radius: 9999px; font-size: 15px; font-weight: 500; text-decoration: none; transition-property: background-color, scale; transition-duration: 150ms; }
+.plan-cta:active { scale: 0.98; }
+.plan .spacer { flex: 1; min-height: 28px; }
+.plan:not(.plan-pro) .plan-cta { background: var(--white); color: var(--ink); box-shadow: 0 0 0 1px var(--control); }
+.plan:not(.plan-pro) .plan-cta:hover { background: var(--frost); }
+.plan-pro .plan-cta { background: var(--white); color: var(--ink); }
+.plan-pro .plan-cta:hover { background: var(--mist-2); }
+@media (max-width: 860px) { .plans { grid-template-columns: minmax(0, 1fr); } .plan { padding: 28px 24px; } .plan-price { font-size: 46px; } }
+
 /* ---------- Footer ---------- */
 .footer { background: var(--mist); padding-block: 28px 36px; transition: padding-right 300ms var(--ease-drawer); }
 .footer .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; }
@@ -312,7 +344,7 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
   <nav class="nav" aria-label="Site">
     <a class="brand" href="#top">Meya Icons <span class="pro">1.0</span></a>
     <div class="nav-actions">
-      <button class="pill pill-soon soon below" type="button" aria-disabled="true" data-tip="Coming soon" aria-label="Buy icons, coming soon">Buy Icons</button>
+      <a class="pill pill-ink" href="#pricing">Buy Icons</a>
     </div>
   </nav>
 </div>
@@ -425,6 +457,46 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
     </dl>
   </div>
 </aside>
+
+<section class="pricing" id="pricing" aria-labelledby="pricing-title">
+  <div class="wrap">
+    <div class="pricing-head">
+      <h2 id="pricing-title">Simple pricing.</h2>
+      <p>Two styles free forever. Every style with Pro.</p>
+    </div>
+    <div class="plans">
+      <div class="plan">
+        <span class="plan-label">Free</span>
+        <div class="plan-price">$0</div>
+        <div class="plan-alt"></div>
+        <p class="plan-desc">Everything you need to design with Meya Icons today.</p>
+        <ul>
+          <li><span data-ico="shapes:check"></span>Outline and Duotone, 572 icons</li>
+          <li><span data-ico="shapes:check"></span>Copy as SVG or React</li>
+          <li><span data-ico="shapes:check"></span>npm package, MIT license</li>
+        </ul>
+        <div class="spacer"></div>
+        <a class="plan-cta" href="#icons">Browse free icons</a>
+      </div>
+      <div class="plan plan-pro">
+        <span class="plan-label">Pro</span>
+        <div class="plan-price">$9<small>/mo</small></div>
+        <div class="plan-alt">or $90/yr</div>
+        <p class="plan-desc">Every style, one flat rate.</p>
+        <ul>
+          <li><span data-ico="shapes:check"></span>Sharp, Filled and Pixel, 861 icons</li>
+          <li><span data-ico="shapes:check"></span>Everything in Free</li>
+          <li><span data-ico="shapes:check"></span>New icons as they ship</li>
+        </ul>
+        <div class="plan-preview" aria-hidden="true"><span><svg viewBox="0 0 24 24" fill="none"><path d="M5.208 9.348V20.312H18.792V9.348" stroke="currentColor" stroke-width="1.3" stroke-linecap="square" stroke-linejoin="miter"/>
+  <path d="M3.547 10.801L12 3.306L20.453 10.801" stroke="currentColor" stroke-width="1.3" stroke-linecap="square" stroke-linejoin="miter"/>
+  <path d="M12 15.5748C12 14.7243 12.6895 14.0348 13.5401 14.0348H14.1001C14.9506 14.0348 15.6401 14.7243 15.6401 15.5748C15.6401 16.4254 14.9506 17.1149 14.1001 17.1149H13.54C12.6895 17.1149 12 16.4254 12 15.5748Z" fill="currentColor"/></svg></span><span><svg viewBox="0 0 24 24" fill="none"><path d="M 7.5 3.987 C 6.399 4.148, 5.488 4.612, 4.673 5.424 C 4.204 5.891, 3.883 6.34, 3.59 6.936 C 2.95 8.239, 2.789 9.689, 3.112 11.218 C 3.653 13.778, 5.603 16.25, 8.686 18.286 C 9.377 18.742, 10.307 19.29, 10.638 19.437 C 11.369 19.76, 12.248 19.811, 12.991 19.573 C 13.307 19.471, 13.437 19.411, 13.893 19.154 C 18.071 16.797, 20.516 13.871, 20.99 10.663 C 21.073 10.094, 21.062 9.218, 20.962 8.636 C 20.489 5.86, 18.255 3.859, 15.738 3.958 C 15.158 3.981, 14.7 4.08, 14.174 4.297 C 13.481 4.584, 12.881 4.999, 12.28 5.608 L 11.998 5.894 11.718 5.607 C 10.872 4.74, 9.914 4.207, 8.845 4.01 C 8.552 3.956, 7.799 3.943, 7.5 3.987" fill="currentColor" fill-rule="evenodd"/></svg></span><span><svg viewBox="0 0 24 24" fill="none" shape-rendering="crispEdges"><path d="M8 2H16V3H8ZM6 3H18V4H6ZM5 4H9V5H5ZM15 4H19V5H15ZM4 5H7V6H4ZM17 5H19V6H17ZM3 6H6V7H3ZM17 6H20V7H17ZM2 7H5V8H2ZM18 7H20V8H18ZM2 8H4V9H2ZM18 8H21V9H18ZM2 9H4V10H2ZM19 9H21V10H19ZM2 10H4V11H2ZM19 10H21V11H19ZM2 11H4V12H2ZM8 11H9V12H8ZM11 11H13V12H11ZM15 11H16V12H15ZM19 11H21V12H19ZM2 12H4V13H2ZM8 12H9V13H8ZM11 12H13V13H11ZM15 12H16V13H15ZM19 12H21V13H19ZM2 13H4V14H2ZM19 13H21V14H19ZM2 14H5V15H2ZM19 14H21V15H19ZM3 15H5V16H3ZM18 15H21V16H18ZM2 16H5V17H2ZM17 16H20V17H17ZM2 17H4V18H2ZM16 17H19V18H16ZM2 18H8V19H2ZM14 18H18V19H14ZM3 19H17V20H3ZM4 20H6V21H4ZM7 20H15V21H7Z" fill="currentColor"/></svg></span><span><svg viewBox="0 0 24 24" fill="none"><path d="M12.846 7.77L11.154 4.387H3.541V7.77M3.541 7.77H16.399C17.82 7.77 18.53 7.77 19.073 8.047C19.551 8.29 19.939 8.678 20.182 9.156C20.459 9.699 20.459 10.409 20.459 11.83V15.552C20.459 16.973 20.459 17.684 20.182 18.227C19.939 18.704 19.551 19.093 19.073 19.336C18.53 19.612 17.82 19.612 16.399 19.612H7.601C6.18 19.612 5.47 19.612 4.927 19.336C4.449 19.093 4.061 18.704 3.818 18.227C3.541 17.684 3.541 16.973 3.541 15.552Z" stroke="currentColor" stroke-width="1.3" stroke-linecap="square" stroke-linejoin="miter"/></svg></span><span><svg viewBox="0 0 24 24" fill="none"><path d="M 11.05 2.889 C 10.408 2.959, 10.105 3.076, 9.786 3.379 C 9.559 3.595, 9.425 3.816, 9.325 4.138 C 9.2 4.539, 9.175 4.602, 9.053 4.812 C 8.821 5.214, 8.37 5.592, 7.947 5.74 C 7.491 5.9, 7.168 5.913, 6.611 5.797 C 6.295 5.732, 6.205 5.722, 6.025 5.735 C 5.596 5.765, 5.233 5.923, 4.955 6.199 C 4.404 6.747, 3.565 8.271, 3.408 9.012 C 3.361 9.23, 3.379 9.525, 3.452 9.766 C 3.541 10.054, 3.665 10.259, 3.91 10.521 C 4.422 11.069, 4.595 11.506, 4.569 12.185 C 4.545 12.784, 4.387 13.124, 3.866 13.696 C 3.643 13.941, 3.499 14.206, 3.436 14.49 C 3.376 14.76, 3.397 15.143, 3.486 15.402 C 3.675 15.949, 4.35 17.124, 4.808 17.701 C 5.244 18.251, 5.899 18.462, 6.617 18.282 C 6.989 18.189, 7.511 18.184, 7.807 18.269 C 8.558 18.486, 9.073 19.008, 9.321 19.805 C 9.487 20.341, 9.777 20.7, 10.212 20.908 C 10.452 21.024, 10.626 21.065, 11.05 21.109 C 11.62 21.169, 12.002 21.18, 12.488 21.15 C 13.477 21.091, 13.834 20.988, 14.196 20.66 C 14.473 20.41, 14.608 20.182, 14.727 19.766 C 14.855 19.32, 15.033 19.011, 15.327 18.725 C 15.85 18.216, 16.589 18.031, 17.375 18.212 C 18.069 18.373, 18.614 18.236, 19.061 17.789 C 19.62 17.23, 20.442 15.767, 20.592 15.065 C 20.7 14.557, 20.522 14.018, 20.092 13.556 C 19.581 13.006, 19.405 12.562, 19.431 11.89 C 19.455 11.29, 19.621 10.933, 20.138 10.372 C 20.451 10.032, 20.6 9.657, 20.6 9.213 C 20.6 8.959, 20.566 8.805, 20.438 8.472 C 20.25 7.985, 19.782 7.138, 19.406 6.6 C 18.845 5.8, 18.234 5.551, 17.34 5.758 C 16.744 5.896, 16.197 5.826, 15.725 5.55 C 15.209 5.249, 14.898 4.835, 14.692 4.175 C 14.578 3.812, 14.462 3.617, 14.225 3.391 C 13.89 3.072, 13.6 2.959, 12.929 2.89 C 12.465 2.841, 11.496 2.841, 11.05 2.889 M 11.625 9.05 C 10.471 9.211, 9.544 9.976, 9.178 11.071 C 8.66 12.619, 9.507 14.299, 11.071 14.822 C 12.619 15.341, 14.299 14.493, 14.822 12.929 C 15.385 11.249, 14.336 9.447, 12.588 9.088 C 12.347 9.038, 11.85 9.019, 11.625 9.05" fill="currentColor" fill-rule="evenodd"/></svg></span><span><svg viewBox="0 0 24 24" fill="none" shape-rendering="crispEdges"><path d="M10 2H12V3H10ZM10 3H13V4H10ZM9 4H14V5H9ZM8 5H11V6H8ZM12 5H15V6H12ZM7 6H10V7H7ZM13 6H16V7H13ZM3 7H9V8H3ZM14 7H20V8H14ZM2 8H8V9H2ZM15 8H21V9H15ZM2 9H4V10H2ZM18 9H21V10H18ZM2 10H5V11H2ZM17 10H20V11H17ZM3 11H6V12H3ZM16 11H19V12H16ZM4 12H7V13H4ZM15 12H18V13H15ZM5 13H8V14H5ZM15 13H18V14H15ZM5 14H8V15H5ZM16 14H18V15H16ZM5 15H7V16H5ZM16 15H18V16H16ZM5 16H7V17H5ZM10 16H14V17H10ZM16 16H18V17H16ZM5 17H7V18H5ZM8 17H18V18H8ZM5 18H11V19H5ZM13 18H18V19H13ZM6 19H9V20H6ZM15 19H17V20H15Z" fill="currentColor"/></svg></span></div>
+        <div class="spacer"></div>
+        <a href="#pricing" class="plan-cta soon" id="get-pro" data-tip="Coming soon">Get Pro</a>
+      </div>
+    </div>
+  </div>
+</section>
 
 <div class="toast" id="toast" role="status" aria-live="polite"><span data-ico="shapes:check"></span><span id="toast-text">Copied</span></div>
 
