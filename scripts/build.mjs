@@ -80,6 +80,21 @@ fs.writeFileSync(
 );
 if (process.argv[2]) fs.writeFileSync(process.argv[2], fragment);
 
+// ---------- Pixel Lab (docs/pixel.html) ----------
+// Converts Outline icons to pixel-grid icons in the browser. Keeps real stroke widths.
+const pixelData = icons.filter((i) => i.v.outline).map((i) => ({ key: `${i.c}/${i.n}`, n: i.n, b: i.v.outline }));
+const pixel = fs
+  .readFileSync(rel("site/pixel.html"), "utf8")
+  .replace("/*__DATA__*/", `window.MEYA=${JSON.stringify({ icons: pixelData })};`)
+  .replaceAll("__COUNT__", String(pixelData.length))
+  .replaceAll("__FAVICON__", `data:image/png;base64,${fs.readFileSync(rel("assets/favicon.png")).toString("base64")}`);
+const pSplit = pixel.indexOf("</style>") + 8;
+fs.writeFileSync(
+  rel("docs/pixel.html"),
+  `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n${pixel.slice(0, pSplit).replaceAll("__SITE__", "./")}\n</head>\n<body>\n${pixel.slice(pSplit).trim().replaceAll("__SITE__", "./")}\n</body>\n</html>\n`
+);
+if (process.argv[3]) fs.writeFileSync(process.argv[3], pixel.replaceAll("__SITE__", "https://nazmijavier.github.io/meya-icons/"));
+
 // ---------- README images ----------
 // Official app-icon mark (vector trace of Logos/Main Logo.png), drawn inline so GitHub renders it.
 const LOGO = fs.readFileSync(rel("assets/logo.svg"), "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim();
