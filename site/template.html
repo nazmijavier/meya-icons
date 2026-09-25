@@ -159,6 +159,14 @@ button { cursor: pointer; }
 
 /* ---------- Grid ---------- */
 main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-drawer); }
+.rail { display: none; }
+.rail-title { margin: 0 0 14px; font-size: 13px; font-weight: 500; color: var(--slate); }
+.rail-tiles { display: flex; flex-wrap: wrap; gap: 10px; }
+@media (min-width: 1200px) {
+  /* The grid gives up a narrow column so the sponsors stay in view while scrolling. */
+  main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 168px; gap: 40px; align-items: start; }
+  .rail { display: block; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 132px); }
+}
 .section + .section { margin-top: 48px; }
 .section-head { display: flex; align-items: baseline; gap: 8px; margin: 0 2px 14px; }
 .section-head h2 { margin: 0; font-size: 21px; font-weight: 600; letter-spacing: -0.02em; }
@@ -324,12 +332,23 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
 </div>
 
 <main class="wrap">
-  <div id="sections"></div>
-  <div class="empty" id="empty" hidden>
-    <h3>No icons match “<span id="empty-q"></span>”</h3>
-    <p>Try a shorter word, or one of these:</p>
-    <div class="suggest" id="suggest"></div>
+  <div>
+    <div id="sections"></div>
+    <div class="empty" id="empty" hidden>
+      <h3>No icons match “<span id="empty-q"></span>”</h3>
+      <p>Try a shorter word, or one of these:</p>
+      <div class="suggest" id="suggest"></div>
+    </div>
   </div>
+  <aside class="rail" aria-label="Sponsors">
+    <p class="rail-title">Sponsors</p>
+    <div class="rail-tiles">
+      <a class="sponsor-tile" href="https://meyalab.com/" target="_blank" rel="noopener" data-tip="Meya Lab Studio" aria-label="Meya Lab Studio">
+        <svg class="sponsor-mark" viewBox="0 0 480 480" fill="none" aria-hidden="true">__SPONSOR_LOGO__</svg>
+      </a>
+      <a class="sponsor-add" href="https://meyalab.com/contact" target="_blank" rel="noopener" data-tip="Become a sponsor" aria-label="Become a sponsor"><span data-ico="shapes:plus"></span></a>
+    </div>
+  </aside>
 </main>
 
 <aside class="sheet" id="sheet" aria-label="Icon details" aria-hidden="true">
