@@ -76,6 +76,18 @@ button { cursor: pointer; }
 .brand { align-items: center; }
 .brand .pro { font-size: 10px; height: 18px; padding-inline: 6px; letter-spacing: 0.02em; }
 .nav-actions { display: flex; align-items: center; gap: 2px; }
+.sponsor { display: flex; align-items: center; gap: 8px; margin-right: 10px; }
+.sponsor-label { font: 500 11px/1 var(--sans); letter-spacing: 0.05em; text-transform: uppercase; color: var(--steel); }
+.sponsor-tile { display: block; width: 32px; height: 32px; transition: scale 150ms ease; }
+.sponsor-tile:active { scale: 0.94; }
+.sponsor-mark { width: 100%; height: 100%; display: block; }
+.sponsor-add { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 8px; border: 1.5px dashed var(--hairline); color: var(--steel); transition-property: border-color, color, scale; transition-duration: 150ms; }
+.sponsor-add:hover { border-color: var(--steel); color: var(--ink); }
+.sponsor-add:active { scale: 0.94; }
+.sponsor-add svg { width: 14px; height: 14px; stroke-width: 1.8; }
+#sound .i-off { display: none; }
+#sound[aria-pressed="false"] .i-on { display: none; }
+#sound[aria-pressed="false"] .i-off { display: block; }
 .nav-link { display: inline-flex; align-items: center; gap: 7px; height: 40px; padding-inline: 12px; border-radius: 9999px; color: var(--slate); text-decoration: none; font-size: 13px; font-weight: 500; transition: background-color 150ms ease; }
 .nav-link:hover { color: var(--ink); background: var(--mist); }
 .nav-link svg { width: 15px; height: 15px; }
@@ -112,13 +124,13 @@ button { cursor: pointer; }
 .seg { display: flex; gap: 2px; padding: 3px; height: 36px; border-radius: 9999px; background: var(--mist); flex: none; }
 .seg button { height: 30px; padding-inline: 14px; border: 0; border-radius: 9999px; background: none; font-size: 13px; font-weight: 500; color: var(--slate); transition: background-color 150ms ease, color 150ms ease; }
 .seg button:hover { color: var(--ink); }
-.seg .soon { position: relative; color: var(--steel); }
+.seg .soon { color: var(--steel); }
 .seg .soon:hover { color: var(--slate); }
-.soon { position: relative; }
-.soon::after { content: "Coming soon"; position: absolute; left: 50%; bottom: calc(100% + 8px); translate: -50% 4px; scale: 0.96; padding: 6px 10px; border-radius: 8px; background: var(--ink); color: #fff; font-size: 12px; font-weight: 500; white-space: nowrap; opacity: 0; pointer-events: none; transform-origin: 50% 100%; transition: opacity 150ms var(--ease-out), translate 150ms var(--ease-out), scale 150ms var(--ease-out); z-index: 5; }
-.soon.tip::after { opacity: 1; translate: -50% 0; scale: 1; }
-.soon.below::after { bottom: auto; top: calc(100% + 8px); translate: -50% -4px; transform-origin: 50% 0; }
-.soon.below.tip::after { translate: -50% 0; }
+[data-tip] { position: relative; }
+[data-tip]::after { content: attr(data-tip); position: absolute; left: 50%; bottom: calc(100% + 8px); translate: -50% 4px; scale: 0.96; padding: 6px 10px; border-radius: 8px; background: var(--ink); color: #fff; font-size: 12px; font-weight: 500; white-space: nowrap; opacity: 0; pointer-events: none; transform-origin: 50% 100%; transition: opacity 150ms var(--ease-out), translate 150ms var(--ease-out), scale 150ms var(--ease-out); z-index: 5; }
+[data-tip]:hover::after, [data-tip]:focus-visible::after, [data-tip].tip::after { opacity: 1; translate: -50% 0; scale: 1; }
+[data-tip].below::after { bottom: auto; top: calc(100% + 8px); translate: -50% -4px; transform-origin: 50% 0; }
+[data-tip].below:hover::after, [data-tip].below:focus-visible::after, [data-tip].below.tip::after { translate: -50% 0; }
 .seg button { display: inline-flex; align-items: center; gap: 6px; }
 .pro { display: inline-flex; align-items: center; height: 16px; padding-inline: 5px; border-radius: 4px; background: var(--ink); color: #fff; font-size: 9px; font-weight: 600; letter-spacing: 0.06em; line-height: 1; }
 .seg .soon .pro { opacity: 0.55; }
@@ -205,9 +217,10 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
 .meta dd { margin: 0; text-align: right; padding-top: 8px; }
 
 /* ---------- Toast ---------- */
-.toast { position: fixed; z-index: 60; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 24px); display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px 0 14px; border-radius: 9999px; background: var(--ink); color: #fff; font-size: 14px; font-weight: 500; translate: -50% 10px; opacity: 0; pointer-events: none; transition: translate 200ms var(--ease-out), opacity 200ms var(--ease-out); }
+.toast { position: fixed; z-index: 60; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 24px); display: flex; align-items: center; gap: 8px; height: 44px; max-width: calc(100vw - 32px); white-space: nowrap; padding: 0 18px 0 14px; border-radius: 9999px; background: var(--ink); color: #fff; font-size: 14px; font-weight: 500; translate: -50% 10px; opacity: 0; pointer-events: none; transition: translate 200ms var(--ease-out), opacity 200ms var(--ease-out); }
 .toast.show { translate: -50% 0; opacity: 1; }
-.toast svg { width: 16px; height: 16px; stroke-width: 1.8; color: var(--brand); }
+.toast svg { width: 16px; height: 16px; stroke-width: 1.8; color: var(--brand); flex: none; }
+.toast #toast-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 
 /* ---------- Footer ---------- */
 .footer { background: var(--mist); padding-block: 28px 36px; transition: padding-right 300ms var(--ease-drawer); }
@@ -241,6 +254,10 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
   .seg button { flex: none; height: 34px; padding-inline: 14px; }
   .tabs { flex-basis: auto; }
   .nav-link .label { display: none; }
+  /* Nav is tight on a phone: keep the sponsor logo, drop the label and the add button. */
+  .brand { white-space: nowrap; }
+  .sponsor { margin-right: 4px; gap: 4px; }
+  .sponsor-label, .sponsor-add { display: none; }
   /* Compact 3-column grid. */
   main { padding-top: 20px; }
   .section + .section { margin-top: 32px; }
@@ -260,11 +277,21 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
   <nav class="nav" aria-label="Site">
     <a class="brand" href="#top">Meya Icons <span class="pro">__VERSION__</span></a>
     <div class="nav-actions">
+      <div class="sponsor">
+        <span class="sponsor-label">Sponsored by</span>
+        <a class="sponsor-tile below" href="https://meyalab.com/" target="_blank" rel="noopener" data-tip="Meya Lab Studio" aria-label="Meya Lab Studio">
+          <svg class="sponsor-mark" viewBox="0 0 480 480" fill="none" aria-hidden="true">__SPONSOR_LOGO__</svg>
+        </a>
+        <a class="sponsor-add below" href="https://meyalab.com/contact" target="_blank" rel="noopener" data-tip="Become a sponsor" aria-label="Become a sponsor"><span data-ico="shapes:plus"></span></a>
+      </div>
+      <button class="pill icon-btn below" id="sound" type="button" aria-pressed="true" data-tip="Sound on" aria-label="Turn click sound off">
+        <span data-ico="communication:volume" class="i-on"></span><span data-ico="communication:volume-off" class="i-off"></span>
+      </button>
       <a class="nav-link" href="__REPO__" target="_blank" rel="noopener">
         <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
         <span class="label">GitHub</span>
       </a>
-      <button class="pill pill-soon soon below" type="button" aria-disabled="true" aria-label="Buy icons, coming soon">Buy Icons</button>
+      <button class="pill pill-soon soon below" type="button" aria-disabled="true" data-tip="Coming soon" aria-label="Buy icons, coming soon">Buy Icons</button>
     </div>
   </nav>
 </div>
@@ -380,6 +407,33 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
   const pascal = (n) => n.split("-").map((p) => p[0].toUpperCase() + p.slice(1)).join("") + "Icon";
   const fmtSw = (v) => (+v).toFixed(2).replace(/0$/, "");
 
+  // ---------- Click sound ----------
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+  };
+  let actx, clip, muted = store.get("meya-muted") === "1";
+  async function loadSound() {
+    if (clip || !window.AudioContext) return;
+    actx = actx || new AudioContext();
+    if (actx.state === "suspended") await actx.resume();
+    const bin = atob("__CLICK_SOUND__"), bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    clip = await actx.decodeAudioData(bytes.buffer);
+  }
+  function pop() {
+    if (muted || !clip) return;
+    const src = actx.createBufferSource(); src.buffer = clip;
+    const gain = actx.createGain(); gain.gain.value = 0.35;
+    src.connect(gain).connect(actx.destination);
+    src.start();
+  }
+  // pointerdown, not click, so the sound lands the moment the button goes down.
+  document.addEventListener("pointerdown", (e) => {
+    if (muted || !e.target.closest("a, button, select, .tile, input[type=color]")) return;
+    loadSound().then(pop).catch(() => {});
+  }, true);
+
   // Interface icons come from the set itself.
   document.querySelectorAll("[data-ico]").forEach((el) => {
     const [c, n] = el.dataset.ico.split(":");
@@ -483,7 +537,7 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
   const badge = (st) => (st.pro ? '<span class="pro">PRO</span>' : "");
   $("#styles").innerHTML = styles.map((st) => st.count
     ? `<button type="button" data-style="${st.id}" aria-pressed="${st.id === state.style}">${st.label}${badge(st)}</button>`
-    : `<button type="button" class="soon" aria-disabled="true" aria-label="${st.label}${st.pro ? " (Pro)" : ""}, coming soon">${st.label}${badge(st)}</button>`).join("");
+    : `<button type="button" class="soon" aria-disabled="true" data-tip="Coming soon" aria-label="${st.label}${st.pro ? " (Pro)" : ""}, coming soon">${st.label}${badge(st)}</button>`).join("");
   // Anything not released yet (PRO styles, Buy Icons): show "Coming soon" right away, then hide it.
   document.addEventListener("click", (e) => {
     const soon = e.target.closest(".soon"); if (!soon) return;
@@ -560,6 +614,21 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
   }));
   $("#copy-svg").addEventListener("click", (e) => copy(toSvg(state.current), e.currentTarget, `Copied SVG for ${state.current.n}`));
   $("#copy-jsx").addEventListener("click", (e) => copy(toJsx(state.current), e.currentTarget, `Copied ${pascal(state.current.n)}`));
+
+  // ---------- Sound toggle ----------
+  const soundBtn = $("#sound");
+  function syncSound() {
+    soundBtn.setAttribute("aria-pressed", String(!muted));
+    soundBtn.setAttribute("data-tip", muted ? "Sound off" : "Sound on");
+    soundBtn.setAttribute("aria-label", muted ? "Turn click sound on" : "Turn click sound off");
+  }
+  soundBtn.addEventListener("click", () => {
+    muted = !muted;
+    store.set("meya-muted", muted ? "1" : "0");
+    syncSound();
+    if (!muted) loadSound().then(pop).catch(() => {});
+  });
+  syncSound();
 
   // ---------- Keyboard ----------
   document.addEventListener("keydown", (e) => {
