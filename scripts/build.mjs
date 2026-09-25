@@ -15,7 +15,7 @@ const SITE = "https://icons.meyalab.com";
 const PUBLISH_SPONSOR_PAGE = true;
 // Paste the access key from web3forms.com so the sponsor form emails hello@meyalab.com.
 // Left empty, the form falls back to opening the visitor's own mail app.
-const WEB3FORMS_KEY = "";
+const WEB3FORMS_KEY = "11a56e93-754a-4035-87e6-e90bb4de7bf2";
 
 // ---------- Read icons ----------
 // Every style is read from icons/<style>/. An icon is the union of its variants by category and name.
