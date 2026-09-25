@@ -399,6 +399,9 @@ header.intro p { margin: 0; color: var(--slate); font-size: 17px; text-wrap: pre
     toast(`Exported ${icons.length} pixel icons`);
   });
 
+  // For batch scripts: window.MeyaPixel.pixelate(icon, { grid, weight, thr, round }).
+  window.MeyaPixel = { icons, pixelate, svgOut };
+
   filterList();
   select(state.current);
 })();
