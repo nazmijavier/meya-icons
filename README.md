@@ -5,7 +5,7 @@
 
 # Meya Icons
 
-Meya Icons is a free, open-source set of <!--count-->287<!--/count--> icons drawn by [Meya Lab](https://meyalab.com), in two styles: **Outline** and **Duotone** (<!--duo-->285<!--/duo--> icons). Every icon sits on a 24 × 24 grid with a 1.3 px stroke and round caps and joins, and uses `currentColor`, so it picks up the text color around it.
+Meya Icons is a free, open-source set of <!--count-->287<!--/count--> icons drawn by [Meya Lab](https://meyalab.com), in <!--stylenames-->**Outline** and **Duotone**<!--/stylenames--> styles. Every icon sits on a 24 × 24 grid with a 1.3 px stroke and round caps and joins, and uses `currentColor`, so it picks up the text color around it.
 
 [![Icons](https://img.shields.io/badge/icons-287-121212?style=flat-square)](#categories)
 [![Version](https://img.shields.io/badge/version-1.0-1BA4FF?style=flat-square)](https://github.com/nazmijavier/meya-icons/releases)
@@ -13,28 +13,34 @@ Meya Icons is a free, open-source set of <!--count-->287<!--/count--> icons draw
 
 **[Browse the icons](https://nazmijavier.github.io/meya-icons/)** · **[Download ZIP](https://github.com/nazmijavier/meya-icons/releases/latest/download/meya-icons-1.0.zip)** · **[Hire Meya Lab](https://meyalab.com/contact)**
 
+<!--previews-->
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./assets/preview-outline-dark.svg">
   <img alt="A sample of Meya Icons in the Outline style" src="./assets/preview-outline-light.svg" width="100%">
 </picture>
 
-## Styles
-
-| Style | Folder | Look |
-| --- | --- | --- |
-| Outline | [`icons/outline`](./icons/outline) | 1.3 px strokes only |
-| Duotone | [`icons/duotone`](./icons/duotone) | The same strokes, plus a 30% tint fill for depth |
-
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./assets/preview-duotone-dark.svg">
   <img alt="A sample of Meya Icons in the Duotone style" src="./assets/preview-duotone-light.svg" width="100%">
 </picture>
+<!--/previews-->
 
-Duotone tints use `fill-opacity`, so both tones follow `currentColor` and you only set one color.
+## Styles
+
+<!--styles-->
+| Style | Icons | Look |
+| --- | ---: | --- |
+| [Outline](./icons/outline) | 287 | 1.3 px strokes only |
+| [Duotone](./icons/duotone) | 285 | The same strokes, plus a 30% tint fill for depth |
+| Sharp | Coming soon | Strokes with square caps and mitered corners |
+| Filled | Coming soon | Solid shapes for active and selected states |
+<!--/styles-->
+
+Every style uses `currentColor`. Duotone tints use `fill-opacity`, so both tones follow the one color you set.
 
 ## Get the icons
 
-- **Copy one icon.** Open the [website](https://nazmijavier.github.io/meya-icons/), choose Outline or Duotone, search, pick an icon, and copy it as SVG or as a React component. You can change the stroke width and size before you copy.
+- **Copy one icon.** Open the [website](https://nazmijavier.github.io/meya-icons/), choose a style, search, pick an icon, and copy it as SVG or as a React component. You can change the stroke width and size before you copy.
 - **Download the whole set.** Get the [ZIP from the latest release](https://github.com/nazmijavier/meya-icons/releases/latest/download/meya-icons-1.0.zip). The SVG files are in [`icons/`](./icons), one folder per style, then per category.
 - **Clone it.**
 
@@ -111,11 +117,13 @@ Drag any SVG from [`icons/`](./icons) onto the canvas. Strokes and tints stay ed
 ## Adding icons
 
 1. Export the new icons from Figma as SVG. Name each file `category-name.svg`, for example `weather-sun.svg` or `Icon=weather-sun.svg`.
-2. Import them into `icons/`. Add `--style duotone` for Duotone exports:
+2. Import them into `icons/`. Pass `--style` for anything other than Outline (`duotone`, `sharp` or `filled`):
 
    ```bash
    node scripts/import.mjs ~/path/to/exports
    node scripts/import.mjs ~/path/to/duotone-exports --style duotone
+   node scripts/import.mjs ~/path/to/sharp-exports --style sharp
+   node scripts/import.mjs ~/path/to/filled-exports --style filled
    ```
 
 3. Rebuild the website, the README images and the icon counts:

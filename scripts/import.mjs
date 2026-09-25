@@ -1,19 +1,20 @@
 // Imports raw Figma exports into icons/<style>/<category>/<name>.svg.
-// Usage: node scripts/import.mjs <folder-with-exports> [--style outline|duotone]
+// Usage: node scripts/import.mjs <folder-with-exports> [--style outline|duotone|sharp|filled]
 // Accepts "Icon=weather-sun.svg" or "weather-sun.svg". The name must start with a category id.
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { CATEGORIES } from "./categories.mjs";
+import { STYLES } from "./styles.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const STYLES = ["outline", "duotone"];
+const ids = STYLES.map((st) => st.id);
 const args = process.argv.slice(2);
 const styleAt = args.indexOf("--style");
 const style = styleAt >= 0 ? args.splice(styleAt, 2)[1] : "outline";
 const from = args[0];
-if (!from || !STYLES.includes(style)) {
-  console.error("Usage: node scripts/import.mjs <folder-with-exports> [--style outline|duotone]");
+if (!from || !ids.includes(style)) {
+  console.error(`Usage: node scripts/import.mjs <folder-with-exports> [--style ${ids.join("|")}]`);
   process.exit(1);
 }
 

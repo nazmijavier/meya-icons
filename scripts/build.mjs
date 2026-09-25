@@ -4,6 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { CATEGORIES } from "./categories.mjs";
+import { STYLES } from "./styles.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const rel = (...p) => path.join(root, ...p);
@@ -11,7 +12,7 @@ const VERSION = JSON.parse(fs.readFileSync(rel("package.json"), "utf8")).version
 const REPO = "https://github.com/nazmijavier/meya-icons";
 
 // ---------- Read icons ----------
-// Outline is the base set; duotone variants attach to the outline icon with the same name.
+// Every style is read from icons/<style>/. An icon is the union of its variants by category and name.
 function readStyle(style) {
   const out = new Map();
   for (const [cat] of CATEGORIES) {
@@ -27,25 +28,32 @@ function readStyle(style) {
         .trim()
         .replace(/id="([^"]+)"/g, `id="${style}-${cat}-${name}-$1"`)
         .replace(/url\(#([^)]+)\)/g, `url(#${style}-${cat}-${name}-$1)`);
-      out.set(`${cat}/${name}`, { n: name, c: cat, b: inner });
+      out.set(`${cat}/${name}`, inner);
     }
   }
   return out;
 }
-const outline = readStyle("outline");
-const duotone = readStyle("duotone");
-const icons = [...outline.values()].map((i) => ({ ...i, d: duotone.get(`${i.c}/${i.n}`)?.b }));
-const duoCount = icons.filter((i) => i.d).length;
+const variants = Object.fromEntries(STYLES.map((st) => [st.id, readStyle(st.id)]));
+const keys = new Set(Object.values(variants).flatMap((m) => [...m.keys()]));
+const order = CATEGORIES.map(([id]) => id);
+const icons = [...keys]
+  .map((k) => {
+    const [c, n] = k.split("/");
+    return { n, c, v: Object.fromEntries(STYLES.filter((st) => variants[st.id].has(k)).map((st) => [st.id, variants[st.id].get(k)])) };
+  })
+  .sort((x, y) => order.indexOf(x.c) - order.indexOf(y.c) || x.n.localeCompare(y.n));
+const styles = STYLES.map((st) => ({ ...st, count: icons.filter((i) => i.v[st.id]).length }));
+const ready = styles.filter((st) => st.count);
 const categories = CATEGORIES.map(([id, label]) => ({
   id, label,
   count: icons.filter((i) => i.c === id).length,
-  duo: icons.filter((i) => i.c === id && i.d).length,
+  counts: Object.fromEntries(styles.map((st) => [st.id, icons.filter((i) => i.c === id && i.v[st.id]).length])),
 })).filter((c) => c.count);
 
 // ---------- Website ----------
 // On the site, default 1.3 strokes inherit from the root so the stroke slider can drive them.
-const strip = (b) => b && b.replace(/\s*stroke-width="1\.3"/g, "");
-const siteIcons = icons.map((i) => ({ ...i, b: strip(i.b), d: strip(i.d) }));
+const strip = (b) => b.replace(/\s*stroke-width="1\.3"/g, "");
+const siteIcons = icons.map((i) => ({ ...i, v: Object.fromEntries(Object.entries(i.v).map(([k, b]) => [k, strip(b)])) }));
 const wordmark = fs
   .readFileSync(rel("assets/wordmark-white.svg"), "utf8")
   .replace(/fill="white"/g, 'fill="currentColor"')
@@ -53,11 +61,10 @@ const wordmark = fs
 
 const fragment = fs
   .readFileSync(rel("site/template.html"), "utf8")
-  .replace("/*__DATA__*/", `window.MEYA=${JSON.stringify({ categories, icons: siteIcons })};`)
+  .replace("/*__DATA__*/", `window.MEYA=${JSON.stringify({ categories, styles, icons: siteIcons })};`)
   .replace("<!--__WORDMARK__-->", wordmark)
   .replaceAll("__COUNT__", String(icons.length))
   .replaceAll("__CATS__", String(categories.length))
-  .replaceAll("__DUO__", String(duoCount))
   .replaceAll("__VERSION__", VERSION)
   .replaceAll("__REPO__", REPO)
   .replaceAll("__FAVICON__", `data:image/png;base64,${fs.readFileSync(rel("assets/favicon.png")).toString("base64")}`)
@@ -89,15 +96,15 @@ for (const [mode, t] of Object.entries(themes)) {
   <text x="304" y="178" font-family="${FONT}" font-size="72" font-weight="600" letter-spacing="-2.5" fill="${t.ink}">Meya Icons</text>
   <rect x="696" y="126" width="72" height="44" rx="10" fill="${t.bg}" stroke="${t.line}"/>
   <text x="732" y="156" text-anchor="middle" font-family="${FONT}" font-size="22" font-weight="500" fill="${t.muted}">${VERSION}</text>
-  <text x="306" y="232" font-family="${FONT}" font-size="28" fill="${t.muted}">${icons.length} open-source icons in Outline and Duotone by Meya Lab</text>
+  <text x="306" y="232" font-family="${FONT}" font-size="28" fill="${t.muted}">${icons.length} open-source icons in ${ready.map((st) => st.label).join(", ").replace(/, ([^,]*)$/, " and $1")} by Meya Lab</text>
 </svg>
 `
   );
 
   // Preview grids: a sample across every category, one image per style.
-  for (const [style, key] of [["outline", "b"], ["duotone", "d"]]) {
+  for (const { id: style } of ready) {
     const cols = 16, rows = 5, cell = 72, pad = 40;
-    const pool = icons.filter((i) => i[key]);
+    const pool = icons.filter((i) => i.v[style]);
     const perCat = Math.ceil((cols * rows) / categories.length);
     const sample = categories.flatMap((c) => pool.filter((i) => i.c === c.id).slice(0, perCat)).slice(0, cols * rows);
     const w = cols * cell + pad * 2, h = rows * cell + pad * 2;
@@ -105,7 +112,7 @@ for (const [mode, t] of Object.entries(themes)) {
       .map((ic, k) => {
         const x = pad + (k % cols) * cell + (cell - 32) / 2;
         const y = pad + Math.floor(k / cols) * cell + (cell - 32) / 2;
-        return `<svg x="${x}" y="${y}" width="32" height="32" viewBox="0 0 24 24" fill="none">${ic[key]}</svg>`;
+        return `<svg x="${x}" y="${y}" width="32" height="32" viewBox="0 0 24 24" fill="none">${ic.v[style]}</svg>`;
       })
       .join("\n  ");
     fs.writeFileSync(
@@ -121,14 +128,24 @@ if (fs.existsSync(readmePath)) {
   let md = fs.readFileSync(readmePath, "utf8");
   md = md.replace(/(<!--count-->)[\s\S]*?(<!--\/count-->)/g, `$1${icons.length}$2`);
   md = md.replace(/icons-\d+-/g, `icons-${icons.length}-`);
-  md = md.replace(/(<!--duo-->)[\s\S]*?(<!--\/duo-->)/g, `$1${duoCount}$2`);
   const table = [
-    "| Category | Outline | Duotone |",
-    "| --- | ---: | ---: |",
-    ...categories.map((c) => `| ${c.label} | [${c.count}](icons/outline/${c.id}) | [${c.duo}](icons/duotone/${c.id}) |`),
+    `| Category | ${ready.map((st) => st.label).join(" | ")} |`,
+    `| --- | ${ready.map(() => "---:").join(" | ")} |`,
+    ...categories.map((c) => `| ${c.label} | ${ready.map((st) => `[${c.counts[st.id]}](icons/${st.id}/${c.id})`).join(" | ")} |`),
   ].join("\n");
+  const styleRows = [
+    "| Style | Icons | Look |",
+    "| --- | ---: | --- |",
+    ...styles.map((st) => `| ${st.count ? `[${st.label}](./icons/${st.id})` : st.label} | ${st.count || "Coming soon"} | ${st.look} |`),
+  ].join("\n");
+  md = md.replace(/(<!--styles-->)[\s\S]*?(<!--\/styles-->)/, `$1\n${styleRows}\n$2`);
+  const previews = ready
+    .map((st) => `<picture>\n  <source media="(prefers-color-scheme: dark)" srcset="./assets/preview-${st.id}-dark.svg">\n  <img alt="A sample of Meya Icons in the ${st.label} style" src="./assets/preview-${st.id}-light.svg" width="100%">\n</picture>`)
+    .join("\n\n");
+  md = md.replace(/(<!--previews-->)[\s\S]*?(<!--\/previews-->)/, `$1\n${previews}\n$2`);
+  md = md.replace(/(<!--stylenames-->)[\s\S]*?(<!--\/stylenames-->)/g, `$1${ready.map((st) => `**${st.label}**`).join(", ").replace(/, ([^,]*)$/, " and $1")}$2`);
   md = md.replace(/(<!--categories-->)[\s\S]*?(<!--\/categories-->)/, `$1\n${table}\n$2`);
   fs.writeFileSync(readmePath, md);
 }
 
-console.log(`Built ${icons.length} outline + ${duoCount} duotone icons in ${categories.length} categories → docs/index.html (${(fragment.length / 1024).toFixed(0)} KB), README assets updated.`);
+console.log(`Built ${icons.length} icons (${styles.map((st) => `${st.label} ${st.count}`).join(", ")}) in ${categories.length} categories → docs/index.html (${(fragment.length / 1024).toFixed(0)} KB), README assets updated.`);
