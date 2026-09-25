@@ -39,12 +39,14 @@
 }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-html { scroll-padding-top: 150px; }
+html { scroll-padding-top: 130px; }
 body { margin: 0; background: var(--white); color: var(--ink); font: 400 15px/1.47 var(--sans); letter-spacing: -0.01em; -webkit-font-smoothing: antialiased; font-feature-settings: "cv11", "ss01"; font-optical-sizing: auto; }
 button, input { font: inherit; color: inherit; letter-spacing: inherit; }
 button { cursor: pointer; }
 :focus-visible { outline: none; box-shadow: 0 0 0 3px var(--ring); }
-.wrap { max-width: 1280px; margin-inline: auto; padding-inline: 20px; }
+.wrap { max-width: 1440px; margin-inline: auto; padding-inline: 100px; }
+@media (max-width: 1100px) { .wrap { padding-inline: 48px; } }
+@media (max-width: 760px) { .wrap { padding-inline: 20px; } }
 
 /* ---------- Pills ---------- */
 .pill {
@@ -54,7 +56,7 @@ button { cursor: pointer; }
 }
 .pill:active { scale: 0.96; }
 .pill svg { width: 16px; height: 16px; flex: none; }
-.pill-ink { background: var(--ink); color: #fff; padding-right: 4px; }
+.pill-ink { background: var(--ink); color: #fff; }
 .pill-ink:hover { background: #333336; }
 .pill-white { background: var(--white); color: var(--ink); box-shadow: 0 0 0 1px var(--control); }
 .pill-white:hover { background: var(--frost); }
@@ -62,26 +64,23 @@ button { cursor: pointer; }
 .pill-blue:hover { background: #0077ED; }
 .pill-outline { background: transparent; color: var(--ink); box-shadow: 0 0 0 1px var(--steel); }
 .pill-outline:hover { background: var(--mist); }
-.arrow { width: 32px; height: 32px; border-radius: 9999px; background: rgba(255, 255, 255, 0.16); display: grid; place-items: center; }
-.arrow svg { width: 16px; height: 16px; stroke-width: 1.6; rotate: -45deg; }
 .icon-btn { width: 32px; height: 32px; padding: 0; justify-content: center; background: transparent; }
 .icon-btn:hover { background: var(--mist); }
 .icon-btn svg { stroke-width: 1.5; }
 
 /* ---------- Nav (glass pill from the Meya Lab site) ---------- */
-.nav-wrap { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); z-index: 30; padding-top: 12px; transition: padding-right 300ms var(--ease-drawer); }
+.nav-wrap { padding-top: 12px; transition: padding-right 300ms var(--ease-drawer); }
 .nav {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 56px; padding: 0 8px 0 20px; border-radius: 20px;
-  background: rgba(29, 29, 31, 0.5); color: #fff;
-  backdrop-filter: blur(20px) saturate(1.6); -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 64px; color: var(--ink);
 }
 .brand { color: inherit; text-decoration: none; font-size: 15px; font-weight: 500; display: flex; align-items: baseline; gap: 6px; }
-.brand small { font-size: 12px; opacity: 0.6; font-weight: 400; }
+.brand small { font-size: 12px; color: var(--steel); font-weight: 400; }
 .nav-actions { display: flex; align-items: center; gap: 2px; }
-.nav-link { display: inline-flex; align-items: center; gap: 7px; height: 40px; padding-inline: 12px; border-radius: 9999px; color: rgba(255, 255, 255, 0.92); text-decoration: none; font-size: 13px; font-weight: 500; transition: background-color 150ms ease; }
-.nav-link:hover { background: rgba(255, 255, 255, 0.12); }
+.nav-link { display: inline-flex; align-items: center; gap: 7px; height: 40px; padding-inline: 12px; border-radius: 9999px; color: var(--slate); text-decoration: none; font-size: 13px; font-weight: 500; transition: background-color 150ms ease; }
+.nav-link:hover { color: var(--ink); background: var(--mist); }
 .nav-link svg { width: 15px; height: 15px; }
-.nav .pill-ink { height: 40px; font-size: 13px; }
+.nav .pill-ink { height: 40px; font-size: 13px; padding-inline: 18px; }
+.nav-actions { gap: 4px; }
 
 /* ---------- Hero (Figma: Hero / Inner) ---------- */
 .hero { padding-block: 72px 56px; display: grid; justify-items: start; gap: 20px; }
@@ -89,11 +88,10 @@ button { cursor: pointer; }
 .hero h1 { margin: 4px 0 8px; max-width: 16.5em; font-size: clamp(34px, 4.6vw, 56px); line-height: 1.08; font-weight: 500; letter-spacing: -0.03em; text-wrap: balance; }
 .hero-cta { display: flex; flex-wrap: wrap; gap: 10px; }
 .hero-cta .pill { height: 44px; font-size: 15px; }
-.hero-cta .pill-ink { padding-left: 20px; }
-.hero-cta .arrow { width: 36px; height: 36px; }
+.hero-cta .pill { padding-inline: 22px; }
 
 /* ---------- Toolbar ---------- */
-.toolbar { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 80px); z-index: 20; background: rgba(255, 255, 255, 0.86); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+.toolbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: rgba(255, 255, 255, 0.86); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
 .toolbar .wrap { transition: padding-right 300ms var(--ease-drawer); }
 .toolbar-row { display: flex; align-items: center; gap: 8px; padding-block: 12px 4px; }
 .field { position: relative; flex: 1; min-width: 0; }
@@ -194,12 +192,10 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
 }
 @media (max-width: 760px) {
   .hero { padding-block: 48px 36px; }
-  .toolbar { top: calc(env(safe-area-inset-top, 0px) + 76px); }
   .toolbar-row { flex-wrap: wrap; }
   .control { flex: 1; min-width: 0; }
   .control input[type="range"] { flex: 1; width: auto; min-width: 0; }
   .nav-link .label { display: none; }
-  .nav { padding-left: 16px; }
   .grid { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; }
   .tile { border-radius: 18px; }
   .sheet { top: auto; left: 0; width: auto; max-height: 85vh; border-left: 0; border-top: 1px solid var(--control); border-radius: 28px 28px 0 0; translate: 0 100%; }
@@ -220,7 +216,7 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
         <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
         <span class="label">GitHub</span>
       </a>
-      <a class="pill pill-ink" href="https://meyalab.com/contact" target="_blank" rel="noopener">Hire us <span class="arrow"><span data-ico="arrows:arrow-right"></span></span></a>
+      <a class="pill pill-ink" href="https://meyalab.com/contact" target="_blank" rel="noopener">Hire us</a>
     </div>
   </nav>
 </div>
@@ -234,7 +230,7 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
         <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
         Star on GitHub
       </a>
-      <a class="pill pill-ink" href="#icons">Browse 287 icons <span class="arrow"><span data-ico="arrows:arrow-right"></span></span></a>
+      <a class="pill pill-ink" href="#icons">Browse 287 icons</a>
     </div>
   </section>
 </div>
