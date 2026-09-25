@@ -115,8 +115,26 @@ button { cursor: pointer; }
 .kbd { position: absolute; right: 14px; top: 50%; translate: 0 -50%; display: inline-flex; align-items: center; justify-content: center; height: 22px; min-width: 22px; padding-inline: 6px; border-radius: 6px; background: var(--white); color: var(--slate); font-size: 12px; font-weight: 500; box-shadow: 0 0 0 1px var(--control); }
 .clear { position: absolute; right: 7px; top: 50%; translate: 0 -50%; }
 .clear svg { color: var(--slate); }
-.filters { display: flex; align-items: center; gap: 20px; padding-block: 8px 10px; border-bottom: 1px solid var(--control); }
-.filters .divider { width: 1px; height: 20px; background: var(--control); flex: none; }
+.filters { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 10px 0; }
+
+/* Icon colour */
+.color-ctl { position: relative; flex: none; }
+.color-btn { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px 0 10px; border: 0; border-radius: 9999px; background: var(--mist); font-size: 13px; font-weight: 500; color: var(--slate); transition: background-color 150ms ease, color 150ms ease; }
+.color-btn:hover { background: var(--mist-2); color: var(--ink); }
+.color-btn[aria-expanded="true"] { background: var(--ink); color: #fff; }
+.color-dot { width: 18px; height: 18px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12); }
+.color-pop { position: absolute; z-index: 30; top: calc(100% + 8px); right: 0; width: 248px; padding: 14px; border-radius: 18px; border: 1px solid var(--control); background: var(--white); box-shadow: 0 8px 28px rgba(29, 29, 31, 0.1); }
+.color-row { display: flex; align-items: center; gap: 8px; }
+.color-row .swatch { width: 32px; height: 32px; flex: none; border-radius: 8px; overflow: hidden; box-shadow: inset 0 0 0 1px var(--control); }
+.color-row .swatch input { width: 200%; height: 200%; margin: -25%; padding: 0; border: 0; background: none; cursor: pointer; }
+.hex { flex: 1; min-width: 0; height: 32px; padding: 0 8px; border-radius: 8px; border: 1px solid var(--control); background: var(--white); font: 400 12px/1 var(--mono); text-transform: uppercase; }
+.color-reset { height: 32px; padding-inline: 10px; border: 0; border-radius: 8px; background: var(--mist); font-size: 12px; font-weight: 500; color: var(--slate); }
+.color-reset:hover { background: var(--mist-2); color: var(--ink); }
+.presets-title { margin: 14px 0 8px; font-size: 12px; color: var(--steel); }
+.presets { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; }
+.preset { width: 24px; height: 24px; border: 0; border-radius: 50%; padding: 0; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12); transition: scale 150ms ease; }
+.preset:hover { scale: 1.12; }
+.preset[aria-pressed="true"] { box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12), 0 0 0 2px var(--white), 0 0 0 4px var(--ink); }
 .seg { display: flex; gap: 2px; padding: 3px; height: 36px; border-radius: 9999px; background: var(--mist); flex: none; }
 .seg button { height: 30px; padding-inline: 14px; border: 0; border-radius: 9999px; background: none; font-size: 13px; font-weight: 500; color: var(--slate); transition: background-color 150ms ease, color 150ms ease; }
 .seg button:hover { color: var(--ink); }
@@ -148,7 +166,7 @@ button { cursor: pointer; }
 .control output { font: 500 13px/1 var(--sans); color: var(--ink); min-width: 28px; text-align: right; font-variant-numeric: tabular-nums; }
 
 /* Section anchor navigation: bare labels, no chrome. */
-.tabs { display: flex; gap: 22px; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; padding-block: 4px; mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent); -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent); }
+.tabs { display: flex; gap: 20px; min-width: 0; overflow-x: auto; scrollbar-width: none; padding-block: 18px 16px; border-bottom: 1px solid var(--control); mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent); -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent); }
 .tabs::-webkit-scrollbar { display: none; }
 .tab { flex: none; display: inline-flex; align-items: baseline; gap: 5px; padding: 4px 0; border: 0; background: none; font-size: 14px; font-weight: 500; color: var(--slate); transition: color 150ms ease; }
 .tab:hover { color: var(--ink); }
@@ -161,7 +179,7 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
 /* Sponsor rail: a 32px vertical stack of circles, per the Figma frame. */
 /* The grid gives up a 32px column so the sponsors stay in view while scrolling, at every width. */
 main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px; align-items: start; }
-.rail { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 132px); }
+.rail { position: sticky; top: calc(env(safe-area-inset-top, 0px) + var(--toolbar-h, 166px) + 20px); }
 .rail-tiles { display: flex; flex-direction: column; gap: 8px; }
 .section + .section { margin-top: 48px; }
 .section-head { display: flex; align-items: baseline; gap: 8px; margin: 0 2px 14px; }
@@ -176,7 +194,9 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
 .tile:hover { background: var(--mist-2); }
 .tile:active { scale: 0.96; }
 .tile[aria-current="true"] { background: var(--white); box-shadow: inset 0 0 0 1.5px var(--ink); }
-.tile svg { width: var(--size); height: var(--size); stroke-width: var(--sw); margin-block: auto; flex: none; }
+.tile svg { width: var(--size); height: var(--size); stroke-width: var(--sw); margin-block: auto; flex: none; color: var(--icon, var(--ink)); }
+.spon-tile { text-decoration: none; }
+.spon-tile .sponsor-mark { width: 44px; height: 44px; border-radius: 50%; margin-block: auto; flex: none; }
 .tile .name { font-size: 12px; line-height: 1.25; color: var(--slate); text-align: center; overflow-wrap: anywhere; }
 .tile:hover .name, .tile[aria-current="true"] .name { color: var(--ink); }
 .empty { text-align: center; padding: 80px 16px; }
@@ -201,7 +221,7 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
 .stage { position: relative; aspect-ratio: 1; max-width: 100%; border-radius: 28px; background: var(--mist); overflow: hidden; }
 .stage > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 .stage .grid-lines line { stroke: var(--grid); stroke-width: 0.03; }
-.stage .glyph { stroke-width: var(--sw); }
+.stage .glyph { stroke-width: var(--sw); color: var(--icon, var(--ink)); }
 .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .actions .pill { justify-content: center; }
 .copy-swap { position: relative; width: 16px; height: 16px; flex: none; }
@@ -321,11 +341,26 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
     </div>
     <div class="filters">
       <div class="seg" id="styles" role="group" aria-label="Icon style"></div>
-      <span class="divider" aria-hidden="true"></span>
-      <div class="tabs" id="chips" role="toolbar" aria-label="Categories"></div>
+      <div class="color-ctl">
+        <button class="color-btn" id="color-btn" type="button" aria-expanded="false" aria-controls="color-pop">
+          <span class="color-dot" id="color-dot"></span>Color
+        </button>
+        <div class="color-pop" id="color-pop" hidden>
+          <div class="color-row">
+            <span class="swatch"><input id="color" type="color" value="#1D1D1F" aria-label="Pick an icon color"></span>
+            <input class="hex" id="hex" value="#1D1D1F" spellcheck="false" aria-label="Icon color hex">
+            <button class="color-reset" id="color-reset" type="button">Reset</button>
+          </div>
+          <p class="presets-title">Presets</p>
+          <div class="presets" id="presets"></div>
+        </div>
+      </div>
     </div>
+    <div class="tabs" id="chips" role="toolbar" aria-label="Categories"></div>
   </div>
 </div>
+
+<template id="tpl-sponsor"><svg class="sponsor-mark" viewBox="0 0 480 480" fill="none" aria-hidden="true">__SPONSOR_LOGO__</svg></template>
 
 <main class="wrap">
   <div>
@@ -394,7 +429,10 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
   const styleOf = (id) => styles.find((st) => st.id === id);
   const catLabel = Object.fromEntries(categories.map((c) => [c.id, c.label]));
   const $ = (s) => document.querySelector(s);
-  const state = { q: "", cat: "all", style: "outline", sw: 1.3, size: 24, fmt: "svg", current: null };
+  // One tile per sponsor, dropped at a random spot in one of the first sections so it is actually seen.
+  const SPONSORS = [{ label: "sponsors-meya", title: "Meya Lab Studio", href: "https://meyalab.com/" }];
+  const INK = "#1D1D1F";
+  const state = { q: "", cat: "all", style: "outline", sw: 1.3, size: 24, fmt: "svg", color: INK, current: null };
 
   const find = (c, n) => icons.find((i) => i.c === c && i.n === n);
   const inner = (icon) => `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icon.b}</svg>`;
@@ -422,7 +460,7 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
     if (!clip) return;
     if (actx.state === "suspended") actx.resume();
     const src = actx.createBufferSource(); src.buffer = clip;
-    const gain = actx.createGain(); gain.gain.value = 0.35;
+    const gain = actx.createGain(); gain.gain.value = 1;
     src.connect(gain).connect(actx.destination);
     src.start();
   }
@@ -442,19 +480,20 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
   });
 
   // ---------- Copy ----------
+  const paint = (code) => (state.color === INK ? code : code.replaceAll("currentColor", state.color));
   function toSvg(icon) {
-    const code = body(icon).replace(/></g, ">\n  <");
+    const code = paint(body(icon)).replace(/></g, ">\n  <");
     const st = styleOf(state.style);
-    const attrs = (st.stroke ? ` stroke="currentColor" stroke-width="${fmtSw(state.sw)}"` : "") + (st.round ? ' stroke-linecap="round" stroke-linejoin="round"' : "");
+    const attrs = (st.stroke ? ` stroke="${state.color === INK ? "currentColor" : state.color}" stroke-width="${fmtSw(state.sw)}"` : "") + (st.round ? ' stroke-linecap="round" stroke-linejoin="round"' : "");
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${state.size}" height="${state.size}" viewBox="0 0 24 24" fill="none"${attrs}>\n  ${code}\n</svg>`;
   }
   function toJsx(icon) {
-    const code = body(icon)
+    const code = paint(body(icon))
       .replace(/ ([a-z]+)-([a-z])([a-z-]*)=/g, (m, a, b, rest) => ` ${a}${b.toUpperCase()}${rest.replace(/-([a-z])/g, (x, y) => y.toUpperCase())}=`)
       .replace(/style="mask-type:([a-z]+)"/g, 'style={{ maskType: "$1" }}')
       .replace(/></g, ">\n      <");
     const st = styleOf(state.style);
-    const attrs = (st.stroke ? ` stroke="currentColor" strokeWidth={${fmtSw(state.sw)}}` : "") + (st.round ? ' strokeLinecap="round" strokeLinejoin="round"' : "");
+    const attrs = (st.stroke ? ` stroke="${state.color === INK ? "currentColor" : state.color}" strokeWidth={${fmtSw(state.sw)}}` : "") + (st.round ? ' strokeLinecap="round" strokeLinejoin="round"' : "");
     return `export function ${pascal(icon.n)}(props) {\n  return (\n    <svg xmlns="http://www.w3.org/2000/svg" width={${state.size}} height={${state.size}} viewBox="0 0 24 24" fill="none"${attrs} {...props}>\n      ${code}\n    </svg>\n  );\n}`;
   }
   async function copy(text, btn, label) {
@@ -496,6 +535,8 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
       <div class="grid">${icons.map((ic, i) => ic.c !== c.id ? "" : `<button class="tile" type="button" data-i="${i}" aria-label="${title(ic.n)}">${glyph(ic)}<span class="name">${ic.n}</span></button>`).join("")}</div>
     </section>`).join("");
   const tiles = [...sectionsEl.querySelectorAll(".tile")];
+  placeSponsors();
+  const sponTiles = [...sectionsEl.querySelectorAll(".spon-tile")];
   const sections = [...sectionsEl.querySelectorAll(".section")];
 
   function filter() {
@@ -508,12 +549,13 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
       t.hidden = !hit; if (hit) total++;
     }
     for (const s of sections) {
-      const n = s.querySelectorAll(".tile:not([hidden])").length;
+      const n = s.querySelectorAll(".tile:not(.spon-tile):not([hidden])").length;
       const cat = categories.find((c) => c.id === s.dataset.cat);
       const all = cat.counts[state.style];
       s.hidden = n === 0;
       s.querySelector("[data-count]").textContent = n === all ? n : `${n} of ${all}`;
     }
+    for (const t of sponTiles) t.hidden = !!q;
     $("#empty").hidden = total > 0;
     if (!total) {
       $("#empty-q").textContent = state.q;
@@ -527,6 +569,23 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
   function onQuery() { state.q = qEl.value; $("#clear").hidden = !state.q; $("#kbd").hidden = !!state.q; filter(); }
   qEl.addEventListener("input", onQuery);
   $("#clear").addEventListener("click", () => { setQuery(""); qEl.focus(); });
+
+  // ---------- Sponsors in the grid ----------
+  function placeSponsors() {
+    const logo = $("#tpl-sponsor").innerHTML;
+    const grids = [...sectionsEl.querySelectorAll(".grid")];
+    if (!grids.length) return;
+    for (const sp of SPONSORS) {
+      const g = grids[Math.floor(Math.random() * Math.min(3, grids.length))];
+      const a = document.createElement("a");
+      a.className = "tile spon-tile";
+      a.href = sp.href; a.target = "_blank"; a.rel = "noopener sponsored";
+      a.dataset.tip = "Sponsor";
+      a.setAttribute("aria-label", `${sp.title}, sponsor`);
+      a.innerHTML = `${logo}<span class="name">${sp.label}</span>`;
+      g.insertBefore(a, g.children[Math.floor(Math.random() * (g.children.length + 1))] || null);
+    }
+  }
 
   // ---------- Controls ----------
   const root = document.documentElement;
@@ -570,6 +629,38 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
     refreshSheet();
   });
 
+  // The toolbar is sticky and its height changes with the layout, so the rail follows it.
+  const toolbarEl = $(".toolbar");
+  const trackToolbar = () => root.style.setProperty("--toolbar-h", Math.round(toolbarEl.getBoundingClientRect().height) + "px");
+  trackToolbar();
+  if (window.ResizeObserver) new ResizeObserver(trackToolbar).observe(toolbarEl);
+
+  // ---------- Icon colour ----------
+  const PRESETS = ["#000000", "#FFFFFF", "#3F3F46", "#A1A1AA", "#3B82F6", "#6366F1", "#A855F7", "#EC4899",
+                   "#EF4444", "#F97316", "#F59E0B", "#8B5E34", "#22C55E", "#14B8A6", "#38BDF8", "#2563EB"];
+  $("#presets").innerHTML = PRESETS.map((c) => `<button class="preset" type="button" data-color="${c}" style="background:${c}" aria-pressed="false" aria-label="${c}"></button>`).join("");
+  function setColor(v) {
+    state.color = v.toUpperCase();
+    root.style.setProperty("--icon", state.color);
+    $("#color-dot").style.background = state.color;
+    $("#color").value = state.color;
+    $("#hex").value = state.color;
+    $("#presets").querySelectorAll(".preset").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.color === state.color)));
+    if (state.current) refreshSheet();
+  }
+  $("#presets").addEventListener("click", (e) => { const b = e.target.closest("[data-color]"); if (b) setColor(b.dataset.color); });
+  $("#color").addEventListener("input", (e) => setColor(e.target.value));
+  $("#hex").addEventListener("change", (e) => {
+    const v = e.target.value.trim().replace(/^#?/, "#");
+    if (/^#[0-9a-f]{6}$/i.test(v)) setColor(v); else e.target.value = state.color;
+  });
+  $("#color-reset").addEventListener("click", () => setColor(INK));
+  const popBtn = $("#color-btn"), popEl = $("#color-pop");
+  function openPop(on) { popEl.hidden = !on; popBtn.setAttribute("aria-expanded", String(on)); }
+  popBtn.addEventListener("click", () => openPop(popEl.hidden));
+  document.addEventListener("pointerdown", (e) => { if (!popEl.hidden && !e.target.closest(".color-ctl")) openPop(false); });
+  setColor(INK);
+
   // ---------- Sheet ----------
   const sheet = $("#sheet");
   let activeTile = null;
@@ -602,7 +693,7 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
     $("#p-sw").textContent = fmtSw(state.sw) + " px";
   }
   sectionsEl.addEventListener("click", (e) => {
-    const t = e.target.closest(".tile"); if (!t) return;
+    const t = e.target.closest(".tile:not(.spon-tile)"); if (!t) return;
     if (t === activeTile && sheet.classList.contains("open")) return closeSheet();
     openSheet(+t.dataset.i, t);
   });
