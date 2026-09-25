@@ -63,7 +63,7 @@ button { font: inherit; color: inherit; letter-spacing: inherit; cursor: pointer
 .tag { height: 24px; padding-inline: 10px; display: inline-flex; align-items: center; border-radius: 9999px; background: var(--white); color: var(--ink); font-size: 12px; font-weight: 600; }
 .price { display: flex; align-items: baseline; gap: 8px; margin-top: 24px; }
 .price b { font-size: 56px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums; }
-.price span { font-size: 13px; line-height: 1.3; color: var(--steel); }
+.price span { font-size: 14px; color: var(--steel); white-space: nowrap; }
 .plan-pro .price span, .plan-pro .sub, .plan-pro .feat small { color: rgba(255,255,255,.55); }
 .sub { margin-top: 10px; font-size: 14px; color: var(--steel); min-height: 21px; }
 .feats { list-style: none; margin: 28px 0 0; padding: 0; display: grid; gap: 16px; }
@@ -86,27 +86,42 @@ button { font: inherit; color: inherit; letter-spacing: inherit; cursor: pointer
 
 /* ---------- Compare ---------- */
 section { padding-block: 72px 0; }
+section.last { padding-bottom: 96px; }
 h2 { margin: 0 0 28px; font-size: clamp(26px, 3.2vw, 36px); font-weight: 500; letter-spacing: -0.03em; line-height: 1.1; text-wrap: balance; }
 .center { text-align: center; }
-.table-scroll { overflow-x: auto; border-radius: 20px; border: 1px solid var(--control); }
-table { width: 100%; border-collapse: collapse; min-width: 520px; font-size: 14px; }
-th, td { padding: 16px 20px; text-align: center; border-bottom: 1px solid var(--control); }
-th { background: var(--mist); font-weight: 500; }
-th:first-child, td:first-child { text-align: left; }
-tr:last-child td { border-bottom: 0; }
-td { color: var(--slate); }
-td:first-child { color: var(--ink); }
-.yes { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--ink); color: #fff; }
-.yes svg { width: 13px; height: 13px; stroke-width: 2.2; }
-.no { color: var(--control); font-size: 18px; }
+.cmp-scroll { overflow-x: auto; }
+.cmp { min-width: 600px; }
+.cmp-row, .cmp-group { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr); }
+.cmp-row > div, .cmp-group > div { display: flex; align-items: center; justify-content: center; padding: 14px 20px; }
+.cmp-row > div:first-child, .cmp-group > div:first-child { justify-content: flex-start; }
+.cmp-row { border-bottom: 1px solid var(--control); }
+.cmp-row > div:first-child { gap: 12px; font-size: 15px; }
+.cmp-row small { margin-left: auto; padding-right: 8px; font-size: 13px; color: var(--steel); letter-spacing: 0.01em; }
+.cmp-last { border-bottom: 0; }
+.cmp-group > div { padding-top: 28px; padding-bottom: 8px; }
+.cmp-group > div:first-child { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--steel); }
+.cmp-pro { background: var(--mist); }
+.cmp-head { border-bottom: 1px solid var(--control); }
+.cmp-plan { flex-direction: column; gap: 4px; padding: 24px 20px 20px !important; }
+.cmp-plan b { font-size: 17px; font-weight: 600; }
+.cmp-plan span { font-size: 13px; color: var(--steel); letter-spacing: 0.01em; }
+.cmp-plan .pill { margin-top: 12px; height: 36px; font-size: 13px; }
+.cmp-head .cmp-pro { border-radius: 20px 20px 0 0; }
+.cmp-last .cmp-pro { border-radius: 0 0 20px 20px; }
+.cmp-head .cmp-pro .pill { background: var(--ink); color: #fff; } .cmp-head .cmp-pro .pill:hover { background: #333336; }
+.sample { width: 36px; height: 36px; flex: none; display: grid; place-items: center; border-radius: 10px; background: var(--mist); }
+.sample svg { width: 20px; height: 20px; }
+.yes svg { width: 20px; height: 20px; stroke-width: 1.8; color: var(--ink); }
+.no { width: 14px; height: 1.5px; border-radius: 2px; background: var(--control); }
+.txt { font-size: 14px; color: var(--slate); letter-spacing: 0.01em; }
 
 /* ---------- Why ---------- */
 .why-head p { margin: -16px 0 28px; max-width: 36em; color: var(--slate); }
 .why { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
-.why div { padding: 22px; border-radius: 20px; background: var(--mist); min-height: 170px; display: flex; flex-direction: column; }
-.why .ic { width: 22px; height: 22px; }
-.why b { margin-top: auto; font-size: 15px; font-weight: 500; }
-.why p { margin: 6px 0 0; font-size: 13px; color: var(--slate); }
+.why div { padding: 24px; border-radius: 20px; background: var(--mist); display: flex; flex-direction: column; gap: 6px; }
+.why .ic { width: 24px; height: 24px; margin-bottom: 14px; }
+.why b { font-size: 15px; font-weight: 500; }
+.why p { margin: 0; font-size: 13px; color: var(--slate); }
 
 /* ---------- FAQ ---------- */
 .faq-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 48px; }
@@ -126,14 +141,12 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
 .cta b { display: block; font-size: 18px; font-weight: 500; }
 .cta p { margin: 4px 0 0; font-size: 14px; color: var(--slate); }
 
-/* ---------- Footer ---------- */
-.footer { margin-top: 96px; background: var(--mist); padding-block: 28px 36px; }
+/* ---------- Footer (shared by every page) ---------- */
+.footer { background: var(--mist); padding-block: 28px 36px; }
 .footer .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; }
-.footer-meta { display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 13px; color: var(--slate); }
-.footer-meta a { color: var(--link); text-decoration: none; }
-
-/* Descriptions and secondary text read better slightly open */
-.hero p, .sub, .feat small, .why-head p, .why p, .faq-side p, details p, .cta p, .plan-foot small, td { letter-spacing: 0.01em; }
+.footer-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 20px; font-size: 13px; color: var(--slate); letter-spacing: 0.01em; }
+.footer-meta a { color: var(--slate); text-decoration: none; }
+.footer-meta a:hover { color: var(--ink); }
 
 @media (max-width: 900px) {
   .plans, .faq-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
@@ -176,7 +189,7 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
 
       <div class="plan plan-pro">
         <div class="plan-top"><span class="plan-name">__ICON:general/star__Pro</span><span class="tag">Popular</span></div>
-        <div class="price"><b id="pro-price">$5</b><span id="pro-unit">per seat<br>/month</span></div>
+        <div class="price"><b id="pro-price">$5</b><span id="pro-unit">per seat / month</span></div>
         <div class="sub" id="pro-sub">Billed monthly, cancel anytime</div>
         <ul class="feats">
           <li class="feat"><span class="chip">__ICON:layout/layers__</span><div><b>__PRO_COUNT__ more icons</b><small>Sharp, Filled and Pixel</small></div></li>
@@ -184,27 +197,31 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
           <li class="feat"><span class="chip">__ICON:arrows/refresh__</span><div><b>New icons as they ship</b><small>Included while you're subscribed</small></div></li>
         </ul>
         <div class="teaser" aria-hidden="true">__PRO_PREVIEW__</div>
-        <div class="plan-foot"><div class="seats" role="group" aria-label="Seats"><button type="button" id="seat-down" aria-label="Fewer seats">−</button><output id="seat-n" aria-live="polite">1 seat</output><button type="button" id="seat-up" aria-label="More seats">+</button></div><a href="#" class="pill soon" id="get-pro" data-tip="Coming soon">Get Pro · $5</a></div>
+        <div class="plan-foot"><div class="seats" role="group" aria-label="Seats"><button type="button" id="seat-down" aria-label="Fewer seats">−</button><output id="seat-n" aria-live="polite">1 seat</output><button type="button" id="seat-up" aria-label="More seats">+</button></div><a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro">Get Pro · $5</a></div>
       </div>
     </div>
 
     <section>
       <h2 class="center">Choose what fits your work</h2>
-      <div class="table-scroll">
-        <table>
-          <thead><tr><th>Features</th><th>Free</th><th>Pro</th></tr></thead>
-          <tbody>
-            <tr><td>Outline, 287 icons</td><td>__YES__</td><td>__YES__</td></tr>
-            <tr><td>Duotone, 285 icons</td><td>__YES__</td><td>__YES__</td></tr>
-            <tr><td>Sharp, 287 icons</td><td><span class="no">—</span></td><td>__YES__</td></tr>
-            <tr><td>Filled, 287 icons</td><td><span class="no">—</span></td><td>__YES__</td></tr>
-            <tr><td>Pixel, 287 icons</td><td><span class="no">—</span></td><td>__YES__</td></tr>
-            <tr><td>Copy as SVG or React</td><td>__YES__</td><td>__YES__</td></tr>
-            <tr><td>Stroke, size and colour controls</td><td>__YES__</td><td>__YES__</td></tr>
-            <tr><td>npm package</td><td>__YES__</td><td>__YES__</td></tr>
-            <tr><td>New releases</td><td>Free styles</td><td>Every style</td></tr>
-          </tbody>
-        </table>
+      <div class="cmp-scroll">
+        <div class="cmp" role="table" aria-label="Plan comparison">
+          <div class="cmp-row cmp-head" role="row">
+            <div role="columnheader"></div>
+            <div role="columnheader" class="cmp-plan"><b>Free</b><span>$0 forever</span><a class="pill pill-white" href="./#icons">Browse icons</a></div>
+            <div role="columnheader" class="cmp-plan cmp-pro"><b>Pro</b><span>$5 per seat / month</span><a data-polar href="#" data-tip="Coming soon" class="pill soon">Get Pro</a></div>
+          </div>
+          <div class="cmp-group" role="row"><div role="cell">Styles</div><div role="cell"></div><div role="cell" class="cmp-pro"></div></div>
+          <div class="cmp-row" role="row"><div role="cell"><span class="sample">__SAMPLE:outline__</span>Outline<small>287 icons</small></div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
+          <div class="cmp-row" role="row"><div role="cell"><span class="sample">__SAMPLE:duotone__</span>Duotone<small>285 icons</small></div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
+          <div class="cmp-row" role="row"><div role="cell"><span class="sample">__SAMPLE:sharp__</span>Sharp<small>287 icons</small></div><div role="cell">__NO__</div><div role="cell" class="cmp-pro">__YES__</div></div>
+          <div class="cmp-row" role="row"><div role="cell"><span class="sample">__SAMPLE:filled__</span>Filled<small>287 icons</small></div><div role="cell">__NO__</div><div role="cell" class="cmp-pro">__YES__</div></div>
+          <div class="cmp-row" role="row"><div role="cell"><span class="sample">__SAMPLE:pixel__</span>Pixel<small>287 icons</small></div><div role="cell">__NO__</div><div role="cell" class="cmp-pro">__YES__</div></div>
+          <div class="cmp-group" role="row"><div role="cell">Tools</div><div role="cell"></div><div role="cell" class="cmp-pro"></div></div>
+          <div class="cmp-row" role="row"><div role="cell">Copy as SVG or React</div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
+          <div class="cmp-row" role="row"><div role="cell">Stroke, size and colour controls</div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
+          <div class="cmp-row" role="row"><div role="cell">npm package</div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
+          <div class="cmp-row cmp-last" role="row"><div role="cell">New icons as they ship</div><div role="cell"><span class="txt">Free styles</span></div><div role="cell" class="cmp-pro"><span class="txt">Every style</span></div></div>
+        </div>
       </div>
     </section>
 
@@ -233,7 +250,7 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
       </div>
     </section>
 
-    <section>
+    <section class="last">
       <div class="cta">
         <div><b>Need custom icons?</b><p>Meya Lab designs icon sets for products and brands.</p></div>
         <a class="pill pill-ink" href="https://meyalab.com/contact" target="_blank" rel="noopener">Hire us</a>
@@ -242,15 +259,7 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
   </div>
 </main>
 
-<footer class="footer">
-  <div class="wrap">
-    <a class="brand" href="./">Meya Icons <span class="pro">__VERSION__</span></a>
-    <div class="footer-meta">
-      <span>__COUNT__ free icons · MIT License</span>
-      <a href="mailto:hello@meyalab.com">hello@meyalab.com</a>
-    </div>
-  </div>
-</footer>
+__FOOTER__
 
 <script>
 (() => {

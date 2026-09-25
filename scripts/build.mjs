@@ -78,12 +78,26 @@ for (const n of TEASER) {
   proPreview += `<span><svg viewBox="0 0 24 24" fill="none"${attrs}>${t.replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim()}</svg></span>`;
 }
 
+// ---------- Footer shared by every page ----------
+const FOOTER = `<footer class="footer">
+  <div class="wrap">
+    <a class="brand" href="./">Meya Icons <span class="pro">__VERSION__</span></a>
+    <div class="footer-meta">
+      <span>__COUNT__ free icons · MIT License</span>
+      <a href="pricing.html">Pricing</a>
+      <a href="mailto:hello@meyalab.com">hello@meyalab.com</a>
+      <a href="https://meyalab.com/contact" target="_blank" rel="noopener">Need custom icons? Hire us</a>
+    </div>
+  </div>
+</footer>`;
+
 // ---------- Website ----------
 // On the site, default 1.3 strokes inherit from the root so the stroke slider can drive them.
 const strip = (b) => b.replace(/\s*stroke-width="1\.3"/g, "");
 const siteIcons = icons.map((i) => ({ ...i, v: Object.fromEntries(Object.entries(i.v).map(([k, b]) => [k, strip(b)])) }));
 const fragment = fs
   .readFileSync(rel("site/template.html"), "utf8")
+  .replace("__FOOTER__", FOOTER)
   .replace("/*__DATA__*/", `window.MEYA=${JSON.stringify({ categories, styles, icons: siteIcons })};`)
   .replaceAll("__SPONSOR_LOGO__", fs.readFileSync(rel("assets/logo.svg"), "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim())
   .replace("__CLICK_SOUND__", fs.readFileSync(rel("assets/click.wav")).toString("base64"))
@@ -141,6 +155,7 @@ if (PUBLISH_SPONSOR_PAGE) {
   // ---------- Sponsor page (docs/sponsor.html) ----------
   const sponsor = fs
     .readFileSync(rel("site/sponsor.html"), "utf8")
+    .replace("__FOOTER__", FOOTER)
     .replace("/*__DATA__*/", `window.MEYA=${JSON.stringify({ icons: siteIcons.filter((i) => i.c === "shapes") })};`)
     .replaceAll("__VERSION__", VERSION)
     .replaceAll("__COUNT__", total.toLocaleString("en-US"))
@@ -165,14 +180,22 @@ if (PUBLISH_SPONSOR_PAGE) {
   const check = outlineIcon("shapes/check");
   const page = fs
     .readFileSync(rel("site/pricing.html"), "utf8")
+    .replace("__FOOTER__", FOOTER)
     .replace(/__ICON:([a-z-]+\/[a-z-]+)__/g, (m, ref) => outlineIcon(ref))
     .replaceAll("__YES__", `<span class="yes" aria-label="Included">${check}</span>`)
+    .replaceAll("__NO__", '<span class="no" aria-label="Not included"></span>')
+    .replace(/__SAMPLE:([a-z]+)__/g, (m, st) => {
+      const f = ["outline", "duotone"].includes(st) ? rel("icons", st, "general/home.svg") : path.join(PRO_DIR, st, "general/home.svg");
+      if (!fs.existsSync(f)) return "";
+      const inner = fs.readFileSync(f, "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim();
+      return `<svg viewBox="0 0 24 24" fill="none"${st === "pixel" ? ' shape-rendering="crispEdges"' : ""} aria-hidden="true">${inner}</svg>`;
+    })
+    .replaceAll('data-polar href="#" data-tip="Coming soon" class="pill soon"', POLAR_CHECKOUT ? `href="${POLAR_CHECKOUT}" target="_blank" rel="noopener" class="pill"` : 'href="#" data-tip="Coming soon" class="pill soon"')
     .replaceAll("__VERSION__", VERSION)
     .replaceAll("__COUNT__", total.toLocaleString("en-US"))
     .replaceAll("__PRO_COUNT__", proCount.toLocaleString("en-US"))
     .replaceAll("__ALL_COUNT__", (total + proCount).toLocaleString("en-US"))
     .replace("__PRO_PREVIEW__", proPreview)
-    .replace('href="#" class="pill soon" id="get-pro" data-tip="Coming soon"', POLAR_CHECKOUT ? `href="${POLAR_CHECKOUT}" class="pill" id="get-pro" target="_blank" rel="noopener"` : 'href="#" class="pill soon" id="get-pro" data-tip="Coming soon"')
     .replaceAll("__FAVICON__", `data:image/png;base64,${fs.readFileSync(rel("assets/favicon.png")).toString("base64")}`)
     .replace("__CLICK_SOUND__", fs.readFileSync(rel("assets/click.wav")).toString("base64"));
   const at = page.indexOf("</style>") + 8;
