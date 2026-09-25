@@ -32,9 +32,9 @@ Meya Icons is a free, open-source set of <!--count-->572<!--/count--> icons draw
 | --- | ---: | --- |
 | [Outline](./icons/outline) | 287 | 1.3 px strokes only |
 | [Duotone](./icons/duotone) | 285 | The same strokes, plus a 30% tint fill for depth |
-| Pixel `PRO` | Coming soon | Solid cells on a 12 × 12 grid, made with the Pixel Lab |
 | Sharp `PRO` | Coming soon | Strokes with square caps and mitered corners |
 | Filled `PRO` | Coming soon | Solid shapes for active and selected states |
+| Pixel `PRO` | Coming soon | Solid cells on a 12 × 12 grid, made with the Pixel Lab |
 <!--/styles-->
 
 Every style uses `currentColor`. Duotone tints use `fill-opacity`, so both tones follow the one color you set.
