@@ -11,7 +11,7 @@ Meya Icons is a free, open-source set of <!--count-->572<!--/count--> icons draw
 [![Version](https://img.shields.io/badge/version-1.0-1BA4FF?style=flat-square)](https://github.com/nazmijavier/meya-icons/releases)
 [![License](https://img.shields.io/badge/license-MIT-737373?style=flat-square)](./LICENSE)
 
-**[Download all icons (.zip)](https://github.com/nazmijavier/meya-icons/releases/latest/download/meya-icons-1.0.zip)** · **[Browse and copy](https://nazmijavier.github.io/meya-icons/)** · **[Figma plugin](#figma-plugin)** · **[Hire Meya Lab](https://meyalab.com/contact)**
+**[Download all icons (.zip)](https://github.com/nazmijavier/meya-icons/releases/latest/download/meya-icons.zip)** · **[Browse and copy](https://nazmijavier.github.io/meya-icons/)** · **[Figma plugin](#figma-plugin)** · **[Hire Meya Lab](https://meyalab.com/contact)**
 
 <!--previews-->
 <picture>
@@ -42,7 +42,7 @@ Every style uses `currentColor`. Duotone tints use `fill-opacity`, so both tones
 ## Get the icons
 
 - **Copy one icon.** Open the [website](https://nazmijavier.github.io/meya-icons/), choose a style, search, pick an icon, and copy it as SVG or as a React component. You can change the stroke width and size before you copy.
-- **Download the whole set.** [meya-icons-1.0.zip](https://github.com/nazmijavier/meya-icons/releases/latest/download/meya-icons-1.0.zip) (380 KB) has every SVG in both styles, one folder per style and then per category. It is also on the [Releases page](https://github.com/nazmijavier/meya-icons/releases/latest).
+- **Download the whole set.** [meya-icons.zip](https://github.com/nazmijavier/meya-icons/releases/latest/download/meya-icons.zip) (380 KB) has every SVG in both styles, one folder per style and then per category. It is also on the [Releases page](https://github.com/nazmijavier/meya-icons/releases/latest).
 - **Download the whole repository.** The green **Code** button above, then **Download ZIP**, or [this link](https://github.com/nazmijavier/meya-icons/archive/refs/heads/main.zip). That includes the website and the Figma plugin as well as the icons.
 - **Clone it.**
 
