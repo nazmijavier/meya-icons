@@ -58,10 +58,6 @@ button { font: inherit; color: inherit; letter-spacing: inherit; cursor: pointer
 .badge { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--slate); }
 .hero h1 { margin: 14px 0 0; font-size: clamp(34px, 5vw, 56px); line-height: 1.04; font-weight: 500; letter-spacing: -0.04em; text-wrap: balance; }
 .hero p { margin: 14px auto 0; max-width: 34em; font-size: 17px; color: var(--slate); }
-.toggle { display: inline-flex; margin-top: 28px; padding: 4px; border-radius: 9999px; background: var(--mist); }
-.toggle button { height: 36px; padding-inline: 18px; border: 0; border-radius: 9999px; background: none; font-size: 14px; font-weight: 500; color: var(--slate); }
-.toggle button[aria-pressed="true"] { background: var(--white); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 0 0 1px var(--control); }
-.toggle em { font-style: normal; margin-left: 6px; font-size: 11px; font-weight: 600; color: #1a7f37; }
 
 /* ---------- Plans ---------- */
 .plans { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
@@ -141,6 +137,9 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
 .footer-meta { display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 13px; color: var(--slate); }
 .footer-meta a { color: var(--link); text-decoration: none; }
 
+/* Descriptions and secondary text read better slightly open */
+.hero p, .sub, .feat small, .why-head p, .why p, .faq-side p, details p, .cta p, .plan-foot small, td { letter-spacing: 0.01em; }
+
 @media (max-width: 900px) {
   .plans, .faq-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .why { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -165,10 +164,6 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
       <span class="badge">Upgrade to <span class="pro">PRO</span></span>
       <h1>Simple plans. Full access.</h1>
       <p>Outline and Duotone stay free forever. Pro adds three more styles for one flat rate.</p>
-      <div class="toggle" role="group" aria-label="Billing period">
-        <button type="button" data-period="monthly" aria-pressed="false">Monthly</button>
-        <button type="button" data-period="annual" aria-pressed="true">Annually<em>2 months free</em></button>
-      </div>
     </header>
 
     <div class="plans">
@@ -192,8 +187,8 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
 
       <div class="plan plan-pro">
         <div class="plan-top"><span class="plan-name"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M11.1033 3.8287C11.4702 3.08546 12.53 3.08546 12.8968 3.8287L14.9426 7.97398L19.5172 8.6387C20.3374 8.75789 20.6649 9.76586 20.0714 10.3444L16.7612 13.571L17.5427 18.1271C17.6828 18.944 16.8253 19.567 16.0917 19.1813L12.0001 17.0302L7.90845 19.1813C7.17482 19.567 6.31739 18.944 6.4575 18.1271L7.23893 13.571L3.92873 10.3444C3.33521 9.76586 3.66273 8.75789 4.48295 8.6387L9.05753 7.97398L11.1033 3.8287Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>Pro</span><span class="tag">Popular</span></div>
-        <div class="price"><b id="pro-price">$90</b><span id="pro-unit">per seat<br>/year</span></div>
-        <div class="sub" id="pro-sub">$7.50 per seat a month, billed yearly</div>
+        <div class="price"><b id="pro-price">$5</b><span id="pro-unit">per seat<br>/month</span></div>
+        <div class="sub" id="pro-sub">Billed monthly, cancel anytime</div>
         <ul class="feats">
           <li class="feat"><span class="chip"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3.84434 10.5461C3.27674 10.2456 3.27674 9.43253 3.84434 9.13205L10.5964 5.55753C11.4744 5.0927 12.5256 5.0927 13.4037 5.55753L20.1557 9.13205C20.7233 9.43253 20.7233 10.2456 20.1557 10.5461L13.4037 14.1206C12.5256 14.5855 11.4744 14.5855 10.5964 14.1206L3.84434 10.5461Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M3.83765 14.8633L10.5964 18.4414C11.4745 18.9062 12.5257 18.9062 13.4037 18.4414L20.1625 14.8633" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div><b>861 more icons</b><small>Sharp, Filled and Pixel</small></div></li>
@@ -206,7 +201,7 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
         <div class="teaser" aria-hidden="true"><span><svg viewBox="0 0 24 24" fill="none"><path d="M5.208 9.348V20.312H18.792V9.348" stroke="currentColor" stroke-width="1.3" stroke-linecap="square" stroke-linejoin="miter"/>
   <path d="M3.547 10.801L12 3.306L20.453 10.801" stroke="currentColor" stroke-width="1.3" stroke-linecap="square" stroke-linejoin="miter"/>
   <path d="M12 15.5748C12 14.7243 12.6895 14.0348 13.5401 14.0348H14.1001C14.9506 14.0348 15.6401 14.7243 15.6401 15.5748C15.6401 16.4254 14.9506 17.1149 14.1001 17.1149H13.54C12.6895 17.1149 12 16.4254 12 15.5748Z" fill="currentColor"/></svg></span><span><svg viewBox="0 0 24 24" fill="none"><path d="M 7.5 3.987 C 6.399 4.148, 5.488 4.612, 4.673 5.424 C 4.204 5.891, 3.883 6.34, 3.59 6.936 C 2.95 8.239, 2.789 9.689, 3.112 11.218 C 3.653 13.778, 5.603 16.25, 8.686 18.286 C 9.377 18.742, 10.307 19.29, 10.638 19.437 C 11.369 19.76, 12.248 19.811, 12.991 19.573 C 13.307 19.471, 13.437 19.411, 13.893 19.154 C 18.071 16.797, 20.516 13.871, 20.99 10.663 C 21.073 10.094, 21.062 9.218, 20.962 8.636 C 20.489 5.86, 18.255 3.859, 15.738 3.958 C 15.158 3.981, 14.7 4.08, 14.174 4.297 C 13.481 4.584, 12.881 4.999, 12.28 5.608 L 11.998 5.894 11.718 5.607 C 10.872 4.74, 9.914 4.207, 8.845 4.01 C 8.552 3.956, 7.799 3.943, 7.5 3.987" fill="currentColor" fill-rule="evenodd"/></svg></span><span><svg viewBox="0 0 24 24" fill="none" shape-rendering="crispEdges"><path d="M8 2H16V3H8ZM6 3H18V4H6ZM5 4H9V5H5ZM15 4H19V5H15ZM4 5H7V6H4ZM17 5H19V6H17ZM3 6H6V7H3ZM17 6H20V7H17ZM2 7H5V8H2ZM18 7H20V8H18ZM2 8H4V9H2ZM18 8H21V9H18ZM2 9H4V10H2ZM19 9H21V10H19ZM2 10H4V11H2ZM19 10H21V11H19ZM2 11H4V12H2ZM8 11H9V12H8ZM11 11H13V12H11ZM15 11H16V12H15ZM19 11H21V12H19ZM2 12H4V13H2ZM8 12H9V13H8ZM11 12H13V13H11ZM15 12H16V13H15ZM19 12H21V13H19ZM2 13H4V14H2ZM19 13H21V14H19ZM2 14H5V15H2ZM19 14H21V15H19ZM3 15H5V16H3ZM18 15H21V16H18ZM2 16H5V17H2ZM17 16H20V17H17ZM2 17H4V18H2ZM16 17H19V18H16ZM2 18H8V19H2ZM14 18H18V19H14ZM3 19H17V20H3ZM4 20H6V21H4ZM7 20H15V21H7Z" fill="currentColor"/></svg></span><span><svg viewBox="0 0 24 24" fill="none"><path d="M12.846 7.77L11.154 4.387H3.541V7.77M3.541 7.77H16.399C17.82 7.77 18.53 7.77 19.073 8.047C19.551 8.29 19.939 8.678 20.182 9.156C20.459 9.699 20.459 10.409 20.459 11.83V15.552C20.459 16.973 20.459 17.684 20.182 18.227C19.939 18.704 19.551 19.093 19.073 19.336C18.53 19.612 17.82 19.612 16.399 19.612H7.601C6.18 19.612 5.47 19.612 4.927 19.336C4.449 19.093 4.061 18.704 3.818 18.227C3.541 17.684 3.541 16.973 3.541 15.552Z" stroke="currentColor" stroke-width="1.3" stroke-linecap="square" stroke-linejoin="miter"/></svg></span><span><svg viewBox="0 0 24 24" fill="none"><path d="M 11.05 2.889 C 10.408 2.959, 10.105 3.076, 9.786 3.379 C 9.559 3.595, 9.425 3.816, 9.325 4.138 C 9.2 4.539, 9.175 4.602, 9.053 4.812 C 8.821 5.214, 8.37 5.592, 7.947 5.74 C 7.491 5.9, 7.168 5.913, 6.611 5.797 C 6.295 5.732, 6.205 5.722, 6.025 5.735 C 5.596 5.765, 5.233 5.923, 4.955 6.199 C 4.404 6.747, 3.565 8.271, 3.408 9.012 C 3.361 9.23, 3.379 9.525, 3.452 9.766 C 3.541 10.054, 3.665 10.259, 3.91 10.521 C 4.422 11.069, 4.595 11.506, 4.569 12.185 C 4.545 12.784, 4.387 13.124, 3.866 13.696 C 3.643 13.941, 3.499 14.206, 3.436 14.49 C 3.376 14.76, 3.397 15.143, 3.486 15.402 C 3.675 15.949, 4.35 17.124, 4.808 17.701 C 5.244 18.251, 5.899 18.462, 6.617 18.282 C 6.989 18.189, 7.511 18.184, 7.807 18.269 C 8.558 18.486, 9.073 19.008, 9.321 19.805 C 9.487 20.341, 9.777 20.7, 10.212 20.908 C 10.452 21.024, 10.626 21.065, 11.05 21.109 C 11.62 21.169, 12.002 21.18, 12.488 21.15 C 13.477 21.091, 13.834 20.988, 14.196 20.66 C 14.473 20.41, 14.608 20.182, 14.727 19.766 C 14.855 19.32, 15.033 19.011, 15.327 18.725 C 15.85 18.216, 16.589 18.031, 17.375 18.212 C 18.069 18.373, 18.614 18.236, 19.061 17.789 C 19.62 17.23, 20.442 15.767, 20.592 15.065 C 20.7 14.557, 20.522 14.018, 20.092 13.556 C 19.581 13.006, 19.405 12.562, 19.431 11.89 C 19.455 11.29, 19.621 10.933, 20.138 10.372 C 20.451 10.032, 20.6 9.657, 20.6 9.213 C 20.6 8.959, 20.566 8.805, 20.438 8.472 C 20.25 7.985, 19.782 7.138, 19.406 6.6 C 18.845 5.8, 18.234 5.551, 17.34 5.758 C 16.744 5.896, 16.197 5.826, 15.725 5.55 C 15.209 5.249, 14.898 4.835, 14.692 4.175 C 14.578 3.812, 14.462 3.617, 14.225 3.391 C 13.89 3.072, 13.6 2.959, 12.929 2.89 C 12.465 2.841, 11.496 2.841, 11.05 2.889 M 11.625 9.05 C 10.471 9.211, 9.544 9.976, 9.178 11.071 C 8.66 12.619, 9.507 14.299, 11.071 14.822 C 12.619 15.341, 14.299 14.493, 14.822 12.929 C 15.385 11.249, 14.336 9.447, 12.588 9.088 C 12.347 9.038, 11.85 9.019, 11.625 9.05" fill="currentColor" fill-rule="evenodd"/></svg></span><span><svg viewBox="0 0 24 24" fill="none" shape-rendering="crispEdges"><path d="M10 2H12V3H10ZM10 3H13V4H10ZM9 4H14V5H9ZM8 5H11V6H8ZM12 5H15V6H12ZM7 6H10V7H7ZM13 6H16V7H13ZM3 7H9V8H3ZM14 7H20V8H14ZM2 8H8V9H2ZM15 8H21V9H15ZM2 9H4V10H2ZM18 9H21V10H18ZM2 10H5V11H2ZM17 10H20V11H17ZM3 11H6V12H3ZM16 11H19V12H16ZM4 12H7V13H4ZM15 12H18V13H15ZM5 13H8V14H5ZM15 13H18V14H15ZM5 14H8V15H5ZM16 14H18V15H16ZM5 15H7V16H5ZM16 15H18V16H16ZM5 16H7V17H5ZM10 16H14V17H10ZM16 16H18V17H16ZM5 17H7V18H5ZM8 17H18V18H8ZM5 18H11V19H5ZM13 18H18V19H13ZM6 19H9V20H6ZM15 19H17V20H15Z" fill="currentColor"/></svg></span></div>
-        <div class="plan-foot"><div class="seats" role="group" aria-label="Seats"><button type="button" id="seat-down" aria-label="Fewer seats">−</button><output id="seat-n" aria-live="polite">1 seat</output><button type="button" id="seat-up" aria-label="More seats">+</button></div><a href="#" class="pill soon" id="get-pro" data-tip="Coming soon">Get Pro · $90</a></div>
+        <div class="plan-foot"><div class="seats" role="group" aria-label="Seats"><button type="button" id="seat-down" aria-label="Fewer seats">−</button><output id="seat-n" aria-live="polite">1 seat</output><button type="button" id="seat-up" aria-label="More seats">+</button></div><a href="#" class="pill soon" id="get-pro" data-tip="Coming soon">Get Pro · $5</a></div>
       </div>
     </div>
 
@@ -258,9 +253,7 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
         <details><summary>What's included in Pro?<svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5.11523V18.8852" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M18.885 12L5.11501 12" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><p>Sharp, Filled and Pixel: 861 icons on top of the free Outline and Duotone sets, plus new icons as they're released.</p></details>
         <details><summary>How does per-seat pricing work?<svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5.11523V18.8852" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M18.885 12L5.11501 12" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><p>Each person who uses the Pro icons needs a seat. Pick the number of seats at checkout; the price is $9 per seat a month, or $90 per seat a year.</p></details>
-        <details><summary>Do monthly and annual plans have the same features?<svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5.11523V18.8852" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M18.885 12L5.11501 12" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><p>Yes. Annual costs $90 per seat instead of $108, so you get two months free.</p></details>
+  <path d="M18.885 12L5.11501 12" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><p>Each person who uses the Pro icons needs a seat. Pick the number of seats at checkout; each seat is $5 a month.</p></details>
         <details><summary>Can I use the icons in commercial projects?<svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5.11523V18.8852" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
   <path d="M18.885 12L5.11501 12" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><p>Yes. Outline and Duotone are MIT licensed, and Pro icons can be used in personal and client work.</p></details>
         <details><summary>How do I get the Pro icons?<svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5.11523V18.8852" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
@@ -296,24 +289,13 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
   const $ = (s) => document.querySelector(s);
   // ---------- Billing period ----------
   // Pro is priced per seat: one seat per person using the icons.
-  const P = {
-    monthly: { each: 9, unit: "per seat<br>/month", sub: "Billed monthly, cancel anytime", per: "/mo" },
-    annual: { each: 90, unit: "per seat<br>/year", sub: "$7.50 per seat a month, billed yearly", per: "/yr" },
-  };
-  let period = "annual", seats = 1;
-  const MAX = 50;
+  const EACH = 5, MAX = 50;
+  let seats = 1;
   function show() {
-    const p = P[period];
-    $("#pro-price").textContent = "$" + p.each; $("#pro-unit").innerHTML = p.unit; $("#pro-sub").textContent = p.sub;
     $("#seat-n").textContent = seats + (seats === 1 ? " seat" : " seats");
-    $("#get-pro").textContent = `Get Pro · $${(p.each * seats).toLocaleString("en-US")}${seats > 1 ? p.per : ""}`;
+    $("#get-pro").textContent = `Get Pro · $${(EACH * seats).toLocaleString("en-US")}${seats > 1 ? "/mo" : ""}`;
     $("#seat-down").disabled = seats <= 1; $("#seat-up").disabled = seats >= MAX;
   }
-  document.querySelector(".toggle").addEventListener("click", (e) => {
-    const b = e.target.closest("[data-period]"); if (!b) return;
-    document.querySelectorAll("[data-period]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
-    period = b.dataset.period; show();
-  });
   $("#seat-down").addEventListener("click", () => { seats = Math.max(1, seats - 1); show(); });
   $("#seat-up").addEventListener("click", () => { seats = Math.min(MAX, seats + 1); show(); });
   show();
