@@ -1,0 +1,450 @@
+<title>Meya Icons __VERSION__</title>
+<meta name="description" content="Meya Icons __VERSION__: __COUNT__ open-source stroke icons by Meya Lab. Search, tune the stroke, copy SVG or JSX.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231BA4FF'/%3E%3Cpath d='M7.3 23.3 14.9 11.4l1.3 3.6 6.4-5.4-.1 8.8-1.3-3.1-6.8 6.6.6-4.2Z' fill='%23032439' stroke='%23032439' stroke-width='1' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+/* Light only, matching the Meya Lab site. Component recipes follow ReUI (shadcn). */
+:root {
+  color-scheme: light;
+  --bg: #FFFFFF;
+  --fg: #121212;
+  --muted: #F5F5F5;
+  --muted-2: #EDEDED;
+  --muted-fg: #737373;
+  --faint: #A3A3A3;
+  --border: #E8E8E8;
+  --input: #E3E3E3;
+  --ring: rgba(18, 18, 18, 0.12);
+  --brand: #1BA4FF;
+  --brand-ink: #032439;
+  --grid: rgba(18, 18, 18, 0.06);
+  --shadow-xs: 0 1px 2px rgba(18, 18, 18, 0.05);
+  --shadow-lg: 0 10px 30px -6px rgba(18, 18, 18, 0.12), 0 2px 6px rgba(18, 18, 18, 0.05);
+  --radius: 10px;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-swap: cubic-bezier(0.2, 0, 0, 1);
+  --sans: "Inter Tight", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --sw: 1.3;
+  --size: 24px;
+  --sheet: 380px;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { scroll-padding-top: 140px; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 400 14px/1.5 var(--sans); -webkit-font-smoothing: antialiased; }
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--ring), 0 0 0 1px var(--faint); }
+.wrap { max-width: 1280px; margin-inline: auto; padding-inline: 20px; }
+
+/* ---------- Button (ReUI) ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 36px; padding-inline: 14px; border-radius: 8px; border: 1px solid transparent;
+  background: none; font-size: 14px; font-weight: 500; white-space: nowrap; text-decoration: none; color: inherit;
+  transition-property: background-color, border-color, color, box-shadow, scale; transition-duration: 150ms; transition-timing-function: ease;
+}
+.btn:active { scale: 0.96; }
+.btn svg { width: 16px; height: 16px; stroke-width: 1.5; flex: none; }
+.btn-primary { background: var(--fg); color: #fff; }
+.btn-primary:hover { background: #2B2B2B; }
+.btn-outline { background: var(--bg); border-color: var(--border); box-shadow: var(--shadow-xs); }
+.btn-outline:hover { background: var(--muted); }
+.btn-ghost:hover { background: var(--muted); }
+.btn-icon { width: 32px; height: 32px; padding: 0; }
+
+/* ---------- Nav (dark pill, as on meyalab.com) ---------- */
+.nav-wrap { padding-block: 16px 8px; transition: padding-right 300ms var(--ease-drawer); }
+.nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 52px; padding: 0 6px 0 16px; border-radius: 999px; background: var(--fg); color: #fff; }
+.brand { display: flex; align-items: center; gap: 10px; color: inherit; text-decoration: none; font-weight: 500; font-size: 15px; letter-spacing: -0.01em; }
+.brand svg { width: 22px; height: 22px; }
+.brand .ver { font-size: 12px; color: rgba(255, 255, 255, 0.55); font-weight: 400; }
+.nav-actions { display: flex; align-items: center; gap: 4px; }
+.nav-link { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding-inline: 14px; border-radius: 999px; color: rgba(255, 255, 255, 0.72); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 150ms ease, background-color 150ms ease; }
+.nav-link:hover { color: #fff; background: rgba(255, 255, 255, 0.08); }
+.nav-link svg { width: 16px; height: 16px; }
+.pill { display: inline-flex; align-items: center; gap: 10px; height: 40px; padding: 0 4px 0 16px; border-radius: 999px; background: #fff; color: var(--fg); font-size: 14px; font-weight: 500; text-decoration: none; transition: scale 150ms ease, background-color 150ms ease; }
+.pill:hover { background: #F0F0F0; }
+.pill:active { scale: 0.96; }
+.pill .arrow { width: 32px; height: 32px; border-radius: 999px; background: var(--fg); color: #fff; display: grid; place-items: center; }
+.pill .arrow svg { width: 16px; height: 16px; stroke-width: 1.6; rotate: -45deg; }
+
+/* ---------- Toolbar ---------- */
+.toolbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px) saturate(1.4); -webkit-backdrop-filter: blur(12px) saturate(1.4); }
+.toolbar .wrap { transition: padding-right 300ms var(--ease-drawer); }
+.toolbar-row { display: flex; align-items: center; gap: 8px; padding-block: 12px 10px; }
+.field { position: relative; flex: 1; min-width: 0; }
+.field > svg { position: absolute; left: 12px; top: 50%; translate: 0 -50%; width: 16px; height: 16px; stroke-width: 1.5; color: var(--muted-fg); pointer-events: none; }
+.input { width: 100%; height: 40px; border-radius: 8px; border: 1px solid var(--input); background: var(--bg); box-shadow: var(--shadow-xs); padding: 0 44px 0 36px; font-size: 14px; outline: none; transition: border-color 150ms ease, box-shadow 150ms ease; }
+.input::placeholder { color: var(--muted-fg); }
+.input:focus-visible { border-color: var(--faint); box-shadow: 0 0 0 3px var(--ring); }
+.input::-webkit-search-cancel-button { display: none; }
+.kbd { position: absolute; right: 10px; top: 50%; translate: 0 -50%; display: inline-flex; align-items: center; justify-content: center; height: 20px; min-width: 20px; padding-inline: 5px; border-radius: 4px; background: var(--muted); color: var(--muted-fg); font-size: 12px; font-weight: 500; }
+.clear { position: absolute; right: 6px; top: 50%; translate: 0 -50%; }
+.clear svg { color: var(--muted-fg); }
+.control { display: flex; align-items: center; gap: 10px; height: 40px; padding-inline: 12px; border: 1px solid var(--input); border-radius: 8px; box-shadow: var(--shadow-xs); flex: none; }
+.control label { font-size: 13px; color: var(--muted-fg); font-weight: 500; }
+.control input[type="range"] { width: 88px; accent-color: var(--fg); }
+.control output { font: 500 12px/1 var(--mono); min-width: 30px; text-align: right; font-variant-numeric: tabular-nums; }
+
+.tabs { display: flex; gap: 2px; padding: 3px; margin-bottom: 12px; border-radius: 10px; background: var(--muted); overflow-x: auto; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab { flex: none; display: inline-flex; align-items: center; gap: 6px; height: 30px; padding-inline: 10px; border: 1px solid transparent; border-radius: 7px; background: none; font-size: 13px; font-weight: 500; color: var(--muted-fg); transition: color 150ms ease, background-color 150ms ease, box-shadow 150ms ease; }
+.tab:hover { color: var(--fg); }
+.tab small { font-size: 11px; color: var(--faint); font-variant-numeric: tabular-nums; }
+.tab[aria-pressed="true"], .tab[aria-selected="true"] { background: var(--bg); color: var(--fg); box-shadow: 0 1px 3px rgba(18, 18, 18, 0.08), 0 0 0 1px rgba(18, 18, 18, 0.04); }
+
+/* ---------- Grid ---------- */
+main { padding-block: 12px 64px; transition: padding-right 300ms var(--ease-drawer); }
+.section + .section { margin-top: 36px; }
+.section-head { display: flex; align-items: baseline; gap: 8px; margin: 0 2px 12px; }
+.section-head h2 { margin: 0; font-size: 14px; font-weight: 600; letter-spacing: -0.005em; }
+.section-head span { font-size: 13px; color: var(--faint); font-variant-numeric: tabular-nums; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 8px; }
+.tile {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  aspect-ratio: 1; padding: 14px 8px 12px; border: 0; border-radius: 12px; background: var(--muted);
+  transition-property: background-color, box-shadow, scale; transition-duration: 150ms; transition-timing-function: ease;
+}
+.tile:hover { background: var(--muted-2); }
+.tile:active { scale: 0.96; }
+.tile[aria-current="true"] { background: var(--bg); box-shadow: inset 0 0 0 1.5px var(--fg); }
+.tile svg { width: var(--size); height: var(--size); stroke-width: var(--sw); margin-block: auto; flex: none; }
+.tile .name { font-size: 12px; line-height: 1.25; color: var(--muted-fg); text-align: center; overflow-wrap: anywhere; }
+.tile:hover .name, .tile[aria-current="true"] .name { color: var(--fg); }
+.empty { text-align: center; padding: 80px 16px; }
+.empty h3 { margin: 0 0 4px; font-size: 16px; font-weight: 600; }
+.empty p { margin: 0 0 16px; color: var(--muted-fg); }
+.suggest { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; }
+
+/* ---------- Sheet (ReUI) ---------- */
+.sheet {
+  position: fixed; z-index: 40; top: 0; right: 0; bottom: 0; width: var(--sheet); max-width: 100%;
+  display: flex; flex-direction: column; background: var(--bg); border-left: 1px solid var(--border); box-shadow: var(--shadow-lg);
+  padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+  translate: 100% 0; visibility: hidden; transition: translate 300ms var(--ease-drawer), visibility 0s linear 300ms;
+}
+.sheet.open { translate: 0 0; visibility: visible; transition: translate 300ms var(--ease-drawer), visibility 0s; }
+.sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 16px 0 20px; }
+.sheet-head h3 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+.badge { display: inline-flex; align-items: center; height: 22px; padding-inline: 8px; border-radius: 6px; background: var(--muted); color: var(--muted-fg); font-size: 12px; font-weight: 500; margin-top: 6px; }
+.sheet-body { flex: 1; overflow-y: auto; padding: 16px 20px 20px; display: grid; gap: 14px; align-content: start; }
+.stage { position: relative; aspect-ratio: 1; max-width: 100%; border-radius: 12px; background: var(--muted); overflow: hidden; }
+.stage > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.stage .grid-lines line { stroke: var(--grid); stroke-width: 0.03; }
+.stage .keylines * { fill: none; stroke: var(--brand); stroke-width: 0.04; opacity: 0.45; }
+.stage .glyph { stroke-width: var(--sw); }
+.actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.copy-swap { position: relative; width: 16px; height: 16px; flex: none; }
+.copy-swap svg { position: absolute; inset: 0; transition-property: opacity, scale, filter; transition-duration: 200ms; transition-timing-function: var(--ease-swap); }
+.copy-swap .i-check { opacity: 0; scale: 0.25; filter: blur(4px); }
+.copied .copy-swap .i-copy { opacity: 0; scale: 0.25; filter: blur(4px); }
+.copied .copy-swap .i-check { opacity: 1; scale: 1; filter: blur(0); }
+.code-tabs { margin: 0; width: fit-content; }
+.code { margin: 0; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border); background: #FAFAFA; font: 400 11.5px/1.65 var(--mono); color: #404040; max-height: 240px; overflow: auto; white-space: pre; }
+.meta { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; margin: 0; font-size: 13px; }
+.meta dt { color: var(--muted-fg); }
+.meta dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ---------- Toast (Sonner) ---------- */
+.toast { position: fixed; z-index: 60; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 20px); display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-radius: 10px; background: var(--bg); border: 1px solid var(--border); box-shadow: var(--shadow-lg); font-size: 13px; font-weight: 500; translate: -50% 10px; opacity: 0; pointer-events: none; transition: translate 200ms var(--ease-out), opacity 200ms var(--ease-out); }
+.toast.show { translate: -50% 0; opacity: 1; }
+.toast svg { width: 16px; height: 16px; stroke-width: 1.8; }
+
+/* ---------- Footer ---------- */
+.footer { border-top: 1px solid var(--border); padding-block: 24px 32px; transition: padding-right 300ms var(--ease-drawer); }
+.footer .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; }
+.wordmark { height: 18px; width: auto; display: block; color: var(--fg); }
+.footer-meta { display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 13px; color: var(--muted-fg); }
+.footer-meta a { color: inherit; text-decoration: none; }
+.footer-meta a:hover { color: var(--fg); }
+.footer-meta .hire { color: var(--fg); font-weight: 500; }
+
+@media (min-width: 1100px) {
+  body.sheet-open main, body.sheet-open .toolbar .wrap, body.sheet-open .nav-wrap { padding-right: calc(var(--sheet) + 20px); }
+}
+@media (max-width: 760px) {
+  .toolbar-row { flex-wrap: wrap; }
+  .control { flex: 1; min-width: 0; }
+  .control input[type="range"] { flex: 1; width: auto; min-width: 0; }
+  .nav-link .label { display: none; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); }
+  .sheet { top: auto; left: 0; width: auto; max-height: 85vh; border-left: 0; border-top: 1px solid var(--border); border-radius: 16px 16px 0 0; translate: 0 100%; }
+  .stage { max-width: 200px; width: 100%; margin-inline: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0ms !important; }
+}
+</style>
+
+<div class="wrap nav-wrap">
+  <nav class="nav" aria-label="Site">
+    <a class="brand" href="#all" aria-label="Meya Icons home">
+      <svg viewBox="68 74 300 300" aria-hidden="true"><path d="M77 349 218 130 243 197 359 98 357 258 334 202 211 326 221 251Z" fill="#fff" stroke="#fff" stroke-width="14" stroke-linejoin="round"/></svg>
+      Meya Icons <span class="ver">__VERSION__</span>
+    </a>
+    <div class="nav-actions">
+      <a class="nav-link" href="__REPO__" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        <span class="label">GitHub</span>
+      </a>
+      <a class="pill" href="https://meyalab.com/contact" target="_blank" rel="noopener">Hire us <span class="arrow"><span data-ico="arrows:arrow-right"></span></span></a>
+    </div>
+  </nav>
+</div>
+
+<div class="toolbar" id="all">
+  <div class="wrap">
+    <div class="toolbar-row">
+      <div class="field">
+        <span data-ico="general:search"></span>
+        <input class="input" id="q" type="search" placeholder="Search __COUNT__ icons" autocomplete="off" spellcheck="false" aria-label="Search icons">
+        <kbd class="kbd" id="kbd">/</kbd>
+        <button class="btn btn-ghost btn-icon clear" id="clear" type="button" aria-label="Clear search" hidden><span data-ico="shapes:x"></span></button>
+      </div>
+      <div class="control">
+        <label for="sw">Stroke</label>
+        <input id="sw" type="range" min="0.75" max="2.25" step="0.05" value="1.3">
+        <output id="sw-out" for="sw">1.30</output>
+      </div>
+      <div class="control">
+        <label for="size">Size</label>
+        <input id="size" type="range" min="16" max="48" step="4" value="24">
+        <output id="size-out" for="size">24</output>
+      </div>
+    </div>
+    <div class="tabs" id="chips" role="toolbar" aria-label="Categories"></div>
+  </div>
+</div>
+
+<main class="wrap">
+  <div id="sections"></div>
+  <div class="empty" id="empty" hidden>
+    <h3>No icons match “<span id="empty-q"></span>”</h3>
+    <p>Try a shorter word, or one of these:</p>
+    <div class="suggest" id="suggest"></div>
+  </div>
+</main>
+
+<aside class="sheet" id="sheet" aria-label="Icon details" aria-hidden="true">
+  <div class="sheet-head">
+    <div>
+      <h3 id="p-title">Icon</h3>
+      <span class="badge" id="p-cat">Category</span>
+    </div>
+    <button class="btn btn-ghost btn-icon" id="p-close" type="button" aria-label="Close details"><span data-ico="shapes:x"></span></button>
+  </div>
+  <div class="sheet-body">
+    <div class="stage" id="p-stage"></div>
+    <div class="actions">
+      <button class="btn btn-primary" id="copy-svg" type="button"><span class="copy-swap"><span data-ico="editor:copy" class="i-copy"></span><span data-ico="shapes:check" class="i-check"></span></span>Copy SVG</button>
+      <button class="btn btn-outline" id="copy-jsx" type="button"><span class="copy-swap"><span data-ico="editor:copy" class="i-copy"></span><span data-ico="shapes:check" class="i-check"></span></span>Copy JSX</button>
+    </div>
+    <div class="tabs code-tabs" role="tablist" aria-label="Code format">
+      <button class="tab" role="tab" type="button" aria-selected="true" data-fmt="svg">SVG</button>
+      <button class="tab" role="tab" type="button" aria-selected="false" data-fmt="jsx">React</button>
+    </div>
+    <pre class="code" id="p-code" tabindex="0"></pre>
+    <dl class="meta">
+      <dt>File</dt><dd id="p-file"></dd>
+      <dt>Grid</dt><dd>24 × 24</dd>
+      <dt>Stroke</dt><dd id="p-sw">1.3 px</dd>
+      <dt>Color</dt><dd>currentColor</dd>
+    </dl>
+  </div>
+</aside>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><span data-ico="shapes:check"></span><span id="toast-text">Copied</span></div>
+
+<footer class="footer">
+  <div class="wrap">
+    <a href="https://meyalab.com/" target="_blank" rel="noopener" aria-label="Meya Lab Studio"><!--__WORDMARK__--></a>
+    <div class="footer-meta">
+      <span>Meya Icons __VERSION__ · __COUNT__ icons · MIT License</span>
+      <a href="__REPO__" target="_blank" rel="noopener">GitHub</a>
+      <a class="hire" href="https://meyalab.com/contact" target="_blank" rel="noopener">Need custom icons? Hire us</a>
+    </div>
+  </div>
+</footer>
+
+<script>/*__DATA__*/</script>
+<script>
+(() => {
+  const { icons, categories } = window.MEYA;
+  const catLabel = Object.fromEntries(categories.map((c) => [c.id, c.label]));
+  const $ = (s) => document.querySelector(s);
+  const state = { q: "", cat: "all", sw: 1.3, size: 24, fmt: "svg", current: null };
+
+  const find = (c, n) => icons.find((i) => i.c === c && i.n === n);
+  const inner = (icon) => `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icon.b}</svg>`;
+  const title = (n) => n.replace(/-/g, " ").replace(/^./, (m) => m.toUpperCase());
+  const pascal = (n) => n.split("-").map((p) => p[0].toUpperCase() + p.slice(1)).join("") + "Icon";
+  const fmtSw = (v) => (+v).toFixed(2).replace(/0$/, "");
+
+  // Interface icons come from the set itself.
+  document.querySelectorAll("[data-ico]").forEach((el) => {
+    const [c, n] = el.dataset.ico.split(":");
+    const icon = find(c, n);
+    if (icon) el.outerHTML = inner(icon).replace("<svg ", `<svg class="${el.className}" `);
+  });
+
+  // ---------- Copy ----------
+  function toSvg(icon) {
+    const body = icon.b.replace(/></g, ">\n  <");
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${state.size}" height="${state.size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${fmtSw(state.sw)}" stroke-linecap="round" stroke-linejoin="round">\n  ${body}\n</svg>`;
+  }
+  function toJsx(icon) {
+    const body = icon.b
+      .replace(/ ([a-z]+)-([a-z])([a-z-]*)=/g, (m, a, b, rest) => ` ${a}${b.toUpperCase()}${rest.replace(/-([a-z])/g, (x, y) => y.toUpperCase())}=`)
+      .replace(/style="mask-type:([a-z]+)"/g, 'style={{ maskType: "$1" }}')
+      .replace(/></g, ">\n      <");
+    return `export function ${pascal(icon.n)}(props) {\n  return (\n    <svg xmlns="http://www.w3.org/2000/svg" width={${state.size}} height={${state.size}} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={${fmtSw(state.sw)}} strokeLinecap="round" strokeLinejoin="round" {...props}>\n      ${body}\n    </svg>\n  );\n}`;
+  }
+  async function copy(text, btn, label) {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      const r = document.createRange(); r.selectNodeContents($("#p-code"));
+      const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+      return toast("Clipboard blocked. Code is selected, press ⌘C");
+    }
+    toast(label);
+    if (btn) { btn.classList.add("copied"); clearTimeout(btn._t); btn._t = setTimeout(() => btn.classList.remove("copied"), 1400); }
+  }
+  let toastT;
+  function toast(text) {
+    $("#toast-text").textContent = text;
+    $("#toast").classList.add("show");
+    clearTimeout(toastT); toastT = setTimeout(() => $("#toast").classList.remove("show"), 1800);
+  }
+
+  // ---------- Categories ----------
+  const chips = $("#chips");
+  const chipHtml = (id, label, count) => `<button class="tab" type="button" data-cat="${id}" aria-pressed="false">${label}<small>${count}</small></button>`;
+  chips.innerHTML = chipHtml("all", "All", icons.length) + categories.map((c) => chipHtml(c.id, c.label, c.count)).join("");
+  chips.addEventListener("click", (e) => { const b = e.target.closest(".tab"); if (b) setCat(b.dataset.cat, true); });
+  function setCat(cat, scroll) {
+    state.cat = cat;
+    chips.querySelectorAll(".tab").forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.cat === cat)));
+    try { history.replaceState(null, "", cat === "all" ? location.pathname : "#" + cat); } catch {}
+    filter();
+    if (scroll && $("#all").getBoundingClientRect().top <= 1) window.scrollTo({ top: $("#all").offsetTop });
+  }
+
+  // ---------- Grid ----------
+  const sectionsEl = $("#sections");
+  sectionsEl.innerHTML = categories.map((c) => `
+    <section class="section" data-cat="${c.id}" aria-labelledby="h-${c.id}">
+      <div class="section-head"><h2 id="h-${c.id}">${c.label}</h2><span data-count>${c.count}</span></div>
+      <div class="grid">${icons.map((ic, i) => ic.c !== c.id ? "" : `<button class="tile" type="button" data-i="${i}" aria-label="${title(ic.n)}">${inner(ic)}<span class="name">${ic.n}</span></button>`).join("")}</div>
+    </section>`).join("");
+  const tiles = [...sectionsEl.querySelectorAll(".tile")];
+  const sections = [...sectionsEl.querySelectorAll(".section")];
+
+  function filter() {
+    const raw = state.q.trim().toLowerCase();
+    const q = raw.replace(/\s+/g, "-");
+    let total = 0;
+    for (const t of tiles) {
+      const ic = icons[t.dataset.i];
+      const hit = (state.cat === "all" || ic.c === state.cat) && (!q || ic.n.includes(q) || catLabel[ic.c].toLowerCase().includes(raw));
+      t.hidden = !hit; if (hit) total++;
+    }
+    for (const s of sections) {
+      const n = s.querySelectorAll(".tile:not([hidden])").length;
+      const cat = categories.find((c) => c.id === s.dataset.cat);
+      s.hidden = n === 0;
+      s.querySelector("[data-count]").textContent = n === cat.count ? n : `${n} of ${cat.count}`;
+    }
+    $("#empty").hidden = total > 0;
+    if (!total) {
+      $("#empty-q").textContent = state.q;
+      $("#suggest").innerHTML = ["arrow", "user", "chart", "file", "lock", "calendar"].map((w) => `<button class="btn btn-outline" type="button" data-q="${w}">${w}</button>`).join("");
+    }
+  }
+  $("#suggest").addEventListener("click", (e) => { const b = e.target.closest("[data-q]"); if (b) setQuery(b.dataset.q); });
+
+  const qEl = $("#q");
+  function setQuery(v) { qEl.value = v; onQuery(); }
+  function onQuery() { state.q = qEl.value; $("#clear").hidden = !state.q; $("#kbd").hidden = !!state.q; filter(); }
+  qEl.addEventListener("input", onQuery);
+  $("#clear").addEventListener("click", () => { setQuery(""); qEl.focus(); });
+
+  // ---------- Controls ----------
+  const root = document.documentElement;
+  $("#sw").addEventListener("input", (e) => {
+    state.sw = +e.target.value;
+    root.style.setProperty("--sw", state.sw);
+    $("#sw-out").textContent = state.sw.toFixed(2);
+    refreshSheet();
+  });
+  $("#size").addEventListener("input", (e) => {
+    state.size = +e.target.value;
+    root.style.setProperty("--size", state.size + "px");
+    $("#size-out").textContent = state.size;
+    refreshSheet();
+  });
+
+  // ---------- Sheet ----------
+  const sheet = $("#sheet");
+  let activeTile = null;
+  const gridSvg = (() => {
+    let l = "";
+    for (let i = 1; i < 24; i++) l += `<line x1="${i}" y1="0" x2="${i}" y2="24"/><line x1="0" y1="${i}" x2="24" y2="${i}"/>`;
+    return `<svg viewBox="0 0 24 24" aria-hidden="true"><g class="grid-lines">${l}</g><g class="keylines"><circle cx="12" cy="12" r="10"/><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="2" y="2" width="20" height="20"/></g></svg>`;
+  })();
+  function openSheet(i, tile) {
+    const icon = icons[i];
+    state.current = icon;
+    if (activeTile) activeTile.removeAttribute("aria-current");
+    activeTile = tile; tile.setAttribute("aria-current", "true");
+    $("#p-title").textContent = title(icon.n);
+    $("#p-cat").textContent = catLabel[icon.c];
+    $("#p-file").textContent = `icons/${icon.c}/${icon.n}.svg`;
+    refreshSheet();
+    sheet.classList.add("open"); sheet.setAttribute("aria-hidden", "false");
+    document.body.classList.add("sheet-open");
+  }
+  function closeSheet() {
+    sheet.classList.remove("open"); sheet.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("sheet-open");
+    if (activeTile) { activeTile.removeAttribute("aria-current"); activeTile.focus({ preventScroll: true }); activeTile = null; }
+  }
+  function refreshSheet() {
+    const icon = state.current; if (!icon) return;
+    $("#p-stage").innerHTML = gridSvg + inner(icon).replace("<svg ", '<svg class="glyph" ');
+    $("#p-code").textContent = state.fmt === "svg" ? toSvg(icon) : toJsx(icon);
+    $("#p-sw").textContent = fmtSw(state.sw) + " px";
+  }
+  sectionsEl.addEventListener("click", (e) => {
+    const t = e.target.closest(".tile"); if (!t) return;
+    if (t === activeTile && sheet.classList.contains("open")) return closeSheet();
+    openSheet(+t.dataset.i, t);
+  });
+  $("#p-close").addEventListener("click", closeSheet);
+  document.querySelectorAll(".code-tabs .tab").forEach((tab) => tab.addEventListener("click", () => {
+    state.fmt = tab.dataset.fmt;
+    document.querySelectorAll(".code-tabs .tab").forEach((t) => t.setAttribute("aria-selected", String(t === tab)));
+    refreshSheet();
+  }));
+  $("#copy-svg").addEventListener("click", (e) => copy(toSvg(state.current), e.currentTarget, `Copied SVG for ${state.current.n}`));
+  $("#copy-jsx").addEventListener("click", (e) => copy(toJsx(state.current), e.currentTarget, `Copied ${pascal(state.current.n)}`));
+
+  // ---------- Keyboard ----------
+  document.addEventListener("keydown", (e) => {
+    const typing = /INPUT|TEXTAREA/.test(document.activeElement.tagName);
+    if (e.key === "/" && !typing) { e.preventDefault(); qEl.focus(); qEl.select(); }
+    else if (e.key === "Escape") {
+      if (sheet.classList.contains("open")) closeSheet();
+      else if (document.activeElement === qEl) { setQuery(""); qEl.blur(); }
+    }
+  });
+
+  const hash = location.hash.slice(1);
+  setCat(categories.some((c) => c.id === hash) ? hash : "all", false);
+})();
+</script>
