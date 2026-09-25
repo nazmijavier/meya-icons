@@ -53,10 +53,6 @@ button { font: inherit; color: inherit; letter-spacing: inherit; cursor: pointer
 .badge { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--slate); }
 .hero h1 { margin: 14px 0 0; font-size: clamp(34px, 5vw, 56px); line-height: 1.04; font-weight: 500; letter-spacing: -0.04em; text-wrap: balance; }
 .hero p { margin: 14px auto 0; max-width: 34em; font-size: 17px; color: var(--slate); }
-.toggle { display: inline-flex; margin-top: 28px; padding: 4px; border-radius: 9999px; background: var(--mist); }
-.toggle button { height: 36px; padding-inline: 18px; border: 0; border-radius: 9999px; background: none; font-size: 14px; font-weight: 500; color: var(--slate); }
-.toggle button[aria-pressed="true"] { background: var(--white); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 0 0 1px var(--control); }
-.toggle em { font-style: normal; margin-left: 6px; font-size: 11px; font-weight: 600; color: #1a7f37; }
 
 /* ---------- Plans ---------- */
 .plans { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
@@ -136,6 +132,9 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
 .footer-meta { display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 13px; color: var(--slate); }
 .footer-meta a { color: var(--link); text-decoration: none; }
 
+/* Descriptions and secondary text read better slightly open */
+.hero p, .sub, .feat small, .why-head p, .why p, .faq-side p, details p, .cta p, .plan-foot small, td { letter-spacing: 0.01em; }
+
 @media (max-width: 900px) {
   .plans, .faq-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .why { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -159,10 +158,6 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
       <span class="badge">Upgrade to <span class="pro">PRO</span></span>
       <h1>Simple plans. Full access.</h1>
       <p>Outline and Duotone stay free forever. Pro adds three more styles for one flat rate.</p>
-      <div class="toggle" role="group" aria-label="Billing period">
-        <button type="button" data-period="monthly" aria-pressed="false">Monthly</button>
-        <button type="button" data-period="annual" aria-pressed="true">Annually<em>2 months free</em></button>
-      </div>
     </header>
 
     <div class="plans">
@@ -181,15 +176,15 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
 
       <div class="plan plan-pro">
         <div class="plan-top"><span class="plan-name">__ICON:general/star__Pro</span><span class="tag">Popular</span></div>
-        <div class="price"><b id="pro-price">$90</b><span id="pro-unit">per seat<br>/year</span></div>
-        <div class="sub" id="pro-sub">$7.50 per seat a month, billed yearly</div>
+        <div class="price"><b id="pro-price">$5</b><span id="pro-unit">per seat<br>/month</span></div>
+        <div class="sub" id="pro-sub">Billed monthly, cancel anytime</div>
         <ul class="feats">
           <li class="feat"><span class="chip">__ICON:layout/layers__</span><div><b>__PRO_COUNT__ more icons</b><small>Sharp, Filled and Pixel</small></div></li>
           <li class="feat"><span class="chip">__ICON:alerts-feedback/check-circle__</span><div><b>Everything in Free</b><small>All __ALL_COUNT__ icons in five styles</small></div></li>
           <li class="feat"><span class="chip">__ICON:arrows/refresh__</span><div><b>New icons as they ship</b><small>Included while you're subscribed</small></div></li>
         </ul>
         <div class="teaser" aria-hidden="true">__PRO_PREVIEW__</div>
-        <div class="plan-foot"><div class="seats" role="group" aria-label="Seats"><button type="button" id="seat-down" aria-label="Fewer seats">−</button><output id="seat-n" aria-live="polite">1 seat</output><button type="button" id="seat-up" aria-label="More seats">+</button></div><a href="#" class="pill soon" id="get-pro" data-tip="Coming soon">Get Pro · $90</a></div>
+        <div class="plan-foot"><div class="seats" role="group" aria-label="Seats"><button type="button" id="seat-down" aria-label="Fewer seats">−</button><output id="seat-n" aria-live="polite">1 seat</output><button type="button" id="seat-up" aria-label="More seats">+</button></div><a href="#" class="pill soon" id="get-pro" data-tip="Coming soon">Get Pro · $5</a></div>
       </div>
     </div>
 
@@ -230,8 +225,7 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
       </div>
       <div class="faq">
         <details><summary>What's included in Pro?__ICON:shapes/plus__</summary><p>Sharp, Filled and Pixel: __PRO_COUNT__ icons on top of the free Outline and Duotone sets, plus new icons as they're released.</p></details>
-        <details><summary>How does per-seat pricing work?__ICON:shapes/plus__</summary><p>Each person who uses the Pro icons needs a seat. Pick the number of seats at checkout; the price is $9 per seat a month, or $90 per seat a year.</p></details>
-        <details><summary>Do monthly and annual plans have the same features?__ICON:shapes/plus__</summary><p>Yes. Annual costs $90 per seat instead of $108, so you get two months free.</p></details>
+        <details><summary>How does per-seat pricing work?__ICON:shapes/plus__</summary><p>Each person who uses the Pro icons needs a seat. Pick the number of seats at checkout; each seat is $5 a month.</p></details>
         <details><summary>Can I use the icons in commercial projects?__ICON:shapes/plus__</summary><p>Yes. Outline and Duotone are MIT licensed, and Pro icons can be used in personal and client work.</p></details>
         <details><summary>How do I get the Pro icons?__ICON:shapes/plus__</summary><p>Right after checkout you get a download link by email with every Pro style as SVG files.</p></details>
         <details><summary>Can I cancel anytime?__ICON:shapes/plus__</summary><p>Yes. Manage or cancel your subscription from the customer portal link in your receipt email. You keep access until the end of the period you paid for.</p></details>
@@ -263,24 +257,13 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
   const $ = (s) => document.querySelector(s);
   // ---------- Billing period ----------
   // Pro is priced per seat: one seat per person using the icons.
-  const P = {
-    monthly: { each: 9, unit: "per seat<br>/month", sub: "Billed monthly, cancel anytime", per: "/mo" },
-    annual: { each: 90, unit: "per seat<br>/year", sub: "$7.50 per seat a month, billed yearly", per: "/yr" },
-  };
-  let period = "annual", seats = 1;
-  const MAX = 50;
+  const EACH = 5, MAX = 50;
+  let seats = 1;
   function show() {
-    const p = P[period];
-    $("#pro-price").textContent = "$" + p.each; $("#pro-unit").innerHTML = p.unit; $("#pro-sub").textContent = p.sub;
     $("#seat-n").textContent = seats + (seats === 1 ? " seat" : " seats");
-    $("#get-pro").textContent = `Get Pro · $${(p.each * seats).toLocaleString("en-US")}${seats > 1 ? p.per : ""}`;
+    $("#get-pro").textContent = `Get Pro · $${(EACH * seats).toLocaleString("en-US")}${seats > 1 ? "/mo" : ""}`;
     $("#seat-down").disabled = seats <= 1; $("#seat-up").disabled = seats >= MAX;
   }
-  document.querySelector(".toggle").addEventListener("click", (e) => {
-    const b = e.target.closest("[data-period]"); if (!b) return;
-    document.querySelectorAll("[data-period]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
-    period = b.dataset.period; show();
-  });
   $("#seat-down").addEventListener("click", () => { seats = Math.max(1, seats - 1); show(); });
   $("#seat-up").addEventListener("click", () => { seats = Math.min(MAX, seats + 1); show(); });
   show();
