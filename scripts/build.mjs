@@ -45,7 +45,8 @@ const fragment = fs
   .replaceAll("__COUNT__", String(icons.length))
   .replaceAll("__CATS__", String(categories.length))
   .replaceAll("__VERSION__", VERSION)
-  .replaceAll("__REPO__", REPO);
+  .replaceAll("__REPO__", REPO)
+  .replace("__CHROME__", `data:image/jpeg;base64,${fs.readFileSync(rel("assets/logo-chrome.jpg")).toString("base64")}`);
 
 const split = fragment.indexOf("</style>") + 8;
 fs.writeFileSync(
