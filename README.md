@@ -11,7 +11,7 @@ Meya Icons is a free, open-source set of <!--count-->572<!--/count--> icons draw
 [![Version](https://img.shields.io/badge/version-1.0-1BA4FF?style=flat-square)](https://github.com/nazmijavier/meya-icons/releases)
 [![License](https://img.shields.io/badge/license-MIT-737373?style=flat-square)](./LICENSE)
 
-**[Browse and copy the icons](https://nazmijavier.github.io/meya-icons/)** · **[Hire Meya Lab](https://meyalab.com/contact)**
+**[Browse and copy the icons](https://icons.meyalab.com/)** · **[Hire Meya Lab](https://meyalab.com/contact)**
 
 <!--previews-->
 <picture>
@@ -41,7 +41,7 @@ Every style uses `currentColor`. Duotone tints use `fill-opacity`, so both tones
 
 ## Get the icons
 
-- **Copy one icon.** Open the [website](https://nazmijavier.github.io/meya-icons/), choose a style, search, pick an icon, and copy it as SVG or as a React component. You can change the stroke width and size before you copy.
+- **Copy one icon.** Open the [website](https://icons.meyalab.com/), choose a style, search, pick an icon, and copy it as SVG or as a React component. You can change the stroke width and size before you copy.
 
 ## Usage
 
