@@ -259,11 +259,13 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
 .toast #toast-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 
 /* ---------- Footer ---------- */
-.footer { background: var(--mist); padding-block: 28px 36px; transition: padding-right 300ms var(--ease-drawer); }
+/* ---------- Footer (shared by every page) ---------- */
+.footer { background: var(--mist); padding-block: 28px 36px; }
 .footer .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; }
-.footer-meta { display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 13px; color: var(--slate); }
-.footer-meta a { color: var(--link); text-decoration: none; }
-.footer-meta a:hover { text-decoration: underline; }
+.footer-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 20px; font-size: 13px; color: var(--slate); letter-spacing: 0.01em; }
+.footer-meta a { color: var(--slate); text-decoration: none; }
+.footer-meta a:hover { color: var(--ink); }
+.footer { transition: padding-right 300ms var(--ease-drawer); }
 
 @media (min-width: 1100px) {
   body.sheet-open main, body.sheet-open .toolbar .wrap, body.sheet-open .nav-wrap, body.sheet-open .hero-wrap { padding-right: calc(var(--sheet) + 20px); }
@@ -430,9 +432,11 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
 
 <footer class="footer">
   <div class="wrap">
-    <a class="brand" href="#top">Meya Icons <span class="pro">1.0</span></a>
+    <a class="brand" href="./">Meya Icons <span class="pro">1.0</span></a>
     <div class="footer-meta">
-      <span>572 icons · MIT License</span>
+      <span>572 free icons · MIT License</span>
+      <a href="pricing.html">Pricing</a>
+      <a href="mailto:hello@meyalab.com">hello@meyalab.com</a>
       <a href="https://meyalab.com/contact" target="_blank" rel="noopener">Need custom icons? Hire us</a>
     </div>
   </div>

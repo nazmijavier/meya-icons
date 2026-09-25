@@ -68,7 +68,7 @@ button { font: inherit; color: inherit; letter-spacing: inherit; cursor: pointer
 .tag { height: 24px; padding-inline: 10px; display: inline-flex; align-items: center; border-radius: 9999px; background: var(--white); color: var(--ink); font-size: 12px; font-weight: 600; }
 .price { display: flex; align-items: baseline; gap: 8px; margin-top: 24px; }
 .price b { font-size: 56px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums; }
-.price span { font-size: 13px; line-height: 1.3; color: var(--steel); }
+.price span { font-size: 14px; color: var(--steel); white-space: nowrap; }
 .plan-pro .price span, .plan-pro .sub, .plan-pro .feat small { color: rgba(255,255,255,.55); }
 .sub { margin-top: 10px; font-size: 14px; color: var(--steel); min-height: 21px; }
 .feats { list-style: none; margin: 28px 0 0; padding: 0; display: grid; gap: 16px; }
@@ -91,27 +91,42 @@ button { font: inherit; color: inherit; letter-spacing: inherit; cursor: pointer
 
 /* ---------- Compare ---------- */
 section { padding-block: 72px 0; }
+section.last { padding-bottom: 96px; }
 h2 { margin: 0 0 28px; font-size: clamp(26px, 3.2vw, 36px); font-weight: 500; letter-spacing: -0.03em; line-height: 1.1; text-wrap: balance; }
 .center { text-align: center; }
-.table-scroll { overflow-x: auto; border-radius: 20px; border: 1px solid var(--control); }
-table { width: 100%; border-collapse: collapse; min-width: 520px; font-size: 14px; }
-th, td { padding: 16px 20px; text-align: center; border-bottom: 1px solid var(--control); }
-th { background: var(--mist); font-weight: 500; }
-th:first-child, td:first-child { text-align: left; }
-tr:last-child td { border-bottom: 0; }
-td { color: var(--slate); }
-td:first-child { color: var(--ink); }
-.yes { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--ink); color: #fff; }
-.yes svg { width: 13px; height: 13px; stroke-width: 2.2; }
-.no { color: var(--control); font-size: 18px; }
+.cmp-scroll { overflow-x: auto; }
+.cmp { min-width: 600px; }
+.cmp-row, .cmp-group { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr); }
+.cmp-row > div, .cmp-group > div { display: flex; align-items: center; justify-content: center; padding: 14px 20px; }
+.cmp-row > div:first-child, .cmp-group > div:first-child { justify-content: flex-start; }
+.cmp-row { border-bottom: 1px solid var(--control); }
+.cmp-row > div:first-child { gap: 12px; font-size: 15px; }
+.cmp-row small { margin-left: auto; padding-right: 8px; font-size: 13px; color: var(--steel); letter-spacing: 0.01em; }
+.cmp-last { border-bottom: 0; }
+.cmp-group > div { padding-top: 28px; padding-bottom: 8px; }
+.cmp-group > div:first-child { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--steel); }
+.cmp-pro { background: var(--mist); }
+.cmp-head { border-bottom: 1px solid var(--control); }
+.cmp-plan { flex-direction: column; gap: 4px; padding: 24px 20px 20px !important; }
+.cmp-plan b { font-size: 17px; font-weight: 600; }
+.cmp-plan span { font-size: 13px; color: var(--steel); letter-spacing: 0.01em; }
+.cmp-plan .pill { margin-top: 12px; height: 36px; font-size: 13px; }
+.cmp-head .cmp-pro { border-radius: 20px 20px 0 0; }
+.cmp-last .cmp-pro { border-radius: 0 0 20px 20px; }
+.cmp-head .cmp-pro .pill { background: var(--ink); color: #fff; } .cmp-head .cmp-pro .pill:hover { background: #333336; }
+.sample { width: 36px; height: 36px; flex: none; display: grid; place-items: center; border-radius: 10px; background: var(--mist); }
+.sample svg { width: 20px; height: 20px; }
+.yes svg { width: 20px; height: 20px; stroke-width: 1.8; color: var(--ink); }
+.no { width: 14px; height: 1.5px; border-radius: 2px; background: var(--control); }
+.txt { font-size: 14px; color: var(--slate); letter-spacing: 0.01em; }
 
 /* ---------- Why ---------- */
 .why-head p { margin: -16px 0 28px; max-width: 36em; color: var(--slate); }
 .why { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
-.why div { padding: 22px; border-radius: 20px; background: var(--mist); min-height: 170px; display: flex; flex-direction: column; }
-.why .ic { width: 22px; height: 22px; }
-.why b { margin-top: auto; font-size: 15px; font-weight: 500; }
-.why p { margin: 6px 0 0; font-size: 13px; color: var(--slate); }
+.why div { padding: 24px; border-radius: 20px; background: var(--mist); display: flex; flex-direction: column; gap: 6px; }
+.why .ic { width: 24px; height: 24px; margin-bottom: 14px; }
+.why b { font-size: 15px; font-weight: 500; }
+.why p { margin: 0; font-size: 13px; color: var(--slate); }
 
 /* ---------- FAQ ---------- */
 .faq-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 48px; }
@@ -131,14 +146,12 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
 .cta b { display: block; font-size: 18px; font-weight: 500; }
 .cta p { margin: 4px 0 0; font-size: 14px; color: var(--slate); }
 
-/* ---------- Footer ---------- */
-.footer { margin-top: 96px; background: var(--mist); padding-block: 28px 36px; }
+/* ---------- Footer (shared by every page) ---------- */
+.footer { background: var(--mist); padding-block: 28px 36px; }
 .footer .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; }
-.footer-meta { display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 13px; color: var(--slate); }
-.footer-meta a { color: var(--link); text-decoration: none; }
-
-/* Descriptions and secondary text read better slightly open */
-.hero p, .sub, .feat small, .why-head p, .why p, .faq-side p, details p, .cta p, .plan-foot small, td { letter-spacing: 0.01em; }
+.footer-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 20px; font-size: 13px; color: var(--slate); letter-spacing: 0.01em; }
+.footer-meta a { color: var(--slate); text-decoration: none; }
+.footer-meta a:hover { color: var(--ink); }
 
 @media (max-width: 900px) {
   .plans, .faq-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
@@ -187,7 +200,7 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
 
       <div class="plan plan-pro">
         <div class="plan-top"><span class="plan-name"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M11.1033 3.8287C11.4702 3.08546 12.53 3.08546 12.8968 3.8287L14.9426 7.97398L19.5172 8.6387C20.3374 8.75789 20.6649 9.76586 20.0714 10.3444L16.7612 13.571L17.5427 18.1271C17.6828 18.944 16.8253 19.567 16.0917 19.1813L12.0001 17.0302L7.90845 19.1813C7.17482 19.567 6.31739 18.944 6.4575 18.1271L7.23893 13.571L3.92873 10.3444C3.33521 9.76586 3.66273 8.75789 4.48295 8.6387L9.05753 7.97398L11.1033 3.8287Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>Pro</span><span class="tag">Popular</span></div>
-        <div class="price"><b id="pro-price">$5</b><span id="pro-unit">per seat<br>/month</span></div>
+        <div class="price"><b id="pro-price">$5</b><span id="pro-unit">per seat / month</span></div>
         <div class="sub" id="pro-sub">Billed monthly, cancel anytime</div>
         <ul class="feats">
           <li class="feat"><span class="chip"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3.84434 10.5461C3.27674 10.2456 3.27674 9.43253 3.84434 9.13205L10.5964 5.55753C11.4744 5.0927 12.5256 5.0927 13.4037 5.55753L20.1557 9.13205C20.7233 9.43253 20.7233 10.2456 20.1557 10.5461L13.4037 14.1206C12.5256 14.5855 11.4744 14.5855 10.5964 14.1206L3.84434 10.5461Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
@@ -201,27 +214,37 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
         <div class="teaser" aria-hidden="true"><span><svg viewBox="0 0 24 24" fill="none"><path d="M5.208 9.348V20.312H18.792V9.348" stroke="currentColor" stroke-width="1.3" stroke-linecap="square" stroke-linejoin="miter"/>
   <path d="M3.547 10.801L12 3.306L20.453 10.801" stroke="currentColor" stroke-width="1.3" stroke-linecap="square" stroke-linejoin="miter"/>
   <path d="M12 15.5748C12 14.7243 12.6895 14.0348 13.5401 14.0348H14.1001C14.9506 14.0348 15.6401 14.7243 15.6401 15.5748C15.6401 16.4254 14.9506 17.1149 14.1001 17.1149H13.54C12.6895 17.1149 12 16.4254 12 15.5748Z" fill="currentColor"/></svg></span><span><svg viewBox="0 0 24 24" fill="none"><path d="M 7.5 3.987 C 6.399 4.148, 5.488 4.612, 4.673 5.424 C 4.204 5.891, 3.883 6.34, 3.59 6.936 C 2.95 8.239, 2.789 9.689, 3.112 11.218 C 3.653 13.778, 5.603 16.25, 8.686 18.286 C 9.377 18.742, 10.307 19.29, 10.638 19.437 C 11.369 19.76, 12.248 19.811, 12.991 19.573 C 13.307 19.471, 13.437 19.411, 13.893 19.154 C 18.071 16.797, 20.516 13.871, 20.99 10.663 C 21.073 10.094, 21.062 9.218, 20.962 8.636 C 20.489 5.86, 18.255 3.859, 15.738 3.958 C 15.158 3.981, 14.7 4.08, 14.174 4.297 C 13.481 4.584, 12.881 4.999, 12.28 5.608 L 11.998 5.894 11.718 5.607 C 10.872 4.74, 9.914 4.207, 8.845 4.01 C 8.552 3.956, 7.799 3.943, 7.5 3.987" fill="currentColor" fill-rule="evenodd"/></svg></span><span><svg viewBox="0 0 24 24" fill="none" shape-rendering="crispEdges"><path d="M8 2H16V3H8ZM6 3H18V4H6ZM5 4H9V5H5ZM15 4H19V5H15ZM4 5H7V6H4ZM17 5H19V6H17ZM3 6H6V7H3ZM17 6H20V7H17ZM2 7H5V8H2ZM18 7H20V8H18ZM2 8H4V9H2ZM18 8H21V9H18ZM2 9H4V10H2ZM19 9H21V10H19ZM2 10H4V11H2ZM19 10H21V11H19ZM2 11H4V12H2ZM8 11H9V12H8ZM11 11H13V12H11ZM15 11H16V12H15ZM19 11H21V12H19ZM2 12H4V13H2ZM8 12H9V13H8ZM11 12H13V13H11ZM15 12H16V13H15ZM19 12H21V13H19ZM2 13H4V14H2ZM19 13H21V14H19ZM2 14H5V15H2ZM19 14H21V15H19ZM3 15H5V16H3ZM18 15H21V16H18ZM2 16H5V17H2ZM17 16H20V17H17ZM2 17H4V18H2ZM16 17H19V18H16ZM2 18H8V19H2ZM14 18H18V19H14ZM3 19H17V20H3ZM4 20H6V21H4ZM7 20H15V21H7Z" fill="currentColor"/></svg></span><span><svg viewBox="0 0 24 24" fill="none"><path d="M12.846 7.77L11.154 4.387H3.541V7.77M3.541 7.77H16.399C17.82 7.77 18.53 7.77 19.073 8.047C19.551 8.29 19.939 8.678 20.182 9.156C20.459 9.699 20.459 10.409 20.459 11.83V15.552C20.459 16.973 20.459 17.684 20.182 18.227C19.939 18.704 19.551 19.093 19.073 19.336C18.53 19.612 17.82 19.612 16.399 19.612H7.601C6.18 19.612 5.47 19.612 4.927 19.336C4.449 19.093 4.061 18.704 3.818 18.227C3.541 17.684 3.541 16.973 3.541 15.552Z" stroke="currentColor" stroke-width="1.3" stroke-linecap="square" stroke-linejoin="miter"/></svg></span><span><svg viewBox="0 0 24 24" fill="none"><path d="M 11.05 2.889 C 10.408 2.959, 10.105 3.076, 9.786 3.379 C 9.559 3.595, 9.425 3.816, 9.325 4.138 C 9.2 4.539, 9.175 4.602, 9.053 4.812 C 8.821 5.214, 8.37 5.592, 7.947 5.74 C 7.491 5.9, 7.168 5.913, 6.611 5.797 C 6.295 5.732, 6.205 5.722, 6.025 5.735 C 5.596 5.765, 5.233 5.923, 4.955 6.199 C 4.404 6.747, 3.565 8.271, 3.408 9.012 C 3.361 9.23, 3.379 9.525, 3.452 9.766 C 3.541 10.054, 3.665 10.259, 3.91 10.521 C 4.422 11.069, 4.595 11.506, 4.569 12.185 C 4.545 12.784, 4.387 13.124, 3.866 13.696 C 3.643 13.941, 3.499 14.206, 3.436 14.49 C 3.376 14.76, 3.397 15.143, 3.486 15.402 C 3.675 15.949, 4.35 17.124, 4.808 17.701 C 5.244 18.251, 5.899 18.462, 6.617 18.282 C 6.989 18.189, 7.511 18.184, 7.807 18.269 C 8.558 18.486, 9.073 19.008, 9.321 19.805 C 9.487 20.341, 9.777 20.7, 10.212 20.908 C 10.452 21.024, 10.626 21.065, 11.05 21.109 C 11.62 21.169, 12.002 21.18, 12.488 21.15 C 13.477 21.091, 13.834 20.988, 14.196 20.66 C 14.473 20.41, 14.608 20.182, 14.727 19.766 C 14.855 19.32, 15.033 19.011, 15.327 18.725 C 15.85 18.216, 16.589 18.031, 17.375 18.212 C 18.069 18.373, 18.614 18.236, 19.061 17.789 C 19.62 17.23, 20.442 15.767, 20.592 15.065 C 20.7 14.557, 20.522 14.018, 20.092 13.556 C 19.581 13.006, 19.405 12.562, 19.431 11.89 C 19.455 11.29, 19.621 10.933, 20.138 10.372 C 20.451 10.032, 20.6 9.657, 20.6 9.213 C 20.6 8.959, 20.566 8.805, 20.438 8.472 C 20.25 7.985, 19.782 7.138, 19.406 6.6 C 18.845 5.8, 18.234 5.551, 17.34 5.758 C 16.744 5.896, 16.197 5.826, 15.725 5.55 C 15.209 5.249, 14.898 4.835, 14.692 4.175 C 14.578 3.812, 14.462 3.617, 14.225 3.391 C 13.89 3.072, 13.6 2.959, 12.929 2.89 C 12.465 2.841, 11.496 2.841, 11.05 2.889 M 11.625 9.05 C 10.471 9.211, 9.544 9.976, 9.178 11.071 C 8.66 12.619, 9.507 14.299, 11.071 14.822 C 12.619 15.341, 14.299 14.493, 14.822 12.929 C 15.385 11.249, 14.336 9.447, 12.588 9.088 C 12.347 9.038, 11.85 9.019, 11.625 9.05" fill="currentColor" fill-rule="evenodd"/></svg></span><span><svg viewBox="0 0 24 24" fill="none" shape-rendering="crispEdges"><path d="M10 2H12V3H10ZM10 3H13V4H10ZM9 4H14V5H9ZM8 5H11V6H8ZM12 5H15V6H12ZM7 6H10V7H7ZM13 6H16V7H13ZM3 7H9V8H3ZM14 7H20V8H14ZM2 8H8V9H2ZM15 8H21V9H15ZM2 9H4V10H2ZM18 9H21V10H18ZM2 10H5V11H2ZM17 10H20V11H17ZM3 11H6V12H3ZM16 11H19V12H16ZM4 12H7V13H4ZM15 12H18V13H15ZM5 13H8V14H5ZM15 13H18V14H15ZM5 14H8V15H5ZM16 14H18V15H16ZM5 15H7V16H5ZM16 15H18V16H16ZM5 16H7V17H5ZM10 16H14V17H10ZM16 16H18V17H16ZM5 17H7V18H5ZM8 17H18V18H8ZM5 18H11V19H5ZM13 18H18V19H13ZM6 19H9V20H6ZM15 19H17V20H15Z" fill="currentColor"/></svg></span></div>
-        <div class="plan-foot"><div class="seats" role="group" aria-label="Seats"><button type="button" id="seat-down" aria-label="Fewer seats">−</button><output id="seat-n" aria-live="polite">1 seat</output><button type="button" id="seat-up" aria-label="More seats">+</button></div><a href="#" class="pill soon" id="get-pro" data-tip="Coming soon">Get Pro · $5</a></div>
+        <div class="plan-foot"><div class="seats" role="group" aria-label="Seats"><button type="button" id="seat-down" aria-label="Fewer seats">−</button><output id="seat-n" aria-live="polite">1 seat</output><button type="button" id="seat-up" aria-label="More seats">+</button></div><a href="#" data-tip="Coming soon" class="pill soon" id="get-pro">Get Pro · $5</a></div>
       </div>
     </div>
 
     <section>
       <h2 class="center">Choose what fits your work</h2>
-      <div class="table-scroll">
-        <table>
-          <thead><tr><th>Features</th><th>Free</th><th>Pro</th></tr></thead>
-          <tbody>
-            <tr><td>Outline, 287 icons</td><td><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td></tr>
-            <tr><td>Duotone, 285 icons</td><td><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td></tr>
-            <tr><td>Sharp, 287 icons</td><td><span class="no">—</span></td><td><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td></tr>
-            <tr><td>Filled, 287 icons</td><td><span class="no">—</span></td><td><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td></tr>
-            <tr><td>Pixel, 287 icons</td><td><span class="no">—</span></td><td><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td></tr>
-            <tr><td>Copy as SVG or React</td><td><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td></tr>
-            <tr><td>Stroke, size and colour controls</td><td><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td></tr>
-            <tr><td>npm package</td><td><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td><td><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></td></tr>
-            <tr><td>New releases</td><td>Free styles</td><td>Every style</td></tr>
-          </tbody>
-        </table>
+      <div class="cmp-scroll">
+        <div class="cmp" role="table" aria-label="Plan comparison">
+          <div class="cmp-row cmp-head" role="row">
+            <div role="columnheader"></div>
+            <div role="columnheader" class="cmp-plan"><b>Free</b><span>$0 forever</span><a class="pill pill-white" href="./#icons">Browse icons</a></div>
+            <div role="columnheader" class="cmp-plan cmp-pro"><b>Pro</b><span>$5 per seat / month</span><a href="#" data-tip="Coming soon" class="pill soon">Get Pro</a></div>
+          </div>
+          <div class="cmp-group" role="row"><div role="cell">Styles</div><div role="cell"></div><div role="cell" class="cmp-pro"></div></div>
+          <div class="cmp-row" role="row"><div role="cell"><span class="sample"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5.20814 9.34766V17.312C5.20814 18.9688 6.55128 20.312 8.20813 20.312H15.7919C17.4488 20.312 18.7919 18.9688 18.7919 17.312V9.34766" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M3.54712 10.8007L10.6731 4.48219C11.4303 3.8108 12.5697 3.8108 13.3269 4.48219L20.4529 10.8007" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12 15.5748C12 14.7243 12.6895 14.0348 13.5401 14.0348H14.1001C14.9506 14.0348 15.6401 14.7243 15.6401 15.5748C15.6401 16.4254 14.9506 17.1149 14.1001 17.1149H13.54C12.6895 17.1149 12 16.4254 12 15.5748Z" fill="currentColor"/></svg></span>Outline<small>287 icons</small></div><div role="cell"><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><div role="cell" class="cmp-pro"><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div></div>
+          <div class="cmp-row" role="row"><div role="cell"><span class="sample"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5.20813 9.34766V17.312C5.20813 18.9688 6.55127 20.312 8.20813 20.312H15.7919C17.4487 20.312 18.7919 18.9688 18.7919 17.312V9.34766" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M3.54712 10.8007L10.6731 4.48219C11.4303 3.8108 12.5697 3.8108 13.3269 4.48219L20.4529 10.8007" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12 15.5748C12 14.7243 12.6895 14.0348 13.54 14.0348H14.1001C14.9506 14.0348 15.6401 14.7243 15.6401 15.5748C15.6401 16.4254 14.9506 17.1149 14.1001 17.1149H13.54C12.6895 17.1149 12 16.4254 12 15.5748Z" fill="currentColor" fill-opacity="0.3"/></svg></span>Duotone<small>285 icons</small></div><div role="cell"><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><div role="cell" class="cmp-pro"><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div></div>
+          <div class="cmp-row" role="row"><div role="cell"><span class="sample"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5.208 9.348V20.312H18.792V9.348" stroke="currentColor" stroke-width="1.3" stroke-linecap="square" stroke-linejoin="miter"/>
+  <path d="M3.547 10.801L12 3.306L20.453 10.801" stroke="currentColor" stroke-width="1.3" stroke-linecap="square" stroke-linejoin="miter"/>
+  <path d="M12 15.5748C12 14.7243 12.6895 14.0348 13.5401 14.0348H14.1001C14.9506 14.0348 15.6401 14.7243 15.6401 15.5748C15.6401 16.4254 14.9506 17.1149 14.1001 17.1149H13.54C12.6895 17.1149 12 16.4254 12 15.5748Z" fill="currentColor"/></svg></span>Sharp<small>287 icons</small></div><div role="cell"><span class="no" aria-label="Not included"></span></div><div role="cell" class="cmp-pro"><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div></div>
+          <div class="cmp-row" role="row"><div role="cell"><span class="sample"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M 11.675 3.351 C 11.214 3.405, 10.743 3.599, 10.388 3.883 C 10.099 4.113, 3.292 10.148, 3.112 10.333 C 3.014 10.434, 2.951 10.525, 2.931 10.591 C 2.792 11.052, 3.159 11.497, 3.63 11.442 C 3.798 11.422, 3.911 11.35, 4.25 11.048 L 4.538 10.791 4.551 14.252 C 4.565 17.948, 4.56 17.788, 4.685 18.263 C 4.986 19.409, 5.894 20.377, 7.025 20.758 C 7.366 20.873, 7.618 20.924, 7.988 20.951 C 8.379 20.98, 15.621 20.98, 16.013 20.951 C 16.546 20.912, 17.035 20.777, 17.472 20.548 C 18.364 20.082, 19.068 19.209, 19.315 18.263 C 19.44 17.786, 19.435 17.947, 19.449 14.252 L 19.463 10.791 19.75 11.048 C 20.144 11.399, 20.214 11.438, 20.45 11.437 C 20.593 11.436, 20.661 11.424, 20.738 11.383 C 21.095 11.192, 21.211 10.739, 20.982 10.43 C 20.929 10.358, 14.202 4.375, 13.7 3.953 C 13.137 3.479, 12.413 3.264, 11.675 3.351 M 13.154 14.086 C 12.683 14.203, 12.275 14.576, 12.094 15.055 C 12.023 15.244, 12.016 15.289, 12.015 15.563 C 12.014 15.827, 12.022 15.886, 12.083 16.063 C 12.219 16.456, 12.501 16.776, 12.863 16.949 C 13.17 17.096, 13.27 17.113, 13.85 17.111 C 14.337 17.109, 14.373 17.106, 14.564 17.042 C 15.043 16.884, 15.412 16.514, 15.566 16.039 C 15.659 15.753, 15.659 15.397, 15.566 15.111 C 15.42 14.659, 15.104 14.328, 14.638 14.135 C 14.463 14.063, 14.46 14.063, 13.875 14.058 C 13.453 14.054, 13.25 14.062, 13.154 14.086" fill="currentColor" fill-rule="evenodd"/></svg></span>Filled<small>287 icons</small></div><div role="cell"><span class="no" aria-label="Not included"></span></div><div role="cell" class="cmp-pro"><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div></div>
+          <div class="cmp-row" role="row"><div role="cell"><span class="sample"><svg viewBox="0 0 24 24" fill="none" shape-rendering="crispEdges" aria-hidden="true"><path d="M10 2H12V3H10ZM9 3H13V4H9ZM7 4H15V5H7ZM6 5H10V6H6ZM12 5H16V6H12ZM5 6H8V7H5ZM14 6H17V7H14ZM4 7H7V8H4ZM15 7H18V8H15ZM3 8H6V9H3ZM16 8H19V9H16ZM2 9H6V10H2ZM17 9H21V10H17ZM2 10H6V11H2ZM17 10H21V11H17ZM4 11H6V12H4ZM17 11H19V12H17ZM4 12H6V13H4ZM17 12H19V13H17ZM4 13H6V14H4ZM17 13H19V14H17ZM4 14H6V15H4ZM13 14H15V15H13ZM17 14H19V15H17ZM4 15H6V16H4ZM12 15H16V16H12ZM17 15H19V16H17ZM4 16H6V17H4ZM12 16H15V17H12ZM17 16H19V17H17ZM4 17H6V18H4ZM17 17H19V18H17ZM4 18H7V19H4ZM16 18H19V19H16ZM5 19H18V20H5ZM6 20H17V21H6Z" fill="currentColor"/></svg></span>Pixel<small>287 icons</small></div><div role="cell"><span class="no" aria-label="Not included"></span></div><div role="cell" class="cmp-pro"><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div></div>
+          <div class="cmp-group" role="row"><div role="cell">Tools</div><div role="cell"></div><div role="cell" class="cmp-pro"></div></div>
+          <div class="cmp-row" role="row"><div role="cell">Copy as SVG or React</div><div role="cell"><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><div role="cell" class="cmp-pro"><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div></div>
+          <div class="cmp-row" role="row"><div role="cell">Stroke, size and colour controls</div><div role="cell"><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><div role="cell" class="cmp-pro"><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div></div>
+          <div class="cmp-row" role="row"><div role="cell">npm package</div><div role="cell"><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><div role="cell" class="cmp-pro"><span class="yes" aria-label="Included"><svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.34363 11.6823L10.326 15.6643L17.6563 8.33398" stroke="currentColor" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div></div>
+          <div class="cmp-row cmp-last" role="row"><div role="cell">New icons as they ship</div><div role="cell"><span class="txt">Free styles</span></div><div role="cell" class="cmp-pro"><span class="txt">Every style</span></div></div>
+        </div>
       </div>
     </section>
 
@@ -265,7 +288,7 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
       </div>
     </section>
 
-    <section>
+    <section class="last">
       <div class="cta">
         <div><b>Need custom icons?</b><p>Meya Lab designs icon sets for products and brands.</p></div>
         <a class="pill pill-ink" href="https://meyalab.com/contact" target="_blank" rel="noopener">Hire us</a>
@@ -279,7 +302,9 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
     <a class="brand" href="./">Meya Icons <span class="pro">1.0</span></a>
     <div class="footer-meta">
       <span>572 free icons · MIT License</span>
+      <a href="pricing.html">Pricing</a>
       <a href="mailto:hello@meyalab.com">hello@meyalab.com</a>
+      <a href="https://meyalab.com/contact" target="_blank" rel="noopener">Need custom icons? Hire us</a>
     </div>
   </div>
 </footer>

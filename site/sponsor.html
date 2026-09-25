@@ -82,11 +82,12 @@ textarea.input { min-height: 180px; padding: 18px 24px; border-radius: 28px; res
 .result a { color: inherit; }
 
 /* ---------- Footer ---------- */
+/* ---------- Footer (shared by every page) ---------- */
 .footer { background: var(--mist); padding-block: 28px 36px; }
 .footer .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; }
-.footer-meta { display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 13px; color: var(--slate); }
-.footer-meta a { color: var(--link); text-decoration: none; }
-.footer-meta a:hover { text-decoration: underline; }
+.footer-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 20px; font-size: 13px; color: var(--slate); letter-spacing: 0.01em; }
+.footer-meta a { color: var(--slate); text-decoration: none; }
+.footer-meta a:hover { color: var(--ink); }
 
 @media (max-width: 760px) {
   /* The nav is tight on a phone: drop the labels the brand already covers. */
@@ -141,15 +142,7 @@ textarea.input { min-height: 180px; padding: 18px 24px; border-radius: 28px; res
   </div>
 </main>
 
-<footer class="footer">
-  <div class="wrap">
-    <a class="brand" href="./">Meya Icons <span class="pro">__VERSION__</span></a>
-    <div class="footer-meta">
-      <span>__COUNT__ icons · MIT License</span>
-      <a href="mailto:hello@meyalab.com">hello@meyalab.com</a>
-    </div>
-  </div>
-</footer>
+__FOOTER__
 
 <script>
 (() => {
