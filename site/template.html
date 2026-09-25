@@ -159,12 +159,16 @@ button { cursor: pointer; }
 
 /* ---------- Grid ---------- */
 main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-drawer); }
+/* Sponsor rail: a 32px vertical stack of circles, per the Figma frame. */
 .rail { display: none; }
-.rail-title { margin: 0 0 14px; font-size: 13px; font-weight: 500; color: var(--slate); }
-.rail-tiles { display: flex; flex-wrap: wrap; gap: 10px; }
+.rail-tiles { display: flex; flex-direction: column; gap: 8px; }
+.rail .sponsor-tile, .rail .sponsor-add { width: 32px; height: 32px; }
+.rail .sponsor-add { border: 0; background: var(--mist); color: var(--ink); }
+.rail .sponsor-add:hover { background: var(--mist-2); }
+.rail .sponsor-add svg { width: 14px; height: 14px; stroke-width: 2; }
 @media (min-width: 1200px) {
   /* The grid gives up a narrow column so the sponsors stay in view while scrolling. */
-  main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 168px; gap: 40px; align-items: start; }
+  main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px; align-items: start; }
   .rail { display: block; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 132px); }
 }
 .section + .section { margin-top: 48px; }
@@ -341,7 +345,6 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
     </div>
   </div>
   <aside class="rail" aria-label="Sponsors">
-    <p class="rail-title">Sponsors</p>
     <div class="rail-tiles">
       <a class="sponsor-tile" href="https://meyalab.com/" target="_blank" rel="noopener" data-tip="Meya Lab Studio" aria-label="Meya Lab Studio">
         <svg class="sponsor-mark" viewBox="0 0 480 480" fill="none" aria-hidden="true">__SPONSOR_LOGO__</svg>
