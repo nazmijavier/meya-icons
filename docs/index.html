@@ -116,8 +116,11 @@ button { cursor: pointer; }
 .seg button:hover { color: var(--ink); }
 .seg .soon { position: relative; color: var(--steel); }
 .seg .soon:hover { color: var(--slate); }
-.seg .soon::after { content: "Coming soon"; position: absolute; left: 50%; bottom: calc(100% + 8px); translate: -50% 4px; scale: 0.96; padding: 6px 10px; border-radius: 8px; background: var(--ink); color: #fff; font-size: 12px; font-weight: 500; white-space: nowrap; opacity: 0; pointer-events: none; transform-origin: 50% 100%; transition: opacity 150ms var(--ease-out), translate 150ms var(--ease-out), scale 150ms var(--ease-out); z-index: 5; }
-.seg .soon.tip::after { opacity: 1; translate: -50% 0; scale: 1; }
+.soon { position: relative; }
+.soon::after { content: "Coming soon"; position: absolute; left: 50%; bottom: calc(100% + 8px); translate: -50% 4px; scale: 0.96; padding: 6px 10px; border-radius: 8px; background: var(--ink); color: #fff; font-size: 12px; font-weight: 500; white-space: nowrap; opacity: 0; pointer-events: none; transform-origin: 50% 100%; transition: opacity 150ms var(--ease-out), translate 150ms var(--ease-out), scale 150ms var(--ease-out); z-index: 5; }
+.soon.tip::after { opacity: 1; translate: -50% 0; scale: 1; }
+.soon.below::after { bottom: auto; top: calc(100% + 8px); translate: -50% -4px; transform-origin: 50% 0; }
+.soon.below.tip::after { translate: -50% 0; }
 .seg button { display: inline-flex; align-items: center; gap: 6px; }
 .pro { display: inline-flex; align-items: center; height: 16px; padding-inline: 5px; border-radius: 4px; background: var(--ink); color: #fff; font-size: 9px; font-weight: 600; letter-spacing: 0.06em; line-height: 1; }
 .seg .soon .pro { opacity: 0.55; }
@@ -264,7 +267,7 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
         <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
         <span class="label">GitHub</span>
       </a>
-      <a class="pill pill-ink" href="https://meyalab.com/contact" target="_blank" rel="noopener">Hire us</a>
+      <button class="pill pill-ink soon below" type="button" aria-label="Buy icons, coming soon">Buy Icons</button>
     </div>
   </nav>
 </div>
@@ -499,14 +502,14 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
   $("#styles").innerHTML = styles.map((st) => st.count
     ? `<button type="button" data-style="${st.id}" aria-pressed="${st.id === state.style}">${st.label}${badge(st)}</button>`
     : `<button type="button" class="soon" aria-disabled="true" aria-label="${st.label}${st.pro ? " (Pro)" : ""}, coming soon">${st.label}${badge(st)}</button>`).join("");
+  // Anything not released yet (PRO styles, Buy Icons): show "Coming soon" right away, then hide it.
+  document.addEventListener("click", (e) => {
+    const soon = e.target.closest(".soon"); if (!soon) return;
+    soon.classList.add("tip");
+    clearTimeout(soon._t); soon._t = setTimeout(() => soon.classList.remove("tip"), 1600);
+  });
   $("#styles").addEventListener("click", (e) => {
-    const soon = e.target.closest(".soon");
-    if (soon) {
-      // Not released yet: show the tooltip right away, then hide it.
-      soon.classList.add("tip");
-      clearTimeout(soon._t); soon._t = setTimeout(() => soon.classList.remove("tip"), 1600);
-      return;
-    }
+    if (e.target.closest(".soon")) return;
     const b = e.target.closest("[data-style]"); if (!b || b.dataset.style === state.style) return;
     state.style = b.dataset.style;
     $("#styles").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
