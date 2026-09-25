@@ -57,8 +57,8 @@ fs.writeFileSync(
 if (process.argv[2]) fs.writeFileSync(process.argv[2], fragment);
 
 // ---------- README images ----------
-const png = (f) => `data:image/png;base64,${fs.readFileSync(rel(f)).toString("base64")}`;
-const LOGO = png("assets/logo.png");
+// Official app-icon mark (vector trace of Logos/Main Logo.png), drawn inline so GitHub renders it.
+const LOGO = fs.readFileSync(rel("assets/logo.svg"), "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim();
 const themes = {
   light: { bg: "#FFFFFF", card: "#F5F5F5", ink: "#121212", muted: "#737373", line: "#E8E8E8" },
   dark: { bg: "#0D0D0D", card: "#171717", ink: "#F5F5F5", muted: "#A3A3A3", line: "#262626" },
@@ -71,7 +71,7 @@ for (const [mode, t] of Object.entries(themes)) {
     rel(`assets/banner-${mode}.svg`),
     `<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="360" viewBox="0 0 1280 360" fill="none">
   <rect width="1280" height="360" rx="28" fill="${t.card}"/>
-  <image x="96" y="100" width="160" height="160" href="${LOGO}"/>
+  <svg x="96" y="100" width="160" height="160" viewBox="0 0 480 480">${LOGO}</svg>
   <text x="304" y="178" font-family="${FONT}" font-size="72" font-weight="600" letter-spacing="-2.5" fill="${t.ink}">Meya Icons</text>
   <rect x="696" y="126" width="72" height="44" rx="10" fill="${t.bg}" stroke="${t.line}"/>
   <text x="732" y="156" text-anchor="middle" font-family="${FONT}" font-size="22" font-weight="500" fill="${t.muted}">${VERSION}</text>
