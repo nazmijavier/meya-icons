@@ -61,7 +61,7 @@ const themes = {
   light: { bg: "#FFFFFF", card: "#F5F5F5", ink: "#121212", muted: "#737373", line: "#E8E8E8" },
   dark: { bg: "#0D0D0D", card: "#171717", ink: "#F5F5F5", muted: "#A3A3A3", line: "#262626" },
 };
-const FONT = "'Inter Tight', Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif";
+const FONT = "Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif";
 
 for (const [mode, t] of Object.entries(themes)) {
   // Banner

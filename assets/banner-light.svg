@@ -2,8 +2,8 @@
   <rect width="1280" height="360" rx="28" fill="#F5F5F5"/>
   <rect x="96" y="100" width="160" height="160" rx="40" fill="#1BA4FF"/>
   <svg x="116" y="120" width="120" height="120" viewBox="68 74 300 300"><path d="M77 349 218 130 243 197 359 98 357 258 334 202 211 326 221 251Z" fill="#032439" stroke="#032439" stroke-width="12" stroke-linejoin="round"/></svg>
-  <text x="304" y="178" font-family="'Inter Tight', Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="72" font-weight="600" letter-spacing="-2.5" fill="#121212">Meya Icons</text>
+  <text x="304" y="178" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="72" font-weight="600" letter-spacing="-2.5" fill="#121212">Meya Icons</text>
   <rect x="696" y="126" width="72" height="44" rx="10" fill="#FFFFFF" stroke="#E8E8E8"/>
-  <text x="732" y="156" text-anchor="middle" font-family="'Inter Tight', Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="22" font-weight="500" fill="#737373">1.0</text>
-  <text x="306" y="232" font-family="'Inter Tight', Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="28" fill="#737373">287 open-source stroke icons by Meya Lab</text>
+  <text x="732" y="156" text-anchor="middle" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="22" font-weight="500" fill="#737373">1.0</text>
+  <text x="306" y="232" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="28" fill="#737373">287 open-source stroke icons by Meya Lab</text>
 </svg>
