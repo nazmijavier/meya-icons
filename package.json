@@ -1,18 +1,33 @@
 {
   "name": "meya-icons",
   "version": "1.0.0",
-  "description": "Open-source stroke icons by Meya Lab. 24×24 grid, 1.3px stroke, currentColor.",
+  "description": "Open-source icons by Meya Lab. Outline and Duotone, 24\u00d724 grid, currentColor.",
   "license": "MIT",
   "author": "Meya Lab <hello@meyalab.com> (https://meyalab.com)",
-  "homepage": "https://nazmijavier.github.io/meya-icons/",
+  "homepage": "https://icons.meyalab.com",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nazmijavier/meya-icons.git"
   },
-  "keywords": ["icons", "svg", "stroke", "outline", "icon-set", "meya", "meya-lab"],
-  "files": ["icons", "LICENSE", "README.md"],
+  "keywords": [
+    "icons",
+    "svg",
+    "react",
+    "icon-set",
+    "svg-icons",
+    "stroke-icons",
+    "meya",
+    "meya-lab"
+  ],
+  "files": [
+    "icons",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
     "import": "node scripts/import.mjs",
-    "build": "node scripts/build.mjs"
-  }
+    "build": "node scripts/build.mjs",
+    "pack": "node scripts/package.mjs"
+  },
+  "private": true
 }
