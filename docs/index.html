@@ -81,14 +81,13 @@ button { cursor: pointer; }
 .brand { align-items: center; }
 .brand .pro { font-size: 10px; height: 18px; padding-inline: 6px; letter-spacing: 0.02em; }
 .nav-actions { display: flex; align-items: center; gap: 2px; }
-.sponsors-label { font-size: 15px; color: var(--slate); margin-right: 4px; }
-.sponsor-tile { display: block; width: 44px; height: 44px; border-radius: 50%; overflow: hidden; transition: scale 150ms ease; }
+.sponsor-tile { display: block; width: 32px; height: 32px; border-radius: 50%; overflow: hidden; transition: scale 150ms ease; }
 .sponsor-tile:active { scale: 0.94; }
 .sponsor-mark { width: 100%; height: 100%; display: block; }
-.sponsor-add { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--control); background: var(--white); color: var(--steel); transition-property: border-color, color, scale; transition-duration: 150ms; }
-.sponsor-add:hover { border-color: var(--steel); color: var(--ink); }
+.sponsor-add { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; border: 0; background: var(--mist); color: var(--ink); transition-property: background-color, scale; transition-duration: 150ms; }
+.sponsor-add:hover { background: var(--mist-2); }
 .sponsor-add:active { scale: 0.94; }
-.sponsor-add svg { width: 18px; height: 18px; stroke-width: 1.6; }
+.sponsor-add svg { width: 14px; height: 14px; stroke-width: 2; }
 
 .nav-link { display: inline-flex; align-items: center; gap: 7px; height: 40px; padding-inline: 12px; border-radius: 9999px; color: var(--slate); text-decoration: none; font-size: 13px; font-weight: 500; transition: background-color 150ms ease; }
 .nav-link:hover { color: var(--ink); background: var(--mist); }
@@ -165,17 +164,10 @@ button { cursor: pointer; }
 /* ---------- Grid ---------- */
 main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-drawer); }
 /* Sponsor rail: a 32px vertical stack of circles, per the Figma frame. */
-.rail { display: none; }
+/* The grid gives up a 32px column so the sponsors stay in view while scrolling, at every width. */
+main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px; align-items: start; }
+.rail { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 132px); }
 .rail-tiles { display: flex; flex-direction: column; gap: 8px; }
-.rail .sponsor-tile, .rail .sponsor-add { width: 32px; height: 32px; }
-.rail .sponsor-add { border: 0; background: var(--mist); color: var(--ink); }
-.rail .sponsor-add:hover { background: var(--mist-2); }
-.rail .sponsor-add svg { width: 14px; height: 14px; stroke-width: 2; }
-@media (min-width: 1200px) {
-  /* The grid gives up a narrow column so the sponsors stay in view while scrolling. */
-  main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px; align-items: start; }
-  .rail { display: block; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 132px); }
-}
 .section + .section { margin-top: 48px; }
 .section-head { display: flex; align-items: baseline; gap: 8px; margin: 0 2px 14px; }
 .section-head h2 { margin: 0; font-size: 21px; font-weight: 600; letter-spacing: -0.02em; }
@@ -238,9 +230,7 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
 
 /* ---------- Footer ---------- */
 .footer { background: var(--mist); padding-block: 28px 36px; transition: padding-right 300ms var(--ease-drawer); }
-.footer .wrap { display: grid; gap: 22px; }
-.sponsors { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
-.footer-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; }
+.footer .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; }
 .footer-meta { display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 13px; color: var(--slate); }
 .footer-meta a { color: var(--link); text-decoration: none; }
 .footer-meta a:hover { text-decoration: underline; }
@@ -272,6 +262,8 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
   .brand { white-space: nowrap; }
   /* Compact 3-column grid. */
   main { padding-top: 20px; }
+  main.wrap { gap: 14px; }
+  .rail { top: calc(env(safe-area-inset-top, 0px) + 16px); }
   .section + .section { margin-top: 32px; }
   .section-head h2 { font-size: 18px; }
   .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
@@ -393,21 +385,11 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
 
 <footer class="footer">
   <div class="wrap">
-    <div class="sponsors">
-      <span class="sponsors-label">Sponsors</span>
-      <a class="sponsor-tile" href="https://meyalab.com/" target="_blank" rel="noopener" data-tip="Meya Lab Studio" aria-label="Meya Lab Studio">
-        <svg class="sponsor-mark" viewBox="0 0 480 480" fill="none" aria-hidden="true"><rect width="480" height="480" rx="76" fill="#1BA4FF"/>
-  <path d="M354.6 99.1 L357.4 99.1 L359.9 101.6 L359.9 256.4 L358.6 257.9 L355.1 258.9 L352.1 256.4 L339.9 208.4 L337.9 204.9 L334.6 204.1 L331.4 206.4 L213.9 326.6 L210.9 326.9 L209.4 325.9 L208.1 322.6 L225.1 258.1 L224.9 253.6 L223.4 252.1 L221.1 251.6 L212.1 257.1 L84.4 348.9 L79.9 350.1 L77.4 348.1 L77.1 345.1 L85.1 332.4 L215.9 132.4 L218.9 131.6 L221.9 133.6 L239.9 194.4 L242.4 197.1 L245.9 197.1Z" fill="#032439"/></svg>
-      </a>
-      <a class="sponsor-add" href="https://meyalab.com/contact" target="_blank" rel="noopener" data-tip="Become a sponsor" aria-label="Become a sponsor"><span data-ico="shapes:plus"></span></a>
-    </div>
-    <div class="footer-bar">
-      <a class="brand" href="#top">Meya Icons <span class="pro">1.0</span></a>
-      <div class="footer-meta">
-        <span>572 icons · MIT License</span>
-        <a href="https://github.com/nazmijavier/meya-icons" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://meyalab.com/contact" target="_blank" rel="noopener">Need custom icons? Hire us</a>
-      </div>
+    <a class="brand" href="#top">Meya Icons <span class="pro">1.0</span></a>
+    <div class="footer-meta">
+      <span>572 icons · MIT License</span>
+      <a href="https://github.com/nazmijavier/meya-icons" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://meyalab.com/contact" target="_blank" rel="noopener">Need custom icons? Hire us</a>
     </div>
   </div>
 </footer>
