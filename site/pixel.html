@@ -1,0 +1,399 @@
+<title>Meya Pixel Lab</title>
+<meta name="description" content="Turn Meya Icons into pixel-grid icons. Pick an icon, set the grid, weight and corner rounding, then copy or export.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="icon" type="image/png" href="__FAVICON__">
+<style>
+/* Same tokens as the icon site (DESIGN.md): white canvas, Studio Mist surfaces, flat, pill controls. */
+:root {
+  color-scheme: light;
+  --white: #FFFFFF;
+  --mist: #F5F5F7;
+  --mist-2: #EDEDF0;
+  --paper: #F1F0ED;
+  --hairline: #D6D6D6;
+  --control: #E6E6E8;
+  --ink: #1D1D1F;
+  --slate: #707070;
+  --steel: #86868B;
+  --blue: #0071E3;
+  --ring: rgba(0, 113, 227, 0.28);
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--white); color: var(--ink); font: 400 15px/1.47 var(--sans); letter-spacing: -0.01em; -webkit-font-smoothing: antialiased; font-feature-settings: "cv11", "ss01"; }
+button, input { font: inherit; color: inherit; letter-spacing: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--ring); }
+.wrap { max-width: 1440px; margin-inline: auto; padding-inline: 100px; }
+@media (max-width: 1100px) { .wrap { padding-inline: 48px; } }
+@media (max-width: 760px) { .wrap { padding-inline: 20px; } }
+
+.nav { display: flex; align-items: center; justify-content: space-between; height: 64px; margin-top: 12px; }
+.brand { font-size: 15px; font-weight: 500; text-decoration: none; color: inherit; display: flex; gap: 6px; align-items: baseline; }
+.brand small { font-size: 12px; color: var(--steel); font-weight: 400; }
+.nav a.back { font-size: 13px; font-weight: 500; color: var(--slate); text-decoration: none; }
+.nav a.back:hover { color: var(--ink); }
+
+header.intro { padding-block: 40px 28px; max-width: 44em; }
+header.intro h1 { margin: 0 0 10px; font-size: clamp(30px, 3.6vw, 44px); line-height: 1.08; font-weight: 500; letter-spacing: -0.03em; text-wrap: balance; }
+header.intro p { margin: 0; color: var(--slate); font-size: 17px; text-wrap: pretty; }
+
+.pill { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 18px; border: 0; border-radius: 9999px; font-size: 14px; font-weight: 500; white-space: nowrap; transition-property: background-color, scale; transition-duration: 150ms; }
+.pill:active { scale: 0.96; }
+.pill-blue { background: var(--blue); color: #fff; }
+.pill-blue:hover { background: #0077ED; }
+.pill-ink { background: var(--ink); color: #fff; }
+.pill-ink:hover { background: #333336; }
+.pill-outline { background: transparent; box-shadow: 0 0 0 1px var(--steel); }
+.pill-outline:hover { background: var(--mist); }
+
+.layout { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 24px; align-items: start; padding-bottom: 90px; }
+
+/* Picker */
+.picker { position: sticky; top: 16px; display: grid; gap: 10px; }
+.input { width: 100%; height: 44px; border-radius: 980px; border: 0; background: var(--mist); padding: 0 18px; font-size: 15px; outline: none; }
+.input::placeholder { color: var(--steel); }
+.input:focus-visible { background: var(--white); box-shadow: 0 0 0 1px var(--steel), 0 0 0 4px var(--ring); }
+.list { display: grid; grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); gap: 6px; max-height: 62vh; overflow: auto; padding: 2px; }
+.pick { aspect-ratio: 1; border: 0; border-radius: 14px; background: var(--mist); display: grid; place-items: center; transition: background-color 150ms ease; }
+.pick:hover { background: var(--mist-2); }
+.pick[aria-pressed="true"] { background: var(--white); box-shadow: inset 0 0 0 1.5px var(--ink); }
+.pick svg { width: 22px; height: 22px; }
+.count { font-size: 12px; color: var(--steel); margin: 0 4px; }
+
+/* Stage */
+.panel { display: grid; gap: 20px; }
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.card { position: relative; aspect-ratio: 1; border-radius: 28px; background: var(--paper); display: grid; place-items: center; overflow: hidden; }
+.card.orig { background: var(--mist); }
+.card > svg.art { width: 52%; height: 52%; color: var(--ink); }
+.card .cells { position: absolute; inset: 24%; width: 52%; height: 52%; pointer-events: none; }
+.card .cells line { stroke: rgba(29, 29, 31, 0.08); stroke-width: 0.04; }
+.tag { position: absolute; left: 16px; top: 14px; font-size: 13px; font-weight: 500; color: var(--slate); }
+.tag b { color: var(--ink); font-weight: 600; }
+
+.controls { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.control { display: grid; gap: 8px; padding: 14px 18px 16px; border-radius: 20px; background: var(--mist); }
+.control .top { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; font-weight: 500; color: var(--slate); }
+.control output { color: var(--ink); font-variant-numeric: tabular-nums; }
+.seg { display: flex; gap: 2px; padding: 3px; border-radius: 9999px; background: var(--white); box-shadow: 0 0 0 1px var(--control); }
+.seg button { flex: 1; height: 28px; border: 0; border-radius: 9999px; background: none; font-size: 13px; font-weight: 500; color: var(--slate); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+.range { --p: 50%; -webkit-appearance: none; appearance: none; width: 100%; height: 20px; margin: 0; background: transparent; cursor: pointer; }
+.range:focus-visible { box-shadow: none; }
+.range::-webkit-slider-runnable-track { height: 3px; border-radius: 9999px; background: linear-gradient(to right, var(--ink) var(--p), var(--hairline) var(--p)); }
+.range::-moz-range-track { height: 3px; border-radius: 9999px; background: var(--hairline); }
+.range::-moz-range-progress { height: 3px; border-radius: 9999px; background: var(--ink); }
+.range::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; margin-top: -7.5px; border-radius: 50%; background: var(--white); box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.16); }
+.range::-moz-range-thumb { width: 18px; height: 18px; border: 0; border-radius: 50%; background: var(--white); box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.16); }
+
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.sheet-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-top: 16px; }
+.sheet-head h2 { margin: 0; font-size: 21px; font-weight: 600; letter-spacing: -0.02em; }
+.sheet-head span { font-size: 13px; color: var(--slate); }
+.specimen { border-radius: 28px; background: var(--paper); padding: 40px; display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 28px 20px; }
+.spec { display: grid; justify-items: center; gap: 10px; border: 0; background: none; padding: 0; }
+.spec svg { width: 44px; height: 44px; color: #111; }
+.spec span { font-size: 12px; color: var(--slate); }
+.spec:hover span { color: var(--ink); }
+
+.toast { position: fixed; left: 50%; bottom: 24px; height: 44px; padding: 0 18px; display: flex; align-items: center; border-radius: 9999px; background: var(--ink); color: #fff; font-size: 14px; font-weight: 500; translate: -50% 10px; opacity: 0; pointer-events: none; transition: translate 200ms cubic-bezier(0.23, 1, 0.32, 1), opacity 200ms cubic-bezier(0.23, 1, 0.32, 1); }
+.toast.show { translate: -50% 0; opacity: 1; }
+
+@media (max-width: 1000px) {
+  .layout { grid-template-columns: 1fr; }
+  .picker { position: static; }
+  .list { max-height: 240px; }
+  .controls { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  .compare { grid-template-columns: 1fr; }
+  .controls { grid-template-columns: 1fr; }
+  .specimen { padding: 24px; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0ms !important; } }
+</style>
+
+<div class="wrap">
+  <nav class="nav" aria-label="Site">
+    <a class="brand" href="__SITE__">Meya Icons <small>Pixel Lab</small></a>
+    <a class="back" href="__SITE__">Back to icons</a>
+  </nav>
+
+  <header class="intro">
+    <h1>Turn any Meya icon into a pixel icon.</h1>
+    <p>The tool draws the icon on a coarse grid, fills every cell the stroke covers, then traces the cells into one clean vector path. Tune the grid and weight until it reads well, then copy it or export the whole set.</p>
+  </header>
+
+  <div class="layout">
+    <aside class="picker" aria-label="Pick an icon">
+      <input class="input" id="q" type="search" placeholder="Search __COUNT__ icons" autocomplete="off" spellcheck="false" aria-label="Search icons">
+      <div class="list" id="list"></div>
+      <span class="count" id="count"></span>
+    </aside>
+
+    <section class="panel" aria-label="Pixel converter">
+      <div class="compare">
+        <div class="card orig" id="orig"><span class="tag">Original</span></div>
+        <div class="card" id="pix"><span class="tag" id="pix-tag">Pixel</span></div>
+      </div>
+
+      <div class="controls">
+        <div class="control">
+          <div class="top"><span>Grid</span><output id="grid-out">12 × 12</output></div>
+          <div class="seg" id="grid" role="group" aria-label="Grid size">
+            <button type="button" data-v="8">8</button>
+            <button type="button" data-v="10">10</button>
+            <button type="button" data-v="12" aria-pressed="true">12</button>
+            <button type="button" data-v="16">16</button>
+          </div>
+        </div>
+        <div class="control">
+          <div class="top"><label for="weight">Weight</label><output id="weight-out">1.00</output></div>
+          <input class="range" id="weight" type="range" min="0.5" max="1.8" step="0.05" value="1">
+        </div>
+        <div class="control">
+          <div class="top"><label for="thr">Fill threshold</label><output id="thr-out">45%</output></div>
+          <input class="range" id="thr" type="range" min="0.15" max="0.85" step="0.05" value="0.45">
+        </div>
+        <div class="control">
+          <div class="top"><label for="round">Corner rounding</label><output id="round-out">0%</output></div>
+          <input class="range" id="round" type="range" min="0" max="0.5" step="0.05" value="0">
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="pill pill-blue" id="copy" type="button">Copy SVG</button>
+        <button class="pill pill-outline" id="download" type="button">Download SVG</button>
+        <button class="pill pill-ink" id="export" type="button">Export all as ZIP</button>
+      </div>
+
+      <div class="sheet-head">
+        <h2>Specimen</h2>
+        <span>Same settings applied to a sample of the set. Click one to edit it.</span>
+      </div>
+      <div class="specimen" id="specimen"></div>
+    </section>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>/*__DATA__*/</script>
+<script>
+(() => {
+  const { icons } = window.MEYA;
+  const $ = (s) => document.querySelector(s);
+  const S = 24; // viewBox
+  const SAMPLES = ["general/home", "general/search", "general/heart", "general/settings", "general/user", "general/star", "general/lock", "general/menu",
+    "communication/email", "time/calendar", "time/clock", "files/folder", "weather/sun", "weather/cloud", "media-devices/play", "arrows/arrow-right"];
+  const state = { current: icons.find((i) => i.key === "general/home") || icons[0], grid: 12, weight: 1, thr: 0.45, round: 0 };
+
+  // ---------- Rasterize ----------
+  // Draw the icon with its strokes widened to one cell, then measure how much of each cell is inked.
+  const PX = 12; // canvas pixels per cell
+  function source(icon, strokeWidth) {
+    const body = icon.b
+      .replace(/stroke-width="[^"]*"/g, `stroke-width="${strokeWidth}"`)
+      .replace(/currentColor/g, "#000");
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="SIZE" height="SIZE" fill="none" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
+  }
+  const cache = new Map();
+  async function cells(icon, grid, weight) {
+    const key = `${icon.key}|${grid}|${weight}`;
+    if (cache.has(key)) return cache.get(key);
+    const size = grid * PX;
+    const svg = source(icon, ((S / grid) * weight).toFixed(3)).replaceAll("SIZE", size);
+    const img = new Image();
+    const url = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
+    await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = url; });
+    const c = document.createElement("canvas"); c.width = c.height = size;
+    const ctx = c.getContext("2d", { willReadFrequently: true });
+    ctx.drawImage(img, 0, 0, size, size);
+    URL.revokeObjectURL(url);
+    const data = ctx.getImageData(0, 0, size, size).data;
+    const cov = new Float32Array(grid * grid);
+    for (let gy = 0; gy < grid; gy++)
+      for (let gx = 0; gx < grid; gx++) {
+        let sum = 0;
+        for (let y = gy * PX; y < (gy + 1) * PX; y++)
+          for (let x = gx * PX; x < (gx + 1) * PX; x++) sum += data[(y * size + x) * 4 + 3];
+        cov[gy * grid + gx] = sum / (PX * PX * 255);
+      }
+    cache.set(key, cov);
+    return cov;
+  }
+
+  // ---------- Trace cells into one path ----------
+  // Boundary edges run clockwise around every filled cell; shared edges cancel out.
+  function trace(on, grid) {
+    const at = (x, y) => x >= 0 && y >= 0 && x < grid && y < grid && on[y * grid + x];
+    const edges = new Map(); // "x,y" -> [[x2,y2], ...]
+    const add = (x1, y1, x2, y2) => { const k = x1 + "," + y1; (edges.get(k) || edges.set(k, []).get(k)).push([x2, y2]); };
+    for (let y = 0; y < grid; y++)
+      for (let x = 0; x < grid; x++) {
+        if (!at(x, y)) continue;
+        if (!at(x, y - 1)) add(x, y, x + 1, y);
+        if (!at(x + 1, y)) add(x + 1, y, x + 1, y + 1);
+        if (!at(x, y + 1)) add(x + 1, y + 1, x, y + 1);
+        if (!at(x - 1, y)) add(x, y + 1, x, y);
+      }
+    const loops = [];
+    for (const [k, list] of edges) {
+      while (list.length) {
+        const [sx, sy] = k.split(",").map(Number);
+        const loop = [[sx, sy]];
+        let [px, py] = [sx, sy];
+        let [nx, ny] = list.pop();
+        while (!(nx === sx && ny === sy)) {
+          loop.push([nx, ny]);
+          const outs = edges.get(nx + "," + ny);
+          // At a pinch point, take the sharpest right turn so diagonal cells stay separate.
+          const dx = nx - px, dy = ny - py;
+          let best = 0;
+          if (outs.length > 1) {
+            let score = -Infinity;
+            outs.forEach(([ox, oy], i) => { const s = dx * (oy - ny) - dy * (ox - nx); if (s > score) { score = s; best = i; } });
+          }
+          const [ox, oy] = outs.splice(best, 1)[0];
+          [px, py, nx, ny] = [nx, ny, ox, oy];
+        }
+        loops.push(loop);
+      }
+    }
+    // Keep corners only.
+    return loops.map((l) => l.filter((p, i) => {
+      const a = l[(i - 1 + l.length) % l.length], b = l[(i + 1) % l.length];
+      return (p[0] - a[0]) * (b[1] - p[1]) - (p[1] - a[1]) * (b[0] - p[0]) !== 0;
+    }));
+  }
+
+  const n = (v) => +v.toFixed(3);
+  function toPath(loops, grid, round) {
+    const u = S / grid;
+    return loops.map((pts) => {
+      const len = pts.length;
+      const seg = (i) => {
+        const a = pts[(i - 1 + len) % len], c = pts[i], b = pts[(i + 1) % len];
+        const d1 = [Math.sign(c[0] - a[0]), Math.sign(c[1] - a[1])], d2 = [Math.sign(b[0] - c[0]), Math.sign(b[1] - c[1])];
+        const l1 = Math.abs(c[0] - a[0]) + Math.abs(c[1] - a[1]), l2 = Math.abs(b[0] - c[0]) + Math.abs(b[1] - c[1]);
+        const convex = d1[0] * d2[1] - d1[1] * d2[0] > 0;
+        const r = convex ? Math.min(round, l1 / 2, l2 / 2) : 0;
+        return { inP: [(c[0] - d1[0] * r) * u, (c[1] - d1[1] * r) * u], outP: [(c[0] + d2[0] * r) * u, (c[1] + d2[1] * r) * u], r: r * u };
+      };
+      const s = pts.map((_, i) => seg(i));
+      let d = `M${n(s[0].outP[0])} ${n(s[0].outP[1])}`;
+      for (let k = 1; k <= len; k++) {
+        const c = s[k % len];
+        d += `L${n(c.inP[0])} ${n(c.inP[1])}`;
+        if (c.r) d += `A${n(c.r)} ${n(c.r)} 0 0 1 ${n(c.outP[0])} ${n(c.outP[1])}`;
+      }
+      return d + "Z";
+    }).join("");
+  }
+
+  async function pixelate(icon, o = state) {
+    const cov = await cells(icon, o.grid, o.weight);
+    const on = Array.from(cov, (v) => v >= o.thr);
+    const d = toPath(trace(on, o.grid), o.grid, o.round);
+    return { d, filled: on.filter(Boolean).length };
+  }
+  const svgOut = (d) => `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">\n  <path fill-rule="evenodd" d="${d}"/>\n</svg>\n`;
+  const artOf = (d) => `<svg class="art" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="${d}"/></svg>`;
+  const origOf = (icon, cls = "art") => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icon.b}</svg>`;
+
+  // ---------- UI ----------
+  const list = $("#list");
+  list.innerHTML = icons.map((ic, i) => `<button class="pick" type="button" data-i="${i}" title="${ic.key}" aria-label="${ic.key}">${origOf(ic, "")}</button>`).join("");
+  const picks = [...list.children];
+  function filterList() {
+    const q = $("#q").value.trim().toLowerCase().replace(/\s+/g, "-");
+    let shown = 0;
+    picks.forEach((b) => { const hit = !q || icons[b.dataset.i].key.includes(q); b.hidden = !hit; if (hit) shown++; });
+    $("#count").textContent = `${shown} of ${icons.length} icons`;
+  }
+  $("#q").addEventListener("input", filterList);
+  list.addEventListener("click", (e) => { const b = e.target.closest(".pick"); if (b) select(icons[b.dataset.i]); });
+
+  function gridLines(grid) {
+    let l = "";
+    for (let i = 1; i < grid; i++) { const v = (S / grid) * i; l += `<line x1="${v}" y1="0" x2="${v}" y2="24"/><line x1="0" y1="${v}" x2="24" y2="${v}"/>`; }
+    return `<svg class="cells" viewBox="0 0 24 24" aria-hidden="true">${l}</svg>`;
+  }
+
+  let token = 0;
+  async function render() {
+    const my = ++token;
+    const icon = state.current;
+    const main = await pixelate(icon);
+    if (my !== token) return;
+    state.d = main.d;
+    $("#orig").innerHTML = `<span class="tag"><b>${icon.key}</b> · original</span>` + origOf(icon);
+    $("#pix").innerHTML = `<span class="tag"><b>Pixel</b> · ${main.filled} cells</span>` + gridLines(state.grid) + artOf(main.d);
+    const samples = [icon.key, ...SAMPLES.filter((k) => k !== icon.key)].map((k) => icons.find((i) => i.key === k)).filter(Boolean).slice(0, 16);
+    const outs = await Promise.all(samples.map((ic) => pixelate(ic)));
+    if (my !== token) return;
+    $("#specimen").innerHTML = samples.map((ic, k) => `<button class="spec" type="button" data-key="${ic.key}"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="${outs[k].d}"/></svg><span>${ic.n}</span></button>`).join("");
+  }
+  function select(icon) {
+    state.current = icon;
+    picks.forEach((b) => b.setAttribute("aria-pressed", String(icons[b.dataset.i] === icon)));
+    render();
+  }
+  $("#specimen").addEventListener("click", (e) => { const b = e.target.closest(".spec"); if (b) select(icons.find((i) => i.key === b.dataset.key)); });
+
+  const fill = (el) => el.style.setProperty("--p", ((el.value - el.min) / (el.max - el.min)) * 100 + "%");
+  const bind = (id, key, fmt) => {
+    const el = $("#" + id);
+    fill(el);
+    el.addEventListener("input", () => { state[key] = +el.value; $("#" + id + "-out").textContent = fmt(+el.value); fill(el); render(); });
+  };
+  bind("weight", "weight", (v) => v.toFixed(2));
+  bind("thr", "thr", (v) => Math.round(v * 100) + "%");
+  bind("round", "round", (v) => Math.round(v * 200) + "%");
+  $("#grid").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-v]"); if (!b) return;
+    state.grid = +b.dataset.v;
+    $("#grid").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    $("#grid-out").textContent = `${state.grid} × ${state.grid}`;
+    render();
+  });
+
+  let tt;
+  const toast = (t) => { $("#toast").textContent = t; $("#toast").classList.add("show"); clearTimeout(tt); tt = setTimeout(() => $("#toast").classList.remove("show"), 1800); };
+  function save(blob, name) {
+    const url = URL.createObjectURL(blob);
+    const a = Object.assign(document.createElement("a"), { href: url, download: name });
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+  $("#copy").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(svgOut(state.d)); toast(`Copied pixel ${state.current.n}`); }
+    catch { toast("Clipboard is blocked here. Use Download SVG."); }
+  });
+  $("#download").addEventListener("click", () => save(new Blob([svgOut(state.d)], { type: "image/svg+xml" }), `${state.current.key.replace("/", "-")}.svg`));
+  $("#export").addEventListener("click", async () => {
+    if (!window.JSZip) return toast("The ZIP library didn't load. Check your connection.");
+    const btn = $("#export"); btn.disabled = true;
+    const zip = new JSZip();
+    for (let i = 0; i < icons.length; i++) {
+      btn.textContent = `Exporting ${i + 1} of ${icons.length}`;
+      const { d } = await pixelate(icons[i]);
+      // Named category-name.svg so scripts/import.mjs can take the folder as-is.
+      zip.file(`${icons[i].key.replace("/", "-")}.svg`, svgOut(d));
+    }
+    save(await zip.generateAsync({ type: "blob" }), `meya-pixel-${state.grid}.zip`);
+    btn.disabled = false; btn.textContent = "Export all as ZIP";
+    toast(`Exported ${icons.length} pixel icons`);
+  });
+
+  filterList();
+  select(state.current);
+})();
+</script>
