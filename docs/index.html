@@ -81,7 +81,6 @@ button { cursor: pointer; }
 .brand { align-items: center; }
 .brand .pro { font-size: 10px; height: 18px; padding-inline: 6px; letter-spacing: 0.02em; }
 .nav-actions { display: flex; align-items: center; gap: 2px; }
-.sponsor { display: flex; align-items: center; gap: 8px; margin-right: 10px; }
 .sponsor-label { font: 500 11px/1 var(--sans); letter-spacing: 0.05em; text-transform: uppercase; color: var(--steel); }
 .sponsor-tile { display: block; width: 32px; height: 32px; transition: scale 150ms ease; }
 .sponsor-tile:active { scale: 0.94; }
@@ -229,7 +228,12 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
 
 /* ---------- Footer ---------- */
 .footer { background: var(--mist); padding-block: 28px 36px; transition: padding-right 300ms var(--ease-drawer); }
-.footer .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; }
+.footer .wrap { display: grid; gap: 22px; }
+.sponsors { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.sponsors .sponsor-tile, .sponsors .sponsor-add { width: 40px; height: 40px; }
+.sponsors .sponsor-add { border-radius: 10px; }
+.sponsors .sponsor-add svg { width: 16px; height: 16px; }
+.footer-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; }
 .wordmark { height: 18px; width: auto; display: block; color: var(--ink); }
 .footer-meta { display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 13px; color: var(--slate); }
 .footer-meta a { color: var(--link); text-decoration: none; }
@@ -259,10 +263,7 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
   .seg button { flex: none; height: 34px; padding-inline: 14px; }
   .tabs { flex-basis: auto; }
   .nav-link .label { display: none; }
-  /* Nav is tight on a phone: keep the sponsor logo, drop the label and the add button. */
   .brand { white-space: nowrap; }
-  .sponsor { margin-right: 4px; gap: 4px; }
-  .sponsor-label, .sponsor-add { display: none; }
   /* Compact 3-column grid. */
   main { padding-top: 20px; }
   .section + .section { margin-top: 32px; }
@@ -283,14 +284,6 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
   <nav class="nav" aria-label="Site">
     <a class="brand" href="#top">Meya Icons <span class="pro">1.0</span></a>
     <div class="nav-actions">
-      <div class="sponsor">
-        <span class="sponsor-label">Sponsored by</span>
-        <a class="sponsor-tile below" href="https://meyalab.com/" target="_blank" rel="noopener" data-tip="Meya Lab Studio" aria-label="Meya Lab Studio">
-          <svg class="sponsor-mark" viewBox="0 0 480 480" fill="none" aria-hidden="true"><rect width="480" height="480" rx="76" fill="#1BA4FF"/>
-  <path d="M354.6 99.1 L357.4 99.1 L359.9 101.6 L359.9 256.4 L358.6 257.9 L355.1 258.9 L352.1 256.4 L339.9 208.4 L337.9 204.9 L334.6 204.1 L331.4 206.4 L213.9 326.6 L210.9 326.9 L209.4 325.9 L208.1 322.6 L225.1 258.1 L224.9 253.6 L223.4 252.1 L221.1 251.6 L212.1 257.1 L84.4 348.9 L79.9 350.1 L77.4 348.1 L77.1 345.1 L85.1 332.4 L215.9 132.4 L218.9 131.6 L221.9 133.6 L239.9 194.4 L242.4 197.1 L245.9 197.1Z" fill="#032439"/></svg>
-        </a>
-        <a class="sponsor-add below" href="https://meyalab.com/contact" target="_blank" rel="noopener" data-tip="Become a sponsor" aria-label="Become a sponsor"><span data-ico="shapes:plus"></span></a>
-      </div>
       <button class="pill icon-btn below" id="sound" type="button" aria-pressed="true" data-tip="Sound on" aria-label="Turn click sound off">
         <span data-ico="communication:volume" class="i-on"></span><span data-ico="communication:volume-off" class="i-off"></span>
       </button>
@@ -386,7 +379,16 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
 
 <footer class="footer">
   <div class="wrap">
-    <a href="https://meyalab.com/" target="_blank" rel="noopener" aria-label="Meya Lab Studio"><svg class="wordmark" aria-label="Meya Lab Studio" role="img" width="132" height="22" viewBox="0 0 132 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <div class="sponsors">
+      <span class="sponsor-label">Sponsored by</span>
+      <a class="sponsor-tile" href="https://meyalab.com/" target="_blank" rel="noopener" data-tip="Meya Lab Studio" aria-label="Meya Lab Studio">
+        <svg class="sponsor-mark" viewBox="0 0 480 480" fill="none" aria-hidden="true"><rect width="480" height="480" rx="76" fill="#1BA4FF"/>
+  <path d="M354.6 99.1 L357.4 99.1 L359.9 101.6 L359.9 256.4 L358.6 257.9 L355.1 258.9 L352.1 256.4 L339.9 208.4 L337.9 204.9 L334.6 204.1 L331.4 206.4 L213.9 326.6 L210.9 326.9 L209.4 325.9 L208.1 322.6 L225.1 258.1 L224.9 253.6 L223.4 252.1 L221.1 251.6 L212.1 257.1 L84.4 348.9 L79.9 350.1 L77.4 348.1 L77.1 345.1 L85.1 332.4 L215.9 132.4 L218.9 131.6 L221.9 133.6 L239.9 194.4 L242.4 197.1 L245.9 197.1Z" fill="#032439"/></svg>
+      </a>
+      <a class="sponsor-add" href="https://meyalab.com/contact" target="_blank" rel="noopener" data-tip="Become a sponsor" aria-label="Become a sponsor"><span data-ico="shapes:plus"></span></a>
+    </div>
+    <div class="footer-bar">
+      <a href="https://meyalab.com/" target="_blank" rel="noopener" aria-label="Meya Lab Studio"><svg class="wordmark" aria-label="Meya Lab Studio" role="img" width="132" height="22" viewBox="0 0 132 22" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M1.05469 4.90137H3.46289L7.62891 15.0791H7.77832L11.9531 4.90137H14.3965V17.9971H12.4629V8.52246H12.3398L8.46387 17.9795H6.89941L3.06738 8.51367H2.94434V17.9971H1.05469V4.90137Z" fill="currentColor"/>
 <path d="M20.5928 18.1992C19.6318 18.1992 18.7998 17.9912 18.0967 17.5752C17.3936 17.1592 16.8516 16.5732 16.4707 15.8174C16.0957 15.0557 15.9082 14.168 15.9082 13.1543C15.9082 12.1465 16.0928 11.2588 16.4619 10.4912C16.8369 9.72363 17.3613 9.12598 18.0352 8.69824C18.7148 8.26465 19.5117 8.04785 20.4258 8.04785C20.9824 8.04785 21.5215 8.13867 22.043 8.32031C22.5645 8.50195 23.0332 8.78906 23.4492 9.18164C23.8652 9.57422 24.1934 10.084 24.4336 10.7109C24.6797 11.3379 24.8027 12.0938 24.8027 12.9785V13.6641H16.9893V12.2314H23.8184L22.9307 12.7061C22.9307 12.1025 22.8369 11.5693 22.6494 11.1064C22.4619 10.6436 22.1807 10.2832 21.8057 10.0254C21.4365 9.76172 20.9766 9.62988 20.4258 9.62988C19.875 9.62988 19.4033 9.76172 19.0107 10.0254C18.624 10.2891 18.3281 10.6377 18.123 11.0713C17.918 11.5049 17.8154 11.9795 17.8154 12.4951V13.4707C17.8154 14.1445 17.9326 14.7158 18.167 15.1846C18.4014 15.6533 18.7266 16.0107 19.1426 16.2568C19.5645 16.5029 20.0537 16.626 20.6104 16.626C20.9736 16.626 21.3018 16.5732 21.5947 16.4678C21.8936 16.3623 22.1514 16.2041 22.3682 15.9932C22.585 15.7822 22.749 15.5215 22.8604 15.2109L24.6709 15.5537C24.5244 16.0811 24.2666 16.5439 23.8975 16.9424C23.5283 17.3408 23.0625 17.6514 22.5 17.874C21.9434 18.0908 21.3076 18.1992 20.5928 18.1992Z" fill="currentColor"/>
 <path d="M27 21.6709C26.7129 21.6768 26.4521 21.6562 26.2178 21.6094C25.9893 21.5684 25.8135 21.5186 25.6904 21.46L26.1562 19.9043L26.2881 19.9395C26.7744 20.0625 27.1846 20.0537 27.5186 19.9131C27.8584 19.7783 28.1426 19.4004 28.3711 18.7793L28.6084 18.1289L25.0225 8.1709H27.0703L29.5488 15.7998H29.6543L32.1416 8.1709H34.1895L30.1465 19.2979C29.959 19.8135 29.7217 20.2471 29.4346 20.5986C29.1475 20.9561 28.8018 21.2227 28.3975 21.3984C27.999 21.5801 27.5332 21.6709 27 21.6709Z" fill="currentColor"/>
@@ -402,10 +404,11 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
 <path d="M126.677 18.1992C125.757 18.1992 124.951 17.9883 124.26 17.5664C123.574 17.1445 123.041 16.5527 122.66 15.791C122.285 15.0293 122.098 14.1445 122.098 13.1367C122.098 12.1172 122.285 11.2266 122.66 10.4648C123.041 9.69727 123.574 9.10254 124.26 8.68066C124.951 8.25879 125.757 8.04785 126.677 8.04785C127.603 8.04785 128.408 8.25879 129.094 8.68066C129.779 9.10254 130.312 9.69727 130.693 10.4648C131.074 11.2266 131.265 12.1172 131.265 13.1367C131.265 14.1445 131.074 15.0293 130.693 15.791C130.312 16.5527 129.779 17.1445 129.094 17.5664C128.408 17.9883 127.603 18.1992 126.677 18.1992ZM126.677 16.5908C127.28 16.5908 127.778 16.4326 128.171 16.1162C128.563 15.7998 128.854 15.3809 129.041 14.8594C129.234 14.332 129.331 13.7578 129.331 13.1367C129.331 12.5039 129.234 11.9238 129.041 11.3965C128.854 10.8691 128.563 10.4473 128.171 10.1309C127.778 9.81445 127.28 9.65625 126.677 9.65625C126.079 9.65625 125.584 9.81445 125.191 10.1309C124.805 10.4473 124.515 10.8691 124.321 11.3965C124.128 11.9238 124.031 12.5039 124.031 13.1367C124.031 13.7578 124.128 14.332 124.321 14.8594C124.515 15.3809 124.805 15.7998 125.191 16.1162C125.584 16.4326 126.079 16.5908 126.677 16.5908Z" fill="currentColor"/>
 </svg>
 </a>
-    <div class="footer-meta">
+      <div class="footer-meta">
       <span>Meya Icons 1.0 · 572 icons · MIT License</span>
       <a href="https://github.com/nazmijavier/meya-icons" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://meyalab.com/contact" target="_blank" rel="noopener">Need custom icons? Hire us</a>
+        <a href="https://meyalab.com/contact" target="_blank" rel="noopener">Need custom icons? Hire us</a>
+      </div>
     </div>
   </div>
 </footer>
