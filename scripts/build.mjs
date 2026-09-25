@@ -64,7 +64,9 @@ const wordmark = fs
 const fragment = fs
   .readFileSync(rel("site/template.html"), "utf8")
   .replace("/*__DATA__*/", `window.MEYA=${JSON.stringify({ categories, styles, icons: siteIcons })};`)
-  .replace("<!--__WORDMARK__-->", wordmark)
+  .replaceAll("<!--__WORDMARK__-->", wordmark)
+  .replace("__SPONSOR_LOGO__", fs.readFileSync(rel("assets/logo.svg"), "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim())
+  .replace("__CLICK_SOUND__", fs.readFileSync(rel("assets/click.wav")).toString("base64"))
   .replaceAll("__COUNT__", total.toLocaleString("en-US"))
   .replaceAll("__STYLECOUNT__", String(ready.length))
   .replaceAll("__CATS__", String(categories.length))
