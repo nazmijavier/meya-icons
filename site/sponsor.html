@@ -1,5 +1,5 @@
 <title>Sponsor Meya Icons</title>
-<meta name="description" content="Choose a placement on Meya Icons and send us a few details. We reply with availability, pricing and next steps.">
+<meta name="description" content="Put your brand in front of the designers and developers browsing Meya Icons. Tell us about your product and we will reply with placement options and pricing.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=Geist+Mono:wght@400;500&display=swap">
@@ -13,14 +13,11 @@
   --mist: #F5F5F7;
   --mist-2: #EDEDF0;
   --frost: #FAFAFC;
-  --hairline: #D6D6D6;
   --control: #E6E6E8;
   --ink: #1D1D1F;
   --slate: #707070;
   --steel: #86868B;
   --link: #0066CC;
-  --blue: #0071E3;
-  --brand: #1BA4FF;
   --ring: rgba(0, 113, 227, 0.28);
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --sans: "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
@@ -40,17 +37,13 @@ button { cursor: pointer; }
 .pill { display: inline-flex; align-items: center; gap: 10px; height: 40px; padding: 0 16px; border: 0; border-radius: 9999px; font-size: 14px; font-weight: 500; text-decoration: none; white-space: nowrap; transition-property: background-color, scale; transition-duration: 150ms; transition-timing-function: ease; }
 .pill:active { scale: 0.96; }
 .pill svg { width: 16px; height: 16px; flex: none; }
-.pill-ink { background: var(--ink); color: #fff; }
-.pill-ink:hover { background: #333336; }
-.pill-white { background: var(--white); color: var(--ink); box-shadow: 0 0 0 1px var(--control); }
-.pill-white:hover { background: var(--frost); }
 .pill-soon { background: var(--mist); color: var(--steel); cursor: default; }
 .pill-soon:hover { background: var(--mist-2); }
 .pill-soon:active { scale: 1; }
 
 /* ---------- Tooltip ---------- */
 [data-tip] { position: relative; }
-[data-tip]::after { content: attr(data-tip); position: absolute; left: 50%; bottom: auto; top: calc(100% + 8px); translate: -50% -4px; scale: 0.96; padding: 6px 10px; border-radius: 8px; background: var(--ink); color: #fff; font-size: 12px; font-weight: 500; white-space: nowrap; opacity: 0; pointer-events: none; transform-origin: 50% 0; transition: opacity 150ms var(--ease-out), translate 150ms var(--ease-out), scale 150ms var(--ease-out); z-index: 5; }
+[data-tip]::after { content: attr(data-tip); position: absolute; left: 50%; top: calc(100% + 8px); translate: -50% -4px; scale: 0.96; padding: 6px 10px; border-radius: 8px; background: var(--ink); color: #fff; font-size: 12px; font-weight: 500; white-space: nowrap; opacity: 0; pointer-events: none; transform-origin: 50% 0; transition: opacity 150ms var(--ease-out), translate 150ms var(--ease-out), scale 150ms var(--ease-out); z-index: 5; }
 [data-tip]:hover::after, [data-tip]:focus-visible::after, [data-tip].tip::after { opacity: 1; translate: -50% 0; scale: 1; }
 
 /* ---------- Nav ---------- */
@@ -64,63 +57,30 @@ button { cursor: pointer; }
 .nav-link svg { width: 15px; height: 15px; }
 .nav .pill-soon { height: 40px; font-size: 13px; padding-inline: 18px; }
 
-/* ---------- Header ---------- */
-.intro { padding-block: 48px 40px; max-width: 46em; }
-.intro h1 { margin: 0 0 14px; font-size: clamp(32px, 4.4vw, 52px); line-height: 1.08; font-weight: 500; letter-spacing: -0.03em; text-wrap: balance; }
-.intro p { margin: 0; font-size: 17px; color: var(--slate); text-wrap: pretty; }
-
-/* ---------- Layout ---------- */
-.cols { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: 32px; align-items: start; padding-bottom: 90px; }
-@media (max-width: 980px) { .cols { grid-template-columns: minmax(0, 1fr); } }
-
-/* ---------- Placement cards ---------- */
-.plans { display: grid; gap: 16px; }
-.plan { position: relative; display: block; width: 100%; text-align: left; padding: 22px; border: 0; border-radius: 24px; background: var(--mist); transition-property: background-color, box-shadow; transition-duration: 150ms; }
-.plan:hover { background: var(--mist-2); }
-.plan[aria-pressed="true"] { background: var(--ink); color: #fff; }
-.plan-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-.plan-name { font-size: 16px; font-weight: 600; letter-spacing: -0.015em; }
-.plan-meta { display: block; margin-top: 3px; font-size: 12px; color: var(--steel); }
-.plan[aria-pressed="true"] .plan-meta { color: rgba(255, 255, 255, 0.6); }
-.price { flex: none; display: inline-flex; align-items: baseline; gap: 3px; height: 26px; padding-inline: 10px; border-radius: 9999px; background: var(--white); font-size: 13px; font-weight: 600; }
-.price span { font-size: 11px; font-weight: 500; color: var(--steel); }
-.plan[aria-pressed="true"] .price { background: rgba(255, 255, 255, 0.14); color: #fff; }
-.plan[aria-pressed="true"] .price span { color: rgba(255, 255, 255, 0.6); }
-.plan p { margin: 12px 0 0; font-size: 14px; color: var(--slate); }
-.plan[aria-pressed="true"] p { color: rgba(255, 255, 255, 0.72); }
-.plan ul { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 7px; }
-.plan li { display: flex; gap: 8px; font-size: 13px; color: var(--slate); }
-.plan[aria-pressed="true"] li { color: rgba(255, 255, 255, 0.72); }
-.plan li svg { width: 15px; height: 15px; flex: none; margin-top: 2px; color: var(--ink); }
-.plan[aria-pressed="true"] li svg { color: #fff; }
-
-/* ---------- Form ---------- */
-.form-card { padding: 28px; border-radius: 24px; border: 1px solid var(--control); background: var(--white); }
-.form-card h2 { margin: 0 0 6px; font-size: 21px; font-weight: 600; letter-spacing: -0.02em; }
-.form-card > p { margin: 0 0 22px; font-size: 14px; color: var(--slate); }
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+/* ---------- Sponsor form ---------- */
+.sheet { max-width: 660px; margin-inline: auto; padding-block: 72px 96px; }
+.sheet header { text-align: center; margin-bottom: 40px; }
+.sheet h1 { margin: 0 0 12px; font-size: clamp(32px, 5vw, 48px); line-height: 1.06; font-weight: 500; letter-spacing: -0.035em; text-wrap: balance; }
+.sheet header p { margin: 0 auto; max-width: 38em; font-size: 16px; color: var(--slate); text-wrap: pretty; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 @media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
-.field { display: grid; gap: 6px; margin-bottom: 14px; }
-.field label { font-size: 13px; font-weight: 500; }
-.field .req { color: var(--steel); font-weight: 400; }
-.input, textarea.input { width: 100%; min-height: 42px; padding: 11px 14px; border-radius: 12px; border: 1px solid var(--control); background: var(--white); font-size: 14px; outline: none; transition: border-color 150ms ease, box-shadow 150ms ease; }
+.field { display: grid; gap: 8px; margin-bottom: 20px; }
+.field label { font-size: 14px; font-weight: 500; }
+.field .opt { color: var(--steel); font-weight: 400; }
+.input { width: 100%; min-height: 52px; padding: 15px 18px; border: 1px solid transparent; border-radius: 12px; background: var(--mist); font-size: 15px; outline: none; transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease; }
 .input::placeholder { color: var(--steel); }
-.input:focus { border-color: var(--steel); box-shadow: 0 0 0 4px var(--ring); }
-textarea.input { min-height: 110px; resize: vertical; line-height: 1.5; }
-.choice { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-@media (max-width: 560px) { .choice { grid-template-columns: 1fr; } }
-.choice button { height: 42px; padding-inline: 14px; border: 1px solid var(--control); border-radius: 12px; background: var(--white); font-size: 13px; font-weight: 500; color: var(--slate); text-align: left; transition-property: background-color, border-color, color; transition-duration: 150ms; }
-.choice button:hover { border-color: var(--steel); color: var(--ink); }
-.choice button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
-.choice b { font-weight: 500; }
-.choice span { color: var(--steel); }
-.choice button[aria-pressed="true"] span { color: rgba(255, 255, 255, 0.6); }
-.form-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 20px; }
-.form-foot p { margin: 0; font-size: 12px; color: var(--steel); max-width: 30em; }
-.form-foot .pill { height: 44px; padding-inline: 20px; }
-.sent { margin: 16px 0 0; padding: 12px 14px; border-radius: 12px; background: var(--mist); font-size: 13px; color: var(--slate); }
-.sent b { color: var(--ink); font-weight: 500; }
-.sent a { color: var(--link); }
+.input:hover { background: var(--mist-2); }
+.input:focus { background: var(--white); border-color: var(--control); box-shadow: 0 0 0 4px var(--ring); }
+textarea.input { min-height: 150px; resize: vertical; line-height: 1.5; }
+.send { width: 100%; height: 56px; border: 0; border-radius: 9999px; background: var(--ink); color: #fff; font-size: 15px; font-weight: 500; transition: background-color 150ms ease, scale 150ms ease; }
+.send:hover { background: #333336; }
+.send:active { scale: 0.99; }
+.send[disabled] { background: var(--steel); cursor: default; scale: 1; }
+.note { margin: 18px 0 0; text-align: center; font-size: 13px; color: var(--steel); }
+.result { margin: 20px 0 0; padding: 14px 16px; border-radius: 12px; font-size: 14px; }
+.result.ok { background: var(--mist); color: var(--ink); }
+.result.bad { background: #FEF2F2; color: #9F1239; }
+.result a { color: inherit; }
 
 /* ---------- Footer ---------- */
 .footer { background: var(--mist); padding-block: 28px 36px; }
@@ -128,13 +88,11 @@ textarea.input { min-height: 110px; resize: vertical; line-height: 1.5; }
 .footer-meta { display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 13px; color: var(--slate); }
 .footer-meta a { color: var(--link); text-decoration: none; }
 .footer-meta a:hover { text-decoration: underline; }
+
 @media (max-width: 760px) {
   /* The nav is tight on a phone: drop the labels the brand already covers. */
   .nav-link .label, .nav-actions .nav-link[href="./"] { display: none; }
-  .intro { padding-block: 28px 32px; }
-  .intro h1 { font-size: 30px; }
-  .form-card, .plan { padding: 20px; }
-  .form-foot .pill { width: 100%; justify-content: center; }
+  .sheet { padding-block: 40px 64px; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0ms !important; } }
 </style>
@@ -144,122 +102,66 @@ textarea.input { min-height: 110px; resize: vertical; line-height: 1.5; }
     <a class="brand" href="./">Meya Icons <span class="pro">__VERSION__</span></a>
     <div class="nav-actions">
       <a class="nav-link" href="./">Icons</a>
-      <a class="nav-link" href="__REPO__" target="_blank" rel="noopener">
-        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-        <span class="label">GitHub</span>
-      </a>
       <button class="pill pill-soon" type="button" aria-disabled="true" data-tip="Coming soon">Buy Icons</button>
     </div>
   </nav>
 </div>
 
-<div class="wrap">
-  <header class="intro">
-    <h1>Choose your placement.</h1>
-    <p>Select a placement below and send us a few details. We follow up with availability, pricing and any custom requirements for your campaign.</p>
-  </header>
+<main class="wrap">
+  <div class="sheet">
+    <header>
+      <h1>Sponsor the collection</h1>
+      <p>Put your product in front of the designers and developers browsing Meya Icons. Tell us a little about it and we will reply with placement options, availability and pricing.</p>
+    </header>
 
-  <div class="cols">
-    <div class="plans" id="plans" role="group" aria-label="Placement">
-      <button class="plan" type="button" data-plan="right-side" data-price="$100/mo" aria-pressed="true">
-        <span class="plan-head">
-          <span>
-            <span class="plan-name">Right-side placement</span>
-            <span class="plan-meta">Sticky rail · in view while scrolling</span>
-          </span>
-          <span class="price">$100<span>/mo</span></span>
-        </span>
-        <p>Your logo sits in the rail beside the icon grid, in view on every page of the site for a full month.</p>
-        <ul>
-          <li><span data-ico="shapes:check"></span>Logo, link and tooltip</li>
-          <li><span data-ico="shapes:check"></span>On every page, desktop and mobile</li>
-          <li><span data-ico="shapes:check"></span>30-day campaign window</li>
-        </ul>
-      </button>
-
-      <button class="plan" type="button" data-plan="icons-area" data-price="$300/mo" aria-pressed="false">
-        <span class="plan-head">
-          <span>
-            <span class="plan-name">Icons area placement</span>
-            <span class="plan-meta">In the grid · highest visibility</span>
-          </span>
-          <span class="price">$300<span>/mo</span></span>
-        </span>
-        <p>A tile inside the icon grid itself, where people spend their time browsing. The most visible spot on the page.</p>
-        <ul>
-          <li><span data-ico="shapes:check"></span>Native tile in the icon grid</li>
-          <li><span data-ico="shapes:check"></span>Your artwork, label and link</li>
-          <li><span data-ico="shapes:check"></span>30-day campaign window</li>
-        </ul>
-      </button>
-    </div>
-
-    <form class="form-card" id="form" novalidate>
-      <h2>Contact form</h2>
-      <p>Tell us which placement you are interested in and we will reply with availability and next steps.</p>
-
+    <form id="form" novalidate>
       <div class="grid2">
         <div class="field">
           <label for="name">Name</label>
           <input class="input" id="name" name="name" placeholder="Your name" autocomplete="name" required>
         </div>
         <div class="field">
-          <label for="email">Email</label>
-          <input class="input" id="email" name="email" type="email" placeholder="you@company.com" autocomplete="email" required>
+          <label for="company">Company <span class="opt">— optional</span></label>
+          <input class="input" id="company" name="company" placeholder="Company name" autocomplete="organization">
         </div>
       </div>
 
       <div class="field">
-        <label for="company">Company <span class="req">— optional</span></label>
-        <input class="input" id="company" name="company" placeholder="Company name" autocomplete="organization">
+        <label for="email">Email</label>
+        <input class="input" id="email" name="email" type="email" placeholder="you@company.com" autocomplete="email" required>
       </div>
 
       <div class="field">
-        <span id="placement-label">Preferred placement</span>
-        <div class="choice" id="choice" role="group" aria-labelledby="placement-label">
-          <button type="button" data-plan="right-side" aria-pressed="true"><b>Right-side</b> <span>· $100/mo</span></button>
-          <button type="button" data-plan="icons-area" aria-pressed="false"><b>Icons area</b> <span>· $300/mo</span></button>
-        </div>
+        <label for="message">Message</label>
+        <textarea class="input" id="message" name="message" placeholder="What are you promoting, and roughly when?"></textarea>
       </div>
 
-      <div class="field">
-        <label for="message">Message <span class="req">— optional</span></label>
-        <textarea class="input" id="message" name="message" placeholder="Tell us about your campaign, timing and any creative requirements."></textarea>
-      </div>
-
-      <div class="form-foot">
-        <p>We reply within one or two working days. Nothing is charged until a placement is confirmed.</p>
-        <button class="pill pill-ink" type="submit">Send inquiry</button>
-      </div>
-
-      <p class="sent" id="sent" hidden></p>
+      <button class="send" id="send" type="submit">Send</button>
+      <p class="note">We reply within one or two working days.</p>
+      <p class="result" id="result" hidden></p>
     </form>
   </div>
-</div>
+</main>
 
 <footer class="footer">
   <div class="wrap">
     <a class="brand" href="./">Meya Icons <span class="pro">__VERSION__</span></a>
     <div class="footer-meta">
       <span>__COUNT__ icons · MIT License</span>
-      <a href="__REPO__" target="_blank" rel="noopener">GitHub</a>
       <a href="mailto:hello@meyalab.com">hello@meyalab.com</a>
     </div>
   </div>
 </footer>
 
-<script>/*__DATA__*/</script>
 <script>
 (() => {
   const $ = (s) => document.querySelector(s);
-  const icons = window.MEYA.icons;
+  const TO = "hello@meyalab.com";
 
-  // Interface icons come from the set itself.
-  document.querySelectorAll("[data-ico]").forEach((el) => {
-    const [c, n] = el.dataset.ico.split(":");
-    const icon = icons.find((i) => i.c === c && i.n === n);
-    if (icon) el.outerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icon.v.outline}</svg>`;
-  });
+  // Access key from web3forms.com. Until a real one is set here, Send falls
+  // back to opening the visitor's own mail app.
+  const WEB3FORMS_KEY = "__WEB3FORMS_KEY__";
+  const live = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(WEB3FORMS_KEY);
 
   // ---------- Click sound ----------
   let actx, clip;
@@ -272,52 +174,61 @@ textarea.input { min-height: 110px; resize: vertical; line-height: 1.5; }
       actx.decodeAudioData(bytes.buffer).then((b) => { clip = b; }, () => {});
     } catch {}
   })();
-  function pop() {
-    if (!clip) return;
+  document.addEventListener("pointerdown", (e) => {
+    if (e.button !== 0 || !clip) return;
     if (actx.state === "suspended") actx.resume();
     const src = actx.createBufferSource(); src.buffer = clip;
     const gain = actx.createGain(); gain.gain.value = 1;
     src.connect(gain).connect(actx.destination);
     src.start();
-  }
-  document.addEventListener("pointerdown", (e) => { if (e.button === 0) pop(); }, true);
-
-  // ---------- Placement choice, kept in step between the cards and the form ----------
-  const PLANS = { "right-side": "Right-side placement — $100/mo", "icons-area": "Icons area placement — $300/mo" };
-  let plan = "right-side";
-  function setPlan(id) {
-    plan = id;
-    document.querySelectorAll("[data-plan]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.plan === id)));
-  }
-  document.addEventListener("click", (e) => {
-    const b = e.target.closest("[data-plan]");
-    if (b) setPlan(b.dataset.plan);
-  });
+  }, true);
 
   // ---------- Send ----------
-  // The site is static, so the form opens a pre-filled email rather than pretending to submit.
-  const TO = "hello@meyalab.com";
-  $("#form").addEventListener("submit", (e) => {
+  const result = $("#result"), send = $("#send");
+  const say = (kind, html) => { result.hidden = false; result.className = "result " + kind; result.innerHTML = html; };
+
+  $("#form").addEventListener("submit", async (e) => {
     e.preventDefault();
     const v = (id) => $("#" + id).value.trim();
     if (!v("name") || !v("email")) {
-      $("#sent").hidden = false;
-      $("#sent").innerHTML = "<b>Add your name and email</b> so we know who to reply to.";
+      say("bad", "Add your name and email so we know who to reply to.");
       $(v("name") ? "#email" : "#name").focus();
       return;
     }
-    const body = [
-      `Placement: ${PLANS[plan]}`,
-      `Name: ${v("name")}`,
-      `Email: ${v("email")}`,
-      v("company") && `Company: ${v("company")}`,
-      "",
-      v("message") || "(no message)",
-    ].filter(Boolean).join("\\n");
-    const href = `mailto:${TO}?subject=${encodeURIComponent("Sponsor inquiry — " + PLANS[plan])}&body=${encodeURIComponent(body)}`;
-    location.href = href;
-    $("#sent").hidden = false;
-    $("#sent").innerHTML = `Your email app should be opening with the details filled in. If nothing happens, send it to <a href="mailto:${TO}">${TO}</a> instead.`;
+
+    if (!live) {
+      const body = [`Name: ${v("name")}`, v("company") && `Company: ${v("company")}`, `Email: ${v("email")}`, "", v("message") || "(no message)"].filter(Boolean).join("\n");
+      location.href = `mailto:${TO}?subject=${encodeURIComponent("Sponsor inquiry — Meya Icons")}&body=${encodeURIComponent(body)}`;
+      say("ok", `Your email app should be opening with the details filled in. If nothing happens, write to <a href="mailto:${TO}">${TO}</a>.`);
+      return;
+    }
+
+    send.disabled = true;
+    send.textContent = "Sending…";
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: "Sponsor inquiry — Meya Icons",
+          from_name: "Meya Icons",
+          name: v("name"),
+          company: v("company") || "—",
+          email: v("email"),
+          message: v("message") || "(no message)",
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.message || "Request failed");
+      $("#form").reset();
+      say("ok", "<b>Thank you.</b> Your message is on its way and we will reply within one or two working days.");
+    } catch (err) {
+      say("bad", `That did not go through. Please write to <a href="mailto:${TO}">${TO}</a> instead.`);
+    } finally {
+      send.disabled = false;
+      send.textContent = "Send";
+    }
   });
 })();
 </script>

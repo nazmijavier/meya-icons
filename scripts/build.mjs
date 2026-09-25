@@ -12,7 +12,10 @@ const VERSION = JSON.parse(fs.readFileSync(rel("package.json"), "utf8")).version
 const REPO = "https://github.com/nazmijavier/meya-icons";
 const SITE = "https://icons.meyalab.com";
 // The sponsor page is finished but not open yet: flip this to true to publish docs/sponsor.html.
-const PUBLISH_SPONSOR_PAGE = false;
+const PUBLISH_SPONSOR_PAGE = true;
+// Paste the access key from web3forms.com so the sponsor form emails hello@meyalab.com.
+// Left empty, the form falls back to opening the visitor's own mail app.
+const WEB3FORMS_KEY = "";
 
 // ---------- Read icons ----------
 // Every style is read from icons/<style>/. An icon is the union of its variants by category and name.
@@ -120,7 +123,8 @@ if (PUBLISH_SPONSOR_PAGE) {
     .replaceAll("__COUNT__", total.toLocaleString("en-US"))
     .replaceAll("__REPO__", REPO)
     .replaceAll("__FAVICON__", `data:image/png;base64,${fs.readFileSync(rel("assets/favicon.png")).toString("base64")}`)
-    .replace("__CLICK_SOUND__", fs.readFileSync(rel("assets/click.wav")).toString("base64"));
+    .replaceAll("__WEB3FORMS_KEY__", WEB3FORMS_KEY)
+  .replace("__CLICK_SOUND__", fs.readFileSync(rel("assets/click.wav")).toString("base64"));
   const sAt = sponsor.indexOf("</style>") + 8;
   fs.writeFileSync(
     rel("docs/sponsor.html"),
