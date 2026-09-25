@@ -139,7 +139,7 @@ if (fs.existsSync(readmePath)) {
   const styleRows = [
     "| Style | Icons | Look |",
     "| --- | ---: | --- |",
-    ...styles.map((st) => `| ${st.count ? `[${st.label}](./icons/${st.id})` : st.label} | ${st.count || "Coming soon"} | ${st.look} |`),
+    ...styles.map((st) => `| ${st.count ? `[${st.label}](./icons/${st.id})` : st.label}${st.pro ? " `PRO`" : ""} | ${st.count || "Coming soon"} | ${st.look} |`),
   ].join("\n");
   md = md.replace(/(<!--styles-->)[\s\S]*?(<!--\/styles-->)/, `$1\n${styleRows}\n$2`);
   const previews = ready

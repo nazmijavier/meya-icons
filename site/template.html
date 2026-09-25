@@ -110,7 +110,9 @@ button { cursor: pointer; }
 .seg button:hover { color: var(--ink); }
 .seg button:disabled { cursor: default; color: var(--steel); }
 .seg button:disabled:hover { color: var(--steel); }
-.seg button small { font-size: 10px; font-weight: 500; margin-left: 4px; color: var(--steel); }
+.seg button { display: inline-flex; align-items: center; gap: 6px; }
+.pro { display: inline-flex; align-items: center; height: 16px; padding-inline: 5px; border-radius: 4px; background: var(--ink); color: #fff; font-size: 9px; font-weight: 600; letter-spacing: 0.06em; line-height: 1; }
+.seg button:disabled .pro { opacity: 0.55; }
 .control.off { opacity: 0.45; }
 .seg button[aria-pressed="true"] { background: var(--white); color: var(--ink); box-shadow: 0 0 0 1px var(--control); }
 .control { display: flex; align-items: center; gap: 12px; height: 44px; padding-inline: 18px; border-radius: 980px; background: var(--mist); flex: none; transition: opacity 150ms ease; }
@@ -458,9 +460,10 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
     const c = categories.find((x) => x.id === b.dataset.cat);
     b.querySelector("small").textContent = c ? c.counts[state.style] : styleOf(state.style).count;
   });
+  const badge = (st) => (st.pro ? '<span class="pro">PRO</span>' : "");
   $("#styles").innerHTML = styles.map((st) => st.count
-    ? `<button type="button" data-style="${st.id}" aria-pressed="${st.id === state.style}">${st.label}</button>`
-    : `<button type="button" disabled title="${st.label} is coming soon">${st.label}<small>Soon</small></button>`).join("");
+    ? `<button type="button" data-style="${st.id}" aria-pressed="${st.id === state.style}">${st.label}${badge(st)}</button>`
+    : `<button type="button" disabled title="${st.label}${st.pro ? " (Pro)" : ""} is coming soon">${st.label}${badge(st)}</button>`).join("");
   $("#styles").addEventListener("click", (e) => {
     const b = e.target.closest("[data-style]"); if (!b || b.dataset.style === state.style) return;
     state.style = b.dataset.style;
