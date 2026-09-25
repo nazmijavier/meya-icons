@@ -100,6 +100,10 @@ button { cursor: pointer; }
 .kbd { position: absolute; right: 14px; top: 50%; translate: 0 -50%; display: inline-flex; align-items: center; justify-content: center; height: 22px; min-width: 22px; padding-inline: 6px; border-radius: 6px; background: var(--white); color: var(--slate); font-size: 12px; font-weight: 500; box-shadow: 0 0 0 1px var(--control); }
 .clear { position: absolute; right: 7px; top: 50%; translate: 0 -50%; }
 .clear svg { color: var(--slate); }
+.seg { display: flex; gap: 2px; padding: 3px; height: 44px; border-radius: 9999px; background: var(--mist); flex: none; }
+.seg button { height: 38px; padding-inline: 16px; border: 0; border-radius: 9999px; background: none; font-size: 13px; font-weight: 500; color: var(--slate); transition: background-color 150ms ease, color 150ms ease; }
+.seg button:hover { color: var(--ink); }
+.seg button[aria-pressed="true"] { background: var(--white); color: var(--ink); box-shadow: 0 0 0 1px var(--control); }
 .control { display: flex; align-items: center; gap: 10px; height: 44px; padding-inline: 16px; border-radius: 980px; background: var(--mist); flex: none; }
 .control label { font-size: 13px; color: var(--slate); font-weight: 500; }
 .control input[type="range"] { width: 88px; accent-color: var(--ink); }
@@ -149,11 +153,11 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
 .sheet-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 20px 16px 0 24px; }
 .sheet-head h3 { margin: 0; font-size: 21px; font-weight: 600; letter-spacing: -0.02em; }
 .kicker { display: block; font-size: 13px; color: var(--slate); margin-top: 2px; }
-.sheet-body { flex: 1; overflow-y: auto; padding: 18px 24px 24px; display: grid; gap: 16px; align-content: start; }
+.sheet-body { flex: 1; overflow-y: auto; padding: 18px 24px 24px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-content: start; }
+.sheet-body > * { min-width: 0; }
 .stage { position: relative; aspect-ratio: 1; max-width: 100%; border-radius: 28px; background: var(--mist); overflow: hidden; }
 .stage > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 .stage .grid-lines line { stroke: var(--grid); stroke-width: 0.03; }
-.stage .keylines * { fill: none; stroke: var(--brand); stroke-width: 0.04; opacity: 0.45; }
 .stage .glyph { stroke-width: var(--sw); }
 .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .actions .pill { justify-content: center; }
@@ -190,6 +194,8 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
   .hero { padding-block: 48px 36px; }
   .toolbar-row { flex-wrap: wrap; }
   .control { flex: 1; min-width: 0; }
+  .seg { width: 100%; }
+  .seg button { flex: 1; }
   .control input[type="range"] { flex: 1; width: auto; min-width: 0; }
   .nav-link .label { display: none; }
   .grid { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; }
@@ -237,6 +243,10 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
         <input class="input" id="q" type="search" placeholder="Search __COUNT__ icons" autocomplete="off" spellcheck="false" aria-label="Search icons">
         <kbd class="kbd" id="kbd">/</kbd>
         <button class="pill icon-btn clear" id="clear" type="button" aria-label="Clear search" hidden><span data-ico="shapes:x"></span></button>
+      </div>
+      <div class="seg" id="styles" role="group" aria-label="Icon style">
+        <button type="button" data-style="outline" aria-pressed="true">Outline</button>
+        <button type="button" data-style="duotone" aria-pressed="false">Duotone</button>
       </div>
       <div class="control">
         <label for="sw">Stroke</label>
@@ -309,10 +319,13 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
   const { icons, categories } = window.MEYA;
   const catLabel = Object.fromEntries(categories.map((c) => [c.id, c.label]));
   const $ = (s) => document.querySelector(s);
-  const state = { q: "", cat: "all", sw: 1.3, size: 24, fmt: "svg", current: null };
+  const state = { q: "", cat: "all", style: "outline", sw: 1.3, size: 24, fmt: "svg", current: null };
 
   const find = (c, n) => icons.find((i) => i.c === c && i.n === n);
   const inner = (icon) => `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icon.b}</svg>`;
+  // Artwork in the chosen style; interface chrome always uses outline.
+  const body = (icon) => (state.style === "duotone" ? icon.d : icon.b) || icon.b;
+  const glyph = (icon) => inner({ b: body(icon) });
   const title = (n) => n.replace(/-/g, " ").replace(/^./, (m) => m.toUpperCase());
   const pascal = (n) => n.split("-").map((p) => p[0].toUpperCase() + p.slice(1)).join("") + "Icon";
   const fmtSw = (v) => (+v).toFixed(2).replace(/0$/, "");
@@ -326,15 +339,15 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
 
   // ---------- Copy ----------
   function toSvg(icon) {
-    const body = icon.b.replace(/></g, ">\n  <");
-    return `<svg xmlns="http://www.w3.org/2000/svg" width="${state.size}" height="${state.size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${fmtSw(state.sw)}" stroke-linecap="round" stroke-linejoin="round">\n  ${body}\n</svg>`;
+    const code = body(icon).replace(/></g, ">\n  <");
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${state.size}" height="${state.size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${fmtSw(state.sw)}" stroke-linecap="round" stroke-linejoin="round">\n  ${code}\n</svg>`;
   }
   function toJsx(icon) {
-    const body = icon.b
+    const code = body(icon)
       .replace(/ ([a-z]+)-([a-z])([a-z-]*)=/g, (m, a, b, rest) => ` ${a}${b.toUpperCase()}${rest.replace(/-([a-z])/g, (x, y) => y.toUpperCase())}=`)
       .replace(/style="mask-type:([a-z]+)"/g, 'style={{ maskType: "$1" }}')
       .replace(/></g, ">\n      <");
-    return `export function ${pascal(icon.n)}(props) {\n  return (\n    <svg xmlns="http://www.w3.org/2000/svg" width={${state.size}} height={${state.size}} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={${fmtSw(state.sw)}} strokeLinecap="round" strokeLinejoin="round" {...props}>\n      ${body}\n    </svg>\n  );\n}`;
+    return `export function ${pascal(icon.n)}(props) {\n  return (\n    <svg xmlns="http://www.w3.org/2000/svg" width={${state.size}} height={${state.size}} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={${fmtSw(state.sw)}} strokeLinecap="round" strokeLinejoin="round" {...props}>\n      ${code}\n    </svg>\n  );\n}`;
   }
   async function copy(text, btn, label) {
     try {
@@ -372,7 +385,7 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
   sectionsEl.innerHTML = categories.map((c) => `
     <section class="section" data-cat="${c.id}" aria-labelledby="h-${c.id}">
       <div class="section-head"><h2 id="h-${c.id}">${c.label}</h2><span data-count>${c.count}</span></div>
-      <div class="grid">${icons.map((ic, i) => ic.c !== c.id ? "" : `<button class="tile" type="button" data-i="${i}" aria-label="${title(ic.n)}">${inner(ic)}<span class="name">${ic.n}</span></button>`).join("")}</div>
+      <div class="grid">${icons.map((ic, i) => ic.c !== c.id ? "" : `<button class="tile" type="button" data-i="${i}" aria-label="${title(ic.n)}">${glyph(ic)}<span class="name">${ic.n}</span></button>`).join("")}</div>
     </section>`).join("");
   const tiles = [...sectionsEl.querySelectorAll(".tile")];
   const sections = [...sectionsEl.querySelectorAll(".section")];
@@ -383,14 +396,15 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
     let total = 0;
     for (const t of tiles) {
       const ic = icons[t.dataset.i];
-      const hit = (state.cat === "all" || ic.c === state.cat) && (!q || ic.n.includes(q) || catLabel[ic.c].toLowerCase().includes(raw));
+      const hit = (state.style === "outline" || ic.d) && (state.cat === "all" || ic.c === state.cat) && (!q || ic.n.includes(q) || catLabel[ic.c].toLowerCase().includes(raw));
       t.hidden = !hit; if (hit) total++;
     }
     for (const s of sections) {
       const n = s.querySelectorAll(".tile:not([hidden])").length;
       const cat = categories.find((c) => c.id === s.dataset.cat);
+      const all = state.style === "duotone" ? cat.duo : cat.count;
       s.hidden = n === 0;
-      s.querySelector("[data-count]").textContent = n === cat.count ? n : `${n} of ${cat.count}`;
+      s.querySelector("[data-count]").textContent = n === all ? n : `${n} of ${all}`;
     }
     $("#empty").hidden = total > 0;
     if (!total) {
@@ -408,6 +422,19 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
 
   // ---------- Controls ----------
   const root = document.documentElement;
+  const countChips = () => chips.querySelectorAll(".tab").forEach((b) => {
+    const duo = state.style === "duotone";
+    const c = categories.find((x) => x.id === b.dataset.cat);
+    b.querySelector("small").textContent = c ? (duo ? c.duo : c.count) : (duo ? icons.filter((i) => i.d).length : icons.length);
+  });
+  $("#styles").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-style]"); if (!b || b.dataset.style === state.style) return;
+    state.style = b.dataset.style;
+    $("#styles").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    for (const t of tiles) t.querySelector("svg").outerHTML = glyph(icons[t.dataset.i]);
+    countChips(); filter();
+    if (state.current && state.style === "duotone" && !state.current.d) closeSheet(); else refreshSheet();
+  });
   $("#sw").addEventListener("input", (e) => {
     state.sw = +e.target.value;
     root.style.setProperty("--sw", state.sw);
@@ -427,7 +454,7 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
   const gridSvg = (() => {
     let l = "";
     for (let i = 1; i < 24; i++) l += `<line x1="${i}" y1="0" x2="${i}" y2="24"/><line x1="0" y1="${i}" x2="24" y2="${i}"/>`;
-    return `<svg viewBox="0 0 24 24" aria-hidden="true"><g class="grid-lines">${l}</g><g class="keylines"><circle cx="12" cy="12" r="10"/><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="2" y="2" width="20" height="20"/></g></svg>`;
+    return `<svg viewBox="0 0 24 24" aria-hidden="true"><g class="grid-lines">${l}</g></svg>`;
   })();
   function openSheet(i, tile) {
     const icon = icons[i];
@@ -436,7 +463,6 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
     activeTile = tile; tile.setAttribute("aria-current", "true");
     $("#p-title").textContent = title(icon.n);
     $("#p-cat").textContent = catLabel[icon.c];
-    $("#p-file").textContent = `icons/${icon.c}/${icon.n}.svg`;
     refreshSheet();
     sheet.classList.add("open"); sheet.setAttribute("aria-hidden", "false");
     document.body.classList.add("sheet-open");
@@ -448,7 +474,8 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
   }
   function refreshSheet() {
     const icon = state.current; if (!icon) return;
-    $("#p-stage").innerHTML = gridSvg + inner(icon).replace("<svg ", '<svg class="glyph" ');
+    $("#p-stage").innerHTML = gridSvg + glyph(icon).replace("<svg ", '<svg class="glyph" ');
+    $("#p-file").textContent = `icons/${state.style}/${icon.c}/${icon.n}.svg`;
     $("#p-code").textContent = state.fmt === "svg" ? toSvg(icon) : toJsx(icon);
     $("#p-sw").textContent = fmtSw(state.sw) + " px";
   }

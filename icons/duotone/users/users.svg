@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <path d="M7.10834 15.9733C7.10834 14.3361 8.28949 13.0089 9.74652 13.0089H14.2535C15.7106 13.0089 16.8917 14.3361 16.8917 15.9733C16.8917 17.1427 16.048 18.0908 15.0073 18.0908H8.99275C7.95202 18.0908 7.10834 17.1427 7.10834 15.9733Z" fill="currentColor" fill-opacity="0.3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+  <path d="M4.02234 16.7161C3.26133 16.7161 2.64441 16.0229 2.64441 15.1678C2.64441 13.9706 3.5081 13.0001 4.57351 13.0001H5.86153" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.3" stroke-linecap="round"/>
+  <path d="M19.9777 16.7161C20.7387 16.7161 21.3556 16.0229 21.3556 15.1678C21.3556 13.9706 20.4919 13.0001 19.4265 13.0001H18.1152" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+  <circle cx="12" cy="8.26553" r="2.35626" fill="currentColor" fill-opacity="0.3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+  <circle cx="5.54391" cy="8.89923" r="1.56906" fill="currentColor" fill-opacity="0.3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+  <circle cx="1.56906" cy="1.56906" r="1.56906" transform="matrix(-1 0 0 1 20.0251 7.33017)" fill="currentColor" fill-opacity="0.3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+</svg>

@@ -5,7 +5,7 @@
 
 # Meya Icons
 
-Meya Icons is a free, open-source set of <!--count-->287<!--/count--> stroke icons drawn by [Meya Lab](https://meyalab.com). Every icon sits on a 24 × 24 grid with a 1.3 px stroke and round caps and joins, and uses `currentColor`, so it picks up the text color around it.
+Meya Icons is a free, open-source set of <!--count-->287<!--/count--> icons drawn by [Meya Lab](https://meyalab.com), in two styles: **Outline** and **Duotone** (<!--duo-->285<!--/duo--> icons). Every icon sits on a 24 × 24 grid with a 1.3 px stroke and round caps and joins, and uses `currentColor`, so it picks up the text color around it.
 
 [![Icons](https://img.shields.io/badge/icons-287-121212?style=flat-square)](#categories)
 [![Version](https://img.shields.io/badge/version-1.0-1BA4FF?style=flat-square)](https://github.com/nazmijavier/meya-icons/releases)
@@ -14,14 +14,28 @@ Meya Icons is a free, open-source set of <!--count-->287<!--/count--> stroke ico
 **[Browse the icons](https://nazmijavier.github.io/meya-icons/)** · **[Download ZIP](https://github.com/nazmijavier/meya-icons/releases/latest/download/meya-icons-1.0.zip)** · **[Hire Meya Lab](https://meyalab.com/contact)**
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/preview-dark.svg">
-  <img alt="A sample of Meya Icons across every category" src="./assets/preview-light.svg" width="100%">
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/preview-outline-dark.svg">
+  <img alt="A sample of Meya Icons in the Outline style" src="./assets/preview-outline-light.svg" width="100%">
 </picture>
+
+## Styles
+
+| Style | Folder | Look |
+| --- | --- | --- |
+| Outline | [`icons/outline`](./icons/outline) | 1.3 px strokes only |
+| Duotone | [`icons/duotone`](./icons/duotone) | The same strokes, plus a 30% tint fill for depth |
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./assets/preview-duotone-dark.svg">
+  <img alt="A sample of Meya Icons in the Duotone style" src="./assets/preview-duotone-light.svg" width="100%">
+</picture>
+
+Duotone tints use `fill-opacity`, so both tones follow `currentColor` and you only set one color.
 
 ## Get the icons
 
-- **Copy one icon.** Open the [website](https://nazmijavier.github.io/meya-icons/), search, pick an icon, and copy it as SVG or as a React component. You can change the stroke width and size before you copy.
-- **Download the whole set.** Get the [ZIP from the latest release](https://github.com/nazmijavier/meya-icons/releases/latest/download/meya-icons-1.0.zip). The SVG files are in [`icons/`](./icons), one folder per category.
+- **Copy one icon.** Open the [website](https://nazmijavier.github.io/meya-icons/), choose Outline or Duotone, search, pick an icon, and copy it as SVG or as a React component. You can change the stroke width and size before you copy.
+- **Download the whole set.** Get the [ZIP from the latest release](https://github.com/nazmijavier/meya-icons/releases/latest/download/meya-icons-1.0.zip). The SVG files are in [`icons/`](./icons), one folder per style, then per category.
 - **Clone it.**
 
   ```bash
@@ -37,7 +51,7 @@ Paste the SVG inline. The icon takes the color of its parent.
 ```html
 <button style="color: #1BA4FF">
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-    <!-- paths from icons/general/home.svg -->
+    <!-- paths from icons/outline/general/home.svg -->
   </svg>
   Home
 </button>
@@ -48,7 +62,7 @@ Paste the SVG inline. The icon takes the color of its parent.
 Copy the React version from the website, or import the file with an SVG loader such as SVGR:
 
 ```jsx
-// home.svg copied from icons/general/
+// home.svg copied from icons/outline/general/
 import HomeIcon from "./icons/home.svg?react";
 
 <HomeIcon className="text-neutral-900" width={20} height={20} />
@@ -56,7 +70,7 @@ import HomeIcon from "./icons/home.svg?react";
 
 ### Figma
 
-Drag any SVG from [`icons/`](./icons) onto the canvas. Strokes stay editable.
+Drag any SVG from [`icons/`](./icons) onto the canvas. Strokes and tints stay editable.
 
 ## Design specs
 
@@ -71,36 +85,37 @@ Drag any SVG from [`icons/`](./icons) onto the canvas. Strokes stay editable.
 ## Categories
 
 <!--categories-->
-| Category | Folder | Icons |
-| --- | --- | ---: |
-| General | [`icons/general`](icons/general) | 15 |
-| Arrows | [`icons/arrows`](icons/arrows) | 15 |
-| Alerts & Feedback | [`icons/alerts-feedback`](icons/alerts-feedback) | 15 |
-| Communication | [`icons/communication`](icons/communication) | 15 |
-| Users | [`icons/users`](icons/users) | 15 |
-| Files | [`icons/files`](icons/files) | 15 |
-| Editor | [`icons/editor`](icons/editor) | 15 |
-| Layout | [`icons/layout`](icons/layout) | 15 |
-| Images | [`icons/images`](icons/images) | 15 |
-| Media & Devices | [`icons/media-devices`](icons/media-devices) | 15 |
-| Charts | [`icons/charts`](icons/charts) | 15 |
-| Development | [`icons/development`](icons/development) | 15 |
-| Security | [`icons/security`](icons/security) | 15 |
-| Finance & E-commerce | [`icons/finance-ecommerce`](icons/finance-ecommerce) | 15 |
-| Time | [`icons/time`](icons/time) | 15 |
-| Maps & Travel | [`icons/maps-travel`](icons/maps-travel) | 16 |
-| Education | [`icons/education`](icons/education) | 15 |
-| Weather | [`icons/weather`](icons/weather) | 16 |
-| Shapes | [`icons/shapes`](icons/shapes) | 15 |
+| Category | Outline | Duotone |
+| --- | ---: | ---: |
+| General | [15](icons/outline/general) | [15](icons/duotone/general) |
+| Arrows | [15](icons/outline/arrows) | [15](icons/duotone/arrows) |
+| Alerts & Feedback | [15](icons/outline/alerts-feedback) | [15](icons/duotone/alerts-feedback) |
+| Communication | [15](icons/outline/communication) | [15](icons/duotone/communication) |
+| Users | [15](icons/outline/users) | [15](icons/duotone/users) |
+| Files | [15](icons/outline/files) | [15](icons/duotone/files) |
+| Editor | [15](icons/outline/editor) | [15](icons/duotone/editor) |
+| Layout | [15](icons/outline/layout) | [15](icons/duotone/layout) |
+| Images | [15](icons/outline/images) | [15](icons/duotone/images) |
+| Media & Devices | [15](icons/outline/media-devices) | [15](icons/duotone/media-devices) |
+| Charts | [15](icons/outline/charts) | [15](icons/duotone/charts) |
+| Development | [15](icons/outline/development) | [15](icons/duotone/development) |
+| Security | [15](icons/outline/security) | [15](icons/duotone/security) |
+| Finance & E-commerce | [15](icons/outline/finance-ecommerce) | [15](icons/duotone/finance-ecommerce) |
+| Time | [15](icons/outline/time) | [15](icons/duotone/time) |
+| Maps & Travel | [16](icons/outline/maps-travel) | [15](icons/duotone/maps-travel) |
+| Education | [15](icons/outline/education) | [15](icons/duotone/education) |
+| Weather | [16](icons/outline/weather) | [15](icons/duotone/weather) |
+| Shapes | [15](icons/outline/shapes) | [15](icons/duotone/shapes) |
 <!--/categories-->
 
 ## Adding icons
 
 1. Export the new icons from Figma as SVG. Name each file `category-name.svg`, for example `weather-sun.svg` or `Icon=weather-sun.svg`.
-2. Import them into `icons/`:
+2. Import them into `icons/`. Add `--style duotone` for Duotone exports:
 
    ```bash
    node scripts/import.mjs ~/path/to/exports
+   node scripts/import.mjs ~/path/to/duotone-exports --style duotone
    ```
 
 3. Rebuild the website, the README images and the icon counts:
