@@ -44,6 +44,8 @@ const icons = [...keys]
   .sort((x, y) => order.indexOf(x.c) - order.indexOf(y.c) || x.n.localeCompare(y.n));
 const styles = STYLES.map((st) => ({ ...st, count: icons.filter((i) => i.v[st.id]).length }));
 const ready = styles.filter((st) => st.count);
+// Headline count: every icon in every style that has shipped.
+const total = ready.reduce((n, st) => n + st.count, 0);
 const categories = CATEGORIES.map(([id, label]) => ({
   id, label,
   count: icons.filter((i) => i.c === id).length,
@@ -63,7 +65,8 @@ const fragment = fs
   .readFileSync(rel("site/template.html"), "utf8")
   .replace("/*__DATA__*/", `window.MEYA=${JSON.stringify({ categories, styles, icons: siteIcons })};`)
   .replace("<!--__WORDMARK__-->", wordmark)
-  .replaceAll("__COUNT__", String(icons.length))
+  .replaceAll("__COUNT__", total.toLocaleString("en-US"))
+  .replaceAll("__STYLECOUNT__", String(ready.length))
   .replaceAll("__CATS__", String(categories.length))
   .replaceAll("__VERSION__", VERSION)
   .replaceAll("__REPO__", REPO)
@@ -96,7 +99,7 @@ for (const [mode, t] of Object.entries(themes)) {
   <text x="304" y="178" font-family="${FONT}" font-size="72" font-weight="600" letter-spacing="-2.5" fill="${t.ink}">Meya Icons</text>
   <rect x="696" y="126" width="72" height="44" rx="10" fill="${t.bg}" stroke="${t.line}"/>
   <text x="732" y="156" text-anchor="middle" font-family="${FONT}" font-size="22" font-weight="500" fill="${t.muted}">${VERSION}</text>
-  <text x="306" y="232" font-family="${FONT}" font-size="28" fill="${t.muted}">${icons.length} open-source icons in ${ready.map((st) => st.label).join(", ").replace(/, ([^,]*)$/, " and $1")} by Meya Lab</text>
+  <text x="306" y="232" font-family="${FONT}" font-size="28" fill="${t.muted}">${total.toLocaleString("en-US")} open-source icons in ${ready.map((st) => st.label).join(", ").replace(/, ([^,]*)$/, " and $1")} by Meya Lab</text>
 </svg>
 `
   );
@@ -126,8 +129,8 @@ for (const [mode, t] of Object.entries(themes)) {
 const readmePath = rel("README.md");
 if (fs.existsSync(readmePath)) {
   let md = fs.readFileSync(readmePath, "utf8");
-  md = md.replace(/(<!--count-->)[\s\S]*?(<!--\/count-->)/g, `$1${icons.length}$2`);
-  md = md.replace(/icons-\d+-/g, `icons-${icons.length}-`);
+  md = md.replace(/(<!--count-->)[\s\S]*?(<!--\/count-->)/g, `$1${total}$2`);
+  md = md.replace(/icons-\d+-/g, `icons-${total}-`);
   const table = [
     `| Category | ${ready.map((st) => st.label).join(" | ")} |`,
     `| --- | ${ready.map(() => "---:").join(" | ")} |`,
@@ -148,4 +151,4 @@ if (fs.existsSync(readmePath)) {
   fs.writeFileSync(readmePath, md);
 }
 
-console.log(`Built ${icons.length} icons (${styles.map((st) => `${st.label} ${st.count}`).join(", ")}) in ${categories.length} categories → docs/index.html (${(fragment.length / 1024).toFixed(0)} KB), README assets updated.`);
+console.log(`Built ${total} icons (${styles.map((st) => `${st.label} ${st.count}`).join(", ")}) in ${categories.length} categories → docs/index.html (${(fragment.length / 1024).toFixed(0)} KB), README assets updated.`);
