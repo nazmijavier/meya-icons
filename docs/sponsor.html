@@ -60,7 +60,6 @@ button { cursor: pointer; }
 .nav-link { display: inline-flex; align-items: center; gap: 7px; height: 40px; padding-inline: 12px; border-radius: 9999px; color: var(--slate); text-decoration: none; font-size: 13px; font-weight: 500; transition: color 150ms ease, background-color 150ms ease; }
 .nav-link:hover { color: var(--ink); background: var(--mist); }
 .nav-link svg { width: 15px; height: 15px; }
-.nav .pill-soon { height: 40px; font-size: 13px; padding-inline: 18px; }
 
 /* ---------- Sponsor form ---------- */
 .sheet { max-width: 580px; margin-inline: auto; padding-block: 64px 96px; }
@@ -96,7 +95,7 @@ textarea.input { min-height: 180px; padding: 18px 24px; border-radius: 28px; res
 
 @media (max-width: 760px) {
   /* The nav is tight on a phone: drop the labels the brand already covers. */
-  .nav-link .label, .nav-actions .nav-link[href="./"] { display: none; }
+  .nav-link .label { display: none; }
   .sheet { padding-block: 40px 64px; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0ms !important; } }
@@ -107,7 +106,6 @@ textarea.input { min-height: 180px; padding: 18px 24px; border-radius: 28px; res
   <nav class="nav" aria-label="Site">
     <a class="brand" href="./">Meya Icons <span class="pro">1.0</span></a>
     <div class="nav-actions">
-      <a class="nav-link" href="./">Icons</a>
       <button class="pill pill-soon" type="button" aria-disabled="true" data-tip="Coming soon">Buy Icons</button>
     </div>
   </nav>
