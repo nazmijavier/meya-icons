@@ -413,25 +413,30 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
     set(k, v) { try { localStorage.setItem(k, v); } catch {} },
   };
   let actx, clip, muted = store.get("meya-muted") === "1";
-  async function loadSound() {
-    if (clip || !window.AudioContext) return;
-    actx = actx || new AudioContext();
-    if (actx.state === "suspended") await actx.resume();
-    const bin = atob("__CLICK_SOUND__"), bytes = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-    clip = await actx.decodeAudioData(bytes.buffer);
+  // Decoded up front (a suspended context is allowed before any gesture) so the very first click has sound.
+  function initSound() {
+    if (actx || !window.AudioContext) return;
+    try {
+      actx = new AudioContext();
+      const bin = atob("__CLICK_SOUND__"), bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      actx.decodeAudioData(bytes.buffer).then((b) => { clip = b; }, () => {});
+    } catch {}
   }
   function pop() {
     if (muted || !clip) return;
+    if (actx.state === "suspended") actx.resume();
     const src = actx.createBufferSource(); src.buffer = clip;
     const gain = actx.createGain(); gain.gain.value = 0.35;
     src.connect(gain).connect(actx.destination);
     src.start();
   }
-  // pointerdown, not click, so the sound lands the moment the button goes down.
-  document.addEventListener("pointerdown", (e) => {
-    if (muted || !e.target.closest("a, button, select, .tile, input[type=color]")) return;
-    loadSound().then(pop).catch(() => {});
+  initSound();
+  // Every click anywhere on the page, on the way down so it lands with the press.
+  document.addEventListener("pointerdown", (e) => { if (e.button === 0) pop(); }, true);
+  // Keyboard activation makes no pointer event, so cover Enter and Space on controls.
+  document.addEventListener("keydown", (e) => {
+    if ((e.key === "Enter" || e.key === " ") && e.target.closest("a, button, [role=tab], input[type=range]")) pop();
   }, true);
 
   // Interface icons come from the set itself.
@@ -626,7 +631,7 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
     muted = !muted;
     store.set("meya-muted", muted ? "1" : "0");
     syncSound();
-    if (!muted) loadSound().then(pop).catch(() => {});
+    if (!muted) pop();
   });
   syncSound();
 
