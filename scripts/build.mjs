@@ -155,6 +155,30 @@ if (PUBLISH_SPONSOR_PAGE) {
   );
 }
 
+// ---------- Pricing page (docs/pricing.html) ----------
+{
+  const outlineIcon = (ref) => {
+    const f = rel("icons/outline", ref + ".svg");
+    const inner = fs.readFileSync(f, "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim().replace(/\s*stroke-width="1\.3"/g, "");
+    return `<svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true">${inner}</svg>`;
+  };
+  const check = outlineIcon("shapes/check");
+  const page = fs
+    .readFileSync(rel("site/pricing.html"), "utf8")
+    .replace(/__ICON:([a-z-]+\/[a-z-]+)__/g, (m, ref) => outlineIcon(ref))
+    .replaceAll("__YES__", `<span class="yes" aria-label="Included">${check}</span>`)
+    .replaceAll("__VERSION__", VERSION)
+    .replaceAll("__COUNT__", total.toLocaleString("en-US"))
+    .replaceAll("__PRO_COUNT__", proCount.toLocaleString("en-US"))
+    .replaceAll("__ALL_COUNT__", (total + proCount).toLocaleString("en-US"))
+    .replace("__PRO_PREVIEW__", proPreview)
+    .replace('href="#" class="pill soon" id="get-pro" data-tip="Coming soon"', POLAR_CHECKOUT ? `href="${POLAR_CHECKOUT}" class="pill" id="get-pro" target="_blank" rel="noopener"` : 'href="#" class="pill soon" id="get-pro" data-tip="Coming soon"')
+    .replaceAll("__FAVICON__", `data:image/png;base64,${fs.readFileSync(rel("assets/favicon.png")).toString("base64")}`)
+    .replace("__CLICK_SOUND__", fs.readFileSync(rel("assets/click.wav")).toString("base64"));
+  const at = page.indexOf("</style>") + 8;
+  fs.writeFileSync(rel("docs/pricing.html"), `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n${page.slice(0, at)}\n</head>\n<body>\n${page.slice(at).trim()}\n</body>\n</html>\n`);
+}
+
 // ---------- README images ----------
 // Official app-icon mark (vector trace of Logos/Main Logo.png), drawn inline so GitHub renders it.
 const LOGO = fs.readFileSync(rel("assets/logo.svg"), "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim();

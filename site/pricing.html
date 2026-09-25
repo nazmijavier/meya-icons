@@ -1,0 +1,306 @@
+<title>Pricing · Meya Icons</title>
+<meta name="description" content="Outline and Duotone are free forever. Pro adds Sharp, Filled and Pixel for one flat rate.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="icon" type="image/png" href="__FAVICON__">
+<link rel="apple-touch-icon" href="__FAVICON__">
+<style>
+/* Same tokens as the icon site (DESIGN.md): white canvas, Studio Mist surfaces, flat, pill controls. */
+:root {
+  color-scheme: light;
+  --white: #FFFFFF;
+  --mist: #F5F5F7;
+  --mist-2: #EDEDF0;
+  --frost: #FAFAFC;
+  --control: #E6E6E8;
+  --ink: #1D1D1F;
+  --slate: #707070;
+  --steel: #86868B;
+  --link: #0066CC;
+  --ring: rgba(0, 113, 227, 0.28);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--white); color: var(--ink); font: 400 15px/1.47 var(--sans); letter-spacing: -0.01em; -webkit-font-smoothing: antialiased; font-feature-settings: "cv11", "ss01"; }
+button { font: inherit; color: inherit; letter-spacing: inherit; cursor: pointer; }
+:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--ring); }
+.wrap { max-width: 1440px; margin-inline: auto; padding-inline: 100px; }
+@media (max-width: 1100px) { .wrap { padding-inline: 48px; } }
+@media (max-width: 760px) { .wrap { padding-inline: 20px; } }
+.narrow { max-width: 1040px; margin-inline: auto; }
+.ic { width: 18px; height: 18px; flex: none; stroke-width: 1.6; }
+
+/* ---------- Tooltip ---------- */
+[data-tip] { position: relative; }
+[data-tip]::after { content: attr(data-tip); position: absolute; left: 50%; top: calc(100% + 8px); translate: -50% -4px; scale: 0.96; padding: 6px 10px; border-radius: 8px; background: var(--ink); color: #fff; font-size: 12px; font-weight: 500; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 150ms var(--ease-out), translate 150ms var(--ease-out), scale 150ms var(--ease-out); z-index: 5; }
+[data-tip]:hover::after, [data-tip]:focus-visible::after, [data-tip].tip::after { opacity: 1; translate: -50% 0; scale: 1; }
+
+/* ---------- Nav ---------- */
+.nav-wrap { padding-top: 12px; }
+.nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 64px; }
+.brand { display: flex; align-items: center; gap: 6px; color: inherit; text-decoration: none; font-size: 15px; font-weight: 500; white-space: nowrap; }
+.pro { display: inline-flex; align-items: center; height: 18px; padding-inline: 6px; border-radius: 4px; background: var(--ink); color: #fff; font-size: 10px; font-weight: 600; letter-spacing: 0.02em; line-height: 1; }
+.pill { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 16px; border: 0; border-radius: 9999px; font-size: 14px; font-weight: 500; text-decoration: none; white-space: nowrap; transition-property: background-color, scale; transition-duration: 150ms; }
+.pill:active { scale: 0.97; }
+.pill-ink { background: var(--ink); color: #fff; } .pill-ink:hover { background: #333336; }
+.pill-white { background: var(--white); color: var(--ink); box-shadow: 0 0 0 1px var(--control); } .pill-white:hover { background: var(--frost); }
+
+/* ---------- Hero ---------- */
+.hero { text-align: center; padding-block: 64px 36px; }
+.badge { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--slate); }
+.hero h1 { margin: 14px 0 0; font-size: clamp(34px, 5vw, 56px); line-height: 1.04; font-weight: 500; letter-spacing: -0.04em; text-wrap: balance; }
+.hero p { margin: 14px auto 0; max-width: 34em; font-size: 17px; color: var(--slate); }
+.toggle { display: inline-flex; margin-top: 28px; padding: 4px; border-radius: 9999px; background: var(--mist); }
+.toggle button { height: 36px; padding-inline: 18px; border: 0; border-radius: 9999px; background: none; font-size: 14px; font-weight: 500; color: var(--slate); }
+.toggle button[aria-pressed="true"] { background: var(--white); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 0 0 1px var(--control); }
+.toggle em { font-style: normal; margin-left: 6px; font-size: 11px; font-weight: 600; color: #1a7f37; }
+
+/* ---------- Plans ---------- */
+.plans { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.plan { display: flex; flex-direction: column; padding: 32px; border-radius: 28px; background: var(--mist); }
+.plan-pro { background: var(--ink); color: #fff; }
+.plan-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.plan-name { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 500; }
+.tag { height: 24px; padding-inline: 10px; display: inline-flex; align-items: center; border-radius: 9999px; background: var(--white); color: var(--ink); font-size: 12px; font-weight: 600; }
+.price { display: flex; align-items: baseline; gap: 8px; margin-top: 24px; }
+.price b { font-size: 56px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums; }
+.price span { font-size: 13px; line-height: 1.3; color: var(--steel); }
+.plan-pro .price span, .plan-pro .sub, .plan-pro .feat small { color: rgba(255,255,255,.55); }
+.sub { margin-top: 10px; font-size: 14px; color: var(--steel); min-height: 21px; }
+.feats { list-style: none; margin: 28px 0 0; padding: 0; display: grid; gap: 16px; }
+.feat { display: flex; gap: 12px; }
+.feat .chip { width: 36px; height: 36px; flex: none; display: grid; place-items: center; border-radius: 10px; background: var(--white); }
+.plan-pro .feat .chip { background: rgba(255,255,255,.08); }
+.feat b { display: block; font-size: 14px; font-weight: 500; }
+.feat small { display: block; font-size: 13px; color: var(--slate); }
+.teaser { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 24px; }
+.teaser span { display: grid; place-items: center; aspect-ratio: 1; border-radius: 10px; background: rgba(255,255,255,.08); }
+.teaser svg { width: 20px; height: 20px; color: #fff; }
+.plan-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 28px; }
+.plan-foot small { font-size: 13px; color: var(--steel); }
+.plan-pro .plan-foot .pill { background: var(--white); color: var(--ink); } .plan-pro .plan-foot .pill:hover { background: var(--mist-2); }
+.seats { display: inline-flex; align-items: center; gap: 2px; height: 40px; padding: 4px; border-radius: 9999px; background: rgba(255,255,255,.1); }
+.seats button { width: 32px; height: 32px; border: 0; border-radius: 50%; background: none; color: #fff; font-size: 18px; line-height: 1; }
+.seats button:hover { background: rgba(255,255,255,.12); }
+.seats button:disabled { opacity: .35; cursor: default; background: none; }
+.seats output { min-width: 64px; text-align: center; font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums; }
+
+/* ---------- Compare ---------- */
+section { padding-block: 72px 0; }
+h2 { margin: 0 0 28px; font-size: clamp(26px, 3.2vw, 36px); font-weight: 500; letter-spacing: -0.03em; line-height: 1.1; text-wrap: balance; }
+.center { text-align: center; }
+.table-scroll { overflow-x: auto; border-radius: 20px; border: 1px solid var(--control); }
+table { width: 100%; border-collapse: collapse; min-width: 520px; font-size: 14px; }
+th, td { padding: 16px 20px; text-align: center; border-bottom: 1px solid var(--control); }
+th { background: var(--mist); font-weight: 500; }
+th:first-child, td:first-child { text-align: left; }
+tr:last-child td { border-bottom: 0; }
+td { color: var(--slate); }
+td:first-child { color: var(--ink); }
+.yes { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--ink); color: #fff; }
+.yes svg { width: 13px; height: 13px; stroke-width: 2.2; }
+.no { color: var(--control); font-size: 18px; }
+
+/* ---------- Why ---------- */
+.why-head p { margin: -16px 0 28px; max-width: 36em; color: var(--slate); }
+.why { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.why div { padding: 22px; border-radius: 20px; background: var(--mist); min-height: 170px; display: flex; flex-direction: column; }
+.why .ic { width: 22px; height: 22px; }
+.why b { margin-top: auto; font-size: 15px; font-weight: 500; }
+.why p { margin: 6px 0 0; font-size: 13px; color: var(--slate); }
+
+/* ---------- FAQ ---------- */
+.faq-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 48px; }
+.faq-grid h2 { margin-bottom: 16px; }
+.faq-side p { margin: 0; color: var(--slate); font-size: 14px; }
+.faq-side a { color: var(--ink); }
+.faq { display: grid; gap: 10px; }
+details { border-radius: 16px; background: var(--mist); }
+summary { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 20px; cursor: pointer; font-size: 15px; font-weight: 500; }
+summary::-webkit-details-marker { display: none; }
+summary .ic { transition: rotate 200ms var(--ease-out); }
+details[open] summary .ic { rotate: 45deg; }
+details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate); }
+
+/* ---------- CTA ---------- */
+.cta { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 32px; border-radius: 28px; background: var(--mist); }
+.cta b { display: block; font-size: 18px; font-weight: 500; }
+.cta p { margin: 4px 0 0; font-size: 14px; color: var(--slate); }
+
+/* ---------- Footer ---------- */
+.footer { margin-top: 96px; background: var(--mist); padding-block: 28px 36px; }
+.footer .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; }
+.footer-meta { display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 13px; color: var(--slate); }
+.footer-meta a { color: var(--link); text-decoration: none; }
+
+@media (max-width: 900px) {
+  .plans, .faq-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .why { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .plan { padding: 26px 22px; }
+  .cta { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 480px) { .why { grid-template-columns: minmax(0, 1fr); } .price b { font-size: 46px; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0ms !important; } }
+</style>
+
+<div class="wrap nav-wrap">
+  <nav class="nav" aria-label="Site">
+    <a class="brand" href="./">Meya Icons <span class="pro">__VERSION__</span></a>
+    <a class="pill pill-white" href="./">Browse icons</a>
+  </nav>
+</div>
+
+<main class="wrap">
+  <div class="narrow">
+    <header class="hero">
+      <span class="badge">Upgrade to <span class="pro">PRO</span></span>
+      <h1>Simple plans. Full access.</h1>
+      <p>Outline and Duotone stay free forever. Pro adds three more styles for one flat rate.</p>
+      <div class="toggle" role="group" aria-label="Billing period">
+        <button type="button" data-period="monthly" aria-pressed="false">Monthly</button>
+        <button type="button" data-period="annual" aria-pressed="true">Annually<em>2 months free</em></button>
+      </div>
+    </header>
+
+    <div class="plans">
+      <div class="plan">
+        <div class="plan-top"><span class="plan-name">__ICON:general/user__Free</span></div>
+        <div class="price"><b>$0</b><span>forever</span></div>
+        <div class="sub">No account needed</div>
+        <ul class="feats">
+          <li class="feat"><span class="chip">__ICON:layout/grid__</span><div><b>__COUNT__ icons</b><small>Outline and Duotone</small></div></li>
+          <li class="feat"><span class="chip">__ICON:development/code__</span><div><b>Copy as SVG or React</b><small>Straight from the website</small></div></li>
+          <li class="feat"><span class="chip">__ICON:files/download__</span><div><b>npm package</b><small>npm i meya-icons</small></div></li>
+          <li class="feat"><span class="chip">__ICON:security/shield__</span><div><b>MIT license</b><small>Free for personal and commercial work</small></div></li>
+        </ul>
+        <div class="plan-foot"><small>Free forever</small><a class="pill pill-ink" href="./#icons">Browse free icons</a></div>
+      </div>
+
+      <div class="plan plan-pro">
+        <div class="plan-top"><span class="plan-name">__ICON:general/star__Pro</span><span class="tag">Popular</span></div>
+        <div class="price"><b id="pro-price">$90</b><span id="pro-unit">per seat<br>/year</span></div>
+        <div class="sub" id="pro-sub">$7.50 per seat a month, billed yearly</div>
+        <ul class="feats">
+          <li class="feat"><span class="chip">__ICON:layout/layers__</span><div><b>__PRO_COUNT__ more icons</b><small>Sharp, Filled and Pixel</small></div></li>
+          <li class="feat"><span class="chip">__ICON:alerts-feedback/check-circle__</span><div><b>Everything in Free</b><small>All __ALL_COUNT__ icons in five styles</small></div></li>
+          <li class="feat"><span class="chip">__ICON:arrows/refresh__</span><div><b>New icons as they ship</b><small>Included while you're subscribed</small></div></li>
+        </ul>
+        <div class="teaser" aria-hidden="true">__PRO_PREVIEW__</div>
+        <div class="plan-foot"><div class="seats" role="group" aria-label="Seats"><button type="button" id="seat-down" aria-label="Fewer seats">−</button><output id="seat-n" aria-live="polite">1 seat</output><button type="button" id="seat-up" aria-label="More seats">+</button></div><a href="#" class="pill soon" id="get-pro" data-tip="Coming soon">Get Pro · $90</a></div>
+      </div>
+    </div>
+
+    <section>
+      <h2 class="center">Choose what fits your work</h2>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Features</th><th>Free</th><th>Pro</th></tr></thead>
+          <tbody>
+            <tr><td>Outline, 287 icons</td><td>__YES__</td><td>__YES__</td></tr>
+            <tr><td>Duotone, 285 icons</td><td>__YES__</td><td>__YES__</td></tr>
+            <tr><td>Sharp, 287 icons</td><td><span class="no">—</span></td><td>__YES__</td></tr>
+            <tr><td>Filled, 287 icons</td><td><span class="no">—</span></td><td>__YES__</td></tr>
+            <tr><td>Pixel, 287 icons</td><td><span class="no">—</span></td><td>__YES__</td></tr>
+            <tr><td>Copy as SVG or React</td><td>__YES__</td><td>__YES__</td></tr>
+            <tr><td>Stroke, size and colour controls</td><td>__YES__</td><td>__YES__</td></tr>
+            <tr><td>npm package</td><td>__YES__</td><td>__YES__</td></tr>
+            <tr><td>New releases</td><td>Free styles</td><td>Every style</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <div class="why-head"><h2>Why Meya Icons?</h2><p>Every icon is drawn on the same 24 × 24 grid with the same stroke, so a screen, a diagram and a deck all look like one system.</p></div>
+      <div class="why">
+        <div>__ICON:layout/grid__<b>__ALL_COUNT__ icons</b><p>Five styles of the same 287 shapes.</p></div>
+        <div>__ICON:development/code__<b>SVG and React</b><p>Copy either format, or install from npm.</p></div>
+        <div>__ICON:images/crop__<b>One 24 × 24 grid</b><p>Consistent weight and spacing across every icon.</p></div>
+        <div>__ICON:weather/sun__<b>Colour anything</b><p>Every icon uses currentColor and follows your text.</p></div>
+      </div>
+    </section>
+
+    <section class="faq-grid">
+      <div class="faq-side">
+        <h2>Frequently asked questions</h2>
+        <p>Still have questions? Write to <a href="mailto:hello@meyalab.com">hello@meyalab.com</a>.</p>
+      </div>
+      <div class="faq">
+        <details><summary>What's included in Pro?__ICON:shapes/plus__</summary><p>Sharp, Filled and Pixel: __PRO_COUNT__ icons on top of the free Outline and Duotone sets, plus new icons as they're released.</p></details>
+        <details><summary>How does per-seat pricing work?__ICON:shapes/plus__</summary><p>Each person who uses the Pro icons needs a seat. Pick the number of seats at checkout; the price is $9 per seat a month, or $90 per seat a year.</p></details>
+        <details><summary>Do monthly and annual plans have the same features?__ICON:shapes/plus__</summary><p>Yes. Annual costs $90 per seat instead of $108, so you get two months free.</p></details>
+        <details><summary>Can I use the icons in commercial projects?__ICON:shapes/plus__</summary><p>Yes. Outline and Duotone are MIT licensed, and Pro icons can be used in personal and client work.</p></details>
+        <details><summary>How do I get the Pro icons?__ICON:shapes/plus__</summary><p>Right after checkout you get a download link by email with every Pro style as SVG files.</p></details>
+        <details><summary>Can I cancel anytime?__ICON:shapes/plus__</summary><p>Yes. Manage or cancel your subscription from the customer portal link in your receipt email. You keep access until the end of the period you paid for.</p></details>
+        <details><summary>Is there a Figma plugin?__ICON:shapes/plus__</summary><p>Yes, it's on its way to the Figma Community and will place icons straight onto your canvas.</p></details>
+      </div>
+    </section>
+
+    <section>
+      <div class="cta">
+        <div><b>Need custom icons?</b><p>Meya Lab designs icon sets for products and brands.</p></div>
+        <a class="pill pill-ink" href="https://meyalab.com/contact" target="_blank" rel="noopener">Hire us</a>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <a class="brand" href="./">Meya Icons <span class="pro">__VERSION__</span></a>
+    <div class="footer-meta">
+      <span>__COUNT__ free icons · MIT License</span>
+      <a href="mailto:hello@meyalab.com">hello@meyalab.com</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const $ = (s) => document.querySelector(s);
+  // ---------- Billing period ----------
+  // Pro is priced per seat: one seat per person using the icons.
+  const P = {
+    monthly: { each: 9, unit: "per seat<br>/month", sub: "Billed monthly, cancel anytime", per: "/mo" },
+    annual: { each: 90, unit: "per seat<br>/year", sub: "$7.50 per seat a month, billed yearly", per: "/yr" },
+  };
+  let period = "annual", seats = 1;
+  const MAX = 50;
+  function show() {
+    const p = P[period];
+    $("#pro-price").textContent = "$" + p.each; $("#pro-unit").innerHTML = p.unit; $("#pro-sub").textContent = p.sub;
+    $("#seat-n").textContent = seats + (seats === 1 ? " seat" : " seats");
+    $("#get-pro").textContent = `Get Pro · $${(p.each * seats).toLocaleString("en-US")}${seats > 1 ? p.per : ""}`;
+    $("#seat-down").disabled = seats <= 1; $("#seat-up").disabled = seats >= MAX;
+  }
+  document.querySelector(".toggle").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-period]"); if (!b) return;
+    document.querySelectorAll("[data-period]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    period = b.dataset.period; show();
+  });
+  $("#seat-down").addEventListener("click", () => { seats = Math.max(1, seats - 1); show(); });
+  $("#seat-up").addEventListener("click", () => { seats = Math.min(MAX, seats + 1); show(); });
+  show();
+  // ---------- Not released yet ----------
+  document.addEventListener("click", (e) => {
+    const s = e.target.closest(".soon"); if (!s) return;
+    e.preventDefault(); s.classList.add("tip"); clearTimeout(s._t); s._t = setTimeout(() => s.classList.remove("tip"), 1600);
+  });
+  // ---------- Click sound ----------
+  let actx, clip;
+  try {
+    actx = new AudioContext();
+    const bin = atob("__CLICK_SOUND__"), bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    actx.decodeAudioData(bytes.buffer).then((b) => { clip = b; }, () => {});
+  } catch {}
+  document.addEventListener("pointerdown", (e) => {
+    if (e.button !== 0 || !clip) return;
+    if (actx.state === "suspended") actx.resume();
+    const src = actx.createBufferSource(); src.buffer = clip; src.connect(actx.destination); src.start();
+  }, true);
+})();
+</script>
