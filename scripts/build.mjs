@@ -56,15 +56,9 @@ const categories = CATEGORIES.map(([id, label]) => ({
 // On the site, default 1.3 strokes inherit from the root so the stroke slider can drive them.
 const strip = (b) => b.replace(/\s*stroke-width="1\.3"/g, "");
 const siteIcons = icons.map((i) => ({ ...i, v: Object.fromEntries(Object.entries(i.v).map(([k, b]) => [k, strip(b)])) }));
-const wordmark = fs
-  .readFileSync(rel("assets/wordmark-white.svg"), "utf8")
-  .replace(/fill="white"/g, 'fill="currentColor"')
-  .replace(/<svg /, '<svg class="wordmark" aria-label="Meya Lab Studio" role="img" ');
-
 const fragment = fs
   .readFileSync(rel("site/template.html"), "utf8")
   .replace("/*__DATA__*/", `window.MEYA=${JSON.stringify({ categories, styles, icons: siteIcons })};`)
-  .replaceAll("<!--__WORDMARK__-->", wordmark)
   .replace("__SPONSOR_LOGO__", fs.readFileSync(rel("assets/logo.svg"), "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim())
   .replace("__CLICK_SOUND__", fs.readFileSync(rel("assets/click.wav")).toString("base64"))
   .replaceAll("__COUNT__", total.toLocaleString("en-US"))

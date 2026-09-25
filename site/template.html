@@ -76,14 +76,14 @@ button { cursor: pointer; }
 .brand { align-items: center; }
 .brand .pro { font-size: 10px; height: 18px; padding-inline: 6px; letter-spacing: 0.02em; }
 .nav-actions { display: flex; align-items: center; gap: 2px; }
-.sponsor-label { font: 500 11px/1 var(--sans); letter-spacing: 0.05em; text-transform: uppercase; color: var(--steel); }
-.sponsor-tile { display: block; width: 32px; height: 32px; transition: scale 150ms ease; }
+.sponsors-label { font-size: 15px; color: var(--slate); margin-right: 4px; }
+.sponsor-tile { display: block; width: 44px; height: 44px; border-radius: 50%; overflow: hidden; transition: scale 150ms ease; }
 .sponsor-tile:active { scale: 0.94; }
 .sponsor-mark { width: 100%; height: 100%; display: block; }
-.sponsor-add { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 8px; border: 1.5px dashed var(--hairline); color: var(--steel); transition-property: border-color, color, scale; transition-duration: 150ms; }
+.sponsor-add { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--control); background: var(--white); color: var(--steel); transition-property: border-color, color, scale; transition-duration: 150ms; }
 .sponsor-add:hover { border-color: var(--steel); color: var(--ink); }
 .sponsor-add:active { scale: 0.94; }
-.sponsor-add svg { width: 14px; height: 14px; stroke-width: 1.8; }
+.sponsor-add svg { width: 18px; height: 18px; stroke-width: 1.6; }
 
 .nav-link { display: inline-flex; align-items: center; gap: 7px; height: 40px; padding-inline: 12px; border-radius: 9999px; color: var(--slate); text-decoration: none; font-size: 13px; font-weight: 500; transition: background-color 150ms ease; }
 .nav-link:hover { color: var(--ink); background: var(--mist); }
@@ -222,12 +222,8 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
 /* ---------- Footer ---------- */
 .footer { background: var(--mist); padding-block: 28px 36px; transition: padding-right 300ms var(--ease-drawer); }
 .footer .wrap { display: grid; gap: 22px; }
-.sponsors { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-.sponsors .sponsor-tile, .sponsors .sponsor-add { width: 40px; height: 40px; }
-.sponsors .sponsor-add { border-radius: 10px; }
-.sponsors .sponsor-add svg { width: 16px; height: 16px; }
+.sponsors { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
 .footer-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; }
-.wordmark { height: 18px; width: auto; display: block; color: var(--ink); }
 .footer-meta { display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 13px; color: var(--slate); }
 .footer-meta a { color: var(--link); text-decoration: none; }
 .footer-meta a:hover { text-decoration: underline; }
@@ -369,17 +365,17 @@ main { padding-block: 28px 90px; transition: padding-right 300ms var(--ease-draw
 <footer class="footer">
   <div class="wrap">
     <div class="sponsors">
-      <span class="sponsor-label">Sponsored by</span>
+      <span class="sponsors-label">Sponsors</span>
       <a class="sponsor-tile" href="https://meyalab.com/" target="_blank" rel="noopener" data-tip="Meya Lab Studio" aria-label="Meya Lab Studio">
         <svg class="sponsor-mark" viewBox="0 0 480 480" fill="none" aria-hidden="true">__SPONSOR_LOGO__</svg>
       </a>
       <a class="sponsor-add" href="https://meyalab.com/contact" target="_blank" rel="noopener" data-tip="Become a sponsor" aria-label="Become a sponsor"><span data-ico="shapes:plus"></span></a>
     </div>
     <div class="footer-bar">
-      <a href="https://meyalab.com/" target="_blank" rel="noopener" aria-label="Meya Lab Studio"><!--__WORDMARK__--></a>
+      <a class="brand" href="#top">Meya Icons <span class="pro">__VERSION__</span></a>
       <div class="footer-meta">
-      <span>Meya Icons __VERSION__ · __COUNT__ icons · MIT License</span>
-      <a href="__REPO__" target="_blank" rel="noopener">GitHub</a>
+        <span>__COUNT__ icons · MIT License</span>
+        <a href="__REPO__" target="_blank" rel="noopener">GitHub</a>
         <a href="https://meyalab.com/contact" target="_blank" rel="noopener">Need custom icons? Hire us</a>
       </div>
     </div>
