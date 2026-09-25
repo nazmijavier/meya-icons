@@ -11,7 +11,7 @@ Meya Icons is a free, open-source set of <!--count-->287<!--/count--> stroke ico
 [![Version](https://img.shields.io/badge/version-1.0-1BA4FF?style=flat-square)](https://github.com/nazmijavier/meya-icons/releases)
 [![License](https://img.shields.io/badge/license-MIT-737373?style=flat-square)](./LICENSE)
 
-**[Browse the icons](https://nazmijavier.github.io/meya-icons/)** · **[Download ZIP](https://github.com/nazmijavier/meya-icons/archive/refs/heads/main.zip)** · **[Hire Meya Lab](https://meyalab.com/contact)**
+**[Browse the icons](https://nazmijavier.github.io/meya-icons/)** · **[Download ZIP](https://github.com/nazmijavier/meya-icons/releases/latest/download/meya-icons-1.0.zip)** · **[Hire Meya Lab](https://meyalab.com/contact)**
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./assets/preview-dark.svg">
@@ -21,7 +21,7 @@ Meya Icons is a free, open-source set of <!--count-->287<!--/count--> stroke ico
 ## Get the icons
 
 - **Copy one icon.** Open the [website](https://nazmijavier.github.io/meya-icons/), search, pick an icon, and copy it as SVG or as a React component. You can change the stroke width and size before you copy.
-- **Download the whole set.** Get the [ZIP of this repository](https://github.com/nazmijavier/meya-icons/archive/refs/heads/main.zip). The SVG files are in [`icons/`](./icons), one folder per category.
+- **Download the whole set.** Get the [ZIP from the latest release](https://github.com/nazmijavier/meya-icons/releases/latest/download/meya-icons-1.0.zip). The SVG files are in [`icons/`](./icons), one folder per category.
 - **Clone it.**
 
   ```bash
