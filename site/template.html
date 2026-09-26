@@ -285,7 +285,6 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
   .seg::-webkit-scrollbar { display: none; }
   .seg button { flex: none; height: 34px; padding-inline: 14px; }
   .tabs { flex-basis: auto; }
-  .nav-link .label { display: none; }
   .brand { white-space: nowrap; }
   /* Compact 3-column grid. */
   main { padding-top: 20px; }
@@ -302,12 +301,14 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0ms !important; }
 }
+@media (max-width: 420px) { .nav-link .label { display: none; } }
 </style>
 
 <div class="wrap nav-wrap">
   <nav class="nav" aria-label="Site">
     <a class="brand" href="#top">Meya Icons <span class="pro">__VERSION__</span></a>
     <div class="nav-actions">
+      <a class="nav-link" href="pixel.html" title="Convert icons to pixel style" aria-label="Pixel Lab"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM10.5 10.5h2v2h-2z"/></svg><span class="label">Pixel Lab</span></a>
       <a class="pill pill-ink" href="pricing.html">Upgrade to Pro</a>
     </div>
   </nav>

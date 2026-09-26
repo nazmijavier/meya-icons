@@ -97,18 +97,18 @@ textarea.input { min-height: 180px; padding: 18px 24px; border-radius: 28px; res
 .footer-meta a:hover { color: var(--ink); }
 
 @media (max-width: 760px) {
-  /* The nav is tight on a phone: drop the labels the brand already covers. */
-  .nav-link .label { display: none; }
   .sheet { padding-block: 40px 64px; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0ms !important; } }
+@media (max-width: 420px) { .nav-link .label { display: none; } }
 </style>
 </head>
 <body>
 <div class="wrap nav-wrap">
   <nav class="nav" aria-label="Site">
-    <a class="brand" href="./">Meya Icons <span class="pro">1.0.1</span></a>
+    <a class="brand" href="./">Meya Icons <span class="pro">1.0.2</span></a>
     <div class="nav-actions">
+      <a class="nav-link" href="pixel.html" title="Convert icons to pixel style" aria-label="Pixel Lab"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM10.5 10.5h2v2h-2z"/></svg><span class="label">Pixel Lab</span></a>
       <a class="pill pill-ink" href="pricing.html">Upgrade to Pro</a>
     </div>
   </nav>
@@ -152,7 +152,7 @@ textarea.input { min-height: 180px; padding: 18px 24px; border-radius: 28px; res
 
 <footer class="footer">
   <div class="wrap">
-    <a class="brand" href="./">Meya Icons <span class="pro">1.0.1</span></a>
+    <a class="brand" href="./">Meya Icons <span class="pro">1.0.2</span></a>
     <div class="footer-meta">
       <span>572 free icons · MIT License</span>
       <a href="pricing.html">Pricing</a>

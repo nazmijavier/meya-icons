@@ -46,6 +46,10 @@ button { font: inherit; color: inherit; letter-spacing: inherit; cursor: pointer
 /* ---------- Nav ---------- */
 .nav-wrap { padding-top: 12px; }
 .nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 64px; }
+.nav-actions { display: flex; align-items: center; gap: 4px; }
+.nav-link { display: inline-flex; align-items: center; gap: 7px; height: 40px; padding-inline: 12px; border-radius: 9999px; color: var(--slate); text-decoration: none; font-size: 13px; font-weight: 500; transition: color 150ms ease, background-color 150ms ease; }
+.nav-link:hover { color: var(--ink); background: var(--mist); }
+.nav-link svg { width: 15px; height: 15px; }
 .brand { display: flex; align-items: center; gap: 6px; color: inherit; text-decoration: none; font-size: 15px; font-weight: 500; white-space: nowrap; }
 .pro { display: inline-flex; align-items: center; height: 18px; padding-inline: 6px; border-radius: 4px; background: var(--ink); color: #fff; font-size: 10px; font-weight: 600; letter-spacing: 0.02em; line-height: 1; }
 .pill { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 16px; border: 0; border-radius: 9999px; font-size: 14px; font-weight: 500; text-decoration: none; white-space: nowrap; transition-property: background-color, scale; transition-duration: 150ms; }
@@ -161,13 +165,17 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
 }
 @media (max-width: 480px) { .why { grid-template-columns: minmax(0, 1fr); } .price b { font-size: 46px; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0ms !important; } }
+@media (max-width: 420px) { .nav-link .label { display: none; } }
 </style>
 </head>
 <body>
 <div class="wrap nav-wrap">
   <nav class="nav" aria-label="Site">
-    <a class="brand" href="./">Meya Icons <span class="pro">1.0.1</span></a>
-    <a class="pill pill-white" href="./">Browse icons</a>
+    <a class="brand" href="./">Meya Icons <span class="pro">1.0.2</span></a>
+    <div class="nav-actions">
+      <a class="nav-link" href="pixel.html" title="Convert icons to pixel style" aria-label="Pixel Lab"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM10.5 10.5h2v2h-2z"/></svg><span class="label">Pixel Lab</span></a>
+      <a class="pill pill-white" href="./">Browse icons</a>
+    </div>
   </nav>
 </div>
 
@@ -299,7 +307,7 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
 
 <footer class="footer">
   <div class="wrap">
-    <a class="brand" href="./">Meya Icons <span class="pro">1.0.1</span></a>
+    <a class="brand" href="./">Meya Icons <span class="pro">1.0.2</span></a>
     <div class="footer-meta">
       <span>572 free icons · MIT License</span>
       <a href="pricing.html">Pricing</a>
