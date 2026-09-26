@@ -42,6 +42,8 @@ button { cursor: pointer; }
 .pill { display: inline-flex; align-items: center; gap: 10px; height: 40px; padding: 0 16px; border: 0; border-radius: 9999px; font-size: 14px; font-weight: 500; text-decoration: none; white-space: nowrap; transition-property: background-color, scale; transition-duration: 150ms; transition-timing-function: ease; }
 .pill:active { scale: 0.96; }
 .pill svg { width: 16px; height: 16px; flex: none; }
+.pill-ink { background: var(--ink); color: #fff; }
+.pill-ink:hover { background: #333336; }
 .pill-soon { background: var(--mist); color: var(--steel); cursor: default; }
 .pill-soon:hover { background: var(--mist-2); }
 .pill-soon:active { scale: 1; }
@@ -107,7 +109,7 @@ textarea.input { min-height: 180px; padding: 18px 24px; border-radius: 28px; res
   <nav class="nav" aria-label="Site">
     <a class="brand" href="./">Meya Icons <span class="pro">1.0</span></a>
     <div class="nav-actions">
-      <button class="pill pill-soon" type="button" aria-disabled="true" data-tip="Coming soon">Buy Icons</button>
+      <a class="pill pill-ink" href="pricing.html">Upgrade to Pro</a>
     </div>
   </nav>
 </div>
