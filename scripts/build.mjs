@@ -84,7 +84,7 @@ const FOOTER = `<footer class="footer">
     <a class="brand" href="./">Meya Icons <span class="pro">__VERSION__</span></a>
     <div class="footer-meta">
       <span>__COUNT__ free icons · MIT License</span>
-      <a href="pricing.html">Pricing</a>
+      <a href="pricing">Pricing</a>
       <a href="mailto:hello@meyalab.com">hello@meyalab.com</a>
       <a href="https://meyalab.com/contact" target="_blank" rel="noopener">Need custom icons? Hire us</a>
     </div>
