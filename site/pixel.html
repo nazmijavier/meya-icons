@@ -1,5 +1,5 @@
 <title>Meya Pixel Lab</title>
-<meta name="description" content="Turn Meya Icons into pixel-grid icons. Pick an icon, set the grid, weight and corner rounding, then copy or export.">
+<meta name="description" content="Turn Meya Icons into pixel-grid icons. Pick an icon, set the grid, weight and corner rounding, then copy or download.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=Geist+Mono:wght@400;500&display=swap">
@@ -127,7 +127,7 @@ header.intro p { margin: 0; color: var(--slate); font-size: 17px; text-wrap: pre
 
   <header class="intro">
     <h1>Turn any Meya icon into a pixel icon.</h1>
-    <p>The tool draws the icon on a coarse grid, fills every cell the stroke covers, then traces the cells into one clean vector path. Tune the grid and weight until it reads well, then copy it or export the whole set.</p>
+    <p>The tool draws the icon on a coarse grid, fills every cell the stroke covers, then traces the cells into one clean vector path. Tune the grid and weight until it reads well, then copy or download it.</p>
   </header>
 
   <div class="layout">
@@ -170,7 +170,6 @@ header.intro p { margin: 0; color: var(--slate); font-size: 17px; text-wrap: pre
       <div class="actions">
         <button class="pill pill-blue" id="copy" type="button">Copy SVG</button>
         <button class="pill pill-outline" id="download" type="button">Download SVG</button>
-        <button class="pill pill-ink" id="export" type="button">Export all as ZIP</button>
       </div>
 
       <div class="sheet-head">
@@ -184,7 +183,6 @@ header.intro p { margin: 0; color: var(--slate); font-size: 17px; text-wrap: pre
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>/*__DATA__*/</script>
 <script>
 (() => {
@@ -378,23 +376,6 @@ header.intro p { margin: 0; color: var(--slate); font-size: 17px; text-wrap: pre
     catch { toast("Clipboard is blocked here. Use Download SVG."); }
   });
   $("#download").addEventListener("click", () => save(new Blob([svgOut(state.d)], { type: "image/svg+xml" }), `${state.current.key.replace("/", "-")}.svg`));
-  $("#export").addEventListener("click", async () => {
-    if (!window.JSZip) return toast("The ZIP library didn't load. Check your connection.");
-    const btn = $("#export"); btn.disabled = true;
-    const zip = new JSZip();
-    for (let i = 0; i < icons.length; i++) {
-      btn.textContent = `Exporting ${i + 1} of ${icons.length}`;
-      const { d } = await pixelate(icons[i]);
-      // Named category-name.svg so scripts/import.mjs can take the folder as-is.
-      zip.file(`${icons[i].key.replace("/", "-")}.svg`, svgOut(d));
-    }
-    save(await zip.generateAsync({ type: "blob" }), `meya-pixel-${state.grid}.zip`);
-    btn.disabled = false; btn.textContent = "Export all as ZIP";
-    toast(`Exported ${icons.length} pixel icons`);
-  });
-
-  // For batch scripts: window.MeyaPixel.pixelate(icon, { grid, weight, thr, round }).
-  window.MeyaPixel = { icons, pixelate, svgOut };
 
   filterList();
   select(state.current);
