@@ -273,4 +273,27 @@ if (fs.existsSync(readmePath)) {
   fs.writeFileSync(readmePath, md);
 }
 
+// ---------- Link previews (Open Graph + X), one shared image, each page's own title and description ----------
+fs.copyFileSync(rel("assets/og.png"), rel("docs/og.png"));
+const PAGE_PATH = { "index.html": "/", "pricing.html": "/pricing", "sponsor.html": "/sponsor", "pixel.html": "/pixel" };
+for (const [file, urlPath] of Object.entries(PAGE_PATH)) {
+  const p = rel("docs/" + file);
+  if (!fs.existsSync(p)) continue;
+  let html = fs.readFileSync(p, "utf8").replace(/\n<!--og-->[\s\S]*?<!--\/og-->/, "");
+  const title = (html.match(/<title>([^<]*)<\/title>/) || [])[1] || "Meya Icons";
+  const desc = (html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || "";
+  const tags = [
+    `<meta property="og:type" content="website">`, `<meta property="og:site_name" content="Meya Icons">`,
+    `<meta property="og:title" content="${title}">`, `<meta property="og:description" content="${desc}">`,
+    `<meta property="og:url" content="${SITE}${urlPath}">`, `<meta property="og:image" content="${SITE}/og.png">`,
+    `<meta property="og:image:width" content="2400">`, `<meta property="og:image:height" content="1260">`,
+    `<meta property="og:image:alt" content="Meya Icons: 572 editable icons in Outline, Duotone, Sharp, Filled and Pixel">`,
+    `<meta name="twitter:card" content="summary_large_image">`, `<meta name="twitter:title" content="${title}">`,
+    `<meta name="twitter:description" content="${desc}">`, `<meta name="twitter:image" content="${SITE}/og.png">`,
+    `<link rel="canonical" href="${SITE}${urlPath}">`,
+  ].join("\n");
+  html = html.replace(/(<meta name="description"[^>]*>)/, `$1\n<!--og-->\n${tags}\n<!--/og-->`);
+  fs.writeFileSync(p, html);
+}
+
 console.log(`Built ${total} icons${builtPlugin ? " + Figma plugin UI" : ""} (${styles.map((st) => `${st.label} ${st.count}`).join(", ")}) in ${categories.length} categories → docs/index.html (${(fragment.length / 1024).toFixed(0)} KB), README assets updated.`);
