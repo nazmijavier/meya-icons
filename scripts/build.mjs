@@ -274,7 +274,7 @@ if (fs.existsSync(readmePath)) {
 }
 
 // ---------- Link previews (Open Graph + X), one shared image, each page's own title and description ----------
-fs.copyFileSync(rel("assets/og.png"), rel("docs/og.png"));
+fs.copyFileSync(rel("assets/og.jpg"), rel("docs/og.jpg"));
 const PAGE_PATH = { "index.html": "/", "pricing.html": "/pricing", "sponsor.html": "/sponsor", "pixel.html": "/pixel" };
 for (const [file, urlPath] of Object.entries(PAGE_PATH)) {
   const p = rel("docs/" + file);
@@ -285,11 +285,11 @@ for (const [file, urlPath] of Object.entries(PAGE_PATH)) {
   const tags = [
     `<meta property="og:type" content="website">`, `<meta property="og:site_name" content="Meya Icons">`,
     `<meta property="og:title" content="${title}">`, `<meta property="og:description" content="${desc}">`,
-    `<meta property="og:url" content="${SITE}${urlPath}">`, `<meta property="og:image" content="${SITE}/og.png">`,
-    `<meta property="og:image:width" content="2400">`, `<meta property="og:image:height" content="1260">`,
+    `<meta property="og:url" content="${SITE}${urlPath}">`, `<meta property="og:image" content="${SITE}/og.jpg">`,
+    `<meta property="og:image:width" content="1200">`, `<meta property="og:image:height" content="630">`,
     `<meta property="og:image:alt" content="Meya Icons: 572 editable icons in Outline, Duotone, Sharp, Filled and Pixel">`,
     `<meta name="twitter:card" content="summary_large_image">`, `<meta name="twitter:title" content="${title}">`,
-    `<meta name="twitter:description" content="${desc}">`, `<meta name="twitter:image" content="${SITE}/og.png">`,
+    `<meta name="twitter:description" content="${desc}">`, `<meta name="twitter:image" content="${SITE}/og.jpg">`,
     `<link rel="canonical" href="${SITE}${urlPath}">`,
   ].join("\n");
   html = html.replace(/(<meta name="description"[^>]*>)/, `$1\n<!--og-->\n${tags}\n<!--/og-->`);
