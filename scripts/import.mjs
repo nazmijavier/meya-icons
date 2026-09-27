@@ -50,6 +50,9 @@ function normalize(raw) {
     .split(/(<mask[\s\S]*?<\/mask>)/)
     .map((part) => (part.startsWith("<mask") ? part : part.replace(/"(white|#fff|#ffffff|black|#000|#000000)"/gi, '"currentColor"')))
     .join("")
+    // Filled shapes (dots, letters) get stroke="none" so a stroke set on the root <svg> never thickens them.
+    .replace(/<(path|circle|ellipse|rect|polygon|polyline)\b([^>]*?)(\/?)>/g, (m, tag, a, sl) =>
+      /\sstroke=/.test(a) || !/\sfill="(?!none")[^"]*"/.test(a) ? m : `<${tag}${a} stroke="none"${sl}>`)
     .trim()
     .split(/\n/)
     .map((l) => "  " + l.trim())
