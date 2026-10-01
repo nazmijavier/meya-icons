@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <g transform="matrix(0.046875 0 0 0.046784 0 4)" clip-path="url(#round)" stroke="none">
+  <path d="M0 0.00390625H512V341.33H0V0.00390625Z" fill="#496E2D" stroke="none"/>
+  <path d="M0 341.33V0.00390625H512" fill="#0052B4" stroke="none"/>
+  <path d="M512 66.8889V0.00390625H411.67L0 274.445V341.33H100.33L512 66.8889Z" fill="white" stroke="none"/>
+  <path d="M512 0.00390625V40.1289L60.193 341.33H0V301.205L451.807 0.00390625H512Z" fill="#A2001D" stroke="none"/>
+  <path d="M187.737 103.879L164.996 114.575L177.106 136.599L152.413 131.875L149.284 156.82L132.085 138.473L114.885 156.82L111.756 131.875L87.0631 136.598L99.1721 114.575L76.4331 103.879L99.1731 93.182L87.0631 71.16L111.756 75.882L114.886 50.938L132.085 69.285L149.285 50.938L152.413 75.882L177.106 71.16L164.998 93.184L187.737 103.879Z" fill="#FFDA44" stroke="none"/>
+  </g>
+  <rect x="0.25" y="4.25" width="23.5" height="15.5" rx="1.35" stroke="#000" stroke-opacity="0.1" stroke-width="0.5"/>
+  <defs><clipPath id="round"><rect width="512" height="342" rx="34.13" ry="34.2"/></clipPath></defs>
+</svg>

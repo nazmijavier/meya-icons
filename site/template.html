@@ -432,6 +432,7 @@ __FOOTER__
   const { icons, categories, styles } = window.MEYA;
   const styleOf = (id) => styles.find((st) => st.id === id);
   const catLabel = Object.fromEntries(categories.map((c) => [c.id, c.label]));
+/*__SEARCH__*/
   const $ = (s) => document.querySelector(s);
   // One tile per sponsor, dropped at a random spot in one of the first sections so it is actually seen.
   const SPONSORS = [{ label: "sponsors-meya", title: "Meya Lab Studio", href: "https://meyalab.com/" }];
@@ -544,12 +545,13 @@ __FOOTER__
   const sections = [...sectionsEl.querySelectorAll(".section")];
 
   function filter() {
-    const raw = state.q.trim().toLowerCase();
-    const q = raw.replace(/\s+/g, "-");
+    const q = state.q.trim();
+    const inView = (ic) => !!ic.v[state.style] && (state.cat === "all" || ic.c === state.cat);
+    const found = searchFor(q, icons.filter(inView));
     let total = 0;
     for (const t of tiles) {
       const ic = icons[t.dataset.i];
-      const hit = !!ic.v[state.style] && (state.cat === "all" || ic.c === state.cat) && (!q || ic.n.includes(q) || catLabel[ic.c].toLowerCase().includes(raw));
+      const hit = inView(ic) && found(ic);
       t.hidden = !hit; if (hit) total++;
     }
     for (const s of sections) {
@@ -595,7 +597,7 @@ __FOOTER__
   const root = document.documentElement;
   const countChips = () => chips.querySelectorAll(".tab").forEach((b) => {
     const c = categories.find((x) => x.id === b.dataset.cat);
-    b.querySelector("small").textContent = c ? c.counts[state.style] : styleOf(state.style).count;
+    b.querySelector("small").textContent = c ? c.counts[state.style] : categories.reduce((n, x) => n + x.counts[state.style], 0);
   });
   const badge = (st) => (st.pro ? '<span class="pro">PRO</span>' : "");
   $("#styles").innerHTML = styles.map((st) => st.count

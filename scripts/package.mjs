@@ -3,7 +3,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { CATEGORIES } from "./categories.mjs";
+import { CATEGORIES, COLOR_SETS } from "./categories.mjs";
 import { STYLES } from "./styles.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -86,6 +86,8 @@ function toElements(nodes, uid) {
     return `e(${JSON.stringify(n.name)},{${props.join(",")}}${kids})`;
   }).join(",");
 }
+
+const extras = CATEGORIES.filter(([id]) => COLOR_SETS.includes(id)).map(([id, label]) => [label, icons.filter((i) => i.cat === id).length]);
 
 // ---------- Emit ----------
 fs.rmSync(out, { recursive: true, force: true });
@@ -195,7 +197,7 @@ fs.writeFileSync(path.join(out, "package.json"), JSON.stringify({
 fs.copyFileSync(rel("LICENSE"), path.join(out, "LICENSE"));
 fs.writeFileSync(path.join(out, "README.md"), `# Meya Icons
 
-${Object.entries(counts).map(([k, v]) => `${v} ${k}`).join(" and ")} icons by [Meya Lab](https://meyalab.com), on a 24 × 24 grid.
+${Object.entries(counts).map(([k, v]) => `${k === "outline" ? v - extras.reduce((n, [, c]) => n + c, 0) : v} ${k}`).join(" and ")} icons by [Meya Lab](https://meyalab.com), on a 24 × 24 grid, plus ${extras.map(([l, c]) => `${c} ${l.toLowerCase()}`).join(" and ")} in full color (in the outline folder).
 
 **[Browse every icon](https://icons.meyalab.com/)**
 

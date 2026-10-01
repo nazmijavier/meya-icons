@@ -5,10 +5,10 @@
 
 # Meya Icons
 
-Meya Icons is a free, open-source set of <!--count-->572<!--/count--> icons drawn by [Meya Lab](https://meyalab.com), in <!--stylenames-->**Outline** and **Duotone**<!--/stylenames--> styles. Every icon sits on a 24 × 24 grid and uses `currentColor`, so it picks up the text color around it. The stroke styles use a 1.3 px stroke with round caps and joins.
+Meya Icons is a free, open-source set of <!--count-->870<!--/count--> icons drawn by [Meya Lab](https://meyalab.com), in <!--stylenames-->**Outline** and **Duotone**<!--/stylenames--> styles. Every icon sits on a 24 × 24 grid and uses `currentColor`, so it picks up the text color around it. The stroke styles use a 1.3 px stroke with round caps and joins.
 
 [![npm](https://img.shields.io/npm/v/meya-icons?style=flat-square&color=1BA4FF&label=npm)](https://www.npmjs.com/package/meya-icons)
-[![Icons](https://img.shields.io/badge/icons-572-121212?style=flat-square)](#categories)
+[![Icons](https://img.shields.io/badge/icons-870-121212?style=flat-square)](#categories)
 [![Version](https://img.shields.io/badge/version-1.0-1BA4FF?style=flat-square)](https://github.com/nazmijavier/meya-icons/releases)
 [![License](https://img.shields.io/badge/license-MIT-737373?style=flat-square)](./LICENSE)
 
@@ -36,6 +36,8 @@ Meya Icons is a free, open-source set of <!--count-->572<!--/count--> icons draw
 | Sharp `PRO` | Coming soon | Strokes with square caps and mitered corners |
 | Filled `PRO` | Coming soon | Solid shapes for active and selected states |
 | Pixel `PRO` | Coming soon | Solid cells on a 12 × 12 grid, made with the Pixel Lab |
+| [Cursors](./icons/outline/cursors) | 43 | Full color, one drawing shown in every style |
+| [Flags](./icons/outline/flags) | 255 | Full color, one drawing shown in every style |
 <!--/styles-->
 
 Every style uses `currentColor`. Duotone tints use `fill-opacity`, so both tones follow the one color you set.
@@ -117,6 +119,8 @@ Drag any SVG from [`icons/`](./icons) onto the canvas. Strokes and tints stay ed
 | Education | [15](icons/outline/education) | [15](icons/duotone/education) |
 | Weather | [16](icons/outline/weather) | [15](icons/duotone/weather) |
 | Shapes | [15](icons/outline/shapes) | [15](icons/duotone/shapes) |
+| Cursors | [43](icons/outline/cursors) | [43](icons/outline/cursors) |
+| Flags | [255](icons/outline/flags) | [255](icons/outline/flags) |
 <!--/categories-->
 
 ## Adding icons
