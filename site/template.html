@@ -146,6 +146,7 @@ body.color-open .toolbar { z-index: 50; }
 .seg { display: flex; gap: 2px; padding: 3px; height: 36px; border-radius: 9999px; background: var(--mist); flex: none; }
 .seg button { height: 30px; padding-inline: 14px; border: 0; border-radius: 9999px; background: none; font-size: 13px; font-weight: 500; color: var(--slate); transition: background-color 150ms ease, color 150ms ease; }
 .seg button:hover { color: var(--ink); }
+.seg-sep { flex: none; width: 1px; margin: 7px 4px; background: var(--control); }
 .seg .soon { color: var(--steel); }
 .seg .soon:hover { color: var(--slate); }
 [data-tip] { position: relative; }
@@ -380,7 +381,7 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
     <div id="sections"></div>
     <div class="empty" id="empty" hidden>
       <h3>No icons match “<span id="empty-q"></span>”</h3>
-      <p>Try a shorter word, or one of these:</p>
+      <p id="empty-hint">Try a shorter word, or one of these:</p>
       <div class="suggest" id="suggest"></div>
     </div>
   </div>
@@ -565,10 +566,21 @@ __FOOTER__
     $("#empty").hidden = total > 0;
     if (!total) {
       $("#empty-q").textContent = state.q;
-      $("#suggest").innerHTML = ["arrow", "user", "chart", "file", "lock", "calendar"].map((w) => `<button class="pill pill-outline" type="button" data-q="${w}">${w}</button>`).join("");
+      // Matches in another tab (a flag searched from Outline, say) come first.
+      const elsewhere = styles.filter((st) => st.count && st.id !== state.style).map((st) => {
+        const pool = icons.filter((ic) => ic.v[st.id]);
+        return [st, pool.filter(searchFor(q, pool)).length];
+      }).filter(([, n]) => n);
+      $("#empty-hint").textContent = elsewhere.length ? "Found in another tab:" : "Try a shorter word, or one of these:";
+      $("#suggest").innerHTML = elsewhere.length
+        ? elsewhere.map(([st, n]) => `<button class="pill pill-outline" type="button" data-jump="${st.id}">${n} in ${st.label}</button>`).join("")
+        : ["arrow", "user", "chart", "file", "lock", "calendar"].map((w) => `<button class="pill pill-outline" type="button" data-q="${w}">${w}</button>`).join("");
     }
   }
-  $("#suggest").addEventListener("click", (e) => { const b = e.target.closest("[data-q]"); if (b) setQuery(b.dataset.q); });
+  $("#suggest").addEventListener("click", (e) => {
+    const j = e.target.closest("[data-jump]"); if (j) return $(`#styles [data-style="${j.dataset.jump}"]`).click();
+    const b = e.target.closest("[data-q]"); if (b) setQuery(b.dataset.q);
+  });
 
   const qEl = $("#q");
   function setQuery(v) { qEl.value = v; onQuery(); }
@@ -598,11 +610,12 @@ __FOOTER__
   const countChips = () => chips.querySelectorAll(".tab").forEach((b) => {
     const c = categories.find((x) => x.id === b.dataset.cat);
     b.querySelector("small").textContent = c ? c.counts[state.style] : categories.reduce((n, x) => n + x.counts[state.style], 0);
+    b.hidden = !!c && !c.counts[state.style];
   });
   const badge = (st) => (st.pro ? '<span class="pro">PRO</span>' : "");
-  $("#styles").innerHTML = styles.map((st) => st.count
+  $("#styles").innerHTML = styles.map((st, k) => (st.set && !styles[k - 1].set ? '<span class="seg-sep" aria-hidden="true"></span>' : "") + (st.count
     ? `<button type="button" data-style="${st.id}" aria-pressed="${st.id === state.style}">${st.label}${badge(st)}</button>`
-    : `<button type="button" class="soon" aria-disabled="true" data-tip="Coming soon" aria-label="${st.label}${st.pro ? " (Pro)" : ""}, coming soon">${st.label}${badge(st)}</button>`).join("");
+    : `<button type="button" class="soon" aria-disabled="true" data-tip="Coming soon" aria-label="${st.label}${st.pro ? " (Pro)" : ""}, coming soon">${st.label}${badge(st)}</button>`)).join("");
   // Anything not released yet (PRO styles, Buy Icons): show "Coming soon" right away, then hide it.
   document.addEventListener("click", (e) => {
     const soon = e.target.closest(".soon"); if (!soon) return;
@@ -615,7 +628,8 @@ __FOOTER__
     state.style = b.dataset.style;
     $("#styles").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
     for (const t of tiles) t.querySelector("svg").outerHTML = glyph(icons[t.dataset.i]);
-    countChips(); filter();
+    countChips();
+    if (state.cat !== "all" && !categories.find((c) => c.id === state.cat).counts[state.style]) setCat("all", false); else filter();
     const strokes = styleOf(state.style).stroke;
     $("#sw").disabled = !strokes; $("#sw").closest(".control").classList.toggle("off", !strokes);
     if (state.current && !state.current.v[state.style]) closeSheet(); else refreshSheet();
@@ -725,6 +739,7 @@ __FOOTER__
 
   countChips();
   const hash = location.hash.slice(1);
-  setCat(categories.some((c) => c.id === hash) ? hash : "all", false);
+  if (styles.some((st) => st.set && st.id === hash)) $(`#styles [data-style="${hash}"]`).click();
+  else setCat(categories.some((c) => c.id === hash) ? hash : "all", false);
 })();
 </script>

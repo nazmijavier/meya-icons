@@ -1,5 +1,3 @@
-  // Full-color sets (cursors, flags) are sent once; every style shows that one drawing.
-  for (const ic of icons) for (const k in ic.v) if (ic.v[k] === 1) ic.v[k] = ic.v.outline;
   // ---------- Search (shared by the site and the Figma plugin) ----------
   // Matches the name, the related words from scripts/keywords.mjs and the category, word by word.
   // Partial words and plurals always match; one-letter typos are tried only when nothing matches exactly.
