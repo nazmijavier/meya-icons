@@ -3,7 +3,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { CATEGORIES } from "./categories.mjs";
+import { CATEGORIES, COLOR_SETS } from "./categories.mjs";
+import { keywordsFor } from "./keywords.mjs";
 import { STYLES } from "./styles.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -52,6 +53,9 @@ const styles = STYLES.map((st) => ({ ...st, count: icons.filter((i) => i.v[st.id
 const ready = styles.filter((st) => st.count);
 // Headline count: every icon in every style that has shipped.
 const total = ready.reduce((n, st) => n + st.count, 0);
+// Full-color sets (cursors, flags) are drawn once in outline/ and shown under every shipped style.
+// The style counts above were taken first, so each of them is counted once.
+for (const i of icons) if (COLOR_SETS.includes(i.c)) for (const st of ready) if (!i.v[st.id]) i.v[st.id] = i.v.outline;
 const categories = CATEGORIES.map(([id, label]) => ({
   id, label,
   count: icons.filter((i) => i.c === id).length,
@@ -93,12 +97,16 @@ const FOOTER = `<footer class="footer">
 
 // ---------- Website ----------
 // On the site, default 1.3 strokes inherit from the root so the stroke slider can drive them.
+const SEARCH = fs.readFileSync(rel("site/search.js"), "utf8");
 const strip = (b) => b.replace(/\s*stroke-width="1\.3"/g, "");
-const siteIcons = icons.map((i) => ({ ...i, v: Object.fromEntries(Object.entries(i.v).map(([k, b]) => [k, strip(b)])) }));
+// Full-color sets ship their one drawing under "outline"; the other styles carry 1 and the page reuses it.
+const siteIcons = icons.map((i) => ({ ...i, k: keywordsFor(i.c, i.n), v: Object.fromEntries(Object.entries(i.v).map(([k, b]) =>
+  [k, COLOR_SETS.includes(i.c) && k !== "outline" ? 1 : strip(b)])) }));
 const fragment = fs
   .readFileSync(rel("site/template.html"), "utf8")
   .replace("__FOOTER__", FOOTER)
   .replace("/*__DATA__*/", `window.MEYA=${JSON.stringify({ categories, styles, icons: siteIcons })};`)
+  .replace("/*__SEARCH__*/", SEARCH)
   .replaceAll("__SPONSOR_LOGO__", fs.readFileSync(rel("assets/logo.svg"), "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim())
   .replace("__CLICK_SOUND__", fs.readFileSync(rel("assets/click.wav")).toString("base64"))
   .replaceAll("__COUNT__", total.toLocaleString("en-US"))
@@ -127,7 +135,8 @@ let builtPlugin = false;
 if (fs.existsSync(pluginTpl)) {
   const figmaUi = fs
     .readFileSync(pluginTpl, "utf8")
-    .replace("/*__DATA__*/", `window.MEYA=${JSON.stringify({ categories, styles, icons: siteIcons })};`);
+    .replace("/*__DATA__*/", `window.MEYA=${JSON.stringify({ categories, styles, icons: siteIcons })};`)
+  .replace("/*__SEARCH__*/", SEARCH);
   const at = figmaUi.indexOf("</style>") + 8;
   fs.writeFileSync(
     path.join(pluginDir, "ui.html"),
@@ -138,7 +147,7 @@ if (fs.existsSync(pluginTpl)) {
 
 // ---------- Pixel Lab (docs/pixel.html) ----------
 // Converts Outline icons to pixel-grid icons in the browser. Keeps real stroke widths.
-const pixelData = icons.filter((i) => i.v.outline).map((i) => ({ key: `${i.c}/${i.n}`, n: i.n, b: i.v.outline }));
+const pixelData = icons.filter((i) => i.v.outline && !COLOR_SETS.includes(i.c)).map((i) => ({ key: `${i.c}/${i.n}`, n: i.n, b: i.v.outline }));
 const pixel = fs
   .readFileSync(rel("site/pixel.html"), "utf8")
   .replace("/*__DATA__*/", `window.MEYA=${JSON.stringify({ icons: pixelData })};`)
@@ -184,6 +193,9 @@ if (PUBLISH_SPONSOR_PAGE) {
     .replace(/__ICON:([a-z-]+\/[a-z-]+)__/g, (m, ref) => outlineIcon(ref))
     .replaceAll("__YES__", `<span class="yes" aria-label="Included">${check}</span>`)
     .replaceAll("__NO__", '<span class="no" aria-label="Not included"></span>')
+    .replace(/__SAMPLE:([a-z-]+\/[a-z-]+)__/g, (m, ref) =>
+      `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true">${fs.readFileSync(rel("icons", "outline", ref + ".svg"), "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim()}</svg>`)
+    .replace(/__N:([a-z-]+)__/g, (m, cat) => String(icons.filter((i) => i.c === cat).length))
     .replace(/__SAMPLE:([a-z]+)__/g, (m, st) => {
       const f = ["outline", "duotone"].includes(st) ? rel("icons", st, "general/home.svg") : path.join(PRO_DIR, st, "general/home.svg");
       if (!fs.existsSync(f)) return "";
@@ -229,7 +241,7 @@ for (const [mode, t] of Object.entries(themes)) {
   // Preview grids: a sample across every category, one image per style.
   for (const { id: style } of ready) {
     const cols = 16, rows = 5, cell = 72, pad = 40;
-    const pool = icons.filter((i) => i.v[style]);
+    const pool = icons.filter((i) => i.v[style] && !COLOR_SETS.includes(i.c));
     const perCat = Math.ceil((cols * rows) / categories.length);
     const sample = categories.flatMap((c) => pool.filter((i) => i.c === c.id).slice(0, perCat)).slice(0, cols * rows);
     const w = cols * cell + pad * 2, h = rows * cell + pad * 2;
@@ -256,12 +268,16 @@ if (fs.existsSync(readmePath)) {
   const table = [
     `| Category | ${ready.map((st) => st.label).join(" | ")} |`,
     `| --- | ${ready.map(() => "---:").join(" | ")} |`,
-    ...categories.map((c) => `| ${c.label} | ${ready.map((st) => `[${c.counts[st.id]}](icons/${st.id}/${c.id})`).join(" | ")} |`),
+    ...categories.map((c) => `| ${c.label} | ${ready.map((st) => `[${c.counts[st.id]}](icons/${COLOR_SETS.includes(c.id) ? "outline" : st.id}/${c.id})`).join(" | ")} |`),
   ].join("\n");
   const styleRows = [
     "| Style | Icons | Look |",
     "| --- | ---: | --- |",
-    ...styles.map((st) => `| ${st.count ? `[${st.label}](./icons/${st.id})` : st.label}${st.pro ? " `PRO`" : ""} | ${st.count || "Coming soon"} | ${st.look} |`),
+    ...styles.map((st) => {
+      const n = st.count - icons.filter((i) => COLOR_SETS.includes(i.c) && st.id === "outline").length;
+      return `| ${st.count ? `[${st.label}](./icons/${st.id})` : st.label}${st.pro ? " `PRO`" : ""} | ${n || "Coming soon"} | ${st.look} |`;
+    }),
+    ...categories.filter((c) => COLOR_SETS.includes(c.id)).map((c) => `| [${c.label}](./icons/outline/${c.id}) | ${c.count} | Full color, one drawing shown in every style |`),
   ].join("\n");
   md = md.replace(/(<!--styles-->)[\s\S]*?(<!--\/styles-->)/, `$1\n${styleRows}\n$2`);
   const previews = ready
@@ -287,7 +303,7 @@ for (const [file, urlPath] of Object.entries(PAGE_PATH)) {
     `<meta property="og:title" content="${title}">`, `<meta property="og:description" content="${desc}">`,
     `<meta property="og:url" content="${SITE}${urlPath}">`, `<meta property="og:image" content="${SITE}/og.jpg">`,
     `<meta property="og:image:width" content="1200">`, `<meta property="og:image:height" content="630">`,
-    `<meta property="og:image:alt" content="Meya Icons: 572 editable icons in Outline, Duotone, Sharp, Filled and Pixel">`,
+    `<meta property="og:image:alt" content="Meya Icons: ${total.toLocaleString("en-US")} free icons in Outline and Duotone, plus cursors and flags">`,
     `<meta name="twitter:card" content="summary_large_image">`, `<meta name="twitter:title" content="${title}">`,
     `<meta name="twitter:description" content="${desc}">`, `<meta name="twitter:image" content="${SITE}/og.jpg">`,
     `<link rel="canonical" href="${SITE}${urlPath}">`,

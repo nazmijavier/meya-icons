@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <g transform="matrix(0.046784 0 0 0.046784 0 4)" clip-path="url(#round)" stroke="none">
+  <path d="M0 0H513V342H0V0Z" fill="#D80027" stroke="none"/>
+  <path d="M513 0V171H0V0H513Z" fill="white" stroke="none"/>
+  <path d="M185.8 289C250.859 289 303.6 236.259 303.6 171.2C303.6 106.141 250.859 53.3999 185.8 53.3999C120.741 53.3999 68 106.141 68 171.2C68 236.259 120.741 289 185.8 289Z" fill="white" stroke="none"/>
+  <path d="M68 171C68 105.9 120.8 53.2002 185.8 53.2002C250.9 53.2002 303.6 106 303.6 171" fill="#D80027" stroke="none"/>
+  </g>
+  <rect x="0.25" y="4.25" width="23.5" height="15.5" rx="1.35" stroke="#000" stroke-opacity="0.1" stroke-width="0.5"/>
+  <defs><clipPath id="round"><rect width="513" height="342" rx="34.2" ry="34.2"/></clipPath></defs>
+</svg>

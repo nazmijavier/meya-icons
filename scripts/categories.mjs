@@ -19,4 +19,9 @@ export const CATEGORIES = [
   ["education", "Education"],
   ["weather", "Weather"],
   ["shapes", "Shapes"],
+  ["cursors", "Cursors"],
+  ["flags", "Flags"],
 ];
+
+// Full-color sets drawn once: they live in icons/outline/<id>/ and show in every style on the site.
+export const COLOR_SETS = ["cursors", "flags"];
