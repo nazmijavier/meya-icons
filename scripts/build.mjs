@@ -20,10 +20,13 @@ const WEB3FORMS_KEY = "11a56e93-754a-4035-87e6-e90bb4de7bf2";
 
 // ---------- Read icons ----------
 // Every style is read from icons/<style>/. An icon is the union of its variants by category and name.
+// Full-color sets (cursors, flags) are their own "style": one category, read from icons/outline/<id>/.
 function readStyle(style) {
   const out = new Map();
+  const set = STYLES.find((st) => st.id === style).set;
   for (const [cat] of CATEGORIES) {
-    const dir = rel("icons", style, cat);
+    if (set ? cat !== style : COLOR_SETS.includes(cat)) continue;
+    const dir = rel("icons", set ? "outline" : style, cat);
     if (!fs.existsSync(dir)) continue;
     for (const file of fs.readdirSync(dir).filter((f) => f.endsWith(".svg")).sort()) {
       const name = file.slice(0, -4);
@@ -53,9 +56,8 @@ const styles = STYLES.map((st) => ({ ...st, count: icons.filter((i) => i.v[st.id
 const ready = styles.filter((st) => st.count);
 // Headline count: every icon in every style that has shipped.
 const total = ready.reduce((n, st) => n + st.count, 0);
-// Full-color sets (cursors, flags) are drawn once in outline/ and shown under every shipped style.
-// The style counts above were taken first, so each of them is counted once.
-for (const i of icons) if (COLOR_SETS.includes(i.c)) for (const st of ready) if (!i.v[st.id]) i.v[st.id] = i.v.outline;
+// Drawing styles only, for wording like "in 2 styles" and the README previews.
+const lineStyles = ready.filter((st) => !st.set);
 const categories = CATEGORIES.map(([id, label]) => ({
   id, label,
   count: icons.filter((i) => i.c === id).length,
@@ -99,9 +101,7 @@ const FOOTER = `<footer class="footer">
 // On the site, default 1.3 strokes inherit from the root so the stroke slider can drive them.
 const SEARCH = fs.readFileSync(rel("site/search.js"), "utf8");
 const strip = (b) => b.replace(/\s*stroke-width="1\.3"/g, "");
-// Full-color sets ship their one drawing under "outline"; the other styles carry 1 and the page reuses it.
-const siteIcons = icons.map((i) => ({ ...i, k: keywordsFor(i.c, i.n), v: Object.fromEntries(Object.entries(i.v).map(([k, b]) =>
-  [k, COLOR_SETS.includes(i.c) && k !== "outline" ? 1 : strip(b)])) }));
+const siteIcons = icons.map((i) => ({ ...i, k: keywordsFor(i.c, i.n), v: Object.fromEntries(Object.entries(i.v).map(([k, b]) => [k, strip(b)])) }));
 const fragment = fs
   .readFileSync(rel("site/template.html"), "utf8")
   .replace("__FOOTER__", FOOTER)
@@ -113,7 +113,7 @@ const fragment = fs
   .replaceAll("__PRO_COUNT__", proCount.toLocaleString("en-US"))
   .replace("__PRO_PREVIEW__", proPreview)
   .replace('href="#pricing" class="plan-cta soon" id="get-pro" data-tip="Coming soon"', POLAR_CHECKOUT ? `href="${POLAR_CHECKOUT}" class="plan-cta" id="get-pro" target="_blank" rel="noopener"` : 'href="#pricing" class="plan-cta soon" id="get-pro" data-tip="Coming soon"')
-  .replaceAll("__STYLECOUNT__", String(ready.length))
+  .replaceAll("__STYLECOUNT__", String(lineStyles.length))
   .replaceAll("__CATS__", String(categories.length))
   .replaceAll("__VERSION__", VERSION)
   .replaceAll("__REPO__", REPO)
@@ -233,15 +233,15 @@ for (const [mode, t] of Object.entries(themes)) {
   <text x="304" y="178" font-family="${FONT}" font-size="72" font-weight="600" letter-spacing="-2.5" fill="${t.ink}">Meya Icons</text>
   <rect x="696" y="126" width="72" height="44" rx="10" fill="${t.bg}" stroke="${t.line}"/>
   <text x="732" y="156" text-anchor="middle" font-family="${FONT}" font-size="22" font-weight="500" fill="${t.muted}">${VERSION}</text>
-  <text x="306" y="232" font-family="${FONT}" font-size="28" fill="${t.muted}">${total.toLocaleString("en-US")} open-source icons in ${ready.map((st) => st.label).join(", ").replace(/, ([^,]*)$/, " and $1")} by Meya Lab</text>
+  <text x="306" y="232" font-family="${FONT}" font-size="28" fill="${t.muted}">${total.toLocaleString("en-US")} open-source icons in ${lineStyles.map((st) => st.label).join(", ").replace(/, ([^,]*)$/, " and $1")} by Meya Lab</text>
 </svg>
 `
   );
 
   // Preview grids: a sample across every category, one image per style.
-  for (const { id: style } of ready) {
+  for (const { id: style } of lineStyles) {
     const cols = 16, rows = 5, cell = 72, pad = 40;
-    const pool = icons.filter((i) => i.v[style] && !COLOR_SETS.includes(i.c));
+    const pool = icons.filter((i) => i.v[style]);
     const perCat = Math.ceil((cols * rows) / categories.length);
     const sample = categories.flatMap((c) => pool.filter((i) => i.c === c.id).slice(0, perCat)).slice(0, cols * rows);
     const w = cols * cell + pad * 2, h = rows * cell + pad * 2;
@@ -266,25 +266,21 @@ if (fs.existsSync(readmePath)) {
   md = md.replace(/(<!--count-->)[\s\S]*?(<!--\/count-->)/g, `$1${total}$2`);
   md = md.replace(/icons-\d+-/g, `icons-${total}-`);
   const table = [
-    `| Category | ${ready.map((st) => st.label).join(" | ")} |`,
-    `| --- | ${ready.map(() => "---:").join(" | ")} |`,
-    ...categories.map((c) => `| ${c.label} | ${ready.map((st) => `[${c.counts[st.id]}](icons/${COLOR_SETS.includes(c.id) ? "outline" : st.id}/${c.id})`).join(" | ")} |`),
+    `| Category | ${lineStyles.map((st) => st.label).join(" | ")} |`,
+    `| --- | ${lineStyles.map(() => "---:").join(" | ")} |`,
+    ...categories.filter((c) => !COLOR_SETS.includes(c.id)).map((c) => `| ${c.label} | ${lineStyles.map((st) => `[${c.counts[st.id]}](icons/${st.id}/${c.id})`).join(" | ")} |`),
   ].join("\n");
   const styleRows = [
     "| Style | Icons | Look |",
     "| --- | ---: | --- |",
-    ...styles.map((st) => {
-      const n = st.count - icons.filter((i) => COLOR_SETS.includes(i.c) && st.id === "outline").length;
-      return `| ${st.count ? `[${st.label}](./icons/${st.id})` : st.label}${st.pro ? " `PRO`" : ""} | ${n || "Coming soon"} | ${st.look} |`;
-    }),
-    ...categories.filter((c) => COLOR_SETS.includes(c.id)).map((c) => `| [${c.label}](./icons/outline/${c.id}) | ${c.count} | Full color, one drawing shown in every style |`),
+    ...styles.map((st) => `| ${st.count ? `[${st.label}](./icons/${st.set ? "outline/" : ""}${st.id})` : st.label}${st.pro ? " `PRO`" : ""} | ${st.count || "Coming soon"} | ${st.look} |`),
   ].join("\n");
   md = md.replace(/(<!--styles-->)[\s\S]*?(<!--\/styles-->)/, `$1\n${styleRows}\n$2`);
-  const previews = ready
+  const previews = lineStyles
     .map((st) => `<picture>\n  <source media="(prefers-color-scheme: dark)" srcset="./assets/preview-${st.id}-dark.svg">\n  <img alt="A sample of Meya Icons in the ${st.label} style" src="./assets/preview-${st.id}-light.svg" width="100%">\n</picture>`)
     .join("\n\n");
   md = md.replace(/(<!--previews-->)[\s\S]*?(<!--\/previews-->)/, `$1\n${previews}\n$2`);
-  md = md.replace(/(<!--stylenames-->)[\s\S]*?(<!--\/stylenames-->)/g, `$1${ready.map((st) => `**${st.label}**`).join(", ").replace(/, ([^,]*)$/, " and $1")}$2`);
+  md = md.replace(/(<!--stylenames-->)[\s\S]*?(<!--\/stylenames-->)/g, `$1${lineStyles.map((st) => `**${st.label}**`).join(", ").replace(/, ([^,]*)$/, " and $1")}$2`);
   md = md.replace(/(<!--categories-->)[\s\S]*?(<!--\/categories-->)/, `$1\n${table}\n$2`);
   fs.writeFileSync(readmePath, md);
 }
