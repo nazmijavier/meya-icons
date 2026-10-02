@@ -36,6 +36,8 @@ Meya Icons is a free, open-source set of <!--count-->870<!--/count--> icons draw
 | Sharp `PRO` | Coming soon | Strokes with square caps and mitered corners |
 | Filled `PRO` | Coming soon | Solid shapes for active and selected states |
 | Pixel `PRO` | Coming soon | Solid cells on a 12 × 12 grid, made with the Pixel Lab |
+| 3D `PRO` | Coming soon | Rendered 3D icons with depth and soft light |
+| Glass `PRO` | Coming soon | Frosted, translucent glass icons |
 | [Cursors](./icons/outline/cursors) | 43 | Full-color cursors: arrows, hands, text, resize and more |
 | [Flags](./icons/outline/flags) | 255 | Full-color country and territory flags, 3:2 with rounded corners |
 <!--/styles-->
