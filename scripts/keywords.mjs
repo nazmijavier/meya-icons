@@ -396,6 +396,16 @@ const NAME = {
   film: "movie video cinema reel strip",
   cast: "screen mirror chromecast stream airplay",
   cpu: "processor chip hardware computer",
+  "shopping-bag": "bag shop purchase buy checkout store",
+  store: "shop storefront market retail business",
+  package: "box parcel delivery shipping product order",
+  truck: "delivery shipping transport vehicle logistics",
+  banknote: "cash money bill payment currency",
+  coins: "money change cash currency payment",
+  calculator: "math calculate accounting numbers",
+  barcode: "scan product sku code retail",
+  "qr-code": "scan code link payment",
+  scan: "scanner capture document code read",
   // end of new icons
   // cursors
   arrow: "default select normal",
