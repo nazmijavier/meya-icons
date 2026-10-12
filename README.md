@@ -37,12 +37,12 @@ Meya Icons is a free, open-source set of <!--count-->872<!--/count--> icons draw
 | [Filled](https://icons.meyalab.com/#filled) `PRO` | 288 | Solid shapes for active and selected states |
 | Pixel `PRO` | Coming soon | Solid cells on a 12 × 12 grid, made with the Pixel Lab |
 | 3D `PRO` | Coming soon | Rendered 3D icons with depth and soft light |
-| [Glass](https://icons.meyalab.com/#glass) `PRO` | 288 | Tinted glass shapes with a soft shine, a bright edge and a shadow |
+| Glass `PRO` | Coming soon | Frosted, translucent glass icons |
 | [Cursors](./icons/outline/cursors) | 43 | Full-color cursors: arrows, hands, text, resize and more |
 | [Flags](./icons/outline/flags) | 255 | Full-color country and territory flags, 3:2 with rounded corners |
 <!--/styles-->
 
-Outline, Duotone, Sharp and Filled use `currentColor`; Glass, Cursors and Flags carry their own colors. Duotone tints use `fill-opacity`, so both tones follow the one color you set.
+Outline, Duotone, Sharp and Filled use `currentColor`; Cursors and Flags carry their own colors. Duotone tints use `fill-opacity`, so both tones follow the one color you set.
 
 ## Get the icons
 
