@@ -5,10 +5,10 @@
 
 # Meya Icons
 
-Meya Icons is a free, open-source set of <!--count-->1302<!--/count--> icons drawn by [Meya Lab](https://meyalab.com), in <!--stylenames-->**Outline** and **Duotone**<!--/stylenames--> styles. Every icon sits on a 24 × 24 grid and uses `currentColor`, so it picks up the text color around it. The stroke styles use a 1.3 px stroke with round caps and joins.
+Meya Icons is a free, open-source set of <!--count-->1350<!--/count--> icons drawn by [Meya Lab](https://meyalab.com), in <!--stylenames-->**Outline** and **Duotone**<!--/stylenames--> styles. Every icon sits on a 24 × 24 grid and uses `currentColor`, so it picks up the text color around it. The stroke styles use a 1.3 px stroke with round caps and joins.
 
 [![npm](https://img.shields.io/npm/v/meya-icons?style=flat-square&color=1BA4FF&label=npm)](https://www.npmjs.com/package/meya-icons)
-[![Icons](https://img.shields.io/badge/icons-1302-121212?style=flat-square)](#categories)
+[![Icons](https://img.shields.io/badge/icons-1350-121212?style=flat-square)](#categories)
 [![Version](https://img.shields.io/badge/version-1.0-1BA4FF?style=flat-square)](https://github.com/nazmijavier/meya-icons/releases)
 [![License](https://img.shields.io/badge/license-MIT-737373?style=flat-square)](./LICENSE)
 
@@ -31,8 +31,8 @@ Meya Icons is a free, open-source set of <!--count-->1302<!--/count--> icons dra
 <!--styles-->
 | Style | Icons | Look |
 | --- | ---: | --- |
-| [Outline](./icons/outline) | 503 | 1.3 px strokes only |
-| [Duotone](./icons/duotone) | 501 | The same strokes, plus a 30% tint fill for depth |
+| [Outline](./icons/outline) | 527 | 1.3 px strokes only |
+| [Duotone](./icons/duotone) | 525 | The same strokes, plus a 30% tint fill for depth |
 | [Sharp](https://icons.meyalab.com/#sharp) `PRO` | 503 | Strokes with square caps and mitered corners |
 | [Filled](https://icons.meyalab.com/#filled) `PRO` | 503 | Solid shapes for active and selected states |
 | Pixel `PRO` | Coming soon | Solid cells on a 12 × 12 grid, made with the Pixel Lab |
@@ -102,27 +102,27 @@ Drag any SVG from [`icons/`](./icons) onto the canvas. Strokes and tints stay ed
 <!--categories-->
 | Category | Outline | Duotone |
 | --- | ---: | ---: |
-| General | [66](icons/outline/general) | [66](icons/duotone/general) |
-| Arrows | [27](icons/outline/arrows) | [27](icons/duotone/arrows) |
-| Alerts & Feedback | [16](icons/outline/alerts-feedback) | [16](icons/duotone/alerts-feedback) |
+| General | [74](icons/outline/general) | [74](icons/duotone/general) |
+| Arrows | [30](icons/outline/arrows) | [30](icons/duotone/arrows) |
+| Alerts & Feedback | [17](icons/outline/alerts-feedback) | [17](icons/duotone/alerts-feedback) |
 | Communication | [29](icons/outline/communication) | [29](icons/duotone/communication) |
 | Users | [17](icons/outline/users) | [17](icons/duotone/users) |
 | Files | [25](icons/outline/files) | [25](icons/duotone/files) |
-| Editor | [26](icons/outline/editor) | [26](icons/duotone/editor) |
+| Editor | [27](icons/outline/editor) | [27](icons/duotone/editor) |
 | Layout | [26](icons/outline/layout) | [26](icons/duotone/layout) |
-| Images | [25](icons/outline/images) | [25](icons/duotone/images) |
-| Media & Devices | [42](icons/outline/media-devices) | [42](icons/duotone/media-devices) |
+| Images | [26](icons/outline/images) | [26](icons/duotone/images) |
+| Media & Devices | [44](icons/outline/media-devices) | [44](icons/duotone/media-devices) |
 | Charts | [17](icons/outline/charts) | [17](icons/duotone/charts) |
 | Development | [19](icons/outline/development) | [19](icons/duotone/development) |
 | Security | [18](icons/outline/security) | [18](icons/duotone/security) |
-| Finance & E-commerce | [24](icons/outline/finance-ecommerce) | [24](icons/duotone/finance-ecommerce) |
+| Finance & E-commerce | [26](icons/outline/finance-ecommerce) | [26](icons/duotone/finance-ecommerce) |
 | Time | [18](icons/outline/time) | [18](icons/duotone/time) |
-| Maps & Travel | [27](icons/outline/maps-travel) | [26](icons/duotone/maps-travel) |
-| Education | [18](icons/outline/education) | [18](icons/duotone/education) |
+| Maps & Travel | [28](icons/outline/maps-travel) | [27](icons/duotone/maps-travel) |
+| Education | [20](icons/outline/education) | [20](icons/duotone/education) |
 | Weather | [21](icons/outline/weather) | [20](icons/duotone/weather) |
-| Nature | [9](icons/outline/nature) | [9](icons/duotone/nature) |
-| Health | [9](icons/outline/health) | [9](icons/duotone/health) |
-| Food & Drink | [9](icons/outline/food) | [9](icons/duotone/food) |
+| Nature | [10](icons/outline/nature) | [10](icons/duotone/nature) |
+| Health | [10](icons/outline/health) | [10](icons/duotone/health) |
+| Food & Drink | [10](icons/outline/food) | [10](icons/duotone/food) |
 | Shapes | [15](icons/outline/shapes) | [15](icons/duotone/shapes) |
 <!--/categories-->
 
