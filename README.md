@@ -33,8 +33,8 @@ Meya Icons is a free, open-source set of <!--count-->1302<!--/count--> icons dra
 | --- | ---: | --- |
 | [Outline](./icons/outline) | 503 | 1.3 px strokes only |
 | [Duotone](./icons/duotone) | 501 | The same strokes, plus a 30% tint fill for depth |
-| [Sharp](https://icons.meyalab.com/#sharp) `PRO` | 460 | Strokes with square caps and mitered corners |
-| [Filled](https://icons.meyalab.com/#filled) `PRO` | 460 | Solid shapes for active and selected states |
+| [Sharp](https://icons.meyalab.com/#sharp) `PRO` | 503 | Strokes with square caps and mitered corners |
+| [Filled](https://icons.meyalab.com/#filled) `PRO` | 503 | Solid shapes for active and selected states |
 | Pixel `PRO` | Coming soon | Solid cells on a 12 × 12 grid, made with the Pixel Lab |
 | 3D `PRO` | Coming soon | Rendered 3D icons with depth and soft light |
 | Glass `PRO` | Coming soon | Frosted, translucent glass icons |
