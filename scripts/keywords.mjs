@@ -176,6 +176,7 @@ const NAME = {
   wallet: "money payment purse",
   yen: "money jpy currency",
   // general
+  ellipsis: "dots more options overflow kebab meatballs horizontal three",
   heart: "love like favorite favourite health",
   home: "house main start dashboard",
   lock: "secure private password locked",
