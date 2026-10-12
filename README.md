@@ -33,7 +33,7 @@ Meya Icons is a free, open-source set of <!--count-->872<!--/count--> icons draw
 | --- | ---: | --- |
 | [Outline](./icons/outline) | 288 | 1.3 px strokes only |
 | [Duotone](./icons/duotone) | 286 | The same strokes, plus a 30% tint fill for depth |
-| Sharp `PRO` | Coming soon | Strokes with square caps and mitered corners |
+| [Sharp](https://icons.meyalab.com/#sharp) `PRO` | 288 | Strokes with square caps and mitered corners |
 | Filled `PRO` | Coming soon | Solid shapes for active and selected states |
 | Pixel `PRO` | Coming soon | Solid cells on a 12 × 12 grid, made with the Pixel Lab |
 | 3D `PRO` | Coming soon | Rendered 3D icons with depth and soft light |
@@ -126,13 +126,11 @@ Drag any SVG from [`icons/`](./icons) onto the canvas. Strokes and tints stay ed
 ## Adding icons
 
 1. Export the new icons from Figma as SVG. Name each file `category-name.svg`, for example `weather-sun.svg` or `Icon=weather-sun.svg`.
-2. Import them into `icons/`. Pass `--style` for anything other than Outline (`duotone`, `sharp` or `filled`):
+2. Import them into `icons/`. Pass `--style duotone` for Duotone exports:
 
    ```bash
    node scripts/import.mjs ~/path/to/exports
    node scripts/import.mjs ~/path/to/duotone-exports --style duotone
-   node scripts/import.mjs ~/path/to/sharp-exports --style sharp
-   node scripts/import.mjs ~/path/to/filled-exports --style filled
    ```
 
 3. Rebuild the website, the README images and the icon counts:
@@ -140,6 +138,13 @@ Drag any SVG from [`icons/`](./icons) onto the canvas. Strokes and tints stay ed
    ```bash
    node scripts/build.mjs
    ```
+
+Sharp, Filled and Pixel are Pro styles. Their SVGs live in `../meya-icons-pro/<style>/`, never in `icons/`, so they don't ship under the MIT license. The website shows Sharp from image previews in `docs/pro/`, with copying locked. After changing the Sharp icons, refresh the previews before you build:
+
+```bash
+node scripts/pro-previews.mjs   # needs Playwright: npm i -D playwright && npx playwright install chromium
+node scripts/build.mjs
+```
 
 Rebuild the npm package with:
 

@@ -206,6 +206,11 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
 .tile:active { scale: 0.96; }
 .tile[aria-current="true"] { background: var(--white); box-shadow: inset 0 0 0 1.5px var(--ink); }
 .tile svg { width: var(--size); height: var(--size); stroke-width: var(--sw); margin-block: auto; flex: none; color: var(--icon, var(--ink)); }
+/* PRO showcase styles come from an image sprite used as a mask, filled with the icon colour: nothing to copy. */
+.tile .lk { display: block; width: var(--size); height: var(--size); margin-block: auto; flex: none; background: var(--icon, var(--ink));
+  -webkit-mask: var(--lk) no-repeat; mask: var(--lk) no-repeat;
+  -webkit-mask-size: calc(var(--size) * var(--lk-cols)) auto; mask-size: calc(var(--size) * var(--lk-cols)) auto;
+  -webkit-mask-position: calc(var(--size) * var(--x) * -1) calc(var(--size) * var(--y) * -1); mask-position: calc(var(--size) * var(--x) * -1) calc(var(--size) * var(--y) * -1); }
 .spon-tile { text-decoration: none; }
 .spon-tile .sponsor-mark { width: var(--size); height: var(--size); border-radius: 50%; margin-block: auto; flex: none; }
 .tile .name { font-size: 12px; line-height: 1.25; color: var(--slate); text-align: center; overflow-wrap: anywhere; }
@@ -233,6 +238,11 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
 .stage > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 .stage .grid-lines line { stroke: var(--grid); stroke-width: 0.03; }
 .stage .glyph { stroke-width: var(--sw); color: var(--icon, var(--ink)); }
+.stage .lk-big { position: absolute; inset: 0; background: var(--icon, var(--ink)); -webkit-mask: var(--lk-big) center / 100% 100% no-repeat; mask: var(--lk-big) center / 100% 100% no-repeat; }
+.lock { display: grid; gap: 12px; padding: 16px; border-radius: 16px; background: var(--mist); }
+.lock p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--slate); }
+.lock b { color: var(--ink); font-weight: 600; }
+.lock .pill { justify-content: center; }
 .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .actions .pill { justify-content: center; }
 .copy-swap { position: relative; width: 16px; height: 16px; flex: none; }
@@ -409,6 +419,10 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
       <button class="pill pill-blue" id="copy-svg" type="button"><span class="copy-swap"><span data-ico="editor:copy" class="i-copy"></span><span data-ico="shapes:check" class="i-check"></span></span>Copy SVG</button>
       <button class="pill pill-outline" id="copy-jsx" type="button"><span class="copy-swap"><span data-ico="editor:copy" class="i-copy"></span><span data-ico="shapes:check" class="i-check"></span></span>Copy JSX</button>
     </div>
+    <div class="lock" id="p-lock" hidden>
+      <p><b id="p-lock-style">Sharp</b> is part of Meya Icons Pro. Get Pro to copy it as SVG or React and to use the whole set in Figma.</p>
+      <a class="pill pill-blue" href="pricing">Get Pro</a>
+    </div>
     <div class="code-tabs" role="tablist" aria-label="Code format">
       <button class="tab" role="tab" type="button" aria-selected="true" data-fmt="svg">SVG</button>
       <button class="tab" role="tab" type="button" aria-selected="false" data-fmt="jsx">React</button>
@@ -445,7 +459,12 @@ __FOOTER__
   const ui = (icon) => ({ b: icon.v.outline });
   // Artwork in the chosen style; interface chrome always uses outline.
   const body = (icon) => icon.v[state.style] || icon.v.outline || Object.values(icon.v)[0];
-  const glyph = (icon) => inner({ b: body(icon) });
+  const glyph = (icon) => {
+    const b = body(icon);
+    if (b[0] !== "@") return inner({ b });
+    const n = +b.slice(1), cols = styleOf(state.style).cols;
+    return `<span class="lk" style="--x:${n % cols};--y:${Math.floor(n / cols)}" aria-hidden="true"></span>`;
+  };
   const title = (n) => n.replace(/-/g, " ").replace(/^./, (m) => m.toUpperCase());
   const pascal = (n) => n.split("-").map((p) => p[0].toUpperCase() + p.slice(1)).join("") + "Icon";
   const fmtSw = (v) => (+v).toFixed(2).replace(/0$/, "");
@@ -627,10 +646,13 @@ __FOOTER__
     const b = e.target.closest("[data-style]"); if (!b || b.dataset.style === state.style) return;
     state.style = b.dataset.style;
     $("#styles").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
-    for (const t of tiles) t.querySelector("svg").outerHTML = glyph(icons[t.dataset.i]);
+    const st = styleOf(state.style);
+    sectionsEl.style.setProperty("--lk", st.locked ? `url(pro/${st.id}.webp)` : "none");
+    sectionsEl.style.setProperty("--lk-cols", st.cols || 1);
+    for (const t of tiles) t.querySelector("svg, .lk").outerHTML = glyph(icons[t.dataset.i]);
     countChips();
     if (state.cat !== "all" && !categories.find((c) => c.id === state.cat).counts[state.style]) setCat("all", false); else filter();
-    const strokes = styleOf(state.style).stroke;
+    const strokes = st.stroke && !st.locked;
     $("#sw").disabled = !strokes; $("#sw").closest(".control").classList.toggle("off", !strokes);
     if (state.current && !state.current.v[state.style]) closeSheet(); else refreshSheet();
   });
@@ -707,10 +729,16 @@ __FOOTER__
   }
   function refreshSheet() {
     const icon = state.current; if (!icon) return;
-    $("#p-stage").innerHTML = gridSvg + glyph(icon).replace("<svg ", '<svg class="glyph" ');
-    $("#p-file").textContent = `icons/${state.style}/${icon.c}/${icon.n}.svg`;
-    $("#p-code").textContent = state.fmt === "svg" ? toSvg(icon) : toJsx(icon);
-    $("#p-sw").textContent = fmtSw(state.sw) + " px";
+    const st = styleOf(state.style), locked = !!st.locked;
+    $("#p-stage").innerHTML = gridSvg + (locked
+      ? `<span class="lk-big" style="--lk-big:url(pro/${st.id}/${icon.c}/${icon.n}.webp)" aria-hidden="true"></span>`
+      : glyph(icon).replace("<svg ", '<svg class="glyph" '));
+    for (const el of sheet.querySelectorAll(".actions, .code-tabs, #p-code")) el.hidden = locked;
+    $("#p-lock").hidden = !locked;
+    $("#p-lock-style").textContent = st.label;
+    $("#p-file").textContent = locked ? `Meya Icons Pro · ${st.id}/${icon.c}/${icon.n}.svg` : `icons/${state.style}/${icon.c}/${icon.n}.svg`;
+    if (!locked) $("#p-code").textContent = state.fmt === "svg" ? toSvg(icon) : toJsx(icon);
+    $("#p-sw").textContent = (locked ? "1.3" : fmtSw(state.sw)) + " px";
   }
   sectionsEl.addEventListener("click", (e) => {
     const t = e.target.closest(".tile:not(.spon-tile)"); if (!t) return;
@@ -724,8 +752,8 @@ __FOOTER__
     refreshSheet();
   }));
   $("#install").addEventListener("click", (e) => copy("npm i meya-icons", e.currentTarget, "Copied npm i meya-icons"));
-    $("#copy-svg").addEventListener("click", (e) => copy(toSvg(state.current), e.currentTarget, `Copied SVG for ${state.current.n}`));
-  $("#copy-jsx").addEventListener("click", (e) => copy(toJsx(state.current), e.currentTarget, `Copied ${pascal(state.current.n)}`));
+  $("#copy-svg").addEventListener("click", (e) => { if (!styleOf(state.style).locked) copy(toSvg(state.current), e.currentTarget, `Copied SVG for ${state.current.n}`); });
+  $("#copy-jsx").addEventListener("click", (e) => { if (!styleOf(state.style).locked) copy(toJsx(state.current), e.currentTarget, `Copied ${pascal(state.current.n)}`); });
 
   // ---------- Keyboard ----------
   document.addEventListener("keydown", (e) => {
@@ -739,7 +767,7 @@ __FOOTER__
 
   countChips();
   const hash = location.hash.slice(1);
-  if (styles.some((st) => st.set && st.id === hash)) $(`#styles [data-style="${hash}"]`).click();
+  if (styles.some((st) => st.count && st.id === hash && st.id !== state.style)) $(`#styles [data-style="${hash}"]`).click();
   else setCat(categories.some((c) => c.id === hash) ? hash : "all", false);
 })();
 </script>

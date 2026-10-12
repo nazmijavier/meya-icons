@@ -5,6 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { CATEGORIES, COLOR_SETS } from "./categories.mjs";
 import { keywordsFor } from "./keywords.mjs";
+import { PRO_DIR, proIcons } from "./pro.mjs";
 import { STYLES } from "./styles.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -64,17 +65,38 @@ const categories = CATEGORIES.map(([id, label]) => ({
   counts: Object.fromEntries(styles.map((st) => [st.id, icons.filter((i) => i.c === id && i.v[st.id]).length])),
 })).filter((c) => c.count);
 
+// ---------- PRO showcase: browsable on the site from image previews, never as vectors ----------
+// Previews come from scripts/pro-previews.mjs. Showcase styles stay out of the free counts, the README tables,
+// the npm package and the Figma plugin data. Their icons carry "@<n>", the cell in docs/pro/<style>.webp.
+const PREVIEWS = fs.existsSync(rel("scripts/pro-previews.json")) ? JSON.parse(fs.readFileSync(rel("scripts/pro-previews.json"), "utf8")) : {};
+const showcase = {};
+for (const st of STYLES.filter((s) => s.showcase && !variants[s.id].size && PREVIEWS[s.id])) {
+  const shown = PREVIEWS[st.id].icons;
+  if (fs.existsSync(path.join(PRO_DIR, st.id))) {
+    const now = new Map(proIcons(st.id).map((i) => [i.k, i.h]));
+    const changed = shown.filter(([k, h]) => now.get(k) !== h).length + [...now.keys()].filter((k) => !shown.some(([s]) => s === k)).length;
+    if (changed) console.warn(`${st.label} previews are out of date (${changed} icons differ from ../meya-icons-pro). Run: node scripts/pro-previews.mjs`);
+  }
+  showcase[st.id] = { cols: PREVIEWS[st.id].cols, cell: new Map(shown.map(([k], n) => [k, n])) };
+}
+const missing = Object.entries(showcase).flatMap(([id, sc]) => [...sc.cell.keys()].filter((k) => !keys.has(k)).map((k) => `${id}/${k}`));
+if (missing.length) console.warn(`Showcase previews with no Outline icon, left out: ${missing.join(", ")}`);
+const siteStyles = styles.map((st) => (showcase[st.id] ? { ...st, count: icons.filter((i) => showcase[st.id].cell.has(`${i.c}/${i.n}`)).length, locked: true, cols: showcase[st.id].cols } : st));
+const siteCategories = categories.map((c) => ({ ...c, counts: { ...c.counts, ...Object.fromEntries(Object.entries(showcase).map(([id, sc]) => [id, icons.filter((i) => i.c === c.id && sc.cell.has(`${i.c}/${i.n}`)).length])) } }));
+
 // ---------- Pro teaser (the full PRO sets stay in ../meya-icons-pro) ----------
 // Paste the Polar checkout link here to switch "Get Pro" on.
 const POLAR_CHECKOUT = "";
-const PRO_DIR = rel("../meya-icons-pro");
 const PRO_STYLES = ["sharp", "filled", "pixel"];
 const TEASER = ["general/home", "general/heart", "communication/chat", "files/folder", "general/settings", "general/star"];
 let proCount = 0, proPreview = "";
+const proCounts = {};
 for (const st of PRO_STYLES) {
   const dir = path.join(PRO_DIR, st);
+  proCounts[st] = 0;
   if (!fs.existsSync(dir)) continue;
-  for (const c of fs.readdirSync(dir)) if (fs.statSync(path.join(dir, c)).isDirectory()) proCount += fs.readdirSync(path.join(dir, c)).filter((f) => f.endsWith(".svg")).length;
+  for (const c of fs.readdirSync(dir)) if (fs.statSync(path.join(dir, c)).isDirectory()) proCounts[st] += fs.readdirSync(path.join(dir, c)).filter((f) => f.endsWith(".svg")).length;
+  proCount += proCounts[st];
 }
 for (const n of TEASER) {
   // one teaser icon per slot, cycling through the three styles
@@ -102,10 +124,14 @@ const FOOTER = `<footer class="footer">
 const SEARCH = fs.readFileSync(rel("site/search.js"), "utf8");
 const strip = (b) => b.replace(/\s*stroke-width="1\.3"/g, "");
 const siteIcons = icons.map((i) => ({ ...i, k: keywordsFor(i.c, i.n), v: Object.fromEntries(Object.entries(i.v).map(([k, b]) => [k, strip(b)])) }));
+const showcaseIcons = siteIcons.map((i) => {
+  const extra = Object.entries(showcase).filter(([, sc]) => sc.cell.has(`${i.c}/${i.n}`)).map(([id, sc]) => [id, "@" + sc.cell.get(`${i.c}/${i.n}`)]);
+  return extra.length ? { ...i, v: { ...i.v, ...Object.fromEntries(extra) } } : i;
+});
 const fragment = fs
   .readFileSync(rel("site/template.html"), "utf8")
   .replace("__FOOTER__", FOOTER)
-  .replace("/*__DATA__*/", `window.MEYA=${JSON.stringify({ categories, styles, icons: siteIcons })};`)
+  .replace("/*__DATA__*/", `window.MEYA=${JSON.stringify({ categories: siteCategories, styles: siteStyles, icons: showcaseIcons })};`)
   .replace("/*__SEARCH__*/", SEARCH)
   .replaceAll("__SPONSOR_LOGO__", fs.readFileSync(rel("assets/logo.svg"), "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim())
   .replace("__CLICK_SOUND__", fs.readFileSync(rel("assets/click.wav")).toString("base64"))
@@ -196,6 +222,8 @@ if (PUBLISH_SPONSOR_PAGE) {
     .replace(/__SAMPLE:([a-z-]+\/[a-z-]+)__/g, (m, ref) =>
       `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true">${fs.readFileSync(rel("icons", "outline", ref + ".svg"), "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim()}</svg>`)
     .replace(/__N:([a-z-]+)__/g, (m, cat) => String(icons.filter((i) => i.c === cat).length))
+    .replace(/__STYLE_N:([a-z]+)__/g, (m, st) => String(styles.find((x) => x.id === st).count))
+    .replace(/__PRO_N:([a-z]+)__/g, (m, st) => String(proCounts[st] || siteStyles.find((x) => x.id === st).count))
     .replace(/__SAMPLE:([a-z]+)__/g, (m, st) => {
       const f = ["outline", "duotone"].includes(st) ? rel("icons", st, "general/home.svg") : path.join(PRO_DIR, st, "general/home.svg");
       if (!fs.existsSync(f)) return "";
@@ -273,7 +301,7 @@ if (fs.existsSync(readmePath)) {
   const styleRows = [
     "| Style | Icons | Look |",
     "| --- | ---: | --- |",
-    ...styles.map((st) => `| ${st.count ? `[${st.label}](./icons/${st.set ? "outline/" : ""}${st.id})` : st.label}${st.pro ? " `PRO`" : ""} | ${st.count || "Coming soon"} | ${st.look} |`),
+    ...siteStyles.map((st) => `| ${st.locked ? `[${st.label}](${SITE}/#${st.id})` : st.count ? `[${st.label}](./icons/${st.set ? "outline/" : ""}${st.id})` : st.label}${st.pro ? " `PRO`" : ""} | ${st.count || "Coming soon"} | ${st.look} |`),
   ].join("\n");
   md = md.replace(/(<!--styles-->)[\s\S]*?(<!--\/styles-->)/, `$1\n${styleRows}\n$2`);
   const previews = lineStyles
@@ -308,4 +336,4 @@ for (const [file, urlPath] of Object.entries(PAGE_PATH)) {
   fs.writeFileSync(p, html);
 }
 
-console.log(`Built ${total} icons${builtPlugin ? " + Figma plugin UI" : ""} (${styles.map((st) => `${st.label} ${st.count}`).join(", ")}) in ${categories.length} categories → docs/index.html (${(fragment.length / 1024).toFixed(0)} KB), README assets updated.`);
+console.log(`Built ${total} icons${builtPlugin ? " + Figma plugin UI" : ""} (${siteStyles.map((st) => `${st.label} ${st.count}${st.locked ? " previews" : ""}`).join(", ")}) in ${categories.length} categories → docs/index.html (${(fragment.length / 1024).toFixed(0)} KB), README assets updated.`);
