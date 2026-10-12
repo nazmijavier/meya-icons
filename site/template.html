@@ -211,6 +211,8 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
   -webkit-mask: var(--lk) no-repeat; mask: var(--lk) no-repeat;
   -webkit-mask-size: calc(var(--size) * var(--lk-cols)) auto; mask-size: calc(var(--size) * var(--lk-cols)) auto;
   -webkit-mask-position: calc(var(--size) * var(--x) * -1) calc(var(--size) * var(--y) * -1); mask-position: calc(var(--size) * var(--x) * -1) calc(var(--size) * var(--y) * -1); }
+/* Full-color PRO styles show the sprite itself. */
+.tile .lk.lk-c { background: var(--lk) no-repeat; background-size: calc(var(--size) * var(--lk-cols)) auto; background-position: calc(var(--size) * var(--x) * -1) calc(var(--size) * var(--y) * -1); -webkit-mask: none; mask: none; }
 .spon-tile { text-decoration: none; }
 .spon-tile .sponsor-mark { width: var(--size); height: var(--size); border-radius: 50%; margin-block: auto; flex: none; }
 .tile .name { font-size: 12px; line-height: 1.25; color: var(--slate); text-align: center; overflow-wrap: anywhere; }
@@ -239,6 +241,7 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
 .stage .grid-lines line { stroke: var(--grid); stroke-width: 0.03; }
 .stage .glyph { stroke-width: var(--sw); color: var(--icon, var(--ink)); }
 .stage .lk-big { position: absolute; inset: 0; background: var(--icon, var(--ink)); -webkit-mask: var(--lk-big) center / 100% 100% no-repeat; mask: var(--lk-big) center / 100% 100% no-repeat; }
+.stage .lk-big.lk-c { background: var(--lk-big) center / 100% 100% no-repeat; -webkit-mask: none; mask: none; }
 .lock { display: grid; gap: 12px; padding: 16px; border-radius: 16px; background: var(--mist); }
 .lock p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--slate); }
 .lock b { color: var(--ink); font-weight: 600; }
@@ -462,8 +465,8 @@ __FOOTER__
   const glyph = (icon) => {
     const b = body(icon);
     if (b[0] !== "@") return inner({ b });
-    const n = +b.slice(1), cols = styleOf(state.style).cols;
-    return `<span class="lk" style="--x:${n % cols};--y:${Math.floor(n / cols)}" aria-hidden="true"></span>`;
+    const st = styleOf(state.style), n = +b.slice(1), cols = st.cols;
+    return `<span class="lk${st.color ? " lk-c" : ""}" style="--x:${n % cols};--y:${Math.floor(n / cols)}" aria-hidden="true"></span>`;
   };
   const title = (n) => n.replace(/-/g, " ").replace(/^./, (m) => m.toUpperCase());
   const pascal = (n) => n.split("-").map((p) => p[0].toUpperCase() + p.slice(1)).join("") + "Icon";
@@ -731,7 +734,7 @@ __FOOTER__
     const icon = state.current; if (!icon) return;
     const st = styleOf(state.style), locked = !!st.locked;
     $("#p-stage").innerHTML = gridSvg + (locked
-      ? `<span class="lk-big" style="--lk-big:url(pro/${st.id}/${icon.c}/${icon.n}.webp)" aria-hidden="true"></span>`
+      ? `<span class="lk-big${st.color ? " lk-c" : ""}" style="--lk-big:url(pro/${st.id}/${icon.c}/${icon.n}.webp)" aria-hidden="true"></span>`
       : glyph(icon).replace("<svg ", '<svg class="glyph" '));
     for (const el of sheet.querySelectorAll(".actions, .code-tabs, #p-code")) el.hidden = locked;
     $("#p-lock").hidden = !locked;

@@ -29,8 +29,9 @@ const only = process.argv.slice(2);
 for (const st of STYLES.filter((s) => s.showcase && (!only.length || only.includes(s.id)))) {
   const icons = proIcons(st.id);
   if (!icons.length) { console.log(`${st.label}: no icons in ${path.join(PRO_DIR, st.id)}, skipped`); continue; }
-  // Black on transparent: the site only uses the alpha channel, as a mask filled with the icon colour.
-  const sources = icons.map((i) => "data:image/svg+xml;base64," + Buffer.from(i.svg.replace(/currentColor/g, "#000")).toString("base64"));
+  // One-color styles render black on transparent: the site only uses the alpha channel, as a mask filled with
+  // the icon colour. Full-color styles render as they are and the site shows the image itself.
+  const sources = icons.map((i) => "data:image/svg+xml;base64," + Buffer.from(st.color ? i.svg : i.svg.replace(/currentColor/g, "#000")).toString("base64"));
   const files = await page.evaluate(async ({ sources, CELL, COLS, BIG }) => {
     const load = (src) => new Promise((ok, no) => { const im = new Image(); im.onload = () => ok(im); im.onerror = no; im.src = src; });
     const webp = (c) => new Promise((ok) => c.toBlob((b) => { const r = new FileReader(); r.onload = () => ok(r.result.split(",")[1]); r.readAsDataURL(b); }, "image/webp", 0.8));
