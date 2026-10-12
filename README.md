@@ -5,10 +5,10 @@
 
 # Meya Icons
 
-Meya Icons is a free, open-source set of <!--count-->980<!--/count--> icons drawn by [Meya Lab](https://meyalab.com), in <!--stylenames-->**Outline** and **Duotone**<!--/stylenames--> styles. Every icon sits on a 24 × 24 grid and uses `currentColor`, so it picks up the text color around it. The stroke styles use a 1.3 px stroke with round caps and joins.
+Meya Icons is a free, open-source set of <!--count-->1022<!--/count--> icons drawn by [Meya Lab](https://meyalab.com), in <!--stylenames-->**Outline** and **Duotone**<!--/stylenames--> styles. Every icon sits on a 24 × 24 grid and uses `currentColor`, so it picks up the text color around it. The stroke styles use a 1.3 px stroke with round caps and joins.
 
 [![npm](https://img.shields.io/npm/v/meya-icons?style=flat-square&color=1BA4FF&label=npm)](https://www.npmjs.com/package/meya-icons)
-[![Icons](https://img.shields.io/badge/icons-980-121212?style=flat-square)](#categories)
+[![Icons](https://img.shields.io/badge/icons-1022-121212?style=flat-square)](#categories)
 [![Version](https://img.shields.io/badge/version-1.0-1BA4FF?style=flat-square)](https://github.com/nazmijavier/meya-icons/releases)
 [![License](https://img.shields.io/badge/license-MIT-737373?style=flat-square)](./LICENSE)
 
@@ -31,8 +31,8 @@ Meya Icons is a free, open-source set of <!--count-->980<!--/count--> icons draw
 <!--styles-->
 | Style | Icons | Look |
 | --- | ---: | --- |
-| [Outline](./icons/outline) | 342 | 1.3 px strokes only |
-| [Duotone](./icons/duotone) | 340 | The same strokes, plus a 30% tint fill for depth |
+| [Outline](./icons/outline) | 363 | 1.3 px strokes only |
+| [Duotone](./icons/duotone) | 361 | The same strokes, plus a 30% tint fill for depth |
 | [Sharp](https://icons.meyalab.com/#sharp) `PRO` | 288 | Strokes with square caps and mitered corners |
 | [Filled](https://icons.meyalab.com/#filled) `PRO` | 288 | Solid shapes for active and selected states |
 | Pixel `PRO` | Coming soon | Solid cells on a 12 × 12 grid, made with the Pixel Lab |
@@ -111,7 +111,7 @@ Drag any SVG from [`icons/`](./icons) onto the canvas. Strokes and tints stay ed
 | Editor | [23](icons/outline/editor) | [23](icons/duotone/editor) |
 | Layout | [22](icons/outline/layout) | [22](icons/duotone/layout) |
 | Images | [15](icons/outline/images) | [15](icons/duotone/images) |
-| Media & Devices | [15](icons/outline/media-devices) | [15](icons/duotone/media-devices) |
+| Media & Devices | [36](icons/outline/media-devices) | [36](icons/duotone/media-devices) |
 | Charts | [15](icons/outline/charts) | [15](icons/duotone/charts) |
 | Development | [15](icons/outline/development) | [15](icons/duotone/development) |
 | Security | [15](icons/outline/security) | [15](icons/duotone/security) |
