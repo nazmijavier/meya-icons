@@ -5,10 +5,10 @@
 
 # Meya Icons
 
-Meya Icons is a free, open-source set of <!--count-->872<!--/count--> icons drawn by [Meya Lab](https://meyalab.com), in <!--stylenames-->**Outline** and **Duotone**<!--/stylenames--> styles. Every icon sits on a 24 × 24 grid and uses `currentColor`, so it picks up the text color around it. The stroke styles use a 1.3 px stroke with round caps and joins.
+Meya Icons is a free, open-source set of <!--count-->938<!--/count--> icons drawn by [Meya Lab](https://meyalab.com), in <!--stylenames-->**Outline** and **Duotone**<!--/stylenames--> styles. Every icon sits on a 24 × 24 grid and uses `currentColor`, so it picks up the text color around it. The stroke styles use a 1.3 px stroke with round caps and joins.
 
 [![npm](https://img.shields.io/npm/v/meya-icons?style=flat-square&color=1BA4FF&label=npm)](https://www.npmjs.com/package/meya-icons)
-[![Icons](https://img.shields.io/badge/icons-872-121212?style=flat-square)](#categories)
+[![Icons](https://img.shields.io/badge/icons-938-121212?style=flat-square)](#categories)
 [![Version](https://img.shields.io/badge/version-1.0-1BA4FF?style=flat-square)](https://github.com/nazmijavier/meya-icons/releases)
 [![License](https://img.shields.io/badge/license-MIT-737373?style=flat-square)](./LICENSE)
 
@@ -31,8 +31,8 @@ Meya Icons is a free, open-source set of <!--count-->872<!--/count--> icons draw
 <!--styles-->
 | Style | Icons | Look |
 | --- | ---: | --- |
-| [Outline](./icons/outline) | 288 | 1.3 px strokes only |
-| [Duotone](./icons/duotone) | 286 | The same strokes, plus a 30% tint fill for depth |
+| [Outline](./icons/outline) | 321 | 1.3 px strokes only |
+| [Duotone](./icons/duotone) | 319 | The same strokes, plus a 30% tint fill for depth |
 | [Sharp](https://icons.meyalab.com/#sharp) `PRO` | 288 | Strokes with square caps and mitered corners |
 | [Filled](https://icons.meyalab.com/#filled) `PRO` | 288 | Solid shapes for active and selected states |
 | Pixel `PRO` | Coming soon | Solid cells on a 12 × 12 grid, made with the Pixel Lab |
@@ -102,10 +102,10 @@ Drag any SVG from [`icons/`](./icons) onto the canvas. Strokes and tints stay ed
 <!--categories-->
 | Category | Outline | Duotone |
 | --- | ---: | ---: |
-| General | [16](icons/outline/general) | [16](icons/duotone/general) |
-| Arrows | [15](icons/outline/arrows) | [15](icons/duotone/arrows) |
-| Alerts & Feedback | [15](icons/outline/alerts-feedback) | [15](icons/duotone/alerts-feedback) |
-| Communication | [15](icons/outline/communication) | [15](icons/duotone/communication) |
+| General | [39](icons/outline/general) | [39](icons/duotone/general) |
+| Arrows | [19](icons/outline/arrows) | [19](icons/duotone/arrows) |
+| Alerts & Feedback | [16](icons/outline/alerts-feedback) | [16](icons/duotone/alerts-feedback) |
+| Communication | [20](icons/outline/communication) | [20](icons/duotone/communication) |
 | Users | [15](icons/outline/users) | [15](icons/duotone/users) |
 | Files | [15](icons/outline/files) | [15](icons/duotone/files) |
 | Editor | [15](icons/outline/editor) | [15](icons/duotone/editor) |
