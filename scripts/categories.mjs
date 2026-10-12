@@ -19,6 +19,7 @@ export const CATEGORIES = [
   ["education", "Education"],
   ["weather", "Weather"],
   ["nature", "Nature"],
+  ["health", "Health"],
   ["shapes", "Shapes"],
   ["cursors", "Cursors"],
   ["flags", "Flags"],
