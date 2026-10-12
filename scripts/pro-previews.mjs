@@ -1,6 +1,6 @@
 // Renders image previews of the PRO showcase styles (see `showcase` in styles.mjs) from ../meya-icons-pro.
 // The site shows these images instead of the vector files, so Pro icons can be browsed but not copied.
-// Usage: node scripts/pro-previews.mjs
+// Usage: node scripts/pro-previews.mjs [style ...]   (no styles: every showcase style)
 // Needs Playwright with Chromium: npm i -D playwright && npx playwright install chromium
 // Writes docs/pro/<style>.webp (one sprite for the grid), docs/pro/<style>/<category>/<name>.webp (large, for the
 // details sheet) and scripts/pro-previews.json, which build.mjs reads.
@@ -25,7 +25,8 @@ const manifestPath = rel("scripts/pro-previews.json");
 const manifest = fs.existsSync(manifestPath) ? JSON.parse(fs.readFileSync(manifestPath, "utf8")) : {};
 const browser = await chromium.launch();
 const page = await browser.newPage();
-for (const st of STYLES.filter((s) => s.showcase)) {
+const only = process.argv.slice(2);
+for (const st of STYLES.filter((s) => s.showcase && (!only.length || only.includes(s.id)))) {
   const icons = proIcons(st.id);
   if (!icons.length) { console.log(`${st.label}: no icons in ${path.join(PRO_DIR, st.id)}, skipped`); continue; }
   // Black on transparent: the site only uses the alpha channel, as a mask filled with the icon colour.

@@ -87,7 +87,8 @@ const siteCategories = categories.map((c) => ({ ...c, counts: { ...c.counts, ...
 // ---------- Pro teaser (the full PRO sets stay in ../meya-icons-pro) ----------
 // Paste the Polar checkout link here to switch "Get Pro" on.
 const POLAR_CHECKOUT = "";
-const PRO_STYLES = ["sharp", "filled", "pixel"];
+// Pro styles that have shipped are the showcase ones (browsable on the site); the others show as coming soon.
+const PRO_STYLES = STYLES.filter((st) => st.pro && st.showcase).map((st) => st.id);
 const TEASER = ["general/home", "general/heart", "communication/chat", "files/folder", "general/settings", "general/star"];
 let proCount = 0, proPreview = "";
 const proCounts = {};
@@ -99,8 +100,8 @@ for (const st of PRO_STYLES) {
   proCount += proCounts[st];
 }
 for (const n of TEASER) {
-  // one teaser icon per slot, cycling through the three styles
-  const st = PRO_STYLES[TEASER.indexOf(n) % 3], f = path.join(PRO_DIR, st, n + ".svg");
+  // one teaser icon per slot, cycling through the Pro styles
+  const st = PRO_STYLES[TEASER.indexOf(n) % PRO_STYLES.length], f = path.join(PRO_DIR, st, n + ".svg");
   if (!fs.existsSync(f)) continue;
   const t = fs.readFileSync(f, "utf8"), attrs = st === "pixel" ? ' shape-rendering="crispEdges"' : "";
   proPreview += `<span><svg viewBox="0 0 24 24" fill="none"${attrs}>${t.replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim()}</svg></span>`;
@@ -213,8 +214,19 @@ if (PUBLISH_SPONSOR_PAGE) {
     return `<svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true">${inner}</svg>`;
   };
   const check = outlineIcon("shapes/check");
+  const listOf = (names) => names.join(", ").replace(/, ([^,]*)$/, " and $1");
+  const proNames = listOf(PRO_STYLES.map((id) => STYLES.find((st) => st.id === id).label));
+  const WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+  const styleCount = lineStyles.length + PRO_STYLES.length;
+  // one comparison row per Pro style: shipped ones with a sample and a count, the rest coming soon
+  const proRows = STYLES.filter((st) => st.pro).map((st) => PRO_STYLES.includes(st.id)
+    ? `<div class="cmp-row" role="row"><div role="cell"><span class="sample">__SAMPLE:${st.id}__</span>${st.label}<small>__PRO_N:${st.id}__ icons</small></div><div role="cell">__NO__</div><div role="cell" class="cmp-pro">__YES__</div></div>`
+    : `<div class="cmp-row" role="row"><div role="cell"><span class="sample"></span>${st.label}<small>Coming soon</small></div><div role="cell">__NO__</div><div role="cell" class="cmp-pro"><span class="txt">Coming soon</span></div></div>`).join("\n          ");
   const page = fs
     .readFileSync(rel("site/pricing.html"), "utf8")
+    .replace("__PRO_ROWS__", proRows)
+    .replaceAll("__PRO_NAMES__", proNames)
+    .replaceAll("__STYLE_WORD__", WORDS[styleCount] || String(styleCount))
     .replace("__FOOTER__", FOOTER)
     .replace(/__ICON:([a-z-]+\/[a-z-]+)__/g, (m, ref) => outlineIcon(ref))
     .replaceAll("__YES__", `<span class="yes" aria-label="Included">${check}</span>`)

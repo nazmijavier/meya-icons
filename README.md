@@ -34,7 +34,7 @@ Meya Icons is a free, open-source set of <!--count-->872<!--/count--> icons draw
 | [Outline](./icons/outline) | 288 | 1.3 px strokes only |
 | [Duotone](./icons/duotone) | 286 | The same strokes, plus a 30% tint fill for depth |
 | [Sharp](https://icons.meyalab.com/#sharp) `PRO` | 288 | Strokes with square caps and mitered corners |
-| Filled `PRO` | Coming soon | Solid shapes for active and selected states |
+| [Filled](https://icons.meyalab.com/#filled) `PRO` | 288 | Solid shapes for active and selected states |
 | Pixel `PRO` | Coming soon | Solid cells on a 12 × 12 grid, made with the Pixel Lab |
 | 3D `PRO` | Coming soon | Rendered 3D icons with depth and soft light |
 | Glass `PRO` | Coming soon | Frosted, translucent glass icons |
@@ -139,7 +139,7 @@ Drag any SVG from [`icons/`](./icons) onto the canvas. Strokes and tints stay ed
    node scripts/build.mjs
    ```
 
-Sharp, Filled and Pixel are Pro styles. Their SVGs live in `../meya-icons-pro/<style>/`, never in `icons/`, so they don't ship under the MIT license. The website shows Sharp from image previews in `docs/pro/`, with copying locked. After changing the Sharp icons, refresh the previews before you build:
+Sharp, Filled, Pixel, 3D and Glass are Pro styles. Their SVGs live in `../meya-icons-pro/<style>/`, never in `icons/`, so they don't ship under the MIT license. The website shows the Pro styles that have shipped (marked `showcase` in `scripts/styles.mjs`) from image previews in `docs/pro/`, with copying locked; the others show as coming soon. After changing a shipped Pro style's icons, refresh the previews before you build:
 
 ```bash
 node scripts/pro-previews.mjs   # needs Playwright: npm i -D playwright && npx playwright install chromium

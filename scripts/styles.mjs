@@ -10,7 +10,7 @@ export const STYLES = [
   { id: "outline", label: "Outline", stroke: true, round: true, look: "1.3 px strokes only" },
   { id: "duotone", label: "Duotone", stroke: true, round: true, look: "The same strokes, plus a 30% tint fill for depth" },
   { id: "sharp", label: "Sharp", stroke: true, round: false, pro: true, showcase: true, look: "Strokes with square caps and mitered corners" },
-  { id: "filled", label: "Filled", stroke: false, round: false, pro: true, look: "Solid shapes for active and selected states" },
+  { id: "filled", label: "Filled", stroke: false, round: false, pro: true, showcase: true, look: "Solid shapes for active and selected states" },
   { id: "pixel", label: "Pixel", stroke: false, round: false, pro: true, look: "Solid cells on a 12 × 12 grid, made with the Pixel Lab" },
   { id: "3d", label: "3D", stroke: false, round: false, pro: true, look: "Rendered 3D icons with depth and soft light" },
   { id: "glass", label: "Glass", stroke: false, round: false, pro: true, look: "Frosted, translucent glass icons" },
