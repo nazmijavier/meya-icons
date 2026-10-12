@@ -18,6 +18,7 @@ export const CATEGORIES = [
   ["maps-travel", "Maps & Travel"],
   ["education", "Education"],
   ["weather", "Weather"],
+  ["nature", "Nature"],
   ["shapes", "Shapes"],
   ["cursors", "Cursors"],
   ["flags", "Flags"],
