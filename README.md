@@ -149,7 +149,7 @@ node scripts/package.mjs
 
 It writes `dist/`, which is what gets published.
 
-The website is a single file at [`docs/index.html`](./docs/index.html), served by GitHub Pages.
+The website is a single file at [`docs/index.html`](./docs/index.html), served by Vercel (see [`vercel.json`](./vercel.json)).
 
 ## License
 
