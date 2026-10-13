@@ -5,10 +5,10 @@
 
 # Meya Icons
 
-Meya Icons is a free, open-source set of <!--count-->1882<!--/count--> icons drawn by [Meya Lab](https://meyalab.com), in <!--stylenames-->**Outline** and **Duotone**<!--/stylenames--> styles. Every icon sits on a 24 × 24 grid and uses `currentColor`, so it picks up the text color around it. Icons are drawn with a 1.3 px stroke with round caps and joins, and ship with that stroke outlined into shapes, so they look the same in every app and at every size.
+Meya Icons is a free, open-source set of <!--count-->1938<!--/count--> icons drawn by [Meya Lab](https://meyalab.com), in <!--stylenames-->**Outline** and **Duotone**<!--/stylenames--> styles. Every icon sits on a 24 × 24 grid and uses `currentColor`, so it picks up the text color around it. Icons are drawn with a 1.3 px stroke with round caps and joins, and ship with that stroke outlined into shapes, so they look the same in every app and at every size.
 
 [![npm](https://img.shields.io/npm/v/meya-icons?style=flat-square&color=1BA4FF&label=npm)](https://www.npmjs.com/package/meya-icons)
-[![Icons](https://img.shields.io/badge/icons-1882-121212?style=flat-square)](#categories)
+[![Icons](https://img.shields.io/badge/icons-1938-121212?style=flat-square)](#categories)
 [![Version](https://img.shields.io/badge/version-2.0-1BA4FF?style=flat-square)](https://github.com/nazmijavier/meya-icons/releases)
 [![License](https://img.shields.io/badge/license-MIT-737373?style=flat-square)](./LICENSE)
 
@@ -31,12 +31,12 @@ Meya Icons is a free, open-source set of <!--count-->1882<!--/count--> icons dra
 <!--styles-->
 | Style | Icons | Look |
 | --- | ---: | --- |
-| [Outline](./icons/outline) | 793 | 1.3 px lines, outlined into shapes |
-| [Duotone](./icons/duotone) | 791 | The same lines, plus a 30% tint fill for depth |
-| [Stroke](https://icons.meyalab.com/#stroke) `PRO` | 793 | Live 1.3 px strokes you can make thinner or bolder |
-| [Sharp](https://icons.meyalab.com/#sharp) `PRO` | 793 | Strokes with square caps and mitered corners |
-| [Filled](https://icons.meyalab.com/#filled) `PRO` | 793 | Solid shapes for active and selected states |
-| [Glass](https://icons.meyalab.com/#glass) `PRO` | 793 | Glossy glass in a blue-to-violet gradient |
+| [Outline](./icons/outline) | 821 | 1.3 px lines, outlined into shapes |
+| [Duotone](./icons/duotone) | 819 | The same lines, plus a 30% tint fill for depth |
+| [Stroke](https://icons.meyalab.com/#stroke) `PRO` | 821 | Live 1.3 px strokes you can make thinner or bolder |
+| [Sharp](https://icons.meyalab.com/#sharp) `PRO` | 821 | Strokes with square caps and mitered corners |
+| [Filled](https://icons.meyalab.com/#filled) `PRO` | 821 | Solid shapes for active and selected states |
+| [Glass](https://icons.meyalab.com/#glass) `PRO` | 821 | Glossy glass in a blue-to-violet gradient |
 | Pixel `PRO` | Coming soon | Solid cells on a 12 × 12 grid, made with the Pixel Lab |
 | 3D `PRO` | Coming soon | Rendered 3D icons with depth and soft light |
 | [Cursors](./icons/outline/cursors) | 43 | Full-color cursors: arrows, hands, text, resize and more |
@@ -105,24 +105,24 @@ Drag any SVG from [`icons/`](./icons) onto the canvas. Each icon comes in as one
 <!--categories-->
 | Category | Outline | Duotone |
 | --- | ---: | ---: |
-| General | [92](icons/outline/general) | [92](icons/duotone/general) |
-| AI | [85](icons/outline/ai) | [85](icons/duotone/ai) |
+| General | [95](icons/outline/general) | [95](icons/duotone/general) |
+| AI | [96](icons/outline/ai) | [96](icons/duotone/ai) |
 | Arrows | [37](icons/outline/arrows) | [37](icons/duotone/arrows) |
 | Alerts & Feedback | [17](icons/outline/alerts-feedback) | [17](icons/duotone/alerts-feedback) |
 | Communication | [31](icons/outline/communication) | [31](icons/duotone/communication) |
 | Users | [41](icons/outline/users) | [41](icons/duotone/users) |
-| Files | [27](icons/outline/files) | [27](icons/duotone/files) |
+| Files | [30](icons/outline/files) | [30](icons/duotone/files) |
 | Editor | [32](icons/outline/editor) | [32](icons/duotone/editor) |
 | Layout | [45](icons/outline/layout) | [45](icons/duotone/layout) |
 | Images | [41](icons/outline/images) | [41](icons/duotone/images) |
 | Media & Devices | [55](icons/outline/media-devices) | [55](icons/duotone/media-devices) |
 | Charts | [19](icons/outline/charts) | [19](icons/duotone/charts) |
 | Development | [20](icons/outline/development) | [20](icons/duotone/development) |
-| Security | [19](icons/outline/security) | [19](icons/duotone/security) |
-| Finance & E-commerce | [27](icons/outline/finance-ecommerce) | [27](icons/duotone/finance-ecommerce) |
-| Time | [18](icons/outline/time) | [18](icons/duotone/time) |
+| Security | [20](icons/outline/security) | [20](icons/duotone/security) |
+| Finance & E-commerce | [28](icons/outline/finance-ecommerce) | [28](icons/duotone/finance-ecommerce) |
+| Time | [19](icons/outline/time) | [19](icons/duotone/time) |
 | Maps & Travel | [30](icons/outline/maps-travel) | [29](icons/duotone/maps-travel) |
-| Landmarks | [59](icons/outline/landmarks) | [59](icons/duotone/landmarks) |
+| Landmarks | [67](icons/outline/landmarks) | [67](icons/duotone/landmarks) |
 | Education | [20](icons/outline/education) | [20](icons/duotone/education) |
 | Weather | [21](icons/outline/weather) | [20](icons/duotone/weather) |
 | Nature | [11](icons/outline/nature) | [11](icons/duotone/nature) |
