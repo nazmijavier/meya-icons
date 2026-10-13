@@ -5,10 +5,10 @@
 
 # Meya Icons
 
-Meya Icons is a free, open-source set of <!--count-->1468<!--/count--> icons drawn by [Meya Lab](https://meyalab.com), in <!--stylenames-->**Outline** and **Duotone**<!--/stylenames--> styles. Every icon sits on a 24 × 24 grid and uses `currentColor`, so it picks up the text color around it. The stroke styles use a 1.3 px stroke with round caps and joins.
+Meya Icons is a free, open-source set of <!--count-->1492<!--/count--> icons drawn by [Meya Lab](https://meyalab.com), in <!--stylenames-->**Outline** and **Duotone**<!--/stylenames--> styles. Every icon sits on a 24 × 24 grid and uses `currentColor`, so it picks up the text color around it. The stroke styles use a 1.3 px stroke with round caps and joins.
 
 [![npm](https://img.shields.io/npm/v/meya-icons?style=flat-square&color=1BA4FF&label=npm)](https://www.npmjs.com/package/meya-icons)
-[![Icons](https://img.shields.io/badge/icons-1468-121212?style=flat-square)](#categories)
+[![Icons](https://img.shields.io/badge/icons-1492-121212?style=flat-square)](#categories)
 [![Version](https://img.shields.io/badge/version-1.0-1BA4FF?style=flat-square)](https://github.com/nazmijavier/meya-icons/releases)
 [![License](https://img.shields.io/badge/license-MIT-737373?style=flat-square)](./LICENSE)
 
@@ -31,8 +31,8 @@ Meya Icons is a free, open-source set of <!--count-->1468<!--/count--> icons dra
 <!--styles-->
 | Style | Icons | Look |
 | --- | ---: | --- |
-| [Outline](./icons/outline) | 586 | 1.3 px strokes only |
-| [Duotone](./icons/duotone) | 584 | The same strokes, plus a 30% tint fill for depth |
+| [Outline](./icons/outline) | 598 | 1.3 px strokes only |
+| [Duotone](./icons/duotone) | 596 | The same strokes, plus a 30% tint fill for depth |
 | [Sharp](https://icons.meyalab.com/#sharp) `PRO` | 586 | Strokes with square caps and mitered corners |
 | [Filled](https://icons.meyalab.com/#filled) `PRO` | 586 | Solid shapes for active and selected states |
 | [Glass](https://icons.meyalab.com/#glass) `PRO` | 586 | Black glass with frosted grey parts |
@@ -119,7 +119,7 @@ Drag any SVG from [`icons/`](./icons) onto the canvas. Strokes and tints stay ed
 | Finance & E-commerce | [27](icons/outline/finance-ecommerce) | [27](icons/duotone/finance-ecommerce) |
 | Time | [18](icons/outline/time) | [18](icons/duotone/time) |
 | Maps & Travel | [29](icons/outline/maps-travel) | [28](icons/duotone/maps-travel) |
-| Landmarks | [36](icons/outline/landmarks) | [36](icons/duotone/landmarks) |
+| Landmarks | [48](icons/outline/landmarks) | [48](icons/duotone/landmarks) |
 | Education | [20](icons/outline/education) | [20](icons/duotone/education) |
 | Weather | [21](icons/outline/weather) | [20](icons/duotone/weather) |
 | Nature | [10](icons/outline/nature) | [10](icons/duotone/nature) |

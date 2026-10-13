@@ -623,6 +623,18 @@ const NAME = {
   swayambhunath: "nepal kathmandu capital stupa temple buddha eyes",
   "hassan-tower": "morocco rabat capital minaret tower",
   "rizal-monument": "philippines manila capital rizal park luneta obelisk",
+  "palace-of-culture": "poland warsaw warszawa capital palace of culture and science skyscraper",
+  "hungarian-parliament": "hungary budapest capital parliament building dome",
+  hallgrimskirkja: "iceland reykjavik capital church cathedral",
+  "bayterek-tower": "kazakhstan astana capital baiterek tower sphere",
+  "flame-towers": "azerbaijan baku capital skyscrapers towers flames",
+  "lotus-tower": "sri lanka colombo capital tower lotus",
+  patuxai: "laos vientiane capital victory gate arch",
+  kicc: "kenya nairobi capital kenyatta international convention centre tower",
+  "stockholm-city-hall": "sweden stockholm capital city hall tower three crowns",
+  "motherland-monument": "ukraine kyiv kiev capital statue monument sword shield",
+  "independence-arch": "ghana accra capital black star gate arch square",
+  "helsinki-cathedral": "finland helsinki capital cathedral church dome",
   // end of new icons
   // cursors
   arrow: "default select normal",
