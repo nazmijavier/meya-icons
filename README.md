@@ -5,10 +5,10 @@
 
 # Meya Icons
 
-Meya Icons is a free, open-source set of <!--count-->1958<!--/count--> icons drawn by [Meya Lab](https://meyalab.com), in <!--stylenames-->**Outline** and **Duotone**<!--/stylenames--> styles. Every icon sits on a 24 × 24 grid and uses `currentColor`, so it picks up the text color around it. Icons are drawn with a 1.3 px stroke with round caps and joins, and ship with that stroke outlined into shapes, so they look the same in every app and at every size.
+Meya Icons is a free, open-source set of <!--count-->1978<!--/count--> icons drawn by [Meya Lab](https://meyalab.com), in <!--stylenames-->**Outline** and **Duotone**<!--/stylenames--> styles. Every icon sits on a 24 × 24 grid and uses `currentColor`, so it picks up the text color around it. Icons are drawn with a 1.3 px stroke with round caps and joins, and ship with that stroke outlined into shapes, so they look the same in every app and at every size.
 
 [![npm](https://img.shields.io/npm/v/meya-icons?style=flat-square&color=1BA4FF&label=npm)](https://www.npmjs.com/package/meya-icons)
-[![Icons](https://img.shields.io/badge/icons-1958-121212?style=flat-square)](#categories)
+[![Icons](https://img.shields.io/badge/icons-1978-121212?style=flat-square)](#categories)
 [![Version](https://img.shields.io/badge/version-2.0-1BA4FF?style=flat-square)](https://github.com/nazmijavier/meya-icons/releases)
 [![License](https://img.shields.io/badge/license-MIT-737373?style=flat-square)](./LICENSE)
 
@@ -31,12 +31,12 @@ Meya Icons is a free, open-source set of <!--count-->1958<!--/count--> icons dra
 <!--styles-->
 | Style | Icons | Look |
 | --- | ---: | --- |
-| [Outline](./icons/outline) | 831 | 1.3 px lines, outlined into shapes |
-| [Duotone](./icons/duotone) | 829 | The same lines, plus a 30% tint fill for depth |
-| [Stroke](https://icons.meyalab.com/#stroke) `PRO` | 831 | Live 1.3 px strokes you can make thinner or bolder |
-| [Sharp](https://icons.meyalab.com/#sharp) `PRO` | 831 | Strokes with square caps and mitered corners |
-| [Filled](https://icons.meyalab.com/#filled) `PRO` | 831 | Solid shapes for active and selected states |
-| [Glass](https://icons.meyalab.com/#glass) `PRO` | 831 | Glossy glass in a blue-to-violet gradient |
+| [Outline](./icons/outline) | 841 | 1.3 px lines, outlined into shapes |
+| [Duotone](./icons/duotone) | 839 | The same lines, plus a 30% tint fill for depth |
+| [Stroke](https://icons.meyalab.com/#stroke) `PRO` | 841 | Live 1.3 px strokes you can make thinner or bolder |
+| [Sharp](https://icons.meyalab.com/#sharp) `PRO` | 841 | Strokes with square caps and mitered corners |
+| [Filled](https://icons.meyalab.com/#filled) `PRO` | 841 | Solid shapes for active and selected states |
+| [Glass](https://icons.meyalab.com/#glass) `PRO` | 841 | Glossy glass in a blue-to-violet gradient |
 | Pixel `PRO` | Coming soon | Solid cells on a 12 × 12 grid, made with the Pixel Lab |
 | 3D `PRO` | Coming soon | Rendered 3D icons with depth and soft light |
 | [Cursors](./icons/outline/cursors) | 43 | Full-color cursors: arrows, hands, text, resize and more |
@@ -106,7 +106,7 @@ Drag any SVG from [`icons/`](./icons) onto the canvas. Each icon comes in as one
 | Category | Outline | Duotone |
 | --- | ---: | ---: |
 | General | [95](icons/outline/general) | [95](icons/duotone/general) |
-| AI | [96](icons/outline/ai) | [96](icons/duotone/ai) |
+| AI | [106](icons/outline/ai) | [106](icons/duotone/ai) |
 | Arrows | [37](icons/outline/arrows) | [37](icons/duotone/arrows) |
 | Alerts & Feedback | [18](icons/outline/alerts-feedback) | [18](icons/duotone/alerts-feedback) |
 | Communication | [32](icons/outline/communication) | [32](icons/duotone/communication) |

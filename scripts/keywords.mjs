@@ -869,6 +869,16 @@ const NAME = {
   "calendar-clock": "calendar clock schedule time event appointment",
   "list-plus": "list plus add to list playlist new item",
   shirt: "shirt t-shirt clothes clothing apparel fashion",
+  "ai-link": "ai artificial intelligence link sources citations references web",
+  "ai-finance": "ai artificial intelligence finance money budget dollar advice banking",
+  "ai-legal": "ai artificial intelligence legal law contract justice scale lawyer",
+  "ai-car": "ai artificial intelligence car self driving autonomous vehicle autopilot",
+  "ai-home": "ai artificial intelligence home smart home house automation",
+  "ai-news": "ai artificial intelligence news newspaper digest headlines briefing",
+  "ai-audio": "ai artificial intelligence audio headphones podcast sound listen voice",
+  "ai-store": "ai artificial intelligence store shop marketplace apps gpts",
+  "ai-math": "ai artificial intelligence math calculator solve homework numbers",
+  "ai-map": "ai artificial intelligence map trip planner travel route itinerary",
   // end of new icons
   // cursors
   arrow: "default select normal",
