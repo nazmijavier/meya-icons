@@ -5,10 +5,10 @@
 
 # Meya Icons
 
-Meya Icons is a free, open-source set of <!--count-->1594<!--/count--> icons drawn by [Meya Lab](https://meyalab.com), in <!--stylenames-->**Outline** and **Duotone**<!--/stylenames--> styles. Every icon sits on a 24 × 24 grid and uses `currentColor`, so it picks up the text color around it. The stroke styles use a 1.3 px stroke with round caps and joins.
+Meya Icons is a free, open-source set of <!--count-->1626<!--/count--> icons drawn by [Meya Lab](https://meyalab.com), in <!--stylenames-->**Outline** and **Duotone**<!--/stylenames--> styles. Every icon sits on a 24 × 24 grid and uses `currentColor`, so it picks up the text color around it. The stroke styles use a 1.3 px stroke with round caps and joins.
 
 [![npm](https://img.shields.io/npm/v/meya-icons?style=flat-square&color=1BA4FF&label=npm)](https://www.npmjs.com/package/meya-icons)
-[![Icons](https://img.shields.io/badge/icons-1594-121212?style=flat-square)](#categories)
+[![Icons](https://img.shields.io/badge/icons-1626-121212?style=flat-square)](#categories)
 [![Version](https://img.shields.io/badge/version-1.0-1BA4FF?style=flat-square)](https://github.com/nazmijavier/meya-icons/releases)
 [![License](https://img.shields.io/badge/license-MIT-737373?style=flat-square)](./LICENSE)
 
@@ -31,8 +31,8 @@ Meya Icons is a free, open-source set of <!--count-->1594<!--/count--> icons dra
 <!--styles-->
 | Style | Icons | Look |
 | --- | ---: | --- |
-| [Outline](./icons/outline) | 649 | 1.3 px strokes only |
-| [Duotone](./icons/duotone) | 647 | The same strokes, plus a 30% tint fill for depth |
+| [Outline](./icons/outline) | 665 | 1.3 px strokes only |
+| [Duotone](./icons/duotone) | 663 | The same strokes, plus a 30% tint fill for depth |
 | [Sharp](https://icons.meyalab.com/#sharp) `PRO` | 649 | Strokes with square caps and mitered corners |
 | [Filled](https://icons.meyalab.com/#filled) `PRO` | 649 | Solid shapes for active and selected states |
 | [Glass](https://icons.meyalab.com/#glass) `PRO` | 649 | Black glass with frosted grey parts |
@@ -108,7 +108,7 @@ Drag any SVG from [`icons/`](./icons) onto the canvas. Strokes and tints stay ed
 | Arrows | [30](icons/outline/arrows) | [30](icons/duotone/arrows) |
 | Alerts & Feedback | [17](icons/outline/alerts-feedback) | [17](icons/duotone/alerts-feedback) |
 | Communication | [29](icons/outline/communication) | [29](icons/duotone/communication) |
-| Users | [18](icons/outline/users) | [18](icons/duotone/users) |
+| Users | [34](icons/outline/users) | [34](icons/duotone/users) |
 | Files | [26](icons/outline/files) | [26](icons/duotone/files) |
 | Editor | [28](icons/outline/editor) | [28](icons/duotone/editor) |
 | Layout | [26](icons/outline/layout) | [26](icons/duotone/layout) |
