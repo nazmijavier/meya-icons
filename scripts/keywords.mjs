@@ -611,6 +611,18 @@ const NAME = {
   obelisco: "argentina buenos aires capital obelisk monument",
   atomium: "belgium brussels capital atom spheres",
   "taipei-101": "taiwan taipei capital skyscraper tower",
+  "kingdom-centre": "saudi arabia ksa riyadh capital tower skyscraper kingdom center",
+  "one-pillar-pagoda": "vietnam hanoi capital pagoda temple chua mot cot",
+  "belem-tower": "portugal lisbon lisboa capital tower torre de belem fortress",
+  "amsterdam-houses": "netherlands holland dutch amsterdam capital canal houses gables",
+  "azadi-tower": "iran tehran capital freedom tower monument arch",
+  "faisal-mosque": "pakistan islamabad capital mosque minarets",
+  "kuwait-towers": "kuwait kuwait city capital towers spheres",
+  riesenrad: "austria vienna wien capital ferris wheel prater",
+  beehive: "new zealand nz wellington capital parliament beehive",
+  swayambhunath: "nepal kathmandu capital stupa temple buddha eyes",
+  "hassan-tower": "morocco rabat capital minaret tower",
+  "rizal-monument": "philippines manila capital rizal park luneta obelisk",
   // end of new icons
   // cursors
   arrow: "default select normal",
