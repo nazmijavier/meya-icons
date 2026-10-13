@@ -33,9 +33,9 @@ Meya Icons is a free, open-source set of <!--count-->1862<!--/count--> icons dra
 | --- | ---: | --- |
 | [Outline](./icons/outline) | 783 | 1.3 px strokes only |
 | [Duotone](./icons/duotone) | 781 | The same strokes, plus a 30% tint fill for depth |
-| [Sharp](https://icons.meyalab.com/#sharp) `PRO` | 759 | Strokes with square caps and mitered corners |
-| [Filled](https://icons.meyalab.com/#filled) `PRO` | 759 | Solid shapes for active and selected states |
-| [Glass](https://icons.meyalab.com/#glass) `PRO` | 759 | Glossy glass in a blue-to-violet gradient |
+| [Sharp](https://icons.meyalab.com/#sharp) `PRO` | 783 | Strokes with square caps and mitered corners |
+| [Filled](https://icons.meyalab.com/#filled) `PRO` | 783 | Solid shapes for active and selected states |
+| [Glass](https://icons.meyalab.com/#glass) `PRO` | 783 | Glossy glass in a blue-to-violet gradient |
 | Pixel `PRO` | Coming soon | Solid cells on a 12 × 12 grid, made with the Pixel Lab |
 | 3D `PRO` | Coming soon | Rendered 3D icons with depth and soft light |
 | [Cursors](./icons/outline/cursors) | 43 | Full-color cursors: arrows, hands, text, resize and more |
