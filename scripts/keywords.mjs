@@ -578,6 +578,14 @@ const NAME = {
   "cup-soda": "drink soda straw cola beverage",
   aperture: "camera lens shutter photo",
   "case-sensitive": "match case letters text font",
+  "home-door": "house home main start door",
+  "home-roof": "house home main start roof",
+  "home-chimney": "house home cottage start",
+  "home-window": "house home main start window",
+  "home-rounded": "house home main start soft",
+  "home-heart": "house home family love favorite",
+  "home-wifi": "smart home connected house iot",
+  "home-modern": "house home modern building property",
   // end of new icons
   // cursors
   arrow: "default select normal",
