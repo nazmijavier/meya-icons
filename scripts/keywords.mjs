@@ -821,6 +821,16 @@ const NAME = {
   voicemail: "voicemail message tape answering machine",
   "shield-off": "shield off unprotected disabled security",
   "bolt-off": "bolt off power lightning flash off",
+  "sparkle-square": "ai artificial intelligence sparkle button app ai assistant",
+  "ai-crop": "ai artificial intelligence crop smart crop reframe image",
+  "ai-brush": "ai artificial intelligence brush retouch paint inpaint edit photo",
+  "ai-receipt": "ai artificial intelligence receipt expense scan invoice ocr",
+  "ai-bug": "ai artificial intelligence bug debug fix error code review",
+  "ai-server": "ai artificial intelligence server inference hosting model gpu",
+  "ai-fingerprint": "ai artificial intelligence fingerprint biometric identity verify",
+  "ai-heart": "ai artificial intelligence heart health wellbeing care favorite",
+  "ai-briefcase": "ai artificial intelligence briefcase work business productivity job",
+  "ai-compass": "ai artificial intelligence compass explore discover navigate direction",
   // end of new icons
   // cursors
   arrow: "default select normal",
