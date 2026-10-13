@@ -33,10 +33,10 @@ Meya Icons is a free, open-source set of <!--count-->1714<!--/count--> icons dra
 | --- | ---: | --- |
 | [Outline](./icons/outline) | 709 | 1.3 px strokes only |
 | [Duotone](./icons/duotone) | 707 | The same strokes, plus a 30% tint fill for depth |
-| [Sharp](https://icons.meyalab.com/#sharp) `PRO` | 649 | Strokes with square caps and mitered corners |
-| [Filled](https://icons.meyalab.com/#filled) `PRO` | 649 | Solid shapes for active and selected states |
-| [Glass](https://icons.meyalab.com/#glass) `PRO` | 649 | Black glass with frosted grey parts |
-| [Gradient](https://icons.meyalab.com/#gradient) `PRO` | 649 | Glossy glass in a blue-to-violet gradient |
+| [Sharp](https://icons.meyalab.com/#sharp) `PRO` | 709 | Strokes with square caps and mitered corners |
+| [Filled](https://icons.meyalab.com/#filled) `PRO` | 709 | Solid shapes for active and selected states |
+| [Glass](https://icons.meyalab.com/#glass) `PRO` | 709 | Black glass with frosted grey parts |
+| [Gradient](https://icons.meyalab.com/#gradient) `PRO` | 709 | Glossy glass in a blue-to-violet gradient |
 | Pixel `PRO` | Coming soon | Solid cells on a 12 × 12 grid, made with the Pixel Lab |
 | 3D `PRO` | Coming soon | Rendered 3D icons with depth and soft light |
 | [Cursors](./icons/outline/cursors) | 43 | Full-color cursors: arrows, hands, text, resize and more |
