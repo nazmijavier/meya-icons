@@ -1,8 +1,3 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-  <path d="M6.25 20.6V8.45H17.75V20.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M9.7 20.6V13.45C9.7 12.15 10.73 11.15 12 11.15C13.27 11.15 14.3 12.15 14.3 13.45V20.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M7.15 8.45V6.65H16.85V8.45" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M9.05 6.65V5.25H14.95V6.65" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M10.6 5.25C10.6 4.25 11.2 3.6 12 3.6C12.8 3.6 13.4 4.25 13.4 5.25" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M3.6 20.6H20.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M14.95 4.6h-.969c-.105-.46-.348-.882-.706-1.192-.359-.311-.802-.458-1.275-.458-.473 0-.916.147-1.275.458-.358.31-.601.732-.706 1.192h-.969c-.357 0-.65.293-.65.65v.75h-1.25c-.357 0-.65.293-.65.65v1.15h-.25c-.357 0-.65.293-.65.65v11.5h-2c-.357 0-.65.293-.65.65 0 .357.293.65.65.65h16.8c.357 0 .65-.293.65-.65 0-.357-.293-.65-.65-.65h-2v-11.5c0-.357-.293-.65-.65-.65h-.25v-1.15c0-.357-.293-.65-.65-.65h-1.25v-.75c0-.357-.293-.65-.65-.65zm-3.548 0h1.196c-.131-.222-.338-.35-.598-.35-.26 0-.467.128-.598.35zm2.898 1.3v.1h-4.6v-.1zm1.9 1.4v.5h-8.4v-.5zm-7.15 12.65h-2.15v-10.85h10.2v10.85h-2.15v-6.5c0-.811-.289-1.527-.866-2.099-.571-.566-1.281-.851-2.084-.851-.803 0-1.513.285-2.084.851-.577.572-.866 1.288-.866 2.099zm4.6-6.5v6.5h-3.3v-6.5c0-.45.16-.858.481-1.176.318-.315.723-.474 1.169-.474.446 0 .851.159 1.169.474.321.318.481.726.481 1.176z" fill="currentColor" fill-rule="evenodd"/>
 </svg>

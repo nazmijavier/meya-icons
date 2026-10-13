@@ -1,10 +1,3 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-  <path d="M12 5.35V20.1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="12" cy="4.1" r="1.15" fill="currentColor" stroke="none"/>
-  <path d="M4.95 6.55H19.05" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M8.15 20.1H15.85" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M2.7 13.05L4.95 6.55L7.2 13.05" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M2.7 13.05C2.7 14.6 3.7 15.6 4.95 15.6C6.2 15.6 7.2 14.6 7.2 13.05Z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M16.8 13.05L19.05 6.55L21.3 13.05" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M16.8 13.05C16.8 14.6 17.8 15.6 19.05 15.6C20.3 15.6 21.3 14.6 21.3 13.05Z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12.594 5.085c.037.083.056.174.056.265v.55h6.4c.273 0 .525.178.614.437l2.242 6.475c.054.14.047.288.04.435-.012.287-.053.573-.131.85-.111.398-.3.772-.559 1.095-.56.697-1.311 1.058-2.205 1.058-.894 0-1.646-.361-2.206-1.059-.259-.322-.447-.696-.559-1.094-.075-.267-.116-.543-.13-.819-.007-.147-.019-.299.03-.441l1.951-5.637h-5.487v12.25h3.2c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-7.7c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65h3.2v-12.25h-5.487l1.951 5.637c.023.067.036.138.036.209v.004c0 .822-.224 1.601-.769 2.23-.558.644-1.279.97-2.131.97-.852 0-1.573-.326-2.131-.97-.544-.628-.769-1.408-.769-2.23 0-.072.012-.144.036-.213l2.25-6.5c.089-.258.34-.437.614-.437h6.4v-.55c0-.091.019-.182.056-.265-.447-.27-.658-.813-.508-1.315.145-.484.596-.82 1.102-.82.517 0 .975.35 1.11.849.134.494-.078 1.022-.516 1.286zm6.456 3.452 1.337 3.863h-2.674zm-14.1 0 1.337 3.863h-2.674zm-1.523 5.163h3.046c-.089.343-.271.661-.54.895-.276.241-.618.355-.983.355-.365 0-.707-.114-.983-.355-.269-.234-.451-.552-.54-.895zm14.101 0h3.046c-.09.344-.271.661-.54.896-.277.241-.619.354-.983.354-.365 0-.707-.113-.984-.354-.268-.235-.45-.552-.539-.896z" fill="currentColor" fill-rule="evenodd"/>
 </svg>

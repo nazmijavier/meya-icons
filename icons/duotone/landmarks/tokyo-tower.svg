@@ -1,11 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-  <path d="M12 2.7V5.55" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M11 5.55H13C13.2485 5.55 13.45 5.7515 13.45 6V6.6C13.45 6.8485 13.2485 7.05 13 7.05H11C10.7515 7.05 10.55 6.8485 10.55 6.6V6C10.55 5.7515 10.7515 5.55 11 5.55Z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M10.95 7.05L10.15 10.55" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M13.05 7.05L13.85 10.55" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M8.95 10.55H15.05C15.3814 10.55 15.65 10.8186 15.65 11.15V12.1C15.65 12.4314 15.3814 12.7 15.05 12.7H8.95C8.6186 12.7 8.35 12.4314 8.35 12.1V11.15C8.35 10.8186 8.6186 10.55 8.95 10.55Z" fill="currentColor" fill-opacity="0.3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M9.35 12.7L5.35 20.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M14.65 12.7L18.65 20.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M7.55 16.6H16.45" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M8.6 16.6L12 13.9L15.4 16.6" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M12.65 2.7v2.2h.35c.611 0 1.1.489 1.1 1.1v.6c0 .289-.109.559-.311.766l.695 3.039c.079.348-.141.699-.489.779-.348.079-.699-.141-.779-.489l-.684-2.995h-1.064l-.684 2.995c-.08.348-.431.568-.779.489-.348-.08-.568-.431-.489-.779l.695-3.039c-.202-.207-.311-.477-.311-.766v-.6c0-.611.489-1.1 1.1-1.1h.35v-2.2c0-.357.293-.65.65-.65.357 0 .65.293.65.65zm.15 3.5v.2h-1.6v-.2z" fill="currentColor" fill-rule="evenodd"/>
+  <path d="M8.95 10.55h6.1c.33 0 .6.27.6.6v.95c0 .33-.27.6-.6.6h-6.1c-.33 0-.6-.27-.6-.6v-.95c0-.33.27-.6.6-.6z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
+  <path d="M8.95 9.9h6.1c.339 0 .644.126.884.366.24.24.366.545.366.884v.95c0 .228-.057.453-.178.648-.118.19-.289.354-.486.46l3.594 7.098c.161.319.032.713-.286.874-.319.161-.713.032-.874-.286l-3.819-7.544h-4.502l-3.819 7.544c-.166.328-.577.453-.898.273-.302-.17-.418-.551-.262-.861l3.594-7.098c-.197-.106-.368-.27-.486-.46-.121-.195-.178-.42-.178-.648v-.95c0-.339.126-.644.366-.884.24-.24.545-.366.884-.366zm6.05 2.15h-6v-.85h6z" fill="currentColor" fill-rule="evenodd"/>
+  <path d="M7.55 15.95h8.9c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-8.9c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
+  <path d="M8.196 16.091l3.4-2.7c.234-.186.574-.186.808 0l3.4 2.7c.28.222.327.634.105.913-.222.28-.634.327-.913.105l-2.996-2.379-2.996 2.379c-.28.222-.691.175-.913-.105-.222-.279-.175-.691.105-.913z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
 </svg>

@@ -60,16 +60,16 @@ function attrs(s) {
   return out;
 }
 
-// Children inherit these from the root <svg>, so repeating them per shape is noise.
+// In a stroke style children inherit these from the root <svg>, so repeating them per shape is noise.
 const INHERITED = { "stroke-width": "1.3", "stroke-linecap": "round", "stroke-linejoin": "round" };
 const REACT_ATTR = { class: "className" };
 const camel = (k) => (REACT_ATTR[k] || k.replace(/-([a-z])/g, (_, c) => c.toUpperCase()));
 
-function toElements(nodes, uid) {
+function toElements(nodes, uid, st) {
   return nodes.map((n) => {
     const props = [];
     for (const [k, v] of Object.entries(n.attrs)) {
-      if (INHERITED[k] === v) continue;
+      if (st.stroke && INHERITED[k] === v) continue;
       if (k === "style") {
         const style = Object.fromEntries(v.split(";").filter(Boolean).map((d) => {
           const [p, val] = d.split(":");
@@ -82,7 +82,7 @@ function toElements(nodes, uid) {
       const value = k === "id" ? `${uid}-${v}` : v.replace(/url\(#([^)]+)\)/g, `url(#${uid}-$1)`);
       props.push(`${JSON.stringify(camel(k))}:${JSON.stringify(value)}`);
     }
-    const kids = n.children.length ? `,[${toElements(n.children, uid)}]` : "";
+    const kids = n.children.length ? `,[${toElements(n.children, uid, st)}]` : "";
     return `e(${JSON.stringify(n.name)},{${props.join(",")}}${kids})`;
   }).join(",");
 }
@@ -102,7 +102,7 @@ for (const st of shipped) {
     const b = body(st.id, ic.cat, ic.name);
     if (!b) continue;
     fs.writeFileSync(path.join(dir, `${ic.slug}.svg`), svgFile(st, b));
-    made.push({ ...ic, elements: toElements(parse(b), ic.slug) });
+    made.push({ ...ic, elements: toElements(parse(b), ic.slug, st) });
   }
   counts[st.id] = made.length;
   writeReact(st, made);
@@ -116,9 +116,10 @@ function svgFile(st, inner) {
 function writeReact(st, made) {
   const dir = path.join(out, "react", st.id);
   fs.mkdirSync(dir, { recursive: true });
+  // Outlined styles (Outline, Duotone) paint every shape with its own fill, as their SVG files do.
   const rootProps = st.stroke
     ? `fill:"none",stroke:"currentColor",strokeWidth,strokeLinecap:"round",strokeLinejoin:"round"`
-    : `fill:"currentColor"`;
+    : `fill:"none"`;
   const esmHead = `import { createElement as e0, forwardRef } from "react";
 var e = function (t, p, c) { return c ? e0(t, p, c) : e0(t, p); };
 var base = function (size, color, rest) {
@@ -127,9 +128,8 @@ var base = function (size, color, rest) {
 `;
   const comp = (ic) => `export var ${ic.component} = forwardRef(function ${ic.component}(props, ref) {
   var size = props.size === undefined ? 24 : props.size;
-  var strokeWidth = props.strokeWidth === undefined ? 1.3 : props.strokeWidth;
-  var color = props.color;
-  var rest = Object.assign({}, props); delete rest.size; delete rest.strokeWidth; delete rest.color;
+${st.stroke ? "  var strokeWidth = props.strokeWidth === undefined ? 1.3 : props.strokeWidth;\n" : ""}  var color = props.color;
+  var rest = Object.assign({}, props); delete rest.size;${st.stroke ? " delete rest.strokeWidth;" : ""} delete rest.color;
   return e("svg", Object.assign(base(size, color, rest), { ref: ref, ${rootProps} }), [${ic.elements}]);
 });`;
 
@@ -214,11 +214,13 @@ import { Home, Search } from "meya-icons/react/outline";
 import { Heart } from "meya-icons/react/duotone";
 
 <Home />                          // 24px, inherits the text color
-<Search size={20} strokeWidth={2} />
+<Search size={20} />
 <Heart color="#0071E3" />
 \`\`\`
 
 Every component forwards a ref and accepts any SVG prop, so \`className\`, \`onClick\` and \`aria-label\` all work.
+
+Outline and Duotone ship with their 1.3 px lines outlined into shapes, so they look the same in every app and at every size. Live strokes you can make thinner or bolder are the Stroke style in [Meya Icons Pro](https://icons.meyalab.com/pricing).
 
 ## SVG
 

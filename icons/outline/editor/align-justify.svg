@@ -1,6 +1,3 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-  <path d="M4.5236 6H19.4764" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M4.5236 10H19.4764" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M4.5236 14H19.4764" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M4.5236 18H19.4764" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M4.524 5.35h14.952c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-14.952c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65zm0 4h14.952c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-14.952c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65zm0 4h14.952c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-14.952c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65zm0 4h14.952c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-14.952c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65z" fill="currentColor" fill-rule="evenodd"/>
 </svg>

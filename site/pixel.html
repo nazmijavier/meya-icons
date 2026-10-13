@@ -133,7 +133,7 @@ header.intro p { margin: 0; color: var(--slate); font-size: 17px; text-wrap: pre
 
   <header class="intro">
     <h1>Turn any Meya icon into a pixel icon.</h1>
-    <p>The tool draws the icon on a coarse grid, fills every cell the stroke covers, then traces the cells into one clean vector path. Tune the grid and weight until it reads well, then copy or download it.</p>
+    <p>The tool draws the icon on a coarse grid, fills every cell its lines cover, then traces the cells into one clean vector path. Tune the grid and weight until it reads well, then copy or download it.</p>
   </header>
 
   <div class="layout">
@@ -200,13 +200,19 @@ header.intro p { margin: 0; color: var(--slate); font-size: 17px; text-wrap: pre
   const state = { current: icons.find((i) => i.key === "general/home") || icons[0], grid: 12, weight: 1, thr: 0.45, round: 0 };
 
   // ---------- Rasterize ----------
-  // Draw the icon with its strokes widened to one cell, then measure how much of each cell is inked.
+  // Draw the icon with its lines widened to one cell, then measure how much of each cell is inked. The icons ship
+  // with their 1.3 lines outlined into shapes, so a stroke round each shape makes the lines bolder and a mask
+  // that takes the same band away makes them thinner.
   const PX = 12; // canvas pixels per cell
   function source(icon, strokeWidth) {
-    const body = icon.b
-      .replace(/stroke-width="[^"]*"/g, `stroke-width="${strokeWidth}"`)
-      .replace(/currentColor/g, "#000");
-    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="SIZE" height="SIZE" fill="none" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
+    const body = icon.b.replace(/currentColor/g, "#000"), d = strokeWidth - 1.3;
+    let art = body;
+    if (d > 0.001) art = `<g stroke="#000" stroke-width="${d.toFixed(3)}">${body}</g>`;
+    else if (d < -0.001) {
+      const white = body.replace(/fill="#000"/g, 'fill="#fff"'), edge = body.replace(/fill="#000"/g, 'fill="none" stroke="#000"');
+      art = `<mask id="thin" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">${white}<g stroke-width="${(-d).toFixed(3)}">${edge}</g></mask><g mask="url(#thin)">${body}</g>`;
+    }
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="SIZE" height="SIZE" fill="none" stroke-linecap="round" stroke-linejoin="round">${art}</svg>`;
   }
   const cache = new Map();
   async function cells(icon, grid, weight) {

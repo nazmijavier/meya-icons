@@ -1,6 +1,8 @@
 // Icon styles, in the order they appear on the site and in the README.
 // A style with no icons in icons/<id>/ yet shows greyed out on the site.
-//   stroke: the style is drawn with strokes, so the stroke-width slider applies.
+//   stroke: the style is drawn with strokes, so the stroke-width slider applies. Outline and Duotone ship with
+//           their strokes outlined into shapes; the live strokes are the Pro "Stroke" style.
+//   outlined: drawn with 1.3 px strokes that ship outlined into shapes (the site reports the line weight).
 //   round:  copied SVGs set round caps and joins on the root <svg>.
 //   pro:    shows a PRO badge on the site and in the README.
 //   set:    a full-color set with its own tab instead of a drawing style.
@@ -8,8 +10,9 @@
 //           people can browse it but copying needs Pro, and its vectors never ship in this repo.
 //   color:  the icons carry their own colors (no currentColor), so previews show them as they are.
 export const STYLES = [
-  { id: "outline", label: "Outline", stroke: true, round: true, look: "1.3 px strokes only" },
-  { id: "duotone", label: "Duotone", stroke: true, round: true, look: "The same strokes, plus a 30% tint fill for depth" },
+  { id: "outline", label: "Outline", stroke: false, outlined: true, round: false, look: "1.3 px lines, outlined into shapes" },
+  { id: "duotone", label: "Duotone", stroke: false, outlined: true, round: false, look: "The same lines, plus a 30% tint fill for depth" },
+  { id: "stroke", label: "Stroke", stroke: true, round: true, pro: true, showcase: true, look: "Live 1.3 px strokes you can make thinner or bolder" },
   { id: "sharp", label: "Sharp", stroke: true, round: false, pro: true, showcase: true, look: "Strokes with square caps and mitered corners" },
   { id: "filled", label: "Filled", stroke: false, round: false, pro: true, showcase: true, look: "Solid shapes for active and selected states" },
   { id: "glass", label: "Glass", stroke: false, round: false, pro: true, showcase: true, color: true, look: "Glossy glass in a blue-to-violet gradient" },

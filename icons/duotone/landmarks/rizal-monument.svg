@@ -1,9 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-  <path d="M9 15.05L11.1 4.9L12 3.15L12.9 4.9L15 15.05Z" fill="currentColor" fill-opacity="0.3" stroke="none"/>
-  <path d="M9 15.05L11.0945 4.9267C11.0981 4.909 11.1042 4.8918 11.1125 4.8758L11.6443 3.8417C11.7128 3.7084 11.8501 3.6246 12 3.6246C12.1499 3.6246 12.2872 3.7084 12.3557 3.8417L12.8875 4.8758C12.8958 4.8918 12.9019 4.909 12.9055 4.9267L15 15.05" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M11 15.05V13.65C11 13.1 11.45 12.65 12 12.65C12.55 12.65 13 13.1 13 13.65V15.05" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="12" cy="11.25" r="0.85" fill="currentColor" stroke="none"/>
-  <path d="M8.85 15.05H15.15C15.4261 15.05 15.65 15.2739 15.65 15.55V17.15C15.65 17.4261 15.4261 17.65 15.15 17.65H8.85C8.5739 17.65 8.35 17.4261 8.35 17.15V15.55C8.35 15.2739 8.5739 15.05 8.85 15.05Z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M6.35 20.6V17.65H17.65V20.6" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M4.4 20.6H19.6" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M9 15.05l2.1-10.15.9-1.75.9 1.75 2.1 10.15z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
+  <path d="M15.543 14.465l-2.001-9.668c-.015-.076-.041-.15-.076-.218l-.532-1.034c-.194-.377-.51-.57-.934-.57-.423 0-.74.193-.934.569l-.53 1.032c-.036.069-.063.143-.078.219l-2.001 9.67c-.149.054-.284.141-.398.25-.234.223-.359.511-.359.835v1.6c0 .639.511 1.15 1.15 1.15h6.3c.639 0 1.15-.511 1.15-1.15v-1.6c0-.324-.125-.612-.359-.835-.114-.109-.249-.196-.398-.25zm-5.193-.065h-.552l1.921-9.281.281-.548.281.548 1.921 9.281h-.552v-.75c0-.391-.127-.754-.38-1.053-.242-.285-.566-.493-.935-.566.373-.16.582-.566.495-.963-.084-.388-.433-.668-.83-.668-.408 0-.763.295-.836.697-.071.389.138.779.501.934-.378.075-.711.292-.954.589-.239.292-.361.653-.361 1.03zm2-.75v.75h-.7v-.75c0-.19.16-.35.35-.35.19 0 .35.16.35.35zm-3.35 3.35v-1.3h6v1.3z" fill="currentColor" fill-rule="evenodd"/>
+  <path d="M5.7 20.6v-2.95c0-.357.293-.65.65-.65h11.3c.357 0 .65.293.65.65v2.95c0 .357-.293.65-.65.65-.357 0-.65-.293-.65-.65v-2.3h-10v2.3c0 .357-.293.65-.65.65-.357 0-.65-.293-.65-.65z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
+  <path d="M4.4 19.95h15.2c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-15.2c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
 </svg>

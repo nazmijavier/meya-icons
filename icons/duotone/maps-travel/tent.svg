@@ -1,8 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-  <path d="M3.05 20.35L11.1354 6.4377C11.3144 6.1297 11.6438 5.9402 12 5.9402C12.3562 5.9402 12.6856 6.1297 12.8646 6.4377L20.95 20.35H3.05Z" fill="currentColor" fill-opacity="0.3" stroke="none"/>
-  <path d="M3.05 20.35L11.1354 6.4377C11.3144 6.1297 11.6438 5.9402 12 5.9402C12.3562 5.9402 12.6856 6.1297 12.8646 6.4377L20.95 20.35" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M10.35 2.65L11.55 4.75" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M13.65 2.65L12.45 4.75" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M8.75 20.35L11.4724 15.324C11.5773 15.1304 11.7798 15.0098 12 15.0098C12.2202 15.0098 12.4227 15.1304 12.5276 15.324L15.25 20.35" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M2.85 20.35H21.15" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M3.05 20.35l8.085-13.912c.385-.661 1.345-.661 1.73 0l8.085 13.912z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
+  <path d="M10.914 2.328l1.086 1.899 1.086-1.899c.182-.32.599-.424.91-.228.293.185.39.572.218.872l-1.2 2.1c-.094.166-.26.284-.448.318.361.132.667.389.861.721l8.085 13.912c.179.309.073.71-.235.889-.309.179-.71.073-.889-.235l-8.085-13.913c-.137-.234-.469-.234-.606 0l-8.085 13.913c-.18.309-.58.414-.889.235-.308-.179-.414-.58-.235-.889l8.085-13.912c.194-.332.5-.589.861-.721-.188-.034-.354-.152-.448-.318l-1.2-2.1c-.178-.31-.068-.709.242-.886.309-.178.709-.068.886.242zm.994 2.965c.033-.022.064-.047.092-.074.028.027.059.052.092.074-.061-.004-.123-.004-.184 0z" fill="currentColor" fill-rule="evenodd"/>
+  <path d="M8.178 20.04l2.723-5.026c.234-.432.607-.654 1.099-.654.492 0 .865.222 1.099.654l2.723 5.026c.17.314.052.711-.262.882-.314.17-.711.052-.882-.262l-2.678-4.945-2.678 4.945c-.176.323-.59.437-.906.248-.297-.178-.403-.563-.238-.868z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
+  <path d="M2.85 19.7h18.3c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-18.3c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65z" fill="currentColor" fill-rule="evenodd"/>
 </svg>

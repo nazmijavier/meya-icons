@@ -1,5 +1,5 @@
 <title>Meya Icons __VERSION__</title>
-<meta name="description" content="Meya Icons __VERSION__: __COUNT__ open-source icons in __STYLECOUNT__ styles by Meya Lab. Search, tune the stroke, copy SVG or JSX.">
+<meta name="description" content="Meya Icons __VERSION__: __COUNT__ open-source icons in __STYLECOUNT__ styles by Meya Lab. Search, pick a size and color, copy SVG or JSX.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=Geist+Mono:wght@400;500&display=swap">
@@ -66,7 +66,7 @@ button { cursor: pointer; }
 .pill-soon:active { scale: 1; }
 .icon-btn { width: 32px; height: 32px; padding: 0; justify-content: center; background: transparent; }
 .icon-btn:hover { background: var(--mist); }
-.icon-btn svg { stroke-width: 1.5; }
+.icon-btn svg { --uw: 1.5; }
 
 /* ---------- Nav (glass pill from the Meya Lab site) ---------- */
 .nav-wrap { padding-top: 12px; transition: padding-right 300ms var(--ease-drawer); }
@@ -83,7 +83,7 @@ button { cursor: pointer; }
 .sponsor-add { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; border: 0; background: var(--mist); color: var(--ink); transition-property: background-color, scale; transition-duration: 150ms; }
 .sponsor-add:hover { background: var(--mist-2); }
 .sponsor-add:active { scale: 0.94; }
-.sponsor-add svg { width: 14px; height: 14px; stroke-width: 2; }
+.sponsor-add svg { width: 14px; height: 14px; --uw: 2; }
 
 .nav-link { display: inline-flex; align-items: center; gap: 7px; height: 40px; padding-inline: 12px; border-radius: 9999px; color: var(--slate); text-decoration: none; font-size: 13px; font-weight: 500; transition: background-color 150ms ease; }
 .nav-link:hover { color: var(--ink); background: var(--mist); }
@@ -100,7 +100,7 @@ button { cursor: pointer; }
 .install:active { scale: 0.98; }
 .install code { font: 400 13px/1 var(--mono); color: var(--ink); }
 .install .copy-swap { width: 15px; height: 15px; }
-.install svg { width: 15px; height: 15px; stroke-width: 1.6; }
+.install svg { width: 15px; height: 15px; --uw: 1.6; }
 .stat { display: inline-flex; align-items: center; gap: 10px; margin-top: 8px; font-size: 15px; color: var(--slate); }
 .stat b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
 .stat .dot { width: 8px; height: 8px; border-radius: 50%; background: #34C759; box-shadow: 0 0 0 4px rgba(52, 199, 89, 0.16); }
@@ -114,7 +114,7 @@ button { cursor: pointer; }
 body.color-open .toolbar { z-index: 50; }
 .toolbar-row { display: flex; align-items: center; gap: 8px; padding-block: 12px 0; }
 .field { position: relative; flex: 1; min-width: 0; }
-.field > svg { position: absolute; left: 16px; top: 50%; translate: 0 -50%; width: 17px; height: 17px; stroke-width: 1.5; color: var(--steel); pointer-events: none; }
+.field > svg { position: absolute; left: 16px; top: 50%; translate: 0 -50%; width: 17px; height: 17px; --uw: 1.5; color: var(--steel); pointer-events: none; }
 .input { width: 100%; height: 44px; border-radius: 980px; border: 0; background: var(--mist); padding: 0 48px 0 42px; font-size: 15px; outline: none; transition: background-color 150ms ease, box-shadow 150ms ease; }
 .input::placeholder { color: var(--steel); }
 .input:hover { background: var(--mist-2); }
@@ -157,7 +157,10 @@ body.color-open .toolbar { z-index: 50; }
 .seg button { display: inline-flex; align-items: center; gap: 6px; }
 .pro { display: inline-flex; align-items: center; height: 16px; padding-inline: 5px; border-radius: 4px; background: var(--ink); color: #fff; font-size: 9px; font-weight: 600; letter-spacing: 0.06em; line-height: 1; }
 .seg .soon .pro { opacity: 0.55; }
-.control.off { opacity: 0.45; }
+.control.off > * { opacity: 0.45; }
+.control .pro { margin-left: -6px; }
+/* Interface icons come from the set, whose lines are outlined at 1.3: a stroke round each shape makes one bolder. */
+svg.ui path { stroke: currentColor; stroke-width: calc(var(--uw, 1.3) * 1px - 1.3px); }
 .seg button[aria-pressed="true"] { background: var(--white); color: var(--ink); box-shadow: 0 0 0 1px var(--control); }
 .control { display: flex; align-items: center; gap: 12px; height: 44px; padding-inline: 18px; border-radius: 980px; background: var(--mist); flex: none; transition: opacity 150ms ease; }
 .control label { font-size: 13px; color: var(--slate); font-weight: 500; }
@@ -249,7 +252,7 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
 .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .actions .pill { justify-content: center; }
 .copy-swap { position: relative; width: 16px; height: 16px; flex: none; }
-.copy-swap svg { position: absolute; inset: 0; stroke-width: 1.6; transition-property: opacity, scale, filter; transition-duration: 200ms; transition-timing-function: var(--ease-swap); }
+.copy-swap svg { position: absolute; inset: 0; --uw: 1.6; transition-property: opacity, scale, filter; transition-duration: 200ms; transition-timing-function: var(--ease-swap); }
 .copy-swap .i-check { opacity: 0; scale: 0.25; filter: blur(4px); }
 .copied .copy-swap .i-copy { opacity: 0; scale: 0.25; filter: blur(4px); }
 .copied .copy-swap .i-check { opacity: 1; scale: 1; filter: blur(0); }
@@ -264,7 +267,7 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
 /* ---------- Toast ---------- */
 .toast { position: fixed; z-index: 60; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 24px); display: flex; align-items: center; gap: 8px; height: 44px; max-width: calc(100vw - 32px); white-space: nowrap; padding: 0 18px 0 14px; border-radius: 9999px; background: var(--ink); color: #fff; font-size: 14px; font-weight: 500; translate: -50% 10px; opacity: 0; pointer-events: none; transition: translate 200ms var(--ease-out), opacity 200ms var(--ease-out); }
 .toast.show { translate: -50% 0; opacity: 1; }
-.toast svg { width: 16px; height: 16px; stroke-width: 1.8; color: var(--brand); flex: none; }
+.toast svg { width: 16px; height: 16px; --uw: 1.8; color: var(--brand); flex: none; }
 .toast #toast-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 
 /* ---------- Footer ---------- */
@@ -355,9 +358,9 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
         <kbd class="kbd" id="kbd">/</kbd>
         <button class="pill icon-btn clear" id="clear" type="button" aria-label="Clear search" hidden><span data-ico="shapes:x"></span></button>
       </div>
-      <div class="control">
-        <label for="sw">Stroke</label>
-        <input class="range" id="sw" type="range" min="0.75" max="2.25" step="0.05" value="1.3">
+      <div class="control off" data-tip="Live strokes come with Pro">
+        <label for="sw">Stroke</label><span class="pro" id="sw-pro">PRO</span>
+        <input class="range" id="sw" type="range" min="0.75" max="2.25" step="0.05" value="1.3" disabled>
         <output id="sw-out" for="sw">1.30</output>
       </div>
       <div class="control">
@@ -504,7 +507,7 @@ __FOOTER__
   document.querySelectorAll("[data-ico]").forEach((el) => {
     const [c, n] = el.dataset.ico.split(":");
     const icon = find(c, n);
-    if (icon) el.outerHTML = inner(ui(icon)).replace("<svg ", `<svg class="${el.className}" `);
+    if (icon) el.outerHTML = inner(ui(icon)).replace("<svg ", `<svg class="ui${el.className ? " " + el.className : ""}" `);
   });
 
   // ---------- Copy ----------
@@ -638,9 +641,17 @@ __FOOTER__
   $("#styles").innerHTML = styles.map((st, k) => (st.set && !styles[k - 1].set ? '<span class="seg-sep" aria-hidden="true"></span>' : "") + (st.count
     ? `<button type="button" data-style="${st.id}" aria-pressed="${st.id === state.style}">${st.label}${badge(st)}</button>`
     : `<button type="button" class="soon" aria-disabled="true" data-tip="Coming soon" aria-label="${st.label}${st.pro ? " (Pro)" : ""}, coming soon">${st.label}${badge(st)}</button>`)).join("");
+  // Live strokes are the Pro Stroke style. Outline and Duotone ship outlined and Pro tabs are previews, so there
+  // the slider rests at 1.3 and says where live strokes are.
+  function syncStroke(st) {
+    const live = st.stroke && !st.locked, ctl = $("#sw").closest(".control");
+    $("#sw").disabled = !live; ctl.classList.toggle("off", !live); $("#sw-pro").hidden = live;
+    if (live) delete ctl.dataset.tip; else ctl.dataset.tip = "Live strokes come with Pro";
+  }
+  syncStroke(styleOf(state.style));
   // Anything not released yet (PRO styles, Buy Icons): show "Coming soon" right away, then hide it.
   document.addEventListener("click", (e) => {
-    const soon = e.target.closest(".soon"); if (!soon) return;
+    const soon = e.target.closest(".soon, .control.off"); if (!soon) return;
     soon.classList.add("tip");
     clearTimeout(soon._t); soon._t = setTimeout(() => soon.classList.remove("tip"), 1600);
   });
@@ -655,8 +666,7 @@ __FOOTER__
     for (const t of tiles) t.querySelector("svg, .lk").outerHTML = glyph(icons[t.dataset.i]);
     countChips();
     if (state.cat !== "all" && !categories.find((c) => c.id === state.cat).counts[state.style]) setCat("all", false); else filter();
-    const strokes = st.stroke && !st.locked;
-    $("#sw").disabled = !strokes; $("#sw").closest(".control").classList.toggle("off", !strokes);
+    syncStroke(st);
     if (state.current && !state.current.v[state.style]) closeSheet(); else refreshSheet();
   });
   const fill = (el) => el.style.setProperty("--p", ((el.value - el.min) / (el.max - el.min)) * 100 + "%");
@@ -741,9 +751,9 @@ __FOOTER__
     $("#p-lock-style").textContent = st.label;
     $("#p-file").textContent = locked ? `Meya Icons Pro · ${st.id}/${icon.c}/${icon.n}.svg` : `icons/${state.style}/${icon.c}/${icon.n}.svg`;
     if (!locked) $("#p-code").textContent = state.fmt === "svg" ? toSvg(icon) : toJsx(icon);
-    // solid and full-color styles have no stroke to report
-    $("#p-sw").textContent = (locked ? "1.3" : fmtSw(state.sw)) + " px";
-    $("#p-sw").hidden = $("#p-sw-dt").hidden = !st.stroke;
+    // live strokes report their width, outlined styles their fixed 1.3 lines; solid and full-color styles nothing
+    $("#p-sw").textContent = st.stroke ? (locked ? "1.3" : fmtSw(state.sw)) + " px" : "1.3 px, outlined";
+    $("#p-sw").hidden = $("#p-sw-dt").hidden = !st.stroke && !st.outlined;
     $("#p-color").textContent = st.set || st.color ? "Full color" : "currentColor";
   }
   sectionsEl.addEventListener("click", (e) => {

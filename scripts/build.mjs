@@ -173,7 +173,7 @@ if (fs.existsSync(pluginTpl)) {
 }
 
 // ---------- Pixel Lab (docs/pixel.html) ----------
-// Converts Outline icons to pixel-grid icons in the browser. Keeps real stroke widths.
+// Converts Outline icons to pixel-grid icons in the browser, widening or thinning their outlined lines to the weight asked for.
 const pixelData = icons.filter((i) => i.v.outline && !COLOR_SETS.includes(i.c)).map((i) => ({ key: `${i.c}/${i.n}`, n: i.n, b: i.v.outline }));
 const pixel = fs
   .readFileSync(rel("site/pixel.html"), "utf8")
@@ -211,7 +211,7 @@ if (PUBLISH_SPONSOR_PAGE) {
   const outlineIcon = (ref) => {
     const f = rel("icons/outline", ref + ".svg");
     const inner = fs.readFileSync(f, "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim().replace(/\s*stroke-width="1\.3"/g, "");
-    return `<svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true">${inner}</svg>`;
+    return `<svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
   };
   const check = outlineIcon("shapes/check");
   const listOf = (names) => names.join(", ").replace(/, ([^,]*)$/, " and $1");
@@ -227,6 +227,7 @@ if (PUBLISH_SPONSOR_PAGE) {
     .replace("__PRO_ROWS__", proRows)
     .replaceAll("__PRO_NAMES__", proNames)
     .replaceAll("__STYLE_WORD__", WORDS[styleCount] || String(styleCount))
+    .replaceAll("__PRO_STYLE_WORD__", WORDS[PRO_STYLES.length] || String(PRO_STYLES.length))
     .replace("__FOOTER__", FOOTER)
     .replace(/__ICON:([a-z-]+\/[a-z-]+)__/g, (m, ref) => outlineIcon(ref))
     .replaceAll("__YES__", `<span class="yes" aria-label="Included">${check}</span>`)

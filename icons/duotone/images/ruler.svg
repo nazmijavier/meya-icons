@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-  <path d="M4.1511 14.8284L14.8284 4.1511C15.4533 3.5262 16.4663 3.5262 17.0912 4.1511L19.8489 6.9088C20.4738 7.5337 20.4738 8.5467 19.8489 9.1716L9.1716 19.8489C8.5467 20.4738 7.5337 20.4738 6.9088 19.8489L4.1511 17.0912C3.5262 16.4663 3.5262 15.4533 4.1511 14.8284Z" fill="currentColor" fill-opacity="0.3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M5.6714 13.3081L8.0756 15.7123" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M7.5806 11.399L9.1362 12.9546" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M9.4898 9.4898L11.8939 11.8939" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M11.399 7.5806L12.9546 9.1362" stroke="currentColor" stroke-opacity="0.3" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M13.3081 5.6714L15.7123 8.0756" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M4.151 14.828l10.677-10.677c.624-.624 1.639-.624 2.263 0l2.758 2.758c.624.624.624 1.639 0 2.263l-10.677 10.677c-.624.624-1.639.624-2.263 0l-2.758-2.758c-.624-.624-.624-1.639 0-2.263z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
+  <path d="M3.691 14.369l10.678-10.678c.435-.435.976-.659 1.591-.659.615 0 1.156.224 1.591.659l2.758 2.758c.435.435.659.976.659 1.591 0 .615-.224 1.156-.659 1.591l-10.678 10.678c-.435.435-.976.659-1.591.659-.615 0-1.156-.224-1.591-.659l-2.758-2.758c-.435-.435-.659-.976-.659-1.591 0-.615.224-1.156.659-1.591zm.92.919 1.06-1.061 1.945 1.945c.26.26.69.251.938-.02.235-.255.226-.654-.019-.899l-1.944-1.945 8.697-8.697c.373-.373.971-.373 1.344 0l2.757 2.757c.373.373.373.971 0 1.344l-10.677 10.677c-.373.373-.971.373-1.344 0l-2.757-2.757c-.373-.373-.373-.971 0-1.344z" fill="currentColor" fill-rule="evenodd"/>
+  <path d="M8.04 10.939l1.556 1.556c.252.252.252.667 0 .919-.253.253-.667.253-.919 0l-1.556-1.555c-.253-.253-.253-.667 0-.92.252-.252.667-.252.919 0z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
+  <path d="M9.949 9.03l2.405 2.404c.252.253.252.667 0 .92-.253.252-.667.252-.92 0l-2.404-2.405c-.252-.252-.252-.666 0-.919.253-.252.667-.252.919 0z" fill="currentColor" fill-rule="evenodd"/>
+  <path d="M11.859 7.121l1.555 1.556c.253.252.253.666 0 .919-.252.252-.667.252-.919 0l-1.556-1.556c-.252-.252-.252-.667 0-.919.253-.253.667-.253.92 0z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
+  <path d="M13.768 5.212l2.404 2.404c.26.26.251.69-.02.938-.255.235-.654.226-.899-.019l-2.405-2.404c-.252-.252-.252-.667 0-.919.253-.253.667-.253.92 0z" fill="currentColor" fill-rule="evenodd"/>
 </svg>

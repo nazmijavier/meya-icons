@@ -1,23 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-  <circle cx="7.8" cy="3.6" r="0.6" fill="currentColor" fill-opacity="0.3" stroke="none"/>
-  <circle cx="12" cy="3.6" r="0.7" fill="currentColor" fill-opacity="0.3" stroke="none"/>
-  <circle cx="16.2" cy="3.6" r="0.6" fill="currentColor" fill-opacity="0.3" stroke="none"/>
-  <circle cx="3.6" cy="7.8" r="0.6" fill="currentColor" fill-opacity="0.3" stroke="none"/>
-  <circle cx="7.8" cy="7.8" r="0.9" fill="currentColor" stroke="none"/>
-  <circle cx="12" cy="7.8" r="1.1" fill="currentColor" stroke="none"/>
-  <circle cx="16.2" cy="7.8" r="0.9" fill="currentColor" stroke="none"/>
-  <circle cx="20.4" cy="7.8" r="0.6" fill="currentColor" fill-opacity="0.3" stroke="none"/>
-  <circle cx="3.6" cy="12" r="0.7" fill="currentColor" fill-opacity="0.3" stroke="none"/>
-  <circle cx="7.8" cy="12" r="1.1" fill="currentColor" stroke="none"/>
-  <circle cx="12" cy="12" r="1.45" fill="currentColor" stroke="none"/>
-  <circle cx="16.2" cy="12" r="1.1" fill="currentColor" stroke="none"/>
-  <circle cx="20.4" cy="12" r="0.7" fill="currentColor" fill-opacity="0.3" stroke="none"/>
-  <circle cx="3.6" cy="16.2" r="0.6" fill="currentColor" fill-opacity="0.3" stroke="none"/>
-  <circle cx="7.8" cy="16.2" r="0.9" fill="currentColor" stroke="none"/>
-  <circle cx="12" cy="16.2" r="1.1" fill="currentColor" stroke="none"/>
-  <circle cx="16.2" cy="16.2" r="0.9" fill="currentColor" stroke="none"/>
-  <circle cx="20.4" cy="16.2" r="0.6" fill="currentColor" fill-opacity="0.3" stroke="none"/>
-  <circle cx="7.8" cy="20.4" r="0.6" fill="currentColor" fill-opacity="0.3" stroke="none"/>
-  <circle cx="12" cy="20.4" r="0.7" fill="currentColor" fill-opacity="0.3" stroke="none"/>
-  <circle cx="16.2" cy="20.4" r="0.6" fill="currentColor" fill-opacity="0.3" stroke="none"/>
+  <path d="M8.4 3.6c0 .33-.27.6-.6.6-.33 0-.6-.27-.6-.6 0-.33.27-.6.6-.6.33 0 .6.27.6.6z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
+  <path d="M12.7 3.6c0 .385-.315.7-.7.7-.385 0-.7-.315-.7-.7 0-.385.315-.7.7-.7.385 0 .7.315.7.7z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
+  <path d="M16.8 3.6c0 .33-.27.6-.6.6-.33 0-.6-.27-.6-.6 0-.33.27-.6.6-.6.33 0 .6.27.6.6z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
+  <path d="M4.2 7.8c0 .532-.648.801-1.024.424-.377-.376-.108-1.024.424-1.024.33 0 .6.27.6.6z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
+  <path d="M13.1 7.8c0 .443-.275.852-.685 1.019-.406.165-.883.068-1.193-.241-.317-.317-.41-.809-.23-1.22.174-.396.576-.658 1.008-.658.605 0 1.1.495 1.1 1.1zm-4.4 0c0 .799-.971 1.202-1.536.636-.566-.565-.163-1.536.636-1.536.495 0 .9.405.9.9zm8.4 0c0 .799-.971 1.202-1.536.636-.566-.565-.163-1.536.636-1.536.495 0 .9.405.9.9z" fill="currentColor" fill-rule="evenodd"/>
+  <path d="M21 7.8c0 .532-.648.801-1.024.424-.377-.376-.108-1.024.424-1.024.33 0 .6.27.6.6z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
+  <path d="M4.3 12c0 .385-.315.7-.7.7-.385 0-.7-.315-.7-.7 0-.385.315-.7.7-.7.385 0 .7.315.7.7z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
+  <path d="M13.45 12c0 .8-.65 1.45-1.45 1.45-.8 0-1.45-.65-1.45-1.45 0-.8.65-1.45 1.45-1.45.8 0 1.45.65 1.45 1.45zm-4.55 0c0 .605-.495 1.1-1.1 1.1-.605 0-1.1-.495-1.1-1.1 0-.605.495-1.1 1.1-1.1.605 0 1.1.495 1.1 1.1zm8.4 0c0 .605-.495 1.1-1.1 1.1-.605 0-1.1-.495-1.1-1.1 0-.605.495-1.1 1.1-1.1.605 0 1.1.495 1.1 1.1z" fill="currentColor" fill-rule="evenodd"/>
+  <path d="M21.1 12c0 .385-.315.7-.7.7-.385 0-.7-.315-.7-.7 0-.385.315-.7.7-.7.385 0 .7.315.7.7z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
+  <path d="M4.2 16.2c0 .532-.648.801-1.024.424-.377-.376-.108-1.024.424-1.024.33 0 .6.27.6.6z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
+  <path d="M13.1 16.2c0 .443-.275.852-.685 1.019-.406.165-.883.068-1.193-.241-.317-.317-.41-.809-.23-1.22.174-.396.576-.658 1.008-.658.605 0 1.1.495 1.1 1.1zm-4.4 0c0 .799-.971 1.202-1.536.636-.566-.565-.163-1.536.636-1.536.495 0 .9.405.9.9zm8.4 0c0 .799-.971 1.202-1.536.636-.566-.565-.163-1.536.636-1.536.495 0 .9.405.9.9z" fill="currentColor" fill-rule="evenodd"/>
+  <path d="M21 16.2c0 .532-.648.801-1.024.424-.377-.376-.108-1.024.424-1.024.33 0 .6.27.6.6z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
+  <path d="M8.4 20.4c0 .33-.27.6-.6.6-.33 0-.6-.27-.6-.6 0-.33.27-.6.6-.6.33 0 .6.27.6.6z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
+  <path d="M12.7 20.4c0 .385-.315.7-.7.7-.385 0-.7-.315-.7-.7 0-.385.315-.7.7-.7.385 0 .7.315.7.7z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
+  <path d="M16.8 20.4c0 .33-.27.6-.6.6-.33 0-.6-.27-.6-.6 0-.33.27-.6.6-.6.33 0 .6.27.6.6z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
 </svg>
