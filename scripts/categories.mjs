@@ -16,6 +16,7 @@ export const CATEGORIES = [
   ["finance-ecommerce", "Finance & E-commerce"],
   ["time", "Time"],
   ["maps-travel", "Maps & Travel"],
+  ["landmarks", "Landmarks"],
   ["education", "Education"],
   ["weather", "Weather"],
   ["nature", "Nature"],
