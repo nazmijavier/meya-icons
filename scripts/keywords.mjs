@@ -894,6 +894,16 @@ const NAME = {
   animation: "animation motion animate onion skin frames video",
   keyframes: "keyframes keyframe timeline animation motion",
   prototype: "prototype flow link screens interaction connect design",
+  "ai-health": "ai artificial intelligence health medical heart pulse symptoms wellness",
+  "ai-glasses": "ai artificial intelligence glasses smart glasses wearable ar vision",
+  "ai-phone": "ai artificial intelligence phone smartphone mobile on-device assistant",
+  "ai-watch": "ai artificial intelligence watch smartwatch wearable assistant",
+  "ai-captions": "ai artificial intelligence captions subtitles cc auto captions transcribe",
+  "ai-game": "ai artificial intelligence game gaming gamepad controller npc",
+  "ai-location": "ai artificial intelligence location map pin nearby local places",
+  "ai-chef": "ai artificial intelligence chef cooking recipe meal plan food kitchen",
+  cube: "cube 3d box block solid shape isometric",
+  "ai-3d": "ai artificial intelligence 3d model cube generate object render",
   // end of new icons
   // cursors
   arrow: "default select normal",
