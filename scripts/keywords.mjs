@@ -599,6 +599,18 @@ const NAME = {
   monas: "indonesia jakarta capital national monument monumen nasional tugu",
   "petronas-towers": "malaysia kuala lumpur kl capital twin towers skyscraper",
   "marina-bay-sands": "singapore singapore capital hotel skyline marina bay",
+  "wat-arun": "thailand bangkok capital temple of dawn prang wat",
+  "n-seoul-tower": "south korea korea seoul capital namsan tower",
+  pyramids: "egypt cairo giza capital pyramid desert ancient",
+  "sheikh-zayed-mosque": "united arab emirates uae abu dhabi capital grand mosque dome minaret",
+  parthenon: "greece athens capital temple acropolis ancient greek columns",
+  "puerta-de-alcala": "spain madrid capital gate arch",
+  "peace-tower": "canada ottawa capital parliament tower",
+  "brasilia-cathedral": "brazil brasilia capital cathedral church",
+  "angel-of-independence": "mexico mexico city capital angel column monument",
+  obelisco: "argentina buenos aires capital obelisk monument",
+  atomium: "belgium brussels capital atom spheres",
+  "taipei-101": "taiwan taipei capital skyscraper tower",
   // end of new icons
   // cursors
   arrow: "default select normal",
