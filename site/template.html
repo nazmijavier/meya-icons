@@ -202,13 +202,19 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(116px, 1fr)); gap: 10px; }
 .tile {
   display: flex; flex-direction: column; align-items: center; gap: 10px;
-  aspect-ratio: 1; padding: 16px 8px 14px; border: 0; border-radius: 20px; background: var(--mist);
+  aspect-ratio: 1; padding: 16px 8px 14px; border: 0; border-radius: 20px; --tile-bg: var(--mist); background: var(--tile-bg);
   transition-property: background-color, box-shadow, scale; transition-duration: 150ms; transition-timing-function: ease;
 }
-.tile:hover { background: var(--mist-2); }
+.tile:hover { --tile-bg: var(--mist-2); }
 .tile:active { scale: 0.96; }
-.tile[aria-current="true"] { background: var(--white); box-shadow: inset 0 0 0 1.5px var(--ink); }
+.tile[aria-current="true"] { --tile-bg: var(--white); box-shadow: inset 0 0 0 1.5px var(--ink); }
 .tile svg { width: var(--size); height: var(--size); stroke-width: var(--sw); margin-block: auto; flex: none; color: var(--icon, var(--ink)); }
+/* The Stroke tab previews live strokes on the free outlined artwork (never the Pro files): a line grows under a
+   stroke of its own colour and thins under one in the tile's colour. Outlined icons are one merged shape, so this
+   matches a thinner or bolder 1.3 line with round caps and joins. */
+svg.sim path { stroke-linecap: round; stroke-linejoin: round; }
+svg.sim .ink { stroke: currentColor; stroke-width: max(0px, calc(var(--sw) * 1px - 1.3px)); }
+svg.sim .thin { fill: none; stroke: var(--tile-bg); stroke-width: max(0px, calc(1.3px - var(--sw) * 1px)); transition: stroke 150ms ease; }
 /* PRO showcase styles come from an image sprite used as a mask, filled with the icon colour: nothing to copy. */
 .tile .lk { display: block; width: var(--size); height: var(--size); margin-block: auto; flex: none; background: var(--icon, var(--ink));
   -webkit-mask: var(--lk) no-repeat; mask: var(--lk) no-repeat;
@@ -245,6 +251,9 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
 .stage .glyph { stroke-width: var(--sw); color: var(--icon, var(--ink)); }
 .stage .lk-big { position: absolute; inset: 0; background: var(--icon, var(--ink)); -webkit-mask: var(--lk-big) center / 100% 100% no-repeat; mask: var(--lk-big) center / 100% 100% no-repeat; }
 .stage .lk-big.lk-c { background: var(--lk-big) center / 100% 100% no-repeat; -webkit-mask: none; mask: none; }
+.stage .sim-big path { stroke-linecap: round; stroke-linejoin: round; }
+.stage .sim-big .grow { fill: #fff; stroke: #fff; stroke-width: max(0px, calc(var(--sw) * 1px - 1.3px)); }
+.stage .sim-big .shrink { fill: none; stroke: #000; stroke-width: max(0px, calc(1.3px - var(--sw) * 1px)); }
 .lock { display: grid; gap: 12px; padding: 16px; border-radius: 16px; background: var(--mist); }
 .lock p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--slate); }
 .lock b { color: var(--ink); font-weight: 600; }
@@ -465,7 +474,12 @@ __FOOTER__
   const ui = (icon) => ({ b: icon.v.outline });
   // Artwork in the chosen style; interface chrome always uses outline.
   const body = (icon) => icon.v[state.style] || icon.v.outline || Object.values(icon.v)[0];
+  // Stroke is Pro: its tab previews the slider on the free outlined artwork; copying stays with Pro.
+  const simulates = (st) => st.stroke && st.locked;
+  const sim = (b) => `<svg class="sim" viewBox="0 0 24 24" aria-hidden="true">${b.replace(/<path /g, '<path class="ink" ')}${b.replace(/<path /g, '<path class="thin" ')}</svg>`;
+  const simBig = (b) => `<svg class="sim-big" viewBox="0 0 24 24" aria-hidden="true"><defs><mask id="sim-mask" maskUnits="userSpaceOnUse" x="-2" y="-2" width="28" height="28">${b.replace(/<path /g, '<path class="grow" ')}${b.replace(/<path /g, '<path class="shrink" ')}</mask></defs><rect class="glyph" x="-2" y="-2" width="28" height="28" fill="currentColor" mask="url(#sim-mask)"/></svg>`;
   const glyph = (icon) => {
+    if (simulates(styleOf(state.style)) && icon.v.outline) return sim(icon.v.outline);
     const b = body(icon);
     if (b[0] !== "@") return inner({ b });
     const st = styleOf(state.style), n = +b.slice(1), cols = st.cols;
@@ -641,12 +655,15 @@ __FOOTER__
   $("#styles").innerHTML = styles.map((st, k) => (st.set && !styles[k - 1].set ? '<span class="seg-sep" aria-hidden="true"></span>' : "") + (st.count
     ? `<button type="button" data-style="${st.id}" aria-pressed="${st.id === state.style}">${st.label}${badge(st)}</button>`
     : `<button type="button" class="soon" aria-disabled="true" data-tip="Coming soon" aria-label="${st.label}${st.pro ? " (Pro)" : ""}, coming soon">${st.label}${badge(st)}</button>`)).join("");
-  // Live strokes are the Pro Stroke style. Outline and Duotone ship outlined and Pro tabs are previews, so there
-  // the slider rests at 1.3 and says where live strokes are.
+  // Live strokes are the Pro Stroke style: its tab previews them on the outlined artwork, so the slider works there.
+  // Outline and Duotone ship outlined and the other Pro tabs are previews, so there the slider rests at 1.3 and
+  // says where live strokes are.
   function syncStroke(st) {
-    const live = st.stroke && !st.locked, ctl = $("#sw").closest(".control");
-    $("#sw").disabled = !live; ctl.classList.toggle("off", !live); $("#sw-pro").hidden = live;
+    const live = !!st.stroke, ctl = $("#sw").closest(".control"), el = $("#sw"), v = live ? state.sw : 1.3;
+    el.disabled = !live; ctl.classList.toggle("off", !live); $("#sw-pro").hidden = live;
     if (live) delete ctl.dataset.tip; else ctl.dataset.tip = "Live strokes come with Pro";
+    el.value = v; el.style.setProperty("--p", ((v - el.min) / (el.max - el.min)) * 100 + "%");
+    $("#sw-out").textContent = v.toFixed(2);
   }
   syncStroke(styleOf(state.style));
   // Anything not released yet (PRO styles, Buy Icons): show "Coming soon" right away, then hide it.
@@ -743,7 +760,9 @@ __FOOTER__
   function refreshSheet() {
     const icon = state.current; if (!icon) return;
     const st = styleOf(state.style), locked = !!st.locked;
-    $("#p-stage").innerHTML = gridSvg + (locked
+    $("#p-stage").innerHTML = gridSvg + (simulates(st) && icon.v.outline
+      ? simBig(icon.v.outline)
+      : locked
       ? `<span class="lk-big${st.color ? " lk-c" : ""}" style="--lk-big:url(pro/${st.id}/${icon.c}/${icon.n}.webp)" aria-hidden="true"></span>`
       : glyph(icon).replace("<svg ", '<svg class="glyph" '));
     for (const el of sheet.querySelectorAll(".actions, .code-tabs, #p-code")) el.hidden = locked;
@@ -752,7 +771,7 @@ __FOOTER__
     $("#p-file").textContent = locked ? `Meya Icons Pro · ${st.id}/${icon.c}/${icon.n}.svg` : `icons/${state.style}/${icon.c}/${icon.n}.svg`;
     if (!locked) $("#p-code").textContent = state.fmt === "svg" ? toSvg(icon) : toJsx(icon);
     // live strokes report their width, outlined styles their fixed 1.3 lines; solid and full-color styles nothing
-    $("#p-sw").textContent = st.stroke ? (locked ? "1.3" : fmtSw(state.sw)) + " px" : "1.3 px, outlined";
+    $("#p-sw").textContent = st.stroke ? fmtSw(state.sw) + " px" : "1.3 px, outlined";
     $("#p-sw").hidden = $("#p-sw-dt").hidden = !st.stroke && !st.outlined;
     $("#p-color").textContent = st.set || st.color ? "Full color" : "currentColor";
   }

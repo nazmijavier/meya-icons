@@ -3,7 +3,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { CATEGORIES, COLOR_SETS } from "./categories.mjs";
+import { CATEGORIES, COLOR_SETS, HIDDEN } from "./categories.mjs";
 import { keywordsFor } from "./keywords.mjs";
 import { PRO_DIR, proIcons } from "./pro.mjs";
 import { STYLES } from "./styles.mjs";
@@ -26,7 +26,7 @@ function readStyle(style) {
   const out = new Map();
   const set = STYLES.find((st) => st.id === style).set;
   for (const [cat] of CATEGORIES) {
-    if (set ? cat !== style : COLOR_SETS.includes(cat)) continue;
+    if (set ? cat !== style : COLOR_SETS.includes(cat) || HIDDEN.includes(cat)) continue;
     const dir = rel("icons", set ? "outline" : style, cat);
     if (!fs.existsSync(dir)) continue;
     for (const file of fs.readdirSync(dir).filter((f) => f.endsWith(".svg")).sort()) {
@@ -79,7 +79,7 @@ for (const st of STYLES.filter((s) => s.showcase && !variants[s.id].size && PREV
   }
   showcase[st.id] = { cols: PREVIEWS[st.id].cols, cell: new Map(shown.map(([k], n) => [k, n])) };
 }
-const missing = Object.entries(showcase).flatMap(([id, sc]) => [...sc.cell.keys()].filter((k) => !keys.has(k)).map((k) => `${id}/${k}`));
+const missing = Object.entries(showcase).flatMap(([id, sc]) => [...sc.cell.keys()].filter((k) => !keys.has(k) && !HIDDEN.includes(k.split("/")[0])).map((k) => `${id}/${k}`));
 if (missing.length) console.warn(`Showcase previews with no Outline icon, left out: ${missing.join(", ")}`);
 const siteStyles = styles.map((st) => (showcase[st.id] ? { ...st, count: icons.filter((i) => showcase[st.id].cell.has(`${i.c}/${i.n}`)).length, locked: true, cols: showcase[st.id].cols } : st));
 const siteCategories = categories.map((c) => ({ ...c, counts: { ...c.counts, ...Object.fromEntries(Object.entries(showcase).map(([id, sc]) => [id, icons.filter((i) => i.c === c.id && sc.cell.has(`${i.c}/${i.n}`)).length])) } }));
@@ -96,7 +96,7 @@ for (const st of PRO_STYLES) {
   const dir = path.join(PRO_DIR, st);
   proCounts[st] = 0;
   if (!fs.existsSync(dir)) continue;
-  for (const c of fs.readdirSync(dir)) if (fs.statSync(path.join(dir, c)).isDirectory()) proCounts[st] += fs.readdirSync(path.join(dir, c)).filter((f) => f.endsWith(".svg")).length;
+  for (const c of fs.readdirSync(dir)) if (!HIDDEN.includes(c) && fs.statSync(path.join(dir, c)).isDirectory()) proCounts[st] += fs.readdirSync(path.join(dir, c)).filter((f) => f.endsWith(".svg")).length;
   proCount += proCounts[st];
 }
 for (const n of TEASER) {

@@ -3,7 +3,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { CATEGORIES, COLOR_SETS } from "./categories.mjs";
+import { CATEGORIES, COLOR_SETS, HIDDEN } from "./categories.mjs";
 import { STYLES } from "./styles.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -18,6 +18,7 @@ const shipped = STYLES.filter((st) => fs.existsSync(rel("icons", st.id)) && !st.
 const seen = new Map();
 const icons = [];
 for (const [cat] of CATEGORIES) {
+  if (HIDDEN.includes(cat)) continue; // held back for now (see categories.mjs)
   const dir = rel("icons", "outline", cat);
   if (!fs.existsSync(dir)) continue;
   for (const file of fs.readdirSync(dir).filter((f) => f.endsWith(".svg")).sort()) {

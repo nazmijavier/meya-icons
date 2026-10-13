@@ -30,3 +30,7 @@ export const CATEGORIES = [
 
 // Full-color sets drawn once: they live in icons/outline/<id>/ and show in every style on the site.
 export const COLOR_SETS = ["cursors", "flags"];
+
+// Categories held back for now: their files stay in icons/, but the site, the README, the npm package and the
+// Figma plugin leave them out. Remove an id here to bring it back.
+export const HIDDEN = ["landmarks"];
