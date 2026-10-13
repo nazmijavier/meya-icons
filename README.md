@@ -5,10 +5,10 @@
 
 # Meya Icons
 
-Meya Icons is a free, open-source set of <!--count-->1714<!--/count--> icons drawn by [Meya Lab](https://meyalab.com), in <!--stylenames-->**Outline** and **Duotone**<!--/stylenames--> styles. Every icon sits on a 24 × 24 grid and uses `currentColor`, so it picks up the text color around it. The stroke styles use a 1.3 px stroke with round caps and joins.
+Meya Icons is a free, open-source set of <!--count-->1764<!--/count--> icons drawn by [Meya Lab](https://meyalab.com), in <!--stylenames-->**Outline** and **Duotone**<!--/stylenames--> styles. Every icon sits on a 24 × 24 grid and uses `currentColor`, so it picks up the text color around it. The stroke styles use a 1.3 px stroke with round caps and joins.
 
 [![npm](https://img.shields.io/npm/v/meya-icons?style=flat-square&color=1BA4FF&label=npm)](https://www.npmjs.com/package/meya-icons)
-[![Icons](https://img.shields.io/badge/icons-1714-121212?style=flat-square)](#categories)
+[![Icons](https://img.shields.io/badge/icons-1764-121212?style=flat-square)](#categories)
 [![Version](https://img.shields.io/badge/version-1.0-1BA4FF?style=flat-square)](https://github.com/nazmijavier/meya-icons/releases)
 [![License](https://img.shields.io/badge/license-MIT-737373?style=flat-square)](./LICENSE)
 
@@ -31,12 +31,11 @@ Meya Icons is a free, open-source set of <!--count-->1714<!--/count--> icons dra
 <!--styles-->
 | Style | Icons | Look |
 | --- | ---: | --- |
-| [Outline](./icons/outline) | 709 | 1.3 px strokes only |
-| [Duotone](./icons/duotone) | 707 | The same strokes, plus a 30% tint fill for depth |
+| [Outline](./icons/outline) | 734 | 1.3 px strokes only |
+| [Duotone](./icons/duotone) | 732 | The same strokes, plus a 30% tint fill for depth |
 | [Sharp](https://icons.meyalab.com/#sharp) `PRO` | 709 | Strokes with square caps and mitered corners |
 | [Filled](https://icons.meyalab.com/#filled) `PRO` | 709 | Solid shapes for active and selected states |
-| [Glass](https://icons.meyalab.com/#glass) `PRO` | 709 | Black glass with frosted grey parts |
-| [Gradient](https://icons.meyalab.com/#gradient) `PRO` | 709 | Glossy glass in a blue-to-violet gradient |
+| [Glass](https://icons.meyalab.com/#glass) `PRO` | 709 | Glossy glass in a blue-to-violet gradient |
 | Pixel `PRO` | Coming soon | Solid cells on a 12 × 12 grid, made with the Pixel Lab |
 | 3D `PRO` | Coming soon | Rendered 3D icons with depth and soft light |
 | [Cursors](./icons/outline/cursors) | 43 | Full-color cursors: arrows, hands, text, resize and more |
@@ -104,7 +103,7 @@ Drag any SVG from [`icons/`](./icons) onto the canvas. Strokes and tints stay ed
 | Category | Outline | Duotone |
 | --- | ---: | ---: |
 | General | [86](icons/outline/general) | [86](icons/duotone/general) |
-| AI | [51](icons/outline/ai) | [51](icons/duotone/ai) |
+| AI | [65](icons/outline/ai) | [65](icons/duotone/ai) |
 | Arrows | [30](icons/outline/arrows) | [30](icons/duotone/arrows) |
 | Alerts & Feedback | [17](icons/outline/alerts-feedback) | [17](icons/duotone/alerts-feedback) |
 | Communication | [29](icons/outline/communication) | [29](icons/duotone/communication) |
@@ -120,7 +119,7 @@ Drag any SVG from [`icons/`](./icons) onto the canvas. Strokes and tints stay ed
 | Finance & E-commerce | [27](icons/outline/finance-ecommerce) | [27](icons/duotone/finance-ecommerce) |
 | Time | [18](icons/outline/time) | [18](icons/duotone/time) |
 | Maps & Travel | [29](icons/outline/maps-travel) | [28](icons/duotone/maps-travel) |
-| Landmarks | [48](icons/outline/landmarks) | [48](icons/duotone/landmarks) |
+| Landmarks | [59](icons/outline/landmarks) | [59](icons/duotone/landmarks) |
 | Education | [20](icons/outline/education) | [20](icons/duotone/education) |
 | Weather | [21](icons/outline/weather) | [20](icons/duotone/weather) |
 | Nature | [10](icons/outline/nature) | [10](icons/duotone/nature) |
