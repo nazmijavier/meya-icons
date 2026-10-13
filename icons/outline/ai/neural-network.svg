@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <path d="M6.7744 7.0116L9.5756 5.6384" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M6.7681 9.4012L9.5819 10.7988" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M6.7681 14.5988L9.5819 13.2012" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M6.7744 16.9884L9.5756 18.3616" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M14.4244 5.6384L17.2256 7.0116" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M14.4181 10.7988L17.2319 9.4012" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M14.4181 13.2012L17.2319 14.5988" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M14.4244 18.3616L17.2256 16.9884" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M6.1 8.2C6.1 9.1665 5.3165 9.95 4.35 9.95C3.3835 9.95 2.6 9.1665 2.6 8.2C2.6 7.2335 3.3835 6.45 4.35 6.45C5.3165 6.45 6.1 7.2335 6.1 8.2Z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M6.1 15.8C6.1 16.7665 5.3165 17.55 4.35 17.55C3.3835 17.55 2.6 16.7665 2.6 15.8C2.6 14.8335 3.3835 14.05 4.35 14.05C5.3165 14.05 6.1 14.8335 6.1 15.8Z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M13.75 4.45C13.75 5.4165 12.9665 6.2 12 6.2C11.0335 6.2 10.25 5.4165 10.25 4.45C10.25 3.4835 11.0335 2.7 12 2.7C12.9665 2.7 13.75 3.4835 13.75 4.45Z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M13.75 12C13.75 12.9665 12.9665 13.75 12 13.75C11.0335 13.75 10.25 12.9665 10.25 12C10.25 11.0335 11.0335 10.25 12 10.25C12.9665 10.25 13.75 11.0335 13.75 12Z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M13.75 19.55C13.75 20.5165 12.9665 21.3 12 21.3C11.0335 21.3 10.25 20.5165 10.25 19.55C10.25 18.5835 11.0335 17.8 12 17.8C12.9665 17.8 13.75 18.5835 13.75 19.55Z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M21.4 8.2C21.4 9.1665 20.6165 9.95 19.65 9.95C18.6835 9.95 17.9 9.1665 17.9 8.2C17.9 7.2335 18.6835 6.45 19.65 6.45C20.6165 6.45 21.4 7.2335 21.4 8.2Z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M21.4 15.8C21.4 16.7665 20.6165 17.55 19.65 17.55C18.6835 17.55 17.9 16.7665 17.9 15.8C17.9 14.8335 18.6835 14.05 19.65 14.05C20.6165 14.05 21.4 14.8335 21.4 15.8Z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

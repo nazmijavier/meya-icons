@@ -1,6 +1,7 @@
 // Folder id → display label. Order here is the order on the site and in the README.
 export const CATEGORIES = [
   ["general", "General"],
+  ["ai", "AI"],
   ["arrows", "Arrows"],
   ["alerts-feedback", "Alerts & Feedback"],
   ["communication", "Communication"],
