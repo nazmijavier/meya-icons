@@ -859,6 +859,16 @@ const NAME = {
   "viru-gate": "landmark monument capital city country travel tourism viru gate towers old town tallinn estonia",
   "bahrain-world-trade-center": "landmark monument capital city country travel tourism bahrain world trade center wind turbines manama towers",
   "palacio-salvo": "landmark monument capital city country travel tourism palacio salvo montevideo uruguay tower",
+  "message-plus": "message plus new message compose chat add",
+  "file-download": "file download save export get document",
+  "file-upload": "file upload import send attach document",
+  "package-check": "package check delivered order shipped box done",
+  "bell-plus": "bell plus add alert reminder notification subscribe",
+  "battery-low": "battery low empty charge power level",
+  "battery-full": "battery full charged charge power level",
+  "calendar-clock": "calendar clock schedule time event appointment",
+  "list-plus": "list plus add to list playlist new item",
+  shirt: "shirt t-shirt clothes clothing apparel fashion",
   // end of new icons
   // cursors
   arrow: "default select normal",
