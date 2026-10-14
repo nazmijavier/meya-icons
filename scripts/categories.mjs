@@ -23,6 +23,7 @@ export const CATEGORIES = [
   ["nature", "Nature"],
   ["health", "Health"],
   ["food", "Food & Drink"],
+  ["home", "Home & Living"],
   ["shapes", "Shapes"],
   ["cursors", "Cursors"],
   ["flags", "Flags"],
