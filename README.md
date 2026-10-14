@@ -5,10 +5,10 @@
 
 # Meya Icons
 
-Meya Icons is a free, open-source set of <!--count-->1944<!--/count--> icons drawn by [Meya Lab](https://meyalab.com), in <!--stylenames-->**Outline** and **Duotone**<!--/stylenames--> styles. Every icon sits on a 24 × 24 grid and uses `currentColor`, so it picks up the text color around it. Icons are drawn with a 1.3 px stroke with round caps and joins, and ship with that stroke outlined into shapes, so they look the same in every app and at every size.
+Meya Icons is a free, open-source set of <!--count-->1970<!--/count--> icons drawn by [Meya Lab](https://meyalab.com), in <!--stylenames-->**Outline** and **Duotone**<!--/stylenames--> styles. Every icon sits on a 24 × 24 grid and uses `currentColor`, so it picks up the text color around it. Icons are drawn with a 1.3 px stroke with round caps and joins, and ship with that stroke outlined into shapes, so they look the same in every app and at every size.
 
 [![npm](https://img.shields.io/npm/v/meya-icons?style=flat-square&color=1BA4FF&label=npm)](https://www.npmjs.com/package/meya-icons)
-[![Icons](https://img.shields.io/badge/icons-1944-121212?style=flat-square)](#categories)
+[![Icons](https://img.shields.io/badge/icons-1970-121212?style=flat-square)](#categories)
 [![Version](https://img.shields.io/badge/version-2.0-1BA4FF?style=flat-square)](https://github.com/nazmijavier/meya-icons/releases)
 [![License](https://img.shields.io/badge/license-MIT-737373?style=flat-square)](./LICENSE)
 
@@ -31,12 +31,12 @@ Meya Icons is a free, open-source set of <!--count-->1944<!--/count--> icons dra
 <!--styles-->
 | Style | Icons | Look |
 | --- | ---: | --- |
-| [Outline](./icons/outline) | 824 | 1.3 px lines, outlined into shapes |
-| [Duotone](./icons/duotone) | 822 | The same lines, plus a 30% tint fill for depth |
-| [Stroke](https://icons.meyalab.com/#stroke) `PRO` | 824 | Live 1.3 px strokes you can make thinner or bolder |
-| [Sharp](https://icons.meyalab.com/#sharp) `PRO` | 824 | Strokes with square caps and mitered corners |
-| [Filled](https://icons.meyalab.com/#filled) `PRO` | 824 | Solid shapes for active and selected states |
-| [Glass](https://icons.meyalab.com/#glass) `PRO` | 824 | Glossy glass in a blue-to-violet gradient |
+| [Outline](./icons/outline) | 837 | 1.3 px lines, outlined into shapes |
+| [Duotone](./icons/duotone) | 835 | The same lines, plus a 30% tint fill for depth |
+| [Stroke](https://icons.meyalab.com/#stroke) `PRO` | 837 | Live 1.3 px strokes you can make thinner or bolder |
+| [Sharp](https://icons.meyalab.com/#sharp) `PRO` | 837 | Strokes with square caps and mitered corners |
+| [Filled](https://icons.meyalab.com/#filled) `PRO` | 837 | Solid shapes for active and selected states |
+| [Glass](https://icons.meyalab.com/#glass) `PRO` | 837 | Glossy glass in a blue-to-violet gradient |
 | Pixel `PRO` | Coming soon | Solid cells on a 12 × 12 grid, made with the Pixel Lab |
 | 3D `PRO` | Coming soon | Rendered 3D icons with depth and soft light |
 | [Cursors](./icons/outline/cursors) | 43 | Full-color cursors: arrows, hands, text, resize and more |
@@ -119,9 +119,9 @@ Drag any SVG from [`icons/`](./icons) onto the canvas. Each icon comes in as one
 | Charts | [19](icons/outline/charts) | [19](icons/duotone/charts) |
 | Development | [23](icons/outline/development) | [23](icons/duotone/development) |
 | Security | [20](icons/outline/security) | [20](icons/duotone/security) |
-| Finance & E-commerce | [30](icons/outline/finance-ecommerce) | [30](icons/duotone/finance-ecommerce) |
+| Finance & E-commerce | [38](icons/outline/finance-ecommerce) | [38](icons/duotone/finance-ecommerce) |
 | Time | [21](icons/outline/time) | [21](icons/duotone/time) |
-| Maps & Travel | [31](icons/outline/maps-travel) | [30](icons/duotone/maps-travel) |
+| Maps & Travel | [36](icons/outline/maps-travel) | [35](icons/duotone/maps-travel) |
 | Education | [20](icons/outline/education) | [20](icons/duotone/education) |
 | Weather | [21](icons/outline/weather) | [20](icons/duotone/weather) |
 | Nature | [11](icons/outline/nature) | [11](icons/duotone/nature) |
