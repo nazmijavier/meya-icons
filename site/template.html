@@ -123,7 +123,17 @@ body.color-open .toolbar { z-index: 50; }
 .kbd { position: absolute; right: 14px; top: 50%; translate: 0 -50%; display: inline-flex; align-items: center; justify-content: center; height: 22px; min-width: 22px; padding-inline: 6px; border-radius: 6px; background: var(--white); color: var(--slate); font-size: 12px; font-weight: 500; box-shadow: 0 0 0 1px var(--control); }
 .clear { position: absolute; right: 7px; top: 50%; translate: 0 -50%; }
 .clear svg { color: var(--slate); }
-.filters { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 10px 0; }
+.filters { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; padding-block: 10px 0; }
+/* When the styles are wider than the page they scroll sideways (set from the script), and the buttons beside them
+   move to their own line when they no longer fit. */
+.seg.scroll { max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+.seg.scroll::-webkit-scrollbar { display: none; }
+.seg.scroll button { flex: none; }
+.filters-end { display: flex; align-items: center; gap: 8px; flex: none; margin-left: auto; }
+/* Pause or play the Animated tab: the button shows the icon of what it does next. */
+.color-btn.motion-btn { width: 36px; padding: 0; justify-content: center; }
+.motion-btn svg { width: 18px; height: 18px; }
+.motion .motion-btn .i-play, :root:not(.motion) .motion-btn .i-pause { display: none; }
 
 /* Icon colour */
 .color-ctl { position: relative; flex: none; }
@@ -222,13 +232,18 @@ svg.sim .thin { fill: none; stroke: var(--tile-bg); stroke-width: max(0px, calc(
   -webkit-mask-position: calc(var(--size) * var(--x) * -1) calc(var(--size) * var(--y) * -1); mask-position: calc(var(--size) * var(--x) * -1) calc(var(--size) * var(--y) * -1); }
 /* Full-color PRO styles show the sprite itself. */
 .tile .lk.lk-c { background: var(--lk) no-repeat; background-size: calc(var(--size) * var(--lk-cols)) auto; background-position: calc(var(--size) * var(--x) * -1) calc(var(--size) * var(--y) * -1); -webkit-mask: none; mask: none; }
-/* Animated (PRO): a tile rests on its still frame and plays the animated preview while hovered or focused. */
+/* Animated (PRO): every tile plays its small animated preview on its own. Paused (the Pause button, which starts
+   paused when the system asks for reduced motion), a tile rests on its still frame and plays while hovered or focused. */
+.motion .tile .lk.lk-a { -webkit-mask: var(--lk-a) center / 100% 100% no-repeat; mask: var(--lk-a) center / 100% 100% no-repeat; }
 @media (prefers-reduced-motion: no-preference) {
   .tile:hover .lk.lk-a, .tile:focus-visible .lk.lk-a { -webkit-mask: var(--lk-a) center / 100% 100% no-repeat; mask: var(--lk-a) center / 100% 100% no-repeat; }
 }
-/* Animated vectors (the owner's copy) move in a tile only while it is hovered or focused; the details sheet always plays them. */
+/* Animated vectors (the owner's copy) follow the same rules; the details sheet always plays them. */
 .tile svg [class^="m-"] { animation-play-state: paused; }
-.tile:hover svg [class^="m-"], .tile:focus-visible svg [class^="m-"] { animation-play-state: running; }
+.motion .tile svg [class^="m-"] { animation-play-state: running; }
+@media (prefers-reduced-motion: no-preference) {
+  .tile:hover svg [class^="m-"], .tile:focus-visible svg [class^="m-"] { animation-play-state: running; }
+}
 .spon-tile { text-decoration: none; }
 .spon-tile .sponsor-mark { width: var(--size); height: var(--size); border-radius: 50%; margin-block: auto; flex: none; }
 .tile .name { font-size: 12px; line-height: 1.25; color: var(--slate); text-align: center; overflow-wrap: anywhere; }
@@ -314,6 +329,7 @@ svg.sim .thin { fill: none; stroke: var(--tile-bg); stroke-width: max(0px, calc(
   /* Two swipeable rows (styles, categories) with clear space between them. */
   .filters { flex-direction: column; align-items: stretch; gap: 18px; padding-block: 16px 12px; }
   .filters .divider { display: none; }
+  .filters-end { margin-left: 0; }
   .seg { width: 100%; overflow-x: auto; scrollbar-width: none; height: 40px; }
   .seg::-webkit-scrollbar { display: none; }
   .seg button { flex: none; height: 34px; padding-inline: 14px; }
@@ -387,18 +403,23 @@ svg.sim .thin { fill: none; stroke: var(--tile-bg); stroke-width: max(0px, calc(
     </div>
     <div class="filters">
       <div class="seg" id="styles" role="group" aria-label="Icon style"></div>
-      <div class="color-ctl">
-        <button class="color-btn" id="color-btn" type="button" aria-expanded="false" aria-controls="color-pop">
-          <span class="color-dot" id="color-dot"></span>Color
+      <div class="filters-end">
+        <button class="color-btn motion-btn" id="motion-btn" type="button" aria-label="Pause animations" data-tip="Pause animations" hidden>
+          <span class="i-pause" data-ico="media-devices:pause"></span><span class="i-play" data-ico="media-devices:play"></span>
         </button>
-        <div class="color-pop" id="color-pop" hidden>
-          <div class="color-row">
-            <span class="swatch"><input id="color" type="color" value="#1D1D1F" aria-label="Pick an icon color"></span>
-            <input class="hex" id="hex" value="#1D1D1F" spellcheck="false" aria-label="Icon color hex">
-            <button class="color-reset" id="color-reset" type="button">Reset</button>
+        <div class="color-ctl">
+          <button class="color-btn" id="color-btn" type="button" aria-expanded="false" aria-controls="color-pop">
+            <span class="color-dot" id="color-dot"></span>Color
+          </button>
+          <div class="color-pop" id="color-pop" hidden>
+            <div class="color-row">
+              <span class="swatch"><input id="color" type="color" value="#1D1D1F" aria-label="Pick an icon color"></span>
+              <input class="hex" id="hex" value="#1D1D1F" spellcheck="false" aria-label="Icon color hex">
+              <button class="color-reset" id="color-reset" type="button">Reset</button>
+            </div>
+            <p class="presets-title">Presets</p>
+            <div class="presets" id="presets"></div>
           </div>
-          <p class="presets-title">Presets</p>
-          <div class="presets" id="presets"></div>
         </div>
       </div>
     </div>
@@ -486,12 +507,14 @@ __FOOTER__
   const simulates = (st) => st.locked && st.id === "stroke";
   const sim = (b) => `<svg class="sim" viewBox="0 0 24 24" aria-hidden="true">${b.replace(/<path /g, '<path class="ink" ')}${b.replace(/<path /g, '<path class="thin" ')}</svg>`;
   const simBig = (b) => `<svg class="sim-big" viewBox="0 0 24 24" aria-hidden="true"><defs><mask id="sim-mask" maskUnits="userSpaceOnUse" x="-2" y="-2" width="28" height="28">${b.replace(/<path /g, '<path class="grow" ')}${b.replace(/<path /g, '<path class="shrink" ')}</mask></defs><rect class="glyph" x="-2" y="-2" width="28" height="28" fill="currentColor" mask="url(#sim-mask)"/></svg>`;
+  // An animated icon keeps its reduced-motion rule in what is copied; on the page the Pause button governs motion.
+  const REDUCE = /@media \(prefers-reduced-motion:reduce\)\{[^{}]*\{animation:none\}\}/g;
   const glyph = (icon) => {
     if (simulates(styleOf(state.style)) && icon.v.outline) return sim(icon.v.outline);
     const b = body(icon);
-    if (b[0] !== "@") return inner({ b });
+    if (b[0] !== "@") return inner({ b: b.replace(REDUCE, "") });
     const st = styleOf(state.style), n = +b.slice(1), cols = st.cols;
-    const anim = st.animated ? `;--lk-a:url(pro/${st.id}/${icon.c}/${icon.n}.webp)` : "";
+    const anim = st.animated ? `;--lk-a:url(pro/${st.id}/${icon.c}/${icon.n}.tile.webp)` : "";
     return `<span class="lk${st.color ? " lk-c" : ""}${st.animated ? " lk-a" : ""}" style="--x:${n % cols};--y:${Math.floor(n / cols)}${anim}" aria-hidden="true"></span>`;
   };
   const title = (n) => n.replace(/-/g, " ").replace(/^./, (m) => m.toUpperCase());
@@ -684,6 +707,23 @@ __FOOTER__
     soon.classList.add("tip");
     clearTimeout(soon._t); soon._t = setTimeout(() => soon.classList.remove("tip"), 1600);
   });
+  // Animated tiles play on their own. The button pauses them; it starts paused when the system asks for reduced
+  // motion, and the choice is remembered on this device.
+  const motionBtn = $("#motion-btn");
+  function setMotion(on) {
+    root.classList.toggle("motion", on);
+    motionBtn.setAttribute("aria-label", motionBtn.dataset.tip = on ? "Pause animations" : "Play animations");
+    // paused vectors go back to rest instead of stopping mid-move
+    if (!on) for (const t of tiles) { const g = t.querySelector("svg"); if (g && g.querySelector('[class^="m-"]')) g.outerHTML = glyph(icons[t.dataset.i]); }
+  }
+  let savedMotion = null;
+  try { savedMotion = localStorage.getItem("meya-motion"); } catch {}
+  setMotion(savedMotion ? savedMotion === "on" : !matchMedia("(prefers-reduced-motion: reduce)").matches);
+  motionBtn.addEventListener("click", () => {
+    const on = !root.classList.contains("motion");
+    setMotion(on);
+    try { localStorage.setItem("meya-motion", on ? "on" : "off"); } catch {}
+  });
   $("#styles").addEventListener("click", (e) => {
     if (e.target.closest(".soon")) return;
     const b = e.target.closest("[data-style]"); if (!b || b.dataset.style === state.style) return;
@@ -696,6 +736,7 @@ __FOOTER__
     countChips();
     if (state.cat !== "all" && !categories.find((c) => c.id === state.cat).counts[state.style]) setCat("all", false); else filter();
     syncStroke(st);
+    motionBtn.hidden = !st.animated;
     if (state.current && !state.current.v[state.style]) closeSheet(); else refreshSheet();
   });
   const fill = (el) => el.style.setProperty("--p", ((el.value - el.min) / (el.max - el.min)) * 100 + "%");
@@ -718,6 +759,11 @@ __FOOTER__
   const trackToolbar = () => root.style.setProperty("--toolbar-h", Math.round(toolbarEl.getBoundingClientRect().height) + "px");
   trackToolbar();
   if (window.ResizeObserver) new ResizeObserver(trackToolbar).observe(toolbarEl);
+  // The styles scroll sideways only when they are wider than the page, so their tooltips show whenever they fit.
+  const segEl = $("#styles"), filtersEl = $(".filters");
+  const fitStyles = () => segEl.classList.toggle("scroll", segEl.scrollWidth > filtersEl.clientWidth);
+  fitStyles();
+  if (window.ResizeObserver) new ResizeObserver(fitStyles).observe(filtersEl);
 
   // ---------- Icon colour ----------
   const PRESETS = ["#000000", "#FFFFFF", "#3F3F46", "#A1A1AA", "#3B82F6", "#6366F1", "#A855F7", "#EC4899",

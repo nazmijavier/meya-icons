@@ -5,7 +5,8 @@
 // Writes docs/pro/<style>.webp (one sprite for the grid), docs/pro/<style>/<category>/<name>.webp (large, for the
 // details sheet) and scripts/pro-previews.json, which build.mjs reads.
 // Animated styles: the sprite holds each icon's still frame, and the large previews are animated WebP that loop
-// one full cycle of the icon's motion (made with ffmpeg; without it they stay still).
+// one full cycle of the icon's motion (made with ffmpeg; without it they stay still). Each icon also gets a small
+// <name>.tile.webp at the sprite's cell size, which its tile plays on its own.
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
@@ -39,9 +40,11 @@ async function moving(st, icons) {
       await pg.evaluate((t) => { for (const a of document.getAnimations()) { a.pause(); a.currentTime = t; } }, period + (f * period) / frames);
       await pg.screenshot({ path: path.join(dir, `${String(f).padStart(3, "0")}.png`), omitBackground: true });
     }
-    const out = rel("docs/pro", st.id, `${i.k}.webp`);
-    execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-framerate", String((frames * 1000) / period), "-i", path.join(dir, "%03d.png"),
+    const encode = (out, size) => execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-framerate", String((frames * 1000) / period), "-i", path.join(dir, "%03d.png"),
+      ...(size ? ["-vf", `scale=${size}:${size}:flags=lanczos`] : []),
       "-c:v", "libwebp_anim", "-lossless", "0", "-q:v", "70", "-compression_level", "6", "-loop", "0", "-pix_fmt", "yuva420p", out]);
+    encode(rel("docs/pro", st.id, `${i.k}.webp`));
+    encode(rel("docs/pro", st.id, `${i.k}.tile.webp`), CELL);
   }
   await pg.close();
   fs.rmSync(tmp, { recursive: true, force: true });
