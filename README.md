@@ -37,6 +37,7 @@ Meya Icons is a free, open-source set of <!--count-->2154<!--/count--> icons dra
 | [Sharp](https://icons.meyalab.com/#sharp) `PRO` | 929 | Strokes with square caps and mitered corners |
 | [Filled](https://icons.meyalab.com/#filled) `PRO` | 929 | Solid shapes for active and selected states |
 | [Glass](https://icons.meyalab.com/#glass) `PRO` | 929 | Glossy glass in a blue-to-violet gradient |
+| [Animated](https://icons.meyalab.com/#animated) `PRO` | 62 | Icons that move, each with its own motion, as animated SVG |
 | Pixel `PRO` | Coming soon | Solid cells on a 12 × 12 grid, made with the Pixel Lab |
 | 3D `PRO` | Coming soon | Rendered 3D icons with depth and soft light |
 | [Cursors](./icons/outline/cursors) | 43 | Full-color cursors: arrows, hands, text, resize and more |

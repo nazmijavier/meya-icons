@@ -222,6 +222,13 @@ svg.sim .thin { fill: none; stroke: var(--tile-bg); stroke-width: max(0px, calc(
   -webkit-mask-position: calc(var(--size) * var(--x) * -1) calc(var(--size) * var(--y) * -1); mask-position: calc(var(--size) * var(--x) * -1) calc(var(--size) * var(--y) * -1); }
 /* Full-color PRO styles show the sprite itself. */
 .tile .lk.lk-c { background: var(--lk) no-repeat; background-size: calc(var(--size) * var(--lk-cols)) auto; background-position: calc(var(--size) * var(--x) * -1) calc(var(--size) * var(--y) * -1); -webkit-mask: none; mask: none; }
+/* Animated (PRO): a tile rests on its still frame and plays the animated preview while hovered or focused. */
+@media (prefers-reduced-motion: no-preference) {
+  .tile:hover .lk.lk-a, .tile:focus-visible .lk.lk-a { -webkit-mask: var(--lk-a) center / 100% 100% no-repeat; mask: var(--lk-a) center / 100% 100% no-repeat; }
+}
+/* Animated vectors (the owner's copy) move in a tile only while it is hovered or focused; the details sheet always plays them. */
+.tile svg [class^="m-"] { animation-play-state: paused; }
+.tile:hover svg [class^="m-"], .tile:focus-visible svg [class^="m-"] { animation-play-state: running; }
 .spon-tile { text-decoration: none; }
 .spon-tile .sponsor-mark { width: var(--size); height: var(--size); border-radius: 50%; margin-block: auto; flex: none; }
 .tile .name { font-size: 12px; line-height: 1.25; color: var(--slate); text-align: center; overflow-wrap: anywhere; }
@@ -474,8 +481,9 @@ __FOOTER__
   const ui = (icon) => ({ b: icon.v.outline });
   // Artwork in the chosen style; interface chrome always uses outline.
   const body = (icon) => icon.v[state.style] || icon.v.outline || Object.values(icon.v)[0];
-  // Stroke is Pro: its tab previews the slider on the free outlined artwork; copying stays with Pro.
-  const simulates = (st) => st.stroke && st.locked;
+  // Stroke is Pro: its tab previews the slider on the free outlined artwork; copying stays with Pro. The other
+  // locked stroke styles (Sharp, Animated) look different from that artwork, so they show their own previews.
+  const simulates = (st) => st.locked && st.id === "stroke";
   const sim = (b) => `<svg class="sim" viewBox="0 0 24 24" aria-hidden="true">${b.replace(/<path /g, '<path class="ink" ')}${b.replace(/<path /g, '<path class="thin" ')}</svg>`;
   const simBig = (b) => `<svg class="sim-big" viewBox="0 0 24 24" aria-hidden="true"><defs><mask id="sim-mask" maskUnits="userSpaceOnUse" x="-2" y="-2" width="28" height="28">${b.replace(/<path /g, '<path class="grow" ')}${b.replace(/<path /g, '<path class="shrink" ')}</mask></defs><rect class="glyph" x="-2" y="-2" width="28" height="28" fill="currentColor" mask="url(#sim-mask)"/></svg>`;
   const glyph = (icon) => {
@@ -483,7 +491,8 @@ __FOOTER__
     const b = body(icon);
     if (b[0] !== "@") return inner({ b });
     const st = styleOf(state.style), n = +b.slice(1), cols = st.cols;
-    return `<span class="lk${st.color ? " lk-c" : ""}" style="--x:${n % cols};--y:${Math.floor(n / cols)}" aria-hidden="true"></span>`;
+    const anim = st.animated ? `;--lk-a:url(pro/${st.id}/${icon.c}/${icon.n}.webp)` : "";
+    return `<span class="lk${st.color ? " lk-c" : ""}${st.animated ? " lk-a" : ""}" style="--x:${n % cols};--y:${Math.floor(n / cols)}${anim}" aria-hidden="true"></span>`;
   };
   const title = (n) => n.replace(/-/g, " ").replace(/^./, (m) => m.toUpperCase());
   const pascal = (n) => n.split("-").map((p) => p[0].toUpperCase() + p.slice(1)).join("") + "Icon";
@@ -533,10 +542,13 @@ __FOOTER__
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${state.size}" height="${state.size}" viewBox="0 0 24 24" fill="none"${attrs}>\n  ${code}\n</svg>`;
   }
   function toJsx(icon) {
-    const code = paint(body(icon))
+    // an animated icon carries its CSS in a <style>: JSX takes it as a template literal, and class as className
+    const raw = paint(body(icon)), css = (raw.match(/<style>([\s\S]*?)<\/style>/) || [])[1];
+    const code = raw.replace(/<style>[\s\S]*?<\/style>/, "<style>@@CSS@@</style>").replace(/ class="/g, ' className="')
       .replace(/ ([a-z]+)-([a-z])([a-z-]*)=/g, (m, a, b, rest) => ` ${a}${b.toUpperCase()}${rest.replace(/-([a-z])/g, (x, y) => y.toUpperCase())}=`)
       .replace(/style="mask-type:([a-z]+)"/g, 'style={{ maskType: "$1" }}')
-      .replace(/></g, ">\n      <");
+      .replace(/></g, ">\n      <")
+      .replace("@@CSS@@", css === undefined ? "" : "{`" + css + "`}");
     const st = styleOf(state.style);
     const attrs = (st.stroke ? ` stroke="${state.color === INK ? "currentColor" : state.color}" strokeWidth={${fmtSw(state.sw)}}` : "") + (st.round ? ' strokeLinecap="round" strokeLinejoin="round"' : "");
     return `export function ${pascal(icon.n)}(props) {\n  return (\n    <svg xmlns="http://www.w3.org/2000/svg" width={${state.size}} height={${state.size}} viewBox="0 0 24 24" fill="none"${attrs} {...props}>\n      ${code}\n    </svg>\n  );\n}`;
@@ -659,7 +671,7 @@ __FOOTER__
   // Outline and Duotone ship outlined and the other Pro tabs are previews, so there the slider rests at 1.3 and
   // says where live strokes are.
   function syncStroke(st) {
-    const live = !!st.stroke, ctl = $("#sw").closest(".control"), el = $("#sw"), v = live ? state.sw : 1.3;
+    const live = !!st.stroke && (!st.locked || simulates(st)), ctl = $("#sw").closest(".control"), el = $("#sw"), v = live ? state.sw : 1.3;
     el.disabled = !live; ctl.classList.toggle("off", !live); $("#sw-pro").hidden = live;
     if (live) delete ctl.dataset.tip; else ctl.dataset.tip = "Live strokes come with Pro";
     el.value = v; el.style.setProperty("--p", ((v - el.min) / (el.max - el.min)) * 100 + "%");
@@ -771,7 +783,7 @@ __FOOTER__
     $("#p-file").textContent = locked ? `Meya Icons Pro · ${st.id}/${icon.c}/${icon.n}.svg` : `icons/${state.style}/${icon.c}/${icon.n}.svg`;
     if (!locked) $("#p-code").textContent = state.fmt === "svg" ? toSvg(icon) : toJsx(icon);
     // live strokes report their width, outlined styles their fixed 1.3 lines; solid and full-color styles nothing
-    $("#p-sw").textContent = st.stroke ? fmtSw(state.sw) + " px" : "1.3 px, outlined";
+    $("#p-sw").textContent = st.stroke ? fmtSw(locked && !simulates(st) ? 1.3 : state.sw) + " px" : "1.3 px, outlined";
     $("#p-sw").hidden = $("#p-sw-dt").hidden = !st.stroke && !st.outlined;
     $("#p-color").textContent = st.set || st.color ? "Full color" : "currentColor";
   }
