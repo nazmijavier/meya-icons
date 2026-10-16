@@ -34,6 +34,7 @@ Meya Icons is a free, open-source set of <!--count-->2154<!--/count--> icons dra
 | [Outline](./icons/outline) | 929 | 1.3 px lines, outlined into shapes |
 | [Duotone](./icons/duotone) | 927 | The same lines, plus a 30% tint fill for depth |
 | [Stroke](https://icons.meyalab.com/#stroke) `PRO` | 929 | Live 1.3 px strokes you can make thinner or bolder |
+| [Stroke Duotone](https://icons.meyalab.com/#stroke-duotone) `PRO` | 927 | Live strokes with a 30% tint fill, thinner or bolder |
 | [Sharp](https://icons.meyalab.com/#sharp) `PRO` | 929 | Strokes with square caps and mitered corners |
 | [Filled](https://icons.meyalab.com/#filled) `PRO` | 929 | Solid shapes for active and selected states |
 | [Glass](https://icons.meyalab.com/#glass) `PRO` | 929 | Glossy glass in a blue-to-violet gradient |

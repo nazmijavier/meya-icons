@@ -16,6 +16,7 @@ export const STYLES = [
   { id: "outline", label: "Outline", stroke: false, outlined: true, round: false, look: "1.3 px lines, outlined into shapes" },
   { id: "duotone", label: "Duotone", stroke: false, outlined: true, round: false, look: "The same lines, plus a 30% tint fill for depth" },
   { id: "stroke", label: "Stroke", stroke: true, round: true, pro: true, showcase: true, look: "Live 1.3 px strokes you can make thinner or bolder" },
+  { id: "stroke-duotone", label: "Stroke Duotone", stroke: true, round: true, pro: true, showcase: true, look: "Live strokes with a 30% tint fill, thinner or bolder" },
   { id: "sharp", label: "Sharp", stroke: true, round: false, pro: true, showcase: true, look: "Strokes with square caps and mitered corners" },
   { id: "filled", label: "Filled", stroke: false, round: false, pro: true, showcase: true, look: "Solid shapes for active and selected states" },
   { id: "glass", label: "Glass", stroke: false, round: false, pro: true, showcase: true, color: true, look: "Glossy glass in a blue-to-violet gradient" },

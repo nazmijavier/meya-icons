@@ -154,7 +154,7 @@ body.color-open .toolbar { z-index: 50; }
 .preset:hover { scale: 1.12; }
 .preset[aria-pressed="true"] { box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12), 0 0 0 2px var(--white), 0 0 0 4px var(--ink); }
 .seg { display: flex; gap: 2px; padding: 3px; height: 36px; border-radius: 9999px; background: var(--mist); flex: none; }
-.seg button { height: 30px; padding-inline: 14px; border: 0; border-radius: 9999px; background: none; font-size: 13px; font-weight: 500; color: var(--slate); transition: background-color 150ms ease, color 150ms ease; }
+.seg button { height: 30px; padding-inline: 10px; border: 0; border-radius: 9999px; background: none; font-size: 13px; font-weight: 500; color: var(--slate); transition: background-color 150ms ease, color 150ms ease; }
 .seg button:hover { color: var(--ink); }
 .seg-sep { flex: none; width: 1px; margin: 7px 4px; background: var(--control); }
 .seg .soon { color: var(--steel); }
@@ -164,7 +164,7 @@ body.color-open .toolbar { z-index: 50; }
 [data-tip]:hover::after, [data-tip]:focus-visible::after, [data-tip].tip::after { opacity: 1; translate: -50% 0; scale: 1; }
 [data-tip].below::after { bottom: auto; top: calc(100% + 8px); translate: -50% -4px; transform-origin: 50% 0; }
 [data-tip].below:hover::after, [data-tip].below:focus-visible::after, [data-tip].below.tip::after { translate: -50% 0; }
-.seg button { display: inline-flex; align-items: center; gap: 6px; }
+.seg button { display: inline-flex; align-items: center; gap: 5px; }
 .pro { display: inline-flex; align-items: center; height: 16px; padding-inline: 5px; border-radius: 4px; background: var(--ink); color: #fff; font-size: 9px; font-weight: 600; letter-spacing: 0.06em; line-height: 1; }
 .seg .soon .pro { opacity: 0.55; }
 .control.off > * { opacity: 0.45; }
@@ -503,15 +503,21 @@ __FOOTER__
   const ui = (icon) => ({ b: icon.v.outline });
   // Artwork in the chosen style; interface chrome always uses outline.
   const body = (icon) => icon.v[state.style] || icon.v.outline || Object.values(icon.v)[0];
-  // Stroke is Pro: its tab previews the slider on the free outlined artwork; copying stays with Pro. The other
-  // locked stroke styles (Sharp, Animated) look different from that artwork, so they show their own previews.
-  const simulates = (st) => st.locked && st.id === "stroke";
-  const sim = (b) => `<svg class="sim" viewBox="0 0 24 24" aria-hidden="true">${b.replace(/<path /g, '<path class="ink" ')}${b.replace(/<path /g, '<path class="thin" ')}</svg>`;
-  const simBig = (b) => `<svg class="sim-big" viewBox="0 0 24 24" aria-hidden="true"><defs><mask id="sim-mask" maskUnits="userSpaceOnUse" x="-2" y="-2" width="28" height="28">${b.replace(/<path /g, '<path class="grow" ')}${b.replace(/<path /g, '<path class="shrink" ')}</mask></defs><rect class="glyph" x="-2" y="-2" width="28" height="28" fill="currentColor" mask="url(#sim-mask)"/></svg>`;
+  // Stroke and Stroke Duotone are Pro: their tabs preview the slider on the free outlined artwork (Outline and
+  // Duotone); copying stays with Pro. The other locked stroke styles (Sharp, Animated) look different from that
+  // artwork, so they show their own previews.
+  const SIM = { stroke: "outline", "stroke-duotone": "duotone" };
+  const simulates = (st) => st.locked && st.id in SIM;
+  const simSrc = (icon) => icon.v[SIM[state.style]];
+  // a Duotone tint (its translucent fill) stays as drawn; only the lines grow or thin
+  const TINT = /<path [^>]*fill-opacity="[^"]*"[^>]*\/>/g;
+  const tintOf = (b) => (b.match(TINT) || []).join(""), linesOf = (b) => b.replace(TINT, "");
+  const sim = (b) => { const l = linesOf(b); return `<svg class="sim" viewBox="0 0 24 24" aria-hidden="true">${tintOf(b)}${l.replace(/<path /g, '<path class="ink" ')}${l.replace(/<path /g, '<path class="thin" ')}</svg>`; };
+  const simBig = (b) => { const l = linesOf(b); return `<svg class="sim-big" viewBox="0 0 24 24" aria-hidden="true"><defs><mask id="sim-mask" maskUnits="userSpaceOnUse" x="-2" y="-2" width="28" height="28">${l.replace(/<path /g, '<path class="grow" ')}${l.replace(/<path /g, '<path class="shrink" ')}</mask></defs><g class="glyph">${tintOf(b)}</g><rect class="glyph" x="-2" y="-2" width="28" height="28" fill="currentColor" mask="url(#sim-mask)"/></svg>`; };
   // An animated icon keeps its reduced-motion rule in what is copied; on the page the Pause button governs motion.
   const REDUCE = /@media \(prefers-reduced-motion:reduce\)\{[^{}]*\{animation:none\}\}/g;
   const glyph = (icon) => {
-    if (simulates(styleOf(state.style)) && icon.v.outline) return sim(icon.v.outline);
+    if (simulates(styleOf(state.style)) && simSrc(icon)) return sim(simSrc(icon));
     const b = body(icon);
     if (b[0] !== "@") return inner({ b: b.replace(REDUCE, "") });
     const st = styleOf(state.style), n = +b.slice(1), cols = st.cols;
@@ -824,8 +830,8 @@ __FOOTER__
   function refreshSheet() {
     const icon = state.current; if (!icon) return;
     const st = styleOf(state.style), locked = !!st.locked;
-    $("#p-stage").innerHTML = gridSvg + (simulates(st) && icon.v.outline
-      ? simBig(icon.v.outline)
+    $("#p-stage").innerHTML = gridSvg + (simulates(st) && simSrc(icon)
+      ? simBig(simSrc(icon))
       : locked
       ? `<span class="lk-big${st.color ? " lk-c" : ""}" style="--lk-big:url(pro/${st.id}/${icon.c}/${icon.n}.webp)" aria-hidden="true"></span>`
       : glyph(icon).replace("<svg ", '<svg class="glyph" '));
