@@ -7,12 +7,13 @@
 // Animated styles: the sprite holds each icon's still frame, and the large previews are animated WebP that loop
 // one full cycle of the icon's motion (made with ffmpeg; without it they stay still). Each icon also gets a small
 // <name>.tile.webp at the sprite's cell size, which its tile plays on its own.
-import { execFileSync } from "node:child_process";
+import { execFile, execFileSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { promisify } from "node:util";
 import { PRO_DIR, proIcons } from "./pro.mjs";
 import { STYLES } from "./styles.mjs";
 
@@ -27,26 +28,31 @@ try { ({ chromium } = createRequire(import.meta.url)("playwright")); } catch {
 }
 
 // Animated WebP of each icon's motion: one full cycle (the longest track), from the second cycle on so tracks
-// that start late are already moving, black on transparent like the still previews.
+// that start late are already moving, black on transparent like the still previews. Icons render on a few pages
+// at once.
 async function moving(st, icons) {
   try { execFileSync("ffmpeg", ["-version"], { stdio: "ignore" }); } catch { console.warn(`${st.label}: ffmpeg not found, the large previews stay still`); return; }
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "meya-moving-"));
-  const pg = await browser.newPage({ viewport: { width: MOVING, height: MOVING } });
-  for (const i of icons) {
-    await pg.setContent(`<body style="margin:0;background:transparent">${i.svg.replace("<svg ", `<svg style="display:block;width:${MOVING}px;height:${MOVING}px;color:#000" `)}</body>`);
-    const period = await pg.evaluate(() => Math.max(...document.getAnimations().map((a) => a.effect.getTiming().duration)));
-    const frames = Math.min(48, Math.round((period / 1000) * 20)), dir = fs.mkdtempSync(path.join(tmp, "f-"));
-    for (let f = 0; f < frames; f++) {
-      await pg.evaluate((t) => { for (const a of document.getAnimations()) { a.pause(); a.currentTime = t; } }, period + (f * period) / frames);
-      await pg.screenshot({ path: path.join(dir, `${String(f).padStart(3, "0")}.png`), omitBackground: true });
+  const run = promisify(execFile), queue = [...icons];
+  const worker = async () => {
+    const pg = await browser.newPage({ viewport: { width: MOVING, height: MOVING } });
+    while (queue.length) {
+      const i = queue.shift();
+      await pg.setContent(`<body style="margin:0;background:transparent">${i.svg.replace("<svg ", `<svg style="display:block;width:${MOVING}px;height:${MOVING}px;color:#000" `)}</body>`);
+      const period = await pg.evaluate(() => Math.max(...document.getAnimations().map((a) => a.effect.getTiming().duration)));
+      const frames = Math.min(48, Math.round((period / 1000) * 20)), dir = fs.mkdtempSync(path.join(tmp, "f-"));
+      for (let f = 0; f < frames; f++) {
+        await pg.evaluate((t) => { for (const a of document.getAnimations()) { a.pause(); a.currentTime = t; } }, period + (f * period) / frames);
+        await pg.screenshot({ path: path.join(dir, `${String(f).padStart(3, "0")}.png`), omitBackground: true });
+      }
+      const encode = (out, size) => run("ffmpeg", ["-y", "-loglevel", "error", "-framerate", String((frames * 1000) / period), "-i", path.join(dir, "%03d.png"),
+        ...(size ? ["-vf", `scale=${size}:${size}:flags=lanczos`] : []),
+        "-c:v", "libwebp_anim", "-lossless", "0", "-q:v", "70", "-compression_level", "6", "-loop", "0", "-pix_fmt", "yuva420p", out]);
+      await Promise.all([encode(rel("docs/pro", st.id, `${i.k}.webp`)), encode(rel("docs/pro", st.id, `${i.k}.tile.webp`), CELL)]);
     }
-    const encode = (out, size) => execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-framerate", String((frames * 1000) / period), "-i", path.join(dir, "%03d.png"),
-      ...(size ? ["-vf", `scale=${size}:${size}:flags=lanczos`] : []),
-      "-c:v", "libwebp_anim", "-lossless", "0", "-q:v", "70", "-compression_level", "6", "-loop", "0", "-pix_fmt", "yuva420p", out]);
-    encode(rel("docs/pro", st.id, `${i.k}.webp`));
-    encode(rel("docs/pro", st.id, `${i.k}.tile.webp`), CELL);
-  }
-  await pg.close();
+    await pg.close();
+  };
+  await Promise.all(Array.from({ length: Math.min(4, os.cpus().length) }, worker));
   fs.rmSync(tmp, { recursive: true, force: true });
 }
 
