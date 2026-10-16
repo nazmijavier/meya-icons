@@ -4,10 +4,5 @@
   "installCommand": "echo skip",
   "buildCommand": "echo skip",
   "outputDirectory": "docs",
-  "cleanUrls": true,
-  "git": {
-    "deploymentEnabled": {
-      "main": false
-    }
-  }
+  "cleanUrls": true
 }

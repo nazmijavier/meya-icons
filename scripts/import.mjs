@@ -1,6 +1,8 @@
-// Imports raw Figma exports into icons/<style>/<category>/<name>.svg.
-// Usage: node scripts/import.mjs <folder-with-exports> [--style outline|duotone|sharp|filled]
+// Imports raw Figma exports into icons/<style>/<category>/<name>.svg, or with --out into <folder>/<category>/.
+// Usage: node scripts/import.mjs <folder-with-exports> [--style outline|duotone|sharp|filled] [--out <folder>]
 // Accepts "Icon=weather-sun.svg" or "weather-sun.svg". The name must start with a category id.
+// Stroke exports are Pro: import them into ../meya-icons-pro/stroke (or stroke-duotone) with --out, then
+// outline them into icons/ with scripts/outline.mjs.
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -12,9 +14,11 @@ const ids = STYLES.map((st) => st.id);
 const args = process.argv.slice(2);
 const styleAt = args.indexOf("--style");
 const style = styleAt >= 0 ? args.splice(styleAt, 2)[1] : "outline";
+const outAt = args.indexOf("--out");
+const outDir = outAt >= 0 ? path.resolve(args.splice(outAt, 2)[1]) : path.join(root, "icons", style);
 const from = args[0];
 if (!from || !ids.includes(style)) {
-  console.error(`Usage: node scripts/import.mjs <folder-with-exports> [--style ${ids.join("|")}]`);
+  console.error(`Usage: node scripts/import.mjs <folder-with-exports> [--style ${ids.join("|")}] [--out <folder>]`);
   process.exit(1);
 }
 
@@ -30,7 +34,7 @@ for (const file of fs.readdirSync(from).sort()) {
 
   const raw = fs.readFileSync(path.join(from, file), "utf8");
   const svg = normalize(raw);
-  const dest = path.join(root, "icons", style, cat, `${name}.svg`);
+  const dest = path.join(outDir, cat, `${name}.svg`);
   fs.mkdirSync(path.dirname(dest), { recursive: true });
   if (fs.existsSync(dest)) {
     if (fs.readFileSync(dest, "utf8") === svg) continue;
@@ -39,7 +43,7 @@ for (const file of fs.readdirSync(from).sort()) {
   fs.writeFileSync(dest, svg);
 }
 
-console.log(`Imported ${style}: ${added} new, ${updated} updated.`);
+console.log(`Imported ${outAt >= 0 ? path.relative(process.cwd(), outDir) || outDir : style}: ${added} new, ${updated} updated.`);
 if (skipped.length) console.log(`Skipped ${skipped.length} files with no category prefix (e.g. ${skipped.slice(0, 3).join(", ")}).`);
 
 function normalize(raw) {

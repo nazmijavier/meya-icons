@@ -1,5 +1,5 @@
 <title>Pricing · Meya Icons</title>
-<meta name="description" content="Outline and Duotone are free forever. Pro adds Sharp, Filled and Pixel for one flat rate.">
+<meta name="description" content="Outline and Duotone are free forever. Pro adds __PRO_NAMES__ for one flat rate.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=Geist+Mono:wght@400;500&display=swap">
@@ -31,7 +31,9 @@ button { font: inherit; color: inherit; letter-spacing: inherit; cursor: pointer
 @media (max-width: 1100px) { .wrap { padding-inline: 48px; } }
 @media (max-width: 760px) { .wrap { padding-inline: 20px; } }
 .narrow { max-width: 1040px; margin-inline: auto; }
-.ic { width: 18px; height: 18px; flex: none; stroke-width: 1.6; }
+.ic { width: 18px; height: 18px; flex: none; --uw: 1.6; }
+/* Icons come from the set, whose lines are outlined at 1.3: a stroke round each shape makes one bolder. */
+svg.ui path { stroke: currentColor; stroke-width: calc(var(--uw, 1.3) * 1px - 1.3px); }
 
 /* ---------- Tooltip ---------- */
 [data-tip] { position: relative; }
@@ -115,7 +117,7 @@ h2 { margin: 0 0 28px; font-size: clamp(26px, 3.2vw, 36px); font-weight: 500; le
 .cmp-head .cmp-pro .pill { background: var(--ink); color: #fff; } .cmp-head .cmp-pro .pill:hover { background: #333336; }
 .sample { width: 36px; height: 36px; flex: none; display: grid; place-items: center; border-radius: 10px; background: var(--mist); }
 .sample svg { width: 20px; height: 20px; }
-.yes svg { width: 20px; height: 20px; stroke-width: 1.8; color: var(--ink); }
+.yes svg { width: 20px; height: 20px; --uw: 1.8; color: var(--ink); }
 .no { width: 14px; height: 1.5px; border-radius: 2px; background: var(--control); }
 .txt { font-size: 14px; color: var(--slate); letter-spacing: 0.01em; }
 
@@ -179,7 +181,7 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
     <header class="hero">
       <span class="badge">Upgrade to <span class="pro">PRO</span></span>
       <h1>Simple plans. Full access.</h1>
-      <p>Outline and Duotone stay free forever. Pro adds three more styles for one flat rate.</p>
+      <p>Outline and Duotone stay free forever. Pro adds __PRO_STYLE_WORD__ more styles, live strokes included, for one flat rate.</p>
     </header>
 
     <div class="plans">
@@ -199,10 +201,10 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
       <div class="plan plan-pro">
         <div class="plan-top"><span class="plan-name">__ICON:general/star__Pro</span><span class="tag">Popular</span></div>
         <div class="price"><b id="pro-price">$5</b><span id="pro-unit">per seat / month</span></div>
-        <div class="sub" id="pro-sub">Billed monthly, cancel anytime</div>
+        <div class="sub" id="pro-sub">Billed monthly, cancel anytime. Seats are set at checkout.</div>
         <ul class="feats">
-          <li class="feat"><span class="chip">__ICON:layout/layers__</span><div><b>__PRO_COUNT__ more icons</b><small>Sharp, Filled and Pixel</small></div></li>
-          <li class="feat"><span class="chip">__ICON:alerts-feedback/check-circle__</span><div><b>Everything in Free</b><small>All __ALL_COUNT__ icons in five styles</small></div></li>
+          <li class="feat"><span class="chip">__ICON:layout/layers__</span><div><b>__PRO_COUNT__ more icons</b><small>__PRO_NAMES__</small></div></li>
+          <li class="feat"><span class="chip">__ICON:alerts-feedback/check-circle__</span><div><b>Everything in Free</b><small>All __ALL_COUNT__ icons in __STYLE_WORD__ styles</small></div></li>
           <li class="feat"><span class="chip">__ICON:arrows/refresh__</span><div><b>New icons as they ship</b><small>Included while you're subscribed</small></div></li>
         </ul>
         <div class="teaser" aria-hidden="true">__PRO_PREVIEW__</div>
@@ -220,19 +222,16 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
             <div role="columnheader" class="cmp-plan cmp-pro"><b>Pro</b><span>$5 per seat / month</span><a data-polar href="#" data-tip="Coming soon" class="pill soon">Get Pro</a></div>
           </div>
           <div class="cmp-group" role="row"><div role="cell">Styles</div><div role="cell"></div><div role="cell" class="cmp-pro"></div></div>
-          <div class="cmp-row" role="row"><div role="cell"><span class="sample">__SAMPLE:outline__</span>Outline<small>287 icons</small></div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
-          <div class="cmp-row" role="row"><div role="cell"><span class="sample">__SAMPLE:duotone__</span>Duotone<small>285 icons</small></div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
-          <div class="cmp-row" role="row"><div role="cell"><span class="sample">__SAMPLE:sharp__</span>Sharp<small>287 icons</small></div><div role="cell">__NO__</div><div role="cell" class="cmp-pro">__YES__</div></div>
-          <div class="cmp-row" role="row"><div role="cell"><span class="sample">__SAMPLE:filled__</span>Filled<small>287 icons</small></div><div role="cell">__NO__</div><div role="cell" class="cmp-pro">__YES__</div></div>
-          <div class="cmp-row" role="row"><div role="cell"><span class="sample">__SAMPLE:pixel__</span>Pixel<small>287 icons</small></div><div role="cell">__NO__</div><div role="cell" class="cmp-pro">__YES__</div></div>
-          <div class="cmp-row" role="row"><div role="cell"><span class="sample"></span>3D<small>Coming soon</small></div><div role="cell">__NO__</div><div role="cell" class="cmp-pro"><span class="txt">Coming soon</span></div></div>
-          <div class="cmp-row" role="row"><div role="cell"><span class="sample"></span>Glass<small>Coming soon</small></div><div role="cell">__NO__</div><div role="cell" class="cmp-pro"><span class="txt">Coming soon</span></div></div>
+          <div class="cmp-row" role="row"><div role="cell"><span class="sample">__SAMPLE:outline__</span>Outline<small>__STYLE_N:outline__ icons</small></div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
+          <div class="cmp-row" role="row"><div role="cell"><span class="sample">__SAMPLE:duotone__</span>Duotone<small>__STYLE_N:duotone__ icons</small></div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
+          __PRO_ROWS__
           <div class="cmp-group" role="row"><div role="cell">Extras</div><div role="cell"></div><div role="cell" class="cmp-pro"></div></div>
           <div class="cmp-row" role="row"><div role="cell"><span class="sample">__SAMPLE:cursors/pointer__</span>Cursors<small>__N:cursors__ icons</small></div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
           <div class="cmp-row" role="row"><div role="cell"><span class="sample">__SAMPLE:flags/japan__</span>Flags<small>__N:flags__ icons</small></div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
           <div class="cmp-group" role="row"><div role="cell">Tools</div><div role="cell"></div><div role="cell" class="cmp-pro"></div></div>
           <div class="cmp-row" role="row"><div role="cell">Copy as SVG or React</div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
-          <div class="cmp-row" role="row"><div role="cell">Stroke, size and colour controls</div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
+          <div class="cmp-row" role="row"><div role="cell">Size and colour controls</div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
+          <div class="cmp-row" role="row"><div role="cell">Live strokes you can make thinner or bolder</div><div role="cell"><span class="txt">Outlined, 1.3 px</span></div><div role="cell" class="cmp-pro"><span class="txt">Stroke style</span></div></div>
           <div class="cmp-row" role="row"><div role="cell">npm package</div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
           <div class="cmp-row cmp-last" role="row"><div role="cell">New icons as they ship</div><div role="cell"><span class="txt">Free styles</span></div><div role="cell" class="cmp-pro"><span class="txt">Every style</span></div></div>
         </div>
@@ -242,7 +241,7 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
     <section>
       <div class="why-head"><h2>Why Meya Icons?</h2><p>Every icon is drawn on the same 24 × 24 grid with the same stroke, so a screen, a diagram and a deck all look like one system.</p></div>
       <div class="why">
-        <div>__ICON:layout/grid__<b>__ALL_COUNT__ icons</b><p>Five styles of the same 287 shapes.</p></div>
+        <div>__ICON:layout/grid__<b>__ALL_COUNT__ icons</b><p>Five styles of the same shapes.</p></div>
         <div>__ICON:development/code__<b>SVG and React</b><p>Copy either format, or install from npm.</p></div>
         <div>__ICON:images/crop__<b>One 24 × 24 grid</b><p>Consistent weight and spacing across every icon.</p></div>
         <div>__ICON:weather/sun__<b>Colour anything</b><p>Every icon uses currentColor and follows your text.</p></div>
@@ -255,12 +254,12 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
         <p>Still have questions? Write to <a href="mailto:hello@meyalab.com">hello@meyalab.com</a>.</p>
       </div>
       <div class="faq">
-        <details><summary>What's included in Pro?__ICON:shapes/plus__</summary><p>Sharp, Filled and Pixel: __PRO_COUNT__ icons on top of the free Outline and Duotone sets, plus new icons as they're released.</p></details>
-        <details><summary>How does per-seat pricing work?__ICON:shapes/plus__</summary><p>Each person who uses the Pro icons needs a seat. Pick the number of seats at checkout; each seat is $5 a month.</p></details>
+        <details><summary>What's included in Pro?__ICON:shapes/plus__</summary><p>__PRO_NAMES__: __PRO_COUNT__ icons on top of the free Outline and Duotone sets, plus new icons as they're released.</p></details>
+        <details><summary>How does per-seat pricing work?__ICON:shapes/plus__</summary><p>Each person who uses the Pro icons needs a seat, at $5 a month. Pick the number of seats at checkout, then send the extra seats to your teammates by email.</p></details>
         <details><summary>Can I use the icons in commercial projects?__ICON:shapes/plus__</summary><p>Yes. Outline and Duotone are MIT licensed, and Pro icons can be used in personal and client work.</p></details>
-        <details><summary>How do I get the Pro icons?__ICON:shapes/plus__</summary><p>Right after checkout you get a download link by email with every Pro style as SVG files.</p></details>
+        <details><summary>How do I get the Pro icons?__ICON:shapes/plus__</summary><p>Right after checkout, your receipt email links to your customer portal, where you download every Pro style as SVG files. New icons are added there as they're released.</p></details>
         <details><summary>Can I cancel anytime?__ICON:shapes/plus__</summary><p>Yes. Manage or cancel your subscription from the customer portal link in your receipt email. You keep access until the end of the period you paid for.</p></details>
-        <details><summary>Is there a Figma plugin?__ICON:shapes/plus__</summary><p>Yes. <a href="https://www.figma.com/community/plugin/1685393903679180914" target="_blank" rel="noopener" style="color:var(--ink)">Meya Icons for Figma</a> is free in the Figma Community and places icons straight onto your canvas, with every stroke editable.</p></details>
+        <details><summary>Is there a Figma plugin?__ICON:shapes/plus__</summary><p>Yes. <a href="https://www.figma.com/community/plugin/1685393903679180914" target="_blank" rel="noopener" style="color:var(--ink)">Meya Icons for Figma</a> is free in the Figma Community and places icons straight onto your canvas, ready to recolor.</p></details>
       </div>
     </section>
 

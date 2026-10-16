@@ -1,0 +1,4 @@
+#!/bin/sh
+# Stops a commit that would publish Meya Icons Pro (see scripts/guard.mjs).
+# Turn it on once per clone: npm run hooks
+exec node scripts/guard.mjs --staged

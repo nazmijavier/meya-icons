@@ -1,5 +1,5 @@
 <title>Meya Icons __VERSION__</title>
-<meta name="description" content="Meya Icons __VERSION__: __COUNT__ open-source icons in __STYLECOUNT__ styles by Meya Lab. Search, tune the stroke, copy SVG or JSX.">
+<meta name="description" content="Meya Icons __VERSION__: __COUNT__ open-source icons in __STYLECOUNT__ styles by Meya Lab. Search, pick a size and color, copy SVG or JSX.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=Geist+Mono:wght@400;500&display=swap">
@@ -66,7 +66,7 @@ button { cursor: pointer; }
 .pill-soon:active { scale: 1; }
 .icon-btn { width: 32px; height: 32px; padding: 0; justify-content: center; background: transparent; }
 .icon-btn:hover { background: var(--mist); }
-.icon-btn svg { stroke-width: 1.5; }
+.icon-btn svg { --uw: 1.5; }
 
 /* ---------- Nav (glass pill from the Meya Lab site) ---------- */
 .nav-wrap { padding-top: 12px; transition: padding-right 300ms var(--ease-drawer); }
@@ -83,7 +83,7 @@ button { cursor: pointer; }
 .sponsor-add { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; border: 0; background: var(--mist); color: var(--ink); transition-property: background-color, scale; transition-duration: 150ms; }
 .sponsor-add:hover { background: var(--mist-2); }
 .sponsor-add:active { scale: 0.94; }
-.sponsor-add svg { width: 14px; height: 14px; stroke-width: 2; }
+.sponsor-add svg { width: 14px; height: 14px; --uw: 2; }
 
 .nav-link { display: inline-flex; align-items: center; gap: 7px; height: 40px; padding-inline: 12px; border-radius: 9999px; color: var(--slate); text-decoration: none; font-size: 13px; font-weight: 500; transition: background-color 150ms ease; }
 .nav-link:hover { color: var(--ink); background: var(--mist); }
@@ -100,7 +100,7 @@ button { cursor: pointer; }
 .install:active { scale: 0.98; }
 .install code { font: 400 13px/1 var(--mono); color: var(--ink); }
 .install .copy-swap { width: 15px; height: 15px; }
-.install svg { width: 15px; height: 15px; stroke-width: 1.6; }
+.install svg { width: 15px; height: 15px; --uw: 1.6; }
 .stat { display: inline-flex; align-items: center; gap: 10px; margin-top: 8px; font-size: 15px; color: var(--slate); }
 .stat b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
 .stat .dot { width: 8px; height: 8px; border-radius: 50%; background: #34C759; box-shadow: 0 0 0 4px rgba(52, 199, 89, 0.16); }
@@ -114,7 +114,7 @@ button { cursor: pointer; }
 body.color-open .toolbar { z-index: 50; }
 .toolbar-row { display: flex; align-items: center; gap: 8px; padding-block: 12px 0; }
 .field { position: relative; flex: 1; min-width: 0; }
-.field > svg { position: absolute; left: 16px; top: 50%; translate: 0 -50%; width: 17px; height: 17px; stroke-width: 1.5; color: var(--steel); pointer-events: none; }
+.field > svg { position: absolute; left: 16px; top: 50%; translate: 0 -50%; width: 17px; height: 17px; --uw: 1.5; color: var(--steel); pointer-events: none; }
 .input { width: 100%; height: 44px; border-radius: 980px; border: 0; background: var(--mist); padding: 0 48px 0 42px; font-size: 15px; outline: none; transition: background-color 150ms ease, box-shadow 150ms ease; }
 .input::placeholder { color: var(--steel); }
 .input:hover { background: var(--mist-2); }
@@ -123,7 +123,17 @@ body.color-open .toolbar { z-index: 50; }
 .kbd { position: absolute; right: 14px; top: 50%; translate: 0 -50%; display: inline-flex; align-items: center; justify-content: center; height: 22px; min-width: 22px; padding-inline: 6px; border-radius: 6px; background: var(--white); color: var(--slate); font-size: 12px; font-weight: 500; box-shadow: 0 0 0 1px var(--control); }
 .clear { position: absolute; right: 7px; top: 50%; translate: 0 -50%; }
 .clear svg { color: var(--slate); }
-.filters { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 10px 0; }
+.filters { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; padding-block: 10px 0; }
+/* When the styles are wider than the page they scroll sideways (set from the script), and the buttons beside them
+   move to their own line when they no longer fit. */
+.seg.scroll { max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+.seg.scroll::-webkit-scrollbar { display: none; }
+.seg.scroll button { flex: none; }
+.filters-end { display: flex; align-items: center; gap: 8px; flex: none; margin-left: auto; }
+/* Pause or play the Animated tab: the button shows the icon of what it does next. */
+.color-btn.motion-btn { width: 36px; padding: 0; justify-content: center; }
+.motion-btn svg { width: 18px; height: 18px; }
+.motion .motion-btn .i-play, :root:not(.motion) .motion-btn .i-pause { display: none; }
 
 /* Icon colour */
 .color-ctl { position: relative; flex: none; }
@@ -144,7 +154,7 @@ body.color-open .toolbar { z-index: 50; }
 .preset:hover { scale: 1.12; }
 .preset[aria-pressed="true"] { box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12), 0 0 0 2px var(--white), 0 0 0 4px var(--ink); }
 .seg { display: flex; gap: 2px; padding: 3px; height: 36px; border-radius: 9999px; background: var(--mist); flex: none; }
-.seg button { height: 30px; padding-inline: 14px; border: 0; border-radius: 9999px; background: none; font-size: 13px; font-weight: 500; color: var(--slate); transition: background-color 150ms ease, color 150ms ease; }
+.seg button { height: 30px; padding-inline: 10px; border: 0; border-radius: 9999px; background: none; font-size: 13px; font-weight: 500; color: var(--slate); transition: background-color 150ms ease, color 150ms ease; }
 .seg button:hover { color: var(--ink); }
 .seg-sep { flex: none; width: 1px; margin: 7px 4px; background: var(--control); }
 .seg .soon { color: var(--steel); }
@@ -154,10 +164,13 @@ body.color-open .toolbar { z-index: 50; }
 [data-tip]:hover::after, [data-tip]:focus-visible::after, [data-tip].tip::after { opacity: 1; translate: -50% 0; scale: 1; }
 [data-tip].below::after { bottom: auto; top: calc(100% + 8px); translate: -50% -4px; transform-origin: 50% 0; }
 [data-tip].below:hover::after, [data-tip].below:focus-visible::after, [data-tip].below.tip::after { translate: -50% 0; }
-.seg button { display: inline-flex; align-items: center; gap: 6px; }
+.seg button { display: inline-flex; align-items: center; gap: 5px; }
 .pro { display: inline-flex; align-items: center; height: 16px; padding-inline: 5px; border-radius: 4px; background: var(--ink); color: #fff; font-size: 9px; font-weight: 600; letter-spacing: 0.06em; line-height: 1; }
 .seg .soon .pro { opacity: 0.55; }
-.control.off { opacity: 0.45; }
+.control.off > * { opacity: 0.45; }
+.control .pro { margin-left: -6px; }
+/* Interface icons come from the set, whose lines are outlined at 1.3: a stroke round each shape makes one bolder. */
+svg.ui path { stroke: currentColor; stroke-width: calc(var(--uw, 1.3) * 1px - 1.3px); }
 .seg button[aria-pressed="true"] { background: var(--white); color: var(--ink); box-shadow: 0 0 0 1px var(--control); }
 .control { display: flex; align-items: center; gap: 12px; height: 44px; padding-inline: 18px; border-radius: 980px; background: var(--mist); flex: none; transition: opacity 150ms ease; }
 .control label { font-size: 13px; color: var(--slate); font-weight: 500; }
@@ -199,13 +212,39 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(116px, 1fr)); gap: 10px; }
 .tile {
   display: flex; flex-direction: column; align-items: center; gap: 10px;
-  aspect-ratio: 1; padding: 16px 8px 14px; border: 0; border-radius: 20px; background: var(--mist);
+  aspect-ratio: 1; padding: 16px 8px 14px; border: 0; border-radius: 20px; --tile-bg: var(--mist); background: var(--tile-bg);
   transition-property: background-color, box-shadow, scale; transition-duration: 150ms; transition-timing-function: ease;
 }
-.tile:hover { background: var(--mist-2); }
+.tile:hover { --tile-bg: var(--mist-2); }
 .tile:active { scale: 0.96; }
-.tile[aria-current="true"] { background: var(--white); box-shadow: inset 0 0 0 1.5px var(--ink); }
+.tile[aria-current="true"] { --tile-bg: var(--white); box-shadow: inset 0 0 0 1.5px var(--ink); }
 .tile svg { width: var(--size); height: var(--size); stroke-width: var(--sw); margin-block: auto; flex: none; color: var(--icon, var(--ink)); }
+/* The Stroke tab previews live strokes on the free outlined artwork (never the Pro files): a line grows under a
+   stroke of its own colour and thins under one in the tile's colour. Outlined icons are one merged shape, so this
+   matches a thinner or bolder 1.3 line with round caps and joins. */
+svg.sim path { stroke-linecap: round; stroke-linejoin: round; }
+svg.sim .ink { stroke: currentColor; stroke-width: max(0px, calc(var(--sw) * 1px - 1.3px)); }
+svg.sim .thin { fill: none; stroke: var(--tile-bg); stroke-width: max(0px, calc(1.3px - var(--sw) * 1px)); transition: stroke 150ms ease; }
+/* PRO showcase styles come from an image sprite used as a mask, filled with the icon colour: nothing to copy. */
+.tile .lk { display: block; width: var(--size); height: var(--size); margin-block: auto; flex: none; background: var(--icon, var(--ink));
+  -webkit-mask: var(--lk) no-repeat; mask: var(--lk) no-repeat;
+  -webkit-mask-size: calc(var(--size) * var(--lk-cols)) auto; mask-size: calc(var(--size) * var(--lk-cols)) auto;
+  -webkit-mask-position: calc(var(--size) * var(--x) * -1) calc(var(--size) * var(--y) * -1); mask-position: calc(var(--size) * var(--x) * -1) calc(var(--size) * var(--y) * -1); }
+/* Full-color PRO styles show the sprite itself. */
+.tile .lk.lk-c { background: var(--lk) no-repeat; background-size: calc(var(--size) * var(--lk-cols)) auto; background-position: calc(var(--size) * var(--x) * -1) calc(var(--size) * var(--y) * -1); -webkit-mask: none; mask: none; }
+/* Animated (PRO): every tile near the screen plays its small animated preview on its own (the rest wait, so a
+   long tab doesn't load every preview at once). Paused (the Pause button, which starts paused when the system asks
+   for reduced motion), a tile rests on its still frame and plays while hovered or focused. */
+.motion .tile.near .lk.lk-a { -webkit-mask: var(--lk-a) center / 100% 100% no-repeat; mask: var(--lk-a) center / 100% 100% no-repeat; }
+@media (prefers-reduced-motion: no-preference) {
+  .tile:hover .lk.lk-a, .tile:focus-visible .lk.lk-a { -webkit-mask: var(--lk-a) center / 100% 100% no-repeat; mask: var(--lk-a) center / 100% 100% no-repeat; }
+}
+/* Animated vectors (the owner's copy) follow the same rules; the details sheet always plays them. */
+.tile svg [class^="m-"] { animation-play-state: paused; }
+.motion .tile.near svg [class^="m-"] { animation-play-state: running; }
+@media (prefers-reduced-motion: no-preference) {
+  .tile:hover svg [class^="m-"], .tile:focus-visible svg [class^="m-"] { animation-play-state: running; }
+}
 .spon-tile { text-decoration: none; }
 .spon-tile .sponsor-mark { width: var(--size); height: var(--size); border-radius: 50%; margin-block: auto; flex: none; }
 .tile .name { font-size: 12px; line-height: 1.25; color: var(--slate); text-align: center; overflow-wrap: anywhere; }
@@ -233,10 +272,19 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
 .stage > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 .stage .grid-lines line { stroke: var(--grid); stroke-width: 0.03; }
 .stage .glyph { stroke-width: var(--sw); color: var(--icon, var(--ink)); }
+.stage .lk-big { position: absolute; inset: 0; background: var(--icon, var(--ink)); -webkit-mask: var(--lk-big) center / 100% 100% no-repeat; mask: var(--lk-big) center / 100% 100% no-repeat; }
+.stage .lk-big.lk-c { background: var(--lk-big) center / 100% 100% no-repeat; -webkit-mask: none; mask: none; }
+.stage .sim-big path { stroke-linecap: round; stroke-linejoin: round; }
+.stage .sim-big .grow { fill: #fff; stroke: #fff; stroke-width: max(0px, calc(var(--sw) * 1px - 1.3px)); }
+.stage .sim-big .shrink { fill: none; stroke: #000; stroke-width: max(0px, calc(1.3px - var(--sw) * 1px)); }
+.lock { display: grid; gap: 12px; padding: 16px; border-radius: 16px; background: var(--mist); }
+.lock p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--slate); }
+.lock b { color: var(--ink); font-weight: 600; }
+.lock .pill { justify-content: center; }
 .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .actions .pill { justify-content: center; }
 .copy-swap { position: relative; width: 16px; height: 16px; flex: none; }
-.copy-swap svg { position: absolute; inset: 0; stroke-width: 1.6; transition-property: opacity, scale, filter; transition-duration: 200ms; transition-timing-function: var(--ease-swap); }
+.copy-swap svg { position: absolute; inset: 0; --uw: 1.6; transition-property: opacity, scale, filter; transition-duration: 200ms; transition-timing-function: var(--ease-swap); }
 .copy-swap .i-check { opacity: 0; scale: 0.25; filter: blur(4px); }
 .copied .copy-swap .i-copy { opacity: 0; scale: 0.25; filter: blur(4px); }
 .copied .copy-swap .i-check { opacity: 1; scale: 1; filter: blur(0); }
@@ -251,7 +299,7 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
 /* ---------- Toast ---------- */
 .toast { position: fixed; z-index: 60; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 24px); display: flex; align-items: center; gap: 8px; height: 44px; max-width: calc(100vw - 32px); white-space: nowrap; padding: 0 18px 0 14px; border-radius: 9999px; background: var(--ink); color: #fff; font-size: 14px; font-weight: 500; translate: -50% 10px; opacity: 0; pointer-events: none; transition: translate 200ms var(--ease-out), opacity 200ms var(--ease-out); }
 .toast.show { translate: -50% 0; opacity: 1; }
-.toast svg { width: 16px; height: 16px; stroke-width: 1.8; color: var(--brand); flex: none; }
+.toast svg { width: 16px; height: 16px; --uw: 1.8; color: var(--brand); flex: none; }
 .toast #toast-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 
 /* ---------- Footer ---------- */
@@ -282,6 +330,7 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
   /* Two swipeable rows (styles, categories) with clear space between them. */
   .filters { flex-direction: column; align-items: stretch; gap: 18px; padding-block: 16px 12px; }
   .filters .divider { display: none; }
+  .filters-end { margin-left: 0; }
   .seg { width: 100%; overflow-x: auto; scrollbar-width: none; height: 40px; }
   .seg::-webkit-scrollbar { display: none; }
   .seg button { flex: none; height: 34px; padding-inline: 14px; }
@@ -342,9 +391,9 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
         <kbd class="kbd" id="kbd">/</kbd>
         <button class="pill icon-btn clear" id="clear" type="button" aria-label="Clear search" hidden><span data-ico="shapes:x"></span></button>
       </div>
-      <div class="control">
-        <label for="sw">Stroke</label>
-        <input class="range" id="sw" type="range" min="0.75" max="2.25" step="0.05" value="1.3">
+      <div class="control off" data-tip="Live strokes come with Pro">
+        <label for="sw">Stroke</label><span class="pro" id="sw-pro">PRO</span>
+        <input class="range" id="sw" type="range" min="0.75" max="2.25" step="0.05" value="1.3" disabled>
         <output id="sw-out" for="sw">1.30</output>
       </div>
       <div class="control">
@@ -355,18 +404,23 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
     </div>
     <div class="filters">
       <div class="seg" id="styles" role="group" aria-label="Icon style"></div>
-      <div class="color-ctl">
-        <button class="color-btn" id="color-btn" type="button" aria-expanded="false" aria-controls="color-pop">
-          <span class="color-dot" id="color-dot"></span>Color
+      <div class="filters-end">
+        <button class="color-btn motion-btn" id="motion-btn" type="button" aria-label="Pause animations" data-tip="Pause animations" hidden>
+          <span class="i-pause" data-ico="media-devices:pause"></span><span class="i-play" data-ico="media-devices:play"></span>
         </button>
-        <div class="color-pop" id="color-pop" hidden>
-          <div class="color-row">
-            <span class="swatch"><input id="color" type="color" value="#1D1D1F" aria-label="Pick an icon color"></span>
-            <input class="hex" id="hex" value="#1D1D1F" spellcheck="false" aria-label="Icon color hex">
-            <button class="color-reset" id="color-reset" type="button">Reset</button>
+        <div class="color-ctl">
+          <button class="color-btn" id="color-btn" type="button" aria-expanded="false" aria-controls="color-pop">
+            <span class="color-dot" id="color-dot"></span>Color
+          </button>
+          <div class="color-pop" id="color-pop" hidden>
+            <div class="color-row">
+              <span class="swatch"><input id="color" type="color" value="#1D1D1F" aria-label="Pick an icon color"></span>
+              <input class="hex" id="hex" value="#1D1D1F" spellcheck="false" aria-label="Icon color hex">
+              <button class="color-reset" id="color-reset" type="button">Reset</button>
+            </div>
+            <p class="presets-title">Presets</p>
+            <div class="presets" id="presets"></div>
           </div>
-          <p class="presets-title">Presets</p>
-          <div class="presets" id="presets"></div>
         </div>
       </div>
     </div>
@@ -409,6 +463,10 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
       <button class="pill pill-blue" id="copy-svg" type="button"><span class="copy-swap"><span data-ico="editor:copy" class="i-copy"></span><span data-ico="shapes:check" class="i-check"></span></span>Copy SVG</button>
       <button class="pill pill-outline" id="copy-jsx" type="button"><span class="copy-swap"><span data-ico="editor:copy" class="i-copy"></span><span data-ico="shapes:check" class="i-check"></span></span>Copy JSX</button>
     </div>
+    <div class="lock" id="p-lock" hidden>
+      <p><b id="p-lock-style">Sharp</b> is part of Meya Icons Pro. Get Pro to copy it as SVG or React and to use the whole set in Figma.</p>
+      <a class="pill pill-blue" href="pricing">Get Pro</a>
+    </div>
     <div class="code-tabs" role="tablist" aria-label="Code format">
       <button class="tab" role="tab" type="button" aria-selected="true" data-fmt="svg">SVG</button>
       <button class="tab" role="tab" type="button" aria-selected="false" data-fmt="jsx">React</button>
@@ -417,8 +475,8 @@ main.wrap { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 28px
     <dl class="meta">
       <dt>File</dt><dd id="p-file"></dd>
       <dt>Grid</dt><dd>24 × 24</dd>
-      <dt>Stroke</dt><dd id="p-sw">1.3 px</dd>
-      <dt>Color</dt><dd>currentColor</dd>
+      <dt id="p-sw-dt">Stroke</dt><dd id="p-sw">1.3 px</dd>
+      <dt>Color</dt><dd id="p-color">currentColor</dd>
     </dl>
   </div>
 </aside>
@@ -445,7 +503,27 @@ __FOOTER__
   const ui = (icon) => ({ b: icon.v.outline });
   // Artwork in the chosen style; interface chrome always uses outline.
   const body = (icon) => icon.v[state.style] || icon.v.outline || Object.values(icon.v)[0];
-  const glyph = (icon) => inner({ b: body(icon) });
+  // Stroke and Stroke Duotone are Pro: their tabs preview the slider on the free outlined artwork (Outline and
+  // Duotone); copying stays with Pro. The other locked stroke styles (Sharp, Animated) look different from that
+  // artwork, so they show their own previews.
+  const SIM = { stroke: "outline", "stroke-duotone": "duotone" };
+  const simulates = (st) => st.locked && st.id in SIM;
+  const simSrc = (icon) => icon.v[SIM[state.style]];
+  // a Duotone tint (its translucent fill) stays as drawn; only the lines grow or thin
+  const TINT = /<path [^>]*fill-opacity="[^"]*"[^>]*\/>/g;
+  const tintOf = (b) => (b.match(TINT) || []).join(""), linesOf = (b) => b.replace(TINT, "");
+  const sim = (b) => { const l = linesOf(b); return `<svg class="sim" viewBox="0 0 24 24" aria-hidden="true">${tintOf(b)}${l.replace(/<path /g, '<path class="ink" ')}${l.replace(/<path /g, '<path class="thin" ')}</svg>`; };
+  const simBig = (b) => { const l = linesOf(b); return `<svg class="sim-big" viewBox="0 0 24 24" aria-hidden="true"><defs><mask id="sim-mask" maskUnits="userSpaceOnUse" x="-2" y="-2" width="28" height="28">${l.replace(/<path /g, '<path class="grow" ')}${l.replace(/<path /g, '<path class="shrink" ')}</mask></defs><g class="glyph">${tintOf(b)}</g><rect class="glyph" x="-2" y="-2" width="28" height="28" fill="currentColor" mask="url(#sim-mask)"/></svg>`; };
+  // An animated icon keeps its reduced-motion rule in what is copied; on the page the Pause button governs motion.
+  const REDUCE = /@media \(prefers-reduced-motion:reduce\)\{[^{}]*\{animation:none\}\}/g;
+  const glyph = (icon) => {
+    if (simulates(styleOf(state.style)) && simSrc(icon)) return sim(simSrc(icon));
+    const b = body(icon);
+    if (b[0] !== "@") return inner({ b: b.replace(REDUCE, "") });
+    const st = styleOf(state.style), n = +b.slice(1), cols = st.cols;
+    const anim = st.animated ? `;--lk-a:url(pro/${st.id}/${icon.c}/${icon.n}.tile.webp)` : "";
+    return `<span class="lk${st.color ? " lk-c" : ""}${st.animated ? " lk-a" : ""}" style="--x:${n % cols};--y:${Math.floor(n / cols)}${anim}" aria-hidden="true"></span>`;
+  };
   const title = (n) => n.replace(/-/g, " ").replace(/^./, (m) => m.toUpperCase());
   const pascal = (n) => n.split("-").map((p) => p[0].toUpperCase() + p.slice(1)).join("") + "Icon";
   const fmtSw = (v) => (+v).toFixed(2).replace(/0$/, "");
@@ -482,7 +560,7 @@ __FOOTER__
   document.querySelectorAll("[data-ico]").forEach((el) => {
     const [c, n] = el.dataset.ico.split(":");
     const icon = find(c, n);
-    if (icon) el.outerHTML = inner(ui(icon)).replace("<svg ", `<svg class="${el.className}" `);
+    if (icon) el.outerHTML = inner(ui(icon)).replace("<svg ", `<svg class="ui${el.className ? " " + el.className : ""}" `);
   });
 
   // ---------- Copy ----------
@@ -494,10 +572,13 @@ __FOOTER__
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${state.size}" height="${state.size}" viewBox="0 0 24 24" fill="none"${attrs}>\n  ${code}\n</svg>`;
   }
   function toJsx(icon) {
-    const code = paint(body(icon))
+    // an animated icon carries its CSS in a <style>: JSX takes it as a template literal, and class as className
+    const raw = paint(body(icon)), css = (raw.match(/<style>([\s\S]*?)<\/style>/) || [])[1];
+    const code = raw.replace(/<style>[\s\S]*?<\/style>/, "<style>@@CSS@@</style>").replace(/ class="/g, ' className="')
       .replace(/ ([a-z]+)-([a-z])([a-z-]*)=/g, (m, a, b, rest) => ` ${a}${b.toUpperCase()}${rest.replace(/-([a-z])/g, (x, y) => y.toUpperCase())}=`)
       .replace(/style="mask-type:([a-z]+)"/g, 'style={{ maskType: "$1" }}')
-      .replace(/></g, ">\n      <");
+      .replace(/></g, ">\n      <")
+      .replace("@@CSS@@", css === undefined ? "" : "{`" + css + "`}");
     const st = styleOf(state.style);
     const attrs = (st.stroke ? ` stroke="${state.color === INK ? "currentColor" : state.color}" strokeWidth={${fmtSw(state.sw)}}` : "") + (st.round ? ' strokeLinecap="round" strokeLinejoin="round"' : "");
     return `export function ${pascal(icon.n)}(props) {\n  return (\n    <svg xmlns="http://www.w3.org/2000/svg" width={${state.size}} height={${state.size}} viewBox="0 0 24 24" fill="none"${attrs} {...props}>\n      ${code}\n    </svg>\n  );\n}`;
@@ -616,22 +697,58 @@ __FOOTER__
   $("#styles").innerHTML = styles.map((st, k) => (st.set && !styles[k - 1].set ? '<span class="seg-sep" aria-hidden="true"></span>' : "") + (st.count
     ? `<button type="button" data-style="${st.id}" aria-pressed="${st.id === state.style}">${st.label}${badge(st)}</button>`
     : `<button type="button" class="soon" aria-disabled="true" data-tip="Coming soon" aria-label="${st.label}${st.pro ? " (Pro)" : ""}, coming soon">${st.label}${badge(st)}</button>`)).join("");
+  // Live strokes are the Pro Stroke style: its tab previews them on the outlined artwork, so the slider works there.
+  // Outline and Duotone ship outlined and the other Pro tabs are previews, so there the slider rests at 1.3 and
+  // says where live strokes are.
+  function syncStroke(st) {
+    const live = !!st.stroke && (!st.locked || simulates(st)), ctl = $("#sw").closest(".control"), el = $("#sw"), v = live ? state.sw : 1.3;
+    el.disabled = !live; ctl.classList.toggle("off", !live); $("#sw-pro").hidden = live;
+    if (live) delete ctl.dataset.tip; else ctl.dataset.tip = "Live strokes come with Pro";
+    el.value = v; el.style.setProperty("--p", ((v - el.min) / (el.max - el.min)) * 100 + "%");
+    $("#sw-out").textContent = v.toFixed(2);
+  }
+  syncStroke(styleOf(state.style));
   // Anything not released yet (PRO styles, Buy Icons): show "Coming soon" right away, then hide it.
   document.addEventListener("click", (e) => {
-    const soon = e.target.closest(".soon"); if (!soon) return;
+    const soon = e.target.closest(".soon, .control.off"); if (!soon) return;
     soon.classList.add("tip");
     clearTimeout(soon._t); soon._t = setTimeout(() => soon.classList.remove("tip"), 1600);
   });
+  // Animated tiles play on their own. The button pauses them; it starts paused when the system asks for reduced
+  // motion, and the choice is remembered on this device.
+  const motionBtn = $("#motion-btn");
+  function setMotion(on) {
+    root.classList.toggle("motion", on);
+    motionBtn.setAttribute("aria-label", motionBtn.dataset.tip = on ? "Pause animations" : "Play animations");
+    // paused vectors go back to rest instead of stopping mid-move
+    if (!on) for (const t of tiles) { const g = t.querySelector("svg"); if (g && g.querySelector('[class^="m-"]')) g.outerHTML = glyph(icons[t.dataset.i]); }
+  }
+  let savedMotion = null;
+  try { savedMotion = localStorage.getItem("meya-motion"); } catch {}
+  setMotion(savedMotion ? savedMotion === "on" : !matchMedia("(prefers-reduced-motion: reduce)").matches);
+  motionBtn.addEventListener("click", () => {
+    const on = !root.classList.contains("motion");
+    setMotion(on);
+    try { localStorage.setItem("meya-motion", on ? "on" : "off"); } catch {}
+  });
+  // only tiles near the screen play (see .near in the styles)
+  if (window.IntersectionObserver) {
+    const near = new IntersectionObserver((es) => { for (const e of es) e.target.classList.toggle("near", e.isIntersecting); }, { rootMargin: "300px 0px" });
+    for (const t of tiles) near.observe(t);
+  } else for (const t of tiles) t.classList.add("near");
   $("#styles").addEventListener("click", (e) => {
     if (e.target.closest(".soon")) return;
     const b = e.target.closest("[data-style]"); if (!b || b.dataset.style === state.style) return;
     state.style = b.dataset.style;
     $("#styles").querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
-    for (const t of tiles) t.querySelector("svg").outerHTML = glyph(icons[t.dataset.i]);
+    const st = styleOf(state.style);
+    sectionsEl.style.setProperty("--lk", st.locked ? `url(pro/${st.id}.webp)` : "none");
+    sectionsEl.style.setProperty("--lk-cols", st.cols || 1);
+    for (const t of tiles) t.querySelector("svg, .lk").outerHTML = glyph(icons[t.dataset.i]);
     countChips();
     if (state.cat !== "all" && !categories.find((c) => c.id === state.cat).counts[state.style]) setCat("all", false); else filter();
-    const strokes = styleOf(state.style).stroke;
-    $("#sw").disabled = !strokes; $("#sw").closest(".control").classList.toggle("off", !strokes);
+    syncStroke(st);
+    motionBtn.hidden = !st.animated;
     if (state.current && !state.current.v[state.style]) closeSheet(); else refreshSheet();
   });
   const fill = (el) => el.style.setProperty("--p", ((el.value - el.min) / (el.max - el.min)) * 100 + "%");
@@ -654,6 +771,11 @@ __FOOTER__
   const trackToolbar = () => root.style.setProperty("--toolbar-h", Math.round(toolbarEl.getBoundingClientRect().height) + "px");
   trackToolbar();
   if (window.ResizeObserver) new ResizeObserver(trackToolbar).observe(toolbarEl);
+  // The styles scroll sideways only when they are wider than the page, so their tooltips show whenever they fit.
+  const segEl = $("#styles"), filtersEl = $(".filters");
+  const fitStyles = () => segEl.classList.toggle("scroll", segEl.scrollWidth > filtersEl.clientWidth);
+  fitStyles();
+  if (window.ResizeObserver) new ResizeObserver(fitStyles).observe(filtersEl);
 
   // ---------- Icon colour ----------
   const PRESETS = ["#000000", "#FFFFFF", "#3F3F46", "#A1A1AA", "#3B82F6", "#6366F1", "#A855F7", "#EC4899",
@@ -707,10 +829,21 @@ __FOOTER__
   }
   function refreshSheet() {
     const icon = state.current; if (!icon) return;
-    $("#p-stage").innerHTML = gridSvg + glyph(icon).replace("<svg ", '<svg class="glyph" ');
-    $("#p-file").textContent = `icons/${state.style}/${icon.c}/${icon.n}.svg`;
-    $("#p-code").textContent = state.fmt === "svg" ? toSvg(icon) : toJsx(icon);
-    $("#p-sw").textContent = fmtSw(state.sw) + " px";
+    const st = styleOf(state.style), locked = !!st.locked;
+    $("#p-stage").innerHTML = gridSvg + (simulates(st) && simSrc(icon)
+      ? simBig(simSrc(icon))
+      : locked
+      ? `<span class="lk-big${st.color ? " lk-c" : ""}" style="--lk-big:url(pro/${st.id}/${icon.c}/${icon.n}.webp)" aria-hidden="true"></span>`
+      : glyph(icon).replace("<svg ", '<svg class="glyph" '));
+    for (const el of sheet.querySelectorAll(".actions, .code-tabs, #p-code")) el.hidden = locked;
+    $("#p-lock").hidden = !locked;
+    $("#p-lock-style").textContent = st.label;
+    $("#p-file").textContent = locked ? `Meya Icons Pro · ${st.id}/${icon.c}/${icon.n}.svg` : `icons/${state.style}/${icon.c}/${icon.n}.svg`;
+    if (!locked) $("#p-code").textContent = state.fmt === "svg" ? toSvg(icon) : toJsx(icon);
+    // live strokes report their width, outlined styles their fixed 1.3 lines; solid and full-color styles nothing
+    $("#p-sw").textContent = st.stroke ? fmtSw(locked && !simulates(st) ? 1.3 : state.sw) + " px" : "1.3 px, outlined";
+    $("#p-sw").hidden = $("#p-sw-dt").hidden = !st.stroke && !st.outlined;
+    $("#p-color").textContent = st.set || st.color ? "Full color" : "currentColor";
   }
   sectionsEl.addEventListener("click", (e) => {
     const t = e.target.closest(".tile:not(.spon-tile)"); if (!t) return;
@@ -724,8 +857,8 @@ __FOOTER__
     refreshSheet();
   }));
   $("#install").addEventListener("click", (e) => copy("npm i meya-icons", e.currentTarget, "Copied npm i meya-icons"));
-    $("#copy-svg").addEventListener("click", (e) => copy(toSvg(state.current), e.currentTarget, `Copied SVG for ${state.current.n}`));
-  $("#copy-jsx").addEventListener("click", (e) => copy(toJsx(state.current), e.currentTarget, `Copied ${pascal(state.current.n)}`));
+  $("#copy-svg").addEventListener("click", (e) => { if (!styleOf(state.style).locked) copy(toSvg(state.current), e.currentTarget, `Copied SVG for ${state.current.n}`); });
+  $("#copy-jsx").addEventListener("click", (e) => { if (!styleOf(state.style).locked) copy(toJsx(state.current), e.currentTarget, `Copied ${pascal(state.current.n)}`); });
 
   // ---------- Keyboard ----------
   document.addEventListener("keydown", (e) => {
@@ -739,7 +872,7 @@ __FOOTER__
 
   countChips();
   const hash = location.hash.slice(1);
-  if (styles.some((st) => st.set && st.id === hash)) $(`#styles [data-style="${hash}"]`).click();
+  if (styles.some((st) => st.count && st.id === hash && st.id !== state.style)) $(`#styles [data-style="${hash}"]`).click();
   else setCat(categories.some((c) => c.id === hash) ? hash : "all", false);
 })();
 </script>

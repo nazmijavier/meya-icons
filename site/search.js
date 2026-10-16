@@ -18,7 +18,8 @@
     return toks.every((t) => {
       const forms = [t];
       if (t.length > 3 && t.endsWith("ies")) forms.push(t.slice(0, -3) + "y");
-      else if (t.length > 4 && t.endsWith("es")) forms.push(t.slice(0, -2));
+      // -es only after s, x, z, ch and sh (boxes, watches) or o in longer words (potatoes): grapes is grape, not grap
+      else if (t.length > 4 && (/(s|x|z|ch|sh)es$/.test(t) || (t.length > 5 && t.endsWith("oes")))) forms.push(t.slice(0, -2));
       if (t.length > 3 && t.endsWith("s")) forms.push(t.slice(0, -1));
       return ic.h.some((w) => forms.some((f) => w.startsWith(f)) ||
         (fuzzy && t.length >= 4 && (oneOff(w, t) || (w.length > t.length && oneOff(w.slice(0, t.length), t)))));
