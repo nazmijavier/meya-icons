@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-  <path d="M8.57727 6.59399H20.0064" stroke="currentColor" stroke-width="1.3" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="1.00359" cy="1.00359" r="1.00359" transform="matrix(1 0 0 -1 3.99365 7.60693)" fill="currentColor" fill-opacity="0.3" stroke="none"/>
-  <path d="M8.57727 11.9908H20.0064" stroke="currentColor" stroke-width="1.3" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="1.00359" cy="1.00359" r="1.00359" transform="matrix(1 0 0 -1 3.99365 13.0038)" fill="currentColor" fill-opacity="0.3" stroke="none"/>
-  <path d="M8.57727 17.3871H20.0064" stroke="currentColor" stroke-width="1.3" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="1.00359" cy="1.00359" r="1.00359" transform="matrix(1 0 0 -1 3.99365 18.4001)" fill="currentColor" fill-opacity="0.3" stroke="none"/>
+  <path d="M8.577 5.944h11.429c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-11.429c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65z" fill="currentColor" fill-rule="evenodd"/>
+  <path d="M6.001 6.603c0-.551-.452-1.003-1.004-1.003-.552 0-1.003.452-1.003 1.003 0 .552.451 1.004 1.003 1.004.552 0 1.004-.452 1.004-1.004z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
+  <path d="M8.577 11.341h11.429c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-11.429c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65z" fill="currentColor" fill-rule="evenodd"/>
+  <path d="M6.001 12c0-.552-.452-1.003-1.004-1.003-.552 0-1.003.451-1.003 1.003 0 .552.451 1.004 1.003 1.004.552 0 1.004-.452 1.004-1.004z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
+  <path d="M8.577 16.737h11.429c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-11.429c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65z" fill="currentColor" fill-rule="evenodd"/>
+  <path d="M6.001 17.397c0-.552-.452-1.004-1.004-1.004-.552 0-1.003.452-1.003 1.004 0 .551.451 1.003 1.003 1.003.552 0 1.004-.452 1.004-1.003z" fill="currentColor" fill-opacity="0.3" fill-rule="evenodd"/>
 </svg>

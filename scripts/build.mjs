@@ -1,10 +1,12 @@
 // Builds the website (docs/index.html), README preview images and README counts from icons/<style>/.
 // Usage: node scripts/build.mjs [artifact-fragment-output-path]
+//        node scripts/build.mjs --admin   the owner's copy, see ADMIN below
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { CATEGORIES, COLOR_SETS } from "./categories.mjs";
+import { CATEGORIES, COLOR_SETS, HIDDEN } from "./categories.mjs";
 import { keywordsFor } from "./keywords.mjs";
+import { PRO_DIR, proIcons } from "./pro.mjs";
 import { STYLES } from "./styles.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -17,16 +19,23 @@ const PUBLISH_SPONSOR_PAGE = true;
 // Paste the access key from web3forms.com so the sponsor form emails hello@meyalab.com.
 // Left empty, the form falls back to opening the visitor's own mail app.
 const WEB3FORMS_KEY = "11a56e93-754a-4035-87e6-e90bb4de7bf2";
+// The owner's copy (--admin): the same site with every style as real vectors (the Pro styles read from
+// ../meya-icons-pro), the hidden categories shown and nothing locked. It is written to admin/index.html only:
+// admin/ is git-ignored and outside docs/, so it is never committed or deployed, and docs/ and the README
+// are left untouched.
+const ADMIN = process.argv.includes("--admin");
+const ARGS = process.argv.slice(2).filter((a) => a !== "--admin");
 
 // ---------- Read icons ----------
 // Every style is read from icons/<style>/. An icon is the union of its variants by category and name.
 // Full-color sets (cursors, flags) are their own "style": one category, read from icons/outline/<id>/.
 function readStyle(style) {
   const out = new Map();
-  const set = STYLES.find((st) => st.id === style).set;
+  const { set, showcase } = STYLES.find((st) => st.id === style);
+  const fromPro = ADMIN && showcase;
   for (const [cat] of CATEGORIES) {
-    if (set ? cat !== style : COLOR_SETS.includes(cat)) continue;
-    const dir = rel("icons", set ? "outline" : style, cat);
+    if (set ? cat !== style : COLOR_SETS.includes(cat) || (!ADMIN && HIDDEN.includes(cat))) continue;
+    const dir = fromPro ? path.join(PRO_DIR, style, cat) : rel("icons", set ? "outline" : style, cat);
     if (!fs.existsSync(dir)) continue;
     for (const file of fs.readdirSync(dir).filter((f) => f.endsWith(".svg")).sort()) {
       const name = file.slice(0, -4);
@@ -64,21 +73,43 @@ const categories = CATEGORIES.map(([id, label]) => ({
   counts: Object.fromEntries(styles.map((st) => [st.id, icons.filter((i) => i.c === id && i.v[st.id]).length])),
 })).filter((c) => c.count);
 
+// ---------- PRO showcase: browsable on the site from image previews, never as vectors ----------
+// Previews come from scripts/pro-previews.mjs. Showcase styles stay out of the free counts, the README tables,
+// the npm package and the Figma plugin data. Their icons carry "@<n>", the cell in docs/pro/<style>.webp.
+const PREVIEWS = fs.existsSync(rel("scripts/pro-previews.json")) ? JSON.parse(fs.readFileSync(rel("scripts/pro-previews.json"), "utf8")) : {};
+const showcase = {};
+for (const st of STYLES.filter((s) => s.showcase && !variants[s.id].size && PREVIEWS[s.id])) {
+  const shown = PREVIEWS[st.id].icons;
+  if (fs.existsSync(path.join(PRO_DIR, st.id))) {
+    const now = new Map(proIcons(st.id).map((i) => [i.k, i.h]));
+    const changed = shown.filter(([k, h]) => now.get(k) !== h).length + [...now.keys()].filter((k) => !shown.some(([s]) => s === k)).length;
+    if (changed) console.warn(`${st.label} previews are out of date (${changed} icons differ from ../meya-icons-pro). Run: node scripts/pro-previews.mjs`);
+  }
+  showcase[st.id] = { cols: PREVIEWS[st.id].cols, cell: new Map(shown.map(([k], n) => [k, n])) };
+}
+const missing = Object.entries(showcase).flatMap(([id, sc]) => [...sc.cell.keys()].filter((k) => !keys.has(k) && !HIDDEN.includes(k.split("/")[0])).map((k) => `${id}/${k}`));
+if (missing.length) console.warn(`Showcase previews with no Outline icon, left out: ${missing.join(", ")}`);
+const siteStyles = styles.map((st) => (showcase[st.id] ? { ...st, count: icons.filter((i) => showcase[st.id].cell.has(`${i.c}/${i.n}`)).length, locked: true, cols: showcase[st.id].cols } : st));
+const siteCategories = categories.map((c) => ({ ...c, counts: { ...c.counts, ...Object.fromEntries(Object.entries(showcase).map(([id, sc]) => [id, icons.filter((i) => i.c === c.id && sc.cell.has(`${i.c}/${i.n}`)).length])) } }));
+
 // ---------- Pro teaser (the full PRO sets stay in ../meya-icons-pro) ----------
 // Paste the Polar checkout link here to switch "Get Pro" on.
 const POLAR_CHECKOUT = "";
-const PRO_DIR = rel("../meya-icons-pro");
-const PRO_STYLES = ["sharp", "filled", "pixel"];
+// Pro styles that have shipped are the showcase ones (browsable on the site); the others show as coming soon.
+const PRO_STYLES = STYLES.filter((st) => st.pro && st.showcase).map((st) => st.id);
 const TEASER = ["general/home", "general/heart", "communication/chat", "files/folder", "general/settings", "general/star"];
 let proCount = 0, proPreview = "";
+const proCounts = {};
 for (const st of PRO_STYLES) {
   const dir = path.join(PRO_DIR, st);
+  proCounts[st] = 0;
   if (!fs.existsSync(dir)) continue;
-  for (const c of fs.readdirSync(dir)) if (fs.statSync(path.join(dir, c)).isDirectory()) proCount += fs.readdirSync(path.join(dir, c)).filter((f) => f.endsWith(".svg")).length;
+  for (const c of fs.readdirSync(dir)) if (!HIDDEN.includes(c) && fs.statSync(path.join(dir, c)).isDirectory()) proCounts[st] += fs.readdirSync(path.join(dir, c)).filter((f) => f.endsWith(".svg")).length;
+  proCount += proCounts[st];
 }
 for (const n of TEASER) {
-  // one teaser icon per slot, cycling through the three styles
-  const st = PRO_STYLES[TEASER.indexOf(n) % 3], f = path.join(PRO_DIR, st, n + ".svg");
+  // one teaser icon per slot, cycling through the Pro styles
+  const st = PRO_STYLES[TEASER.indexOf(n) % PRO_STYLES.length], f = path.join(PRO_DIR, st, n + ".svg");
   if (!fs.existsSync(f)) continue;
   const t = fs.readFileSync(f, "utf8"), attrs = st === "pixel" ? ' shape-rendering="crispEdges"' : "";
   proPreview += `<span><svg viewBox="0 0 24 24" fill="none"${attrs}>${t.replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim()}</svg></span>`;
@@ -102,10 +133,14 @@ const FOOTER = `<footer class="footer">
 const SEARCH = fs.readFileSync(rel("site/search.js"), "utf8");
 const strip = (b) => b.replace(/\s*stroke-width="1\.3"/g, "");
 const siteIcons = icons.map((i) => ({ ...i, k: keywordsFor(i.c, i.n), v: Object.fromEntries(Object.entries(i.v).map(([k, b]) => [k, strip(b)])) }));
+const showcaseIcons = siteIcons.map((i) => {
+  const extra = Object.entries(showcase).filter(([, sc]) => sc.cell.has(`${i.c}/${i.n}`)).map(([id, sc]) => [id, "@" + sc.cell.get(`${i.c}/${i.n}`)]);
+  return extra.length ? { ...i, v: { ...i.v, ...Object.fromEntries(extra) } } : i;
+});
 const fragment = fs
   .readFileSync(rel("site/template.html"), "utf8")
   .replace("__FOOTER__", FOOTER)
-  .replace("/*__DATA__*/", `window.MEYA=${JSON.stringify({ categories, styles, icons: siteIcons })};`)
+  .replace("/*__DATA__*/", `window.MEYA=${JSON.stringify({ categories: siteCategories, styles: siteStyles, icons: showcaseIcons })};`)
   .replace("/*__SEARCH__*/", SEARCH)
   .replaceAll("__SPONSOR_LOGO__", fs.readFileSync(rel("assets/logo.svg"), "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim())
   .replace("__CLICK_SOUND__", fs.readFileSync(rel("assets/click.wav")).toString("base64"))
@@ -121,11 +156,24 @@ const fragment = fs
   .replace("__CHROME__", `data:image/jpeg;base64,${fs.readFileSync(rel("assets/logo-chrome.jpg")).toString("base64")}`);
 
 const split = fragment.indexOf("</style>") + 8;
+if (ADMIN) {
+  // admin/ holds only this page, so the links to the other pages go to the live site
+  const owner = fragment.replace(/href="(pricing|sponsor|pixel)"/g, `href="${SITE}/$1"`).replace(/<title>/, "<title>Owner · ");
+  const at = owner.indexOf("</style>") + 8;
+  const note = `<div style="position:fixed;left:12px;bottom:12px;z-index:99;padding:6px 10px;border-radius:8px;background:#1d1d1f;color:#fff;font:600 12px/1.2 Inter,system-ui,sans-serif">Owner copy · every style unlocked · keep private</div>`;
+  fs.mkdirSync(rel("admin"), { recursive: true });
+  fs.writeFileSync(
+    rel("admin/index.html"),
+    `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n<meta name="robots" content="noindex">\n${owner.slice(0, at)}\n</head>\n<body>\n${owner.slice(at).trim()}\n${note}\n</body>\n</html>\n`
+  );
+  console.log(`Owner copy: ${siteStyles.filter((st) => st.count).map((st) => `${st.label} ${st.count}`).join(", ")} in ${categories.length} categories → admin/index.html (${(owner.length / 1048576).toFixed(1)} MB). Keep it private: it holds the Pro vectors.`);
+  process.exit(0);
+}
 fs.writeFileSync(
   rel("docs/index.html"),
   `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n${fragment.slice(0, split)}\n</head>\n<body>\n${fragment.slice(split).trim()}\n</body>\n</html>\n`
 );
-if (process.argv[2]) fs.writeFileSync(process.argv[2], fragment);
+if (ARGS[0]) fs.writeFileSync(ARGS[0], fragment);
 
 // ---------- Figma plugin UI (kept outside this repo) ----------
 // The plugin lives in ../meya-icons-pro/figma-plugin, so this step is skipped when it is not there.
@@ -146,7 +194,7 @@ if (fs.existsSync(pluginTpl)) {
 }
 
 // ---------- Pixel Lab (docs/pixel.html) ----------
-// Converts Outline icons to pixel-grid icons in the browser. Keeps real stroke widths.
+// Converts Outline icons to pixel-grid icons in the browser, widening or thinning their outlined lines to the weight asked for.
 const pixelData = icons.filter((i) => i.v.outline && !COLOR_SETS.includes(i.c)).map((i) => ({ key: `${i.c}/${i.n}`, n: i.n, b: i.v.outline }));
 const pixel = fs
   .readFileSync(rel("site/pixel.html"), "utf8")
@@ -158,7 +206,7 @@ fs.writeFileSync(
   rel("docs/pixel.html"),
   `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n${pixel.slice(0, pSplit).replaceAll("__SITE__", "./")}\n</head>\n<body>\n${pixel.slice(pSplit).trim().replaceAll("__SITE__", "./")}\n</body>\n</html>\n`
 );
-if (process.argv[3]) fs.writeFileSync(process.argv[3], pixel.replaceAll("__SITE__", SITE + "/"));
+if (ARGS[1]) fs.writeFileSync(ARGS[1], pixel.replaceAll("__SITE__", SITE + "/"));
 
 if (PUBLISH_SPONSOR_PAGE) {
   // ---------- Sponsor page (docs/sponsor.html) ----------
@@ -184,11 +232,23 @@ if (PUBLISH_SPONSOR_PAGE) {
   const outlineIcon = (ref) => {
     const f = rel("icons/outline", ref + ".svg");
     const inner = fs.readFileSync(f, "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim().replace(/\s*stroke-width="1\.3"/g, "");
-    return `<svg class="ic" viewBox="0 0 24 24" fill="none" aria-hidden="true">${inner}</svg>`;
+    return `<svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
   };
   const check = outlineIcon("shapes/check");
+  const listOf = (names) => names.join(", ").replace(/, ([^,]*)$/, " and $1");
+  const proNames = listOf(PRO_STYLES.map((id) => STYLES.find((st) => st.id === id).label));
+  const WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+  const styleCount = lineStyles.length + PRO_STYLES.length;
+  // one comparison row per Pro style: shipped ones with a sample and a count, the rest coming soon
+  const proRows = STYLES.filter((st) => st.pro).map((st) => PRO_STYLES.includes(st.id)
+    ? `<div class="cmp-row" role="row"><div role="cell"><span class="sample">__SAMPLE:${st.id}__</span>${st.label}<small>__PRO_N:${st.id}__ icons</small></div><div role="cell">__NO__</div><div role="cell" class="cmp-pro">__YES__</div></div>`
+    : `<div class="cmp-row" role="row"><div role="cell"><span class="sample"></span>${st.label}<small>Coming soon</small></div><div role="cell">__NO__</div><div role="cell" class="cmp-pro"><span class="txt">Coming soon</span></div></div>`).join("\n          ");
   const page = fs
     .readFileSync(rel("site/pricing.html"), "utf8")
+    .replace("__PRO_ROWS__", proRows)
+    .replaceAll("__PRO_NAMES__", proNames)
+    .replaceAll("__STYLE_WORD__", WORDS[styleCount] || String(styleCount))
+    .replaceAll("__PRO_STYLE_WORD__", WORDS[PRO_STYLES.length] || String(PRO_STYLES.length))
     .replace("__FOOTER__", FOOTER)
     .replace(/__ICON:([a-z-]+\/[a-z-]+)__/g, (m, ref) => outlineIcon(ref))
     .replaceAll("__YES__", `<span class="yes" aria-label="Included">${check}</span>`)
@@ -196,6 +256,8 @@ if (PUBLISH_SPONSOR_PAGE) {
     .replace(/__SAMPLE:([a-z-]+\/[a-z-]+)__/g, (m, ref) =>
       `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true">${fs.readFileSync(rel("icons", "outline", ref + ".svg"), "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim()}</svg>`)
     .replace(/__N:([a-z-]+)__/g, (m, cat) => String(icons.filter((i) => i.c === cat).length))
+    .replace(/__STYLE_N:([a-z]+)__/g, (m, st) => String(styles.find((x) => x.id === st).count))
+    .replace(/__PRO_N:([a-z]+)__/g, (m, st) => String(proCounts[st] || siteStyles.find((x) => x.id === st).count))
     .replace(/__SAMPLE:([a-z]+)__/g, (m, st) => {
       const f = ["outline", "duotone"].includes(st) ? rel("icons", st, "general/home.svg") : path.join(PRO_DIR, st, "general/home.svg");
       if (!fs.existsSync(f)) return "";
@@ -273,7 +335,7 @@ if (fs.existsSync(readmePath)) {
   const styleRows = [
     "| Style | Icons | Look |",
     "| --- | ---: | --- |",
-    ...styles.map((st) => `| ${st.count ? `[${st.label}](./icons/${st.set ? "outline/" : ""}${st.id})` : st.label}${st.pro ? " `PRO`" : ""} | ${st.count || "Coming soon"} | ${st.look} |`),
+    ...siteStyles.map((st) => `| ${st.locked ? `[${st.label}](${SITE}/#${st.id})` : st.count ? `[${st.label}](./icons/${st.set ? "outline/" : ""}${st.id})` : st.label}${st.pro ? " `PRO`" : ""} | ${st.count || "Coming soon"} | ${st.look} |`),
   ].join("\n");
   md = md.replace(/(<!--styles-->)[\s\S]*?(<!--\/styles-->)/, `$1\n${styleRows}\n$2`);
   const previews = lineStyles
@@ -308,4 +370,4 @@ for (const [file, urlPath] of Object.entries(PAGE_PATH)) {
   fs.writeFileSync(p, html);
 }
 
-console.log(`Built ${total} icons${builtPlugin ? " + Figma plugin UI" : ""} (${styles.map((st) => `${st.label} ${st.count}`).join(", ")}) in ${categories.length} categories → docs/index.html (${(fragment.length / 1024).toFixed(0)} KB), README assets updated.`);
+console.log(`Built ${total} icons${builtPlugin ? " + Figma plugin UI" : ""} (${siteStyles.map((st) => `${st.label} ${st.count}${st.locked ? " previews" : ""}`).join(", ")}) in ${categories.length} categories → docs/index.html (${(fragment.length / 1024).toFixed(0)} KB), README assets updated.`);

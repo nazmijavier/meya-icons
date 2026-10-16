@@ -1,15 +1,15 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./assets/banner-dark.svg">
-  <img alt="Meya Icons 1.0" src="./assets/banner-light.svg" width="100%">
+  <img alt="Meya Icons 2.0" src="./assets/banner-light.svg" width="100%">
 </picture>
 
 # Meya Icons
 
-Meya Icons is a free, open-source set of <!--count-->870<!--/count--> icons drawn by [Meya Lab](https://meyalab.com), in <!--stylenames-->**Outline** and **Duotone**<!--/stylenames--> styles. Every icon sits on a 24 × 24 grid and uses `currentColor`, so it picks up the text color around it. The stroke styles use a 1.3 px stroke with round caps and joins.
+Meya Icons is a free, open-source set of <!--count-->2214<!--/count--> icons drawn by [Meya Lab](https://meyalab.com), in <!--stylenames-->**Outline** and **Duotone**<!--/stylenames--> styles. Every icon sits on a 24 × 24 grid and uses `currentColor`, so it picks up the text color around it. Icons are drawn with a 1.3 px stroke with round caps and joins, and ship with that stroke outlined into shapes, so they look the same in every app and at every size.
 
 [![npm](https://img.shields.io/npm/v/meya-icons?style=flat-square&color=1BA4FF&label=npm)](https://www.npmjs.com/package/meya-icons)
-[![Icons](https://img.shields.io/badge/icons-870-121212?style=flat-square)](#categories)
-[![Version](https://img.shields.io/badge/version-1.0-1BA4FF?style=flat-square)](https://github.com/nazmijavier/meya-icons/releases)
+[![Icons](https://img.shields.io/badge/icons-2214-121212?style=flat-square)](#categories)
+[![Version](https://img.shields.io/badge/version-2.0-1BA4FF?style=flat-square)](https://github.com/nazmijavier/meya-icons/releases)
 [![License](https://img.shields.io/badge/license-MIT-737373?style=flat-square)](./LICENSE)
 
 **[Browse and copy the icons](https://icons.meyalab.com/)** · **[Figma plugin](https://www.figma.com/community/plugin/1685393903679180914)** · **[Hire Meya Lab](https://meyalab.com/contact)**
@@ -31,22 +31,27 @@ Meya Icons is a free, open-source set of <!--count-->870<!--/count--> icons draw
 <!--styles-->
 | Style | Icons | Look |
 | --- | ---: | --- |
-| [Outline](./icons/outline) | 287 | 1.3 px strokes only |
-| [Duotone](./icons/duotone) | 285 | The same strokes, plus a 30% tint fill for depth |
-| Sharp `PRO` | Coming soon | Strokes with square caps and mitered corners |
-| Filled `PRO` | Coming soon | Solid shapes for active and selected states |
+| [Outline](./icons/outline) | 959 | 1.3 px lines, outlined into shapes |
+| [Duotone](./icons/duotone) | 957 | The same lines, plus a 30% tint fill for depth |
+| [Stroke](https://icons.meyalab.com/#stroke) `PRO` | 959 | Live 1.3 px strokes you can make thinner or bolder |
+| [Stroke Duotone](https://icons.meyalab.com/#stroke-duotone) `PRO` | 957 | Live strokes with a 30% tint fill, thinner or bolder |
+| [Sharp](https://icons.meyalab.com/#sharp) `PRO` | 959 | Strokes with square caps and mitered corners |
+| [Filled](https://icons.meyalab.com/#filled) `PRO` | 959 | Solid shapes for active and selected states |
+| [Glass](https://icons.meyalab.com/#glass) `PRO` | 959 | Glossy glass in a blue-to-violet gradient |
+| [Animated](https://icons.meyalab.com/#animated) `PRO` | 104 | Icons that move, each with its own motion, as animated SVG |
 | Pixel `PRO` | Coming soon | Solid cells on a 12 × 12 grid, made with the Pixel Lab |
 | 3D `PRO` | Coming soon | Rendered 3D icons with depth and soft light |
-| Glass `PRO` | Coming soon | Frosted, translucent glass icons |
 | [Cursors](./icons/outline/cursors) | 43 | Full-color cursors: arrows, hands, text, resize and more |
 | [Flags](./icons/outline/flags) | 255 | Full-color country and territory flags, 3:2 with rounded corners |
 <!--/styles-->
 
-Every style uses `currentColor`. Duotone tints use `fill-opacity`, so both tones follow the one color you set.
+Outline, Duotone, Stroke, Sharp and Filled use `currentColor`; Cursors and Flags carry their own colors. Duotone tints use `fill-opacity`, so both tones follow the one color you set.
+
+Since 2.0, Outline and Duotone have their strokes outlined into solid shapes, so the line weight is fixed at 1.3 px. Live strokes you can make thinner or bolder are the **Stroke** style in [Meya Icons Pro](https://icons.meyalab.com/pricing). Releases before 2.0 keep their strokes and stay MIT.
 
 ## Get the icons
 
-- **Copy one icon.** Open the [website](https://icons.meyalab.com/), choose a style, search, pick an icon, and copy it as SVG or as a React component. You can change the stroke width and size before you copy.
+- **Copy one icon.** Open the [website](https://icons.meyalab.com/), choose a style, search, pick an icon, and copy it as SVG or as a React component. You can change the size and color before you copy.
 - **Use them in Figma.** Install [Meya Icons for Figma](https://www.figma.com/community/plugin/1685393903679180914) from the Community and place icons straight onto your canvas.
 
 - **Install the package.**
@@ -77,7 +82,7 @@ import { Home, Search } from "meya-icons/react/outline";
 import { Heart } from "meya-icons/react/duotone";
 
 <Home />                          // 24px, inherits the text color
-<Search size={20} strokeWidth={2} />
+<Search size={20} />
 <Heart color="#0071E3" />
 ```
 
@@ -85,7 +90,7 @@ Components forward a ref and take any SVG prop, so `className`, `onClick` and `a
 
 ### Figma
 
-Drag any SVG from [`icons/`](./icons) onto the canvas. Strokes and tints stay editable.
+Drag any SVG from [`icons/`](./icons) onto the canvas. Each icon comes in as one shape (Duotone: its tint as a second, 30% layer), ready to recolor.
 
 ## Design specs
 
@@ -93,7 +98,7 @@ Drag any SVG from [`icons/`](./icons) onto the canvas. Strokes and tints stay ed
 | --- | --- |
 | Grid | 24 × 24 px |
 | Live area | 20 × 20 px (2 px padding) |
-| Stroke | 1.3 px, centered |
+| Stroke | 1.3 px, centered, outlined into shapes |
 | Caps and joins | Round |
 | Color | `currentColor` |
 
@@ -102,44 +107,61 @@ Drag any SVG from [`icons/`](./icons) onto the canvas. Strokes and tints stay ed
 <!--categories-->
 | Category | Outline | Duotone |
 | --- | ---: | ---: |
-| General | [15](icons/outline/general) | [15](icons/duotone/general) |
-| Arrows | [15](icons/outline/arrows) | [15](icons/duotone/arrows) |
-| Alerts & Feedback | [15](icons/outline/alerts-feedback) | [15](icons/duotone/alerts-feedback) |
-| Communication | [15](icons/outline/communication) | [15](icons/duotone/communication) |
-| Users | [15](icons/outline/users) | [15](icons/duotone/users) |
-| Files | [15](icons/outline/files) | [15](icons/duotone/files) |
-| Editor | [15](icons/outline/editor) | [15](icons/duotone/editor) |
-| Layout | [15](icons/outline/layout) | [15](icons/duotone/layout) |
-| Images | [15](icons/outline/images) | [15](icons/duotone/images) |
-| Media & Devices | [15](icons/outline/media-devices) | [15](icons/duotone/media-devices) |
-| Charts | [15](icons/outline/charts) | [15](icons/duotone/charts) |
-| Development | [15](icons/outline/development) | [15](icons/duotone/development) |
-| Security | [15](icons/outline/security) | [15](icons/duotone/security) |
-| Finance & E-commerce | [15](icons/outline/finance-ecommerce) | [15](icons/duotone/finance-ecommerce) |
-| Time | [15](icons/outline/time) | [15](icons/duotone/time) |
-| Maps & Travel | [16](icons/outline/maps-travel) | [15](icons/duotone/maps-travel) |
-| Education | [15](icons/outline/education) | [15](icons/duotone/education) |
-| Weather | [16](icons/outline/weather) | [15](icons/duotone/weather) |
-| Shapes | [15](icons/outline/shapes) | [15](icons/duotone/shapes) |
+| General | [106](icons/outline/general) | [106](icons/duotone/general) |
+| AI | [129](icons/outline/ai) | [129](icons/duotone/ai) |
+| Arrows | [37](icons/outline/arrows) | [37](icons/duotone/arrows) |
+| Alerts & Feedback | [18](icons/outline/alerts-feedback) | [18](icons/duotone/alerts-feedback) |
+| Communication | [32](icons/outline/communication) | [32](icons/duotone/communication) |
+| Users | [41](icons/outline/users) | [41](icons/duotone/users) |
+| Files | [34](icons/outline/files) | [34](icons/duotone/files) |
+| Editor | [37](icons/outline/editor) | [37](icons/duotone/editor) |
+| Layout | [47](icons/outline/layout) | [47](icons/duotone/layout) |
+| Images | [49](icons/outline/images) | [49](icons/duotone/images) |
+| Media & Devices | [70](icons/outline/media-devices) | [70](icons/duotone/media-devices) |
+| Charts | [19](icons/outline/charts) | [19](icons/duotone/charts) |
+| Development | [33](icons/outline/development) | [33](icons/duotone/development) |
+| Security | [20](icons/outline/security) | [20](icons/duotone/security) |
+| Finance & E-commerce | [83](icons/outline/finance-ecommerce) | [83](icons/duotone/finance-ecommerce) |
+| Time | [21](icons/outline/time) | [21](icons/duotone/time) |
+| Maps & Travel | [36](icons/outline/maps-travel) | [35](icons/duotone/maps-travel) |
+| Education | [27](icons/outline/education) | [27](icons/duotone/education) |
+| Weather | [21](icons/outline/weather) | [20](icons/duotone/weather) |
+| Nature | [19](icons/outline/nature) | [19](icons/duotone/nature) |
+| Health | [12](icons/outline/health) | [12](icons/duotone/health) |
+| Food & Drink | [28](icons/outline/food) | [28](icons/duotone/food) |
+| Home & Living | [16](icons/outline/home) | [16](icons/duotone/home) |
+| Shapes | [24](icons/outline/shapes) | [24](icons/duotone/shapes) |
 <!--/categories-->
 
 ## Adding icons
 
-1. Export the new icons from Figma as SVG. Name each file `category-name.svg`, for example `weather-sun.svg` or `Icon=weather-sun.svg`.
-2. Import them into `icons/`. Pass `--style` for anything other than Outline (`duotone`, `sharp` or `filled`):
+1. Export the new icons from Figma as SVG, strokes and all. Name each file `category-name.svg`, for example `weather-sun.svg` or `Icon=weather-sun.svg`.
+2. Import them into the Pro stroke folders. The live strokes are the Pro Stroke style, so they stay out of this repo:
 
    ```bash
-   node scripts/import.mjs ~/path/to/exports
-   node scripts/import.mjs ~/path/to/duotone-exports --style duotone
-   node scripts/import.mjs ~/path/to/sharp-exports --style sharp
-   node scripts/import.mjs ~/path/to/filled-exports --style filled
+   node scripts/import.mjs ~/path/to/exports --out ../meya-icons-pro/stroke
+   node scripts/import.mjs ~/path/to/duotone-exports --out ../meya-icons-pro/stroke-duotone
    ```
 
-3. Rebuild the website, the README images and the icon counts:
+3. Outline them into `icons/`. Every stroke becomes the shape it draws, caps, joins and dots included (needs `npm i` once, for CanvasKit). Add a name filter to outline only some icons:
+
+   ```bash
+   node scripts/outline.mjs ../meya-icons-pro/stroke
+   node scripts/outline.mjs ../meya-icons-pro/stroke-duotone --style duotone
+   ```
+
+4. Rebuild the website, the README images and the icon counts:
 
    ```bash
    node scripts/build.mjs
    ```
+
+Stroke, Sharp, Filled, Pixel, 3D and Glass are Pro styles. Their SVGs live in `../meya-icons-pro/<style>/`, never in `icons/`, so they don't ship under the MIT license. The website shows the Pro styles that have shipped (marked `showcase` in `scripts/styles.mjs`) from image previews in `docs/pro/`, with copying locked; the others show as coming soon. Full-color styles (marked `color`) are previewed as they are, the rest as one-color shapes that follow the site's color picker. After changing a shipped Pro style's icons, refresh the previews before you build:
+
+```bash
+node scripts/pro-previews.mjs   # needs Playwright: npm i -D playwright && npx playwright install chromium
+node scripts/build.mjs
+```
 
 Rebuild the npm package with:
 
@@ -149,7 +171,7 @@ node scripts/package.mjs
 
 It writes `dist/`, which is what gets published.
 
-The website is a single file at [`docs/index.html`](./docs/index.html), served by GitHub Pages.
+The website is a single file at [`docs/index.html`](./docs/index.html), served by Vercel (see [`vercel.json`](./vercel.json)).
 
 ## License
 
