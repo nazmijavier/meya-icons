@@ -232,15 +232,16 @@ svg.sim .thin { fill: none; stroke: var(--tile-bg); stroke-width: max(0px, calc(
   -webkit-mask-position: calc(var(--size) * var(--x) * -1) calc(var(--size) * var(--y) * -1); mask-position: calc(var(--size) * var(--x) * -1) calc(var(--size) * var(--y) * -1); }
 /* Full-color PRO styles show the sprite itself. */
 .tile .lk.lk-c { background: var(--lk) no-repeat; background-size: calc(var(--size) * var(--lk-cols)) auto; background-position: calc(var(--size) * var(--x) * -1) calc(var(--size) * var(--y) * -1); -webkit-mask: none; mask: none; }
-/* Animated (PRO): every tile plays its small animated preview on its own. Paused (the Pause button, which starts
-   paused when the system asks for reduced motion), a tile rests on its still frame and plays while hovered or focused. */
-.motion .tile .lk.lk-a { -webkit-mask: var(--lk-a) center / 100% 100% no-repeat; mask: var(--lk-a) center / 100% 100% no-repeat; }
+/* Animated (PRO): every tile near the screen plays its small animated preview on its own (the rest wait, so a
+   long tab doesn't load every preview at once). Paused (the Pause button, which starts paused when the system asks
+   for reduced motion), a tile rests on its still frame and plays while hovered or focused. */
+.motion .tile.near .lk.lk-a { -webkit-mask: var(--lk-a) center / 100% 100% no-repeat; mask: var(--lk-a) center / 100% 100% no-repeat; }
 @media (prefers-reduced-motion: no-preference) {
   .tile:hover .lk.lk-a, .tile:focus-visible .lk.lk-a { -webkit-mask: var(--lk-a) center / 100% 100% no-repeat; mask: var(--lk-a) center / 100% 100% no-repeat; }
 }
 /* Animated vectors (the owner's copy) follow the same rules; the details sheet always plays them. */
 .tile svg [class^="m-"] { animation-play-state: paused; }
-.motion .tile svg [class^="m-"] { animation-play-state: running; }
+.motion .tile.near svg [class^="m-"] { animation-play-state: running; }
 @media (prefers-reduced-motion: no-preference) {
   .tile:hover svg [class^="m-"], .tile:focus-visible svg [class^="m-"] { animation-play-state: running; }
 }
@@ -724,6 +725,11 @@ __FOOTER__
     setMotion(on);
     try { localStorage.setItem("meya-motion", on ? "on" : "off"); } catch {}
   });
+  // only tiles near the screen play (see .near in the styles)
+  if (window.IntersectionObserver) {
+    const near = new IntersectionObserver((es) => { for (const e of es) e.target.classList.toggle("near", e.isIntersecting); }, { rootMargin: "300px 0px" });
+    for (const t of tiles) near.observe(t);
+  } else for (const t of tiles) t.classList.add("near");
   $("#styles").addEventListener("click", (e) => {
     if (e.target.closest(".soon")) return;
     const b = e.target.closest("[data-style]"); if (!b || b.dataset.style === state.style) return;
