@@ -517,7 +517,7 @@ document.addEventListener("click", (e) => {
       <button class="pill pill-outline" id="copy-jsx" type="button"><span class="copy-swap"><span data-ico="editor:copy" class="i-copy"></span><span data-ico="shapes:check" class="i-check"></span></span>Copy JSX</button>
     </div>
     <div class="lock" id="p-lock" hidden>
-      <p><b>Sharp</b> is part of Meya Icons Pro. Get Pro to copy it as SVG or React and to use the whole set in Figma.</p>
+      <p><b>Sharp</b> is part of Meya Icons Pro. Get Pro to copy it as SVG or React.</p>
       <a class="pill pill-blue" href="pricing">Get Pro</a>
       <button type="button" class="lock-login" data-acct-open hidden>Already have Pro? Log in</button>
     </div>
@@ -1163,7 +1163,7 @@ button.acct-open { border: 0; background: none; font-family: inherit; white-spac
     $("#p-lock").hidden = !locked || loading;
     $("#p-lock p").innerHTML = failed
       ? `<b>${st.label}</b>: this icon couldn't be loaded. It may not be published yet. Try again in a moment.`
-      : `<b>${st.label}</b> is part of Meya Icons Pro. Get Pro to copy it as SVG or React and to use the whole set in Figma.`;
+      : `<b>${st.label}</b> is part of Meya Icons Pro. Get Pro to copy it as SVG or React.`;
     $("#p-lock .pill").hidden = failed;
     sheet.querySelector(".lock-login").hidden = failed || proOn() || !(auth && auth.state.configured);
     $("#p-file").textContent = loading ? "Loading the Pro icon…" : st.locked ? `Meya Icons Pro · ${st.id}/${icon.c}/${icon.n}.svg` : `icons/${state.style}/${icon.c}/${icon.n}.svg`;

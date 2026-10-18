@@ -129,7 +129,7 @@ const FOOTER = `<footer class="footer">
 
 // ---------- Offer banner (top of every page) ----------
 // The launch offer, shown site-wide. Set OFFER to null to take the banner down.
-const OFFER = { code: "LAUNCH30", text: "30% off <span class=\"promo-long\">your first year of </span>Pro" };
+const OFFER = { code: "LAUNCH30", pct: 30, text: "30% off <span class=\"promo-long\">your first year of </span>Pro" };
 const BANNER = OFFER
   ? `<div class="promo" role="region" aria-label="Offer">
   <p><span>${OFFER.text} with code</span> <button type="button" class="promo-code" data-code="${OFFER.code}" title="Copy code">${OFFER.code}</button> <a href="pricing#pro">Get Pro<span aria-hidden="true"> →</span></a></p>
@@ -290,29 +290,25 @@ if (PUBLISH_SPONSOR_PAGE) {
   const proNames = listOf(PRO_STYLES.map((id) => STYLES.find((st) => st.id === id).label));
   const WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
   const styleCount = lineStyles.length + PRO_STYLES.length;
-  // one comparison row per Pro style: shipped ones with a sample and a count, the rest coming soon
-  const proRows = STYLES.filter((st) => st.pro).map((st) => PRO_STYLES.includes(st.id)
-    ? `<div class="cmp-row" role="row"><div role="cell"><span class="sample">__SAMPLE:${st.id}__</span>${st.label}<small>__PRO_N:${st.id}__ icons</small></div><div role="cell">__NO__</div><div role="cell" class="cmp-pro">__YES__</div></div>`
-    : `<div class="cmp-row" role="row"><div role="cell"><span class="sample"></span>${st.label}<small>Coming soon</small></div><div role="cell">__NO__</div><div role="cell" class="cmp-pro"><span class="txt">Coming soon</span></div></div>`).join("\n          ");
+  const inline = (set, ref) =>
+    `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true">${fs.readFileSync(rel("icons", set, ref + ".svg"), "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim()}</svg>`;
   const page = fs
     .readFileSync(rel("site/pricing.html"), "utf8")
     .replace("__BANNER__", BANNER)
     .replace("__ACCOUNT_BUTTON__", ACCOUNT_BUTTON)
     .replace("__ACCOUNT__", ACCOUNT)
-    .replace("__PRO_ROWS__", proRows)
+    .replaceAll("__OFFER_PCT__", OFFER ? String(OFFER.pct) : "0")
     .replaceAll("__PRO_NAMES__", proNames)
-    .replaceAll("__STYLE_WORD_CAP__", (w => w[0].toUpperCase() + w.slice(1))(WORDS[styleCount] || String(styleCount)))
     .replaceAll("__STYLE_WORD__", WORDS[styleCount] || String(styleCount))
     .replaceAll("__PRO_STYLE_WORD__", WORDS[PRO_STYLES.length] || String(PRO_STYLES.length))
     .replace("__FOOTER__", FOOTER)
     .replace(/__ICON:([a-z-]+\/[a-z-]+)__/g, (m, ref) => outlineIcon(ref))
     .replaceAll("__YES__", `<span class="yes" aria-label="Included">${check}</span>`)
-    .replaceAll("__NO__", '<span class="no" aria-label="Not included"></span>')
-    .replace(/__SAMPLE:([a-z-]+\/[a-z-]+)__/g, (m, ref) =>
-      `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true">${fs.readFileSync(rel("icons", "outline", ref + ".svg"), "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim()}</svg>`)
-    .replace(/__N:([a-z-]+)__/g, (m, cat) => String(icons.filter((i) => i.c === cat).length))
-    .replace(/__STYLE_N:([a-z]+)__/g, (m, st) => String(styles.find((x) => x.id === st).count))
-    .replace(/__PRO_N:([a-z-]+)__/g, (m, st) => String(proCounts[st] || siteStyles.find((x) => x.id === st).count))
+    // the style gallery: the same icons inline in Outline and Duotone
+    .replace(/__SAMPLE:([a-z-]+\/[a-z-]+)__/g, (m, ref) => inline("outline", ref))
+    .replace(/__DUO:([a-z-]+\/[a-z-]+)__/g, (m, ref) => inline("duotone", ref))
+    .replace(/__STYLE_N:([a-z]+)__/g, (m, st) => styles.find((x) => x.id === st).count.toLocaleString("en-US"))
+    .replace(/__PRO_N:([a-z-]+)__/g, (m, st) => (proCounts[st] || siteStyles.find((x) => x.id === st).count).toLocaleString("en-US"))
     .replace(/__SAMPLE:([a-z-]+)__/g, (m, st) => {
       // free styles from icons/, Pro styles from scripts/pro-samples.json
       const f = rel("icons", st, "general/home.svg");
@@ -327,7 +323,6 @@ if (PUBLISH_SPONSOR_PAGE) {
     .replaceAll("__COUNT__", total.toLocaleString("en-US"))
     .replaceAll("__PRO_COUNT__", proCount.toLocaleString("en-US"))
     .replaceAll("__ALL_COUNT__", (total + proCount).toLocaleString("en-US"))
-    .replace("__PRO_PREVIEW__", proPreview)
     .replaceAll("__FAVICON__", `data:image/png;base64,${fs.readFileSync(rel("assets/favicon.png")).toString("base64")}`)
     .replace("__CLICK_SOUND__", fs.readFileSync(rel("assets/click.wav")).toString("base64"));
   const at = page.indexOf("</style>") + 8;

@@ -1,5 +1,5 @@
 <title>Pricing · Meya Icons</title>
-<meta name="description" content="Outline and Duotone are free forever. Pro adds __PRO_NAMES__ for one flat rate.">
+<meta name="description" content="Outline and Duotone are free forever under MIT. Pro adds __PRO_NAMES__: __PRO_COUNT__ more icons, priced per seat and billed yearly.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=Geist+Mono:wght@400;500&display=swap">
@@ -8,11 +8,13 @@
 <script>
 // Prices show in one currency: Rupiah for visitors in Indonesia, US dollars elsewhere. The time zone gives an instant
 // guess; the page script then asks /api/geo for the visitor's country and remembers it for the session.
+// data-offer marks the launch offer (OFFER in build.mjs), so the struck regular price and first-year price show.
 (() => {
   let cur = null;
   try { cur = sessionStorage.getItem("meya-cur"); } catch {}
   if (!cur) cur = /^Asia\/(Jakarta|Pontianak|Makassar|Jayapura)$/.test(Intl.DateTimeFormat().resolvedOptions().timeZone || "") ? "idr" : "usd";
   document.documentElement.dataset.cur = cur;
+  if (+"__OFFER_PCT__" > 0) document.documentElement.dataset.offer = "on";
 })();
 </script>
 <style>
@@ -31,6 +33,7 @@
   --ring: rgba(0, 113, 227, 0.28);
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --sans: "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
@@ -44,6 +47,12 @@ button { font: inherit; color: inherit; letter-spacing: inherit; cursor: pointer
 .ic { width: 18px; height: 18px; flex: none; --uw: 1.6; }
 /* Icons come from the set, whose lines are outlined at 1.3: a stroke round each shape makes one bolder. */
 svg.ui path { stroke: currentColor; stroke-width: calc(var(--uw, 1.3) * 1px - 1.3px); }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.mono { font-family: var(--mono); font-size: 12.5px; letter-spacing: 0; }
+
+/* One currency at a time (data-cur), and the launch offer on or off (data-offer). */
+:root[data-cur="idr"] .usd, :root:not([data-cur="idr"]) .idr { display: none !important; }
+:root:not([data-offer]) .launch, :root[data-offer] .regular { display: none !important; }
 
 /* ---------- Tooltip ---------- */
 [data-tip] { position: relative; }
@@ -65,85 +74,159 @@ svg.ui path { stroke: currentColor; stroke-width: calc(var(--uw, 1.3) * 1px - 1.
 .pill-white { background: var(--white); color: var(--ink); box-shadow: 0 0 0 1px var(--control); } .pill-white:hover { background: var(--frost); }
 
 /* ---------- Hero ---------- */
-.hero { text-align: center; padding-block: 64px 36px; }
-.badge { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: var(--slate); }
-.hero h1 { margin: 14px 0 0; font-size: clamp(34px, 5vw, 56px); line-height: 1.04; font-weight: 500; letter-spacing: -0.04em; text-wrap: balance; }
-.hero p { margin: 14px auto 0; max-width: 34em; font-size: 17px; color: var(--slate); }
+.hero { text-align: center; padding-block: 48px 32px; }
+.eyebrow { margin: 0; font-size: 13px; font-weight: 500; color: var(--slate); }
+.hero h1 { margin: 12px 0 0; font-size: clamp(34px, 5vw, 56px); line-height: 1.04; font-weight: 500; letter-spacing: -0.04em; text-wrap: balance; }
+.hero .lead { margin: 14px auto 0; max-width: 34em; font-size: 17px; color: var(--slate); text-wrap: pretty; }
+.strip { list-style: none; margin: 28px 0 0; padding: 0; display: flex; justify-content: center; align-items: flex-start; gap: 8px; }
+.strip li { width: 88px; }
+.strip li.sep { width: 1px; height: 56px; margin-inline: 8px; background: var(--control); }
+.st { display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--ink); text-decoration: none; border-radius: 16px; }
+.st:focus-visible { box-shadow: none; }
+.st .t { width: 56px; height: 56px; display: grid; place-items: center; border-radius: 16px; background: var(--mist); transition: background-color 150ms ease, scale 150ms ease, box-shadow 150ms ease; }
+.st:focus-visible .t { box-shadow: 0 0 0 3px var(--ring); }
+.st .t svg { width: 28px; height: 28px; }
+.st:hover .t { background: var(--mist-2); }
+.st:active .t { scale: 0.97; }
+.st[aria-current="true"] .t { box-shadow: 0 0 0 1.5px var(--ink); }
+.st .n { font-size: 12px; font-weight: 500; line-height: 1.25; text-align: center; }
+.st .m { font-size: 11px; color: var(--steel); line-height: 18px; }
 
 /* ---------- Plans ---------- */
-.plans { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-.plan { display: flex; flex-direction: column; padding: 32px; border-radius: 28px; background: var(--mist); }
+.plans { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 16px; align-items: stretch; margin-top: 8px; }
+.plan { display: flex; flex-direction: column; padding: 40px; border-radius: 28px; background: var(--mist); }
 .plan-pro { background: var(--ink); color: #fff; }
 .plan-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .plan-name { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 500; }
-.tag { height: 24px; padding-inline: 10px; display: inline-flex; align-items: center; border-radius: 9999px; background: var(--white); color: var(--ink); font-size: 12px; font-weight: 600; }
-.price { display: flex; align-items: baseline; gap: 8px; margin-top: 24px; }
-.price b { font-size: 56px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums; }
-.price > span { font-size: 14px; color: var(--steel); white-space: nowrap; }
-:root[data-cur="idr"] .price b { font-size: 44px; }
-.plan-pro .price > span, .plan-pro .sub, .plan-pro .feat small { color: rgba(255,255,255,.55); }
-.tiers { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 6px; font-size: 13px; }
-.tiers li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: baseline; }
-.tiers li > span { color: rgba(255,255,255,.55); }
-.tiers b { font-variant-numeric: tabular-nums; }
-:root[data-cur="idr"] .usd, :root:not([data-cur="idr"]) .idr { display: none !important; }
-.sub { margin-top: 10px; font-size: 14px; color: var(--steel); min-height: 21px; }
-.feats { list-style: none; margin: 28px 0 0; padding: 0; display: grid; gap: 16px; }
-.feat { display: flex; gap: 12px; }
-.feat .chip { width: 36px; height: 36px; flex: none; display: grid; place-items: center; border-radius: 10px; background: var(--white); }
-.plan-pro .feat .chip { background: rgba(255,255,255,.08); }
-.feat b { display: block; font-size: 14px; font-weight: 500; }
-.feat small { display: block; font-size: 13px; color: var(--slate); }
-.teaser { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-top: 24px; }
-.teaser span { display: grid; place-items: center; aspect-ratio: 1; border-radius: 10px; background: rgba(255,255,255,.08); }
-.teaser svg { width: 20px; height: 20px; color: #fff; }
-.plan-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 28px; }
-.plan-foot small { font-size: 13px; color: var(--steel); }
-.plan-pro .plan-foot .pill { background: var(--white); color: var(--ink); } .plan-pro .plan-foot .pill:hover { background: var(--mist-2); }
-.seats { display: inline-flex; align-items: center; gap: 2px; height: 40px; padding: 4px; border-radius: 9999px; background: rgba(255,255,255,.1); }
+.tag { height: 24px; padding-inline: 10px; display: inline-flex; align-items: center; border-radius: 9999px; background: var(--white); color: var(--ink); font-size: 12px; font-weight: 600; white-space: nowrap; }
+.price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin-top: 28px; }
+.price b { font-size: 64px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums; }
+:root[data-cur="idr"] .plan-pro .price b { font-size: 48px; }
+#pro-was { font-size: 24px; font-weight: 500; letter-spacing: -0.02em; color: rgba(255, 255, 255, 0.45); text-decoration-thickness: 1.5px; font-variant-numeric: tabular-nums; }
+.unit { font-size: 14px; color: var(--steel); white-space: nowrap; }
+.plan-pro .unit { color: rgba(255, 255, 255, 0.55); }
+.sub { margin: 8px 0 0; min-height: 21px; font-size: 14px; color: var(--steel); }
+.plan-pro .sub { color: rgba(255, 255, 255, 0.55); }
+.cur-note { margin: 4px 0 0; font-size: 12px; color: rgba(255, 255, 255, 0.4); }
+.seat-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 24px; }
+.seats { display: inline-flex; align-items: center; gap: 2px; height: 40px; padding: 4px; border-radius: 9999px; background: rgba(255, 255, 255, 0.1); }
 .seats button { width: 32px; height: 32px; border: 0; border-radius: 50%; background: none; color: #fff; font-size: 18px; line-height: 1; }
-.seats button:hover { background: rgba(255,255,255,.12); }
-.seats button:disabled { opacity: .35; cursor: default; background: none; }
-.seats output { min-width: 64px; text-align: center; font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.seats button:hover { background: rgba(255, 255, 255, 0.12); }
+.seats button:disabled { opacity: 0.35; cursor: default; background: none; }
+.seats output { min-width: 72px; text-align: center; font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.presets { display: flex; gap: 8px; }
+.preset { height: 36px; padding: 0 14px; border: 0; border-radius: 9999px; background: rgba(255, 255, 255, 0.08); color: #fff; font-size: 13px; font-weight: 500; white-space: nowrap; transition: background-color 150ms ease; }
+.preset:hover { background: rgba(255, 255, 255, 0.14); }
+.preset[aria-pressed="true"] { background: #fff; color: var(--ink); }
+.team { margin-top: 14px; font-size: 13px; color: rgba(255, 255, 255, 0.55); }
+.team p { margin: 0; }
+#team-rows { padding: 14px 16px; border-radius: 16px; background: rgba(255, 255, 255, 0.06); }
+#team-rows .cap { font-size: 12px; }
+#team-rows ul { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; }
+#team-rows li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; color: #fff; font-variant-numeric: tabular-nums; }
+#team-rows li > span:first-child { color: rgba(255, 255, 255, 0.55); }
+#team-rows li.off { opacity: 0.4; }
+#seat-save { margin-top: 10px; color: rgba(255, 255, 255, 0.8); }
+.seat-def { margin: 8px 0 0; font-size: 12px; color: rgba(255, 255, 255, 0.55); }
+.seat-def a, #seat-max a { color: inherit; }
+#seat-max { margin: 4px 0 0; font-size: 12px; color: rgba(255, 255, 255, 0.8); }
+.buy { margin-top: 20px; }
+.plan-pro .buy .pill { width: 100%; height: 52px; background: #fff; color: var(--ink); font-size: 15px; }
+.plan-pro .buy .pill:hover { background: var(--mist-2); }
+.reassure { margin: 10px 0 0; text-align: center; font-size: 12.5px; color: rgba(255, 255, 255, 0.55); }
+.login-link { display: block; margin: 6px auto 0; padding: 0; border: 0; background: none; color: rgba(255, 255, 255, 0.8); font-size: 13px; }
+.login-link:hover { color: #fff; text-decoration: underline; }
+#have-pro { margin-top: 20px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; font-size: 14px; }
+#have-pro .pill { background: #fff; color: var(--ink); }
+.rule { height: 1px; margin: 28px 0 22px; border: 0; background: rgba(255, 255, 255, 0.12); }
+.kicker { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255, 255, 255, 0.45); }
+.chips { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.chips li { height: 28px; padding: 0 12px; display: inline-flex; align-items: center; border-radius: 9999px; background: rgba(255, 255, 255, 0.08); font-size: 12.5px; font-weight: 500; }
+.checks { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 10px; font-size: 14px; }
+.checks li { display: flex; align-items: flex-start; gap: 10px; }
+.checks .ic { width: 16px; height: 16px; margin-top: 2px; --uw: 1.8; }
+.plan-free .checks { margin-top: 28px; gap: 14px; }
+.plan-free .checks b { display: block; font-size: 14px; font-weight: 500; }
+.plan-free .checks small { display: block; font-size: 13px; color: var(--slate); }
+.plan-free .checks a { color: inherit; }
+.plan-free .price b { letter-spacing: -0.045em; }
+.plan-foot { margin-top: auto; padding-top: 28px; }
+.plan-foot .pill { width: 100%; height: 48px; }
 
-/* ---------- Compare ---------- */
+/* ---------- Proof ---------- */
+.proof { list-style: none; margin: 24px 0 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 28px; font-size: 13px; font-weight: 500; color: var(--slate); }
+.proof li, .proof a { display: inline-flex; align-items: center; gap: 8px; color: var(--slate); text-decoration: none; }
+.proof a:hover { color: var(--ink); }
+.proof .ic { width: 16px; height: 16px; color: var(--steel); }
+
+/* ---------- Sections ---------- */
 section { padding-block: 72px 0; }
 section.last { padding-bottom: 96px; }
 h2 { margin: 0 0 28px; font-size: clamp(26px, 3.2vw, 36px); font-weight: 500; letter-spacing: -0.03em; line-height: 1.1; text-wrap: balance; }
 .center { text-align: center; }
-.cmp-scroll { overflow-x: auto; }
-.cmp { min-width: 600px; }
-.cmp-row, .cmp-group { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr); }
-.cmp-row > div, .cmp-group > div { display: flex; align-items: center; justify-content: center; padding: 14px 20px; }
-.cmp-row > div:first-child, .cmp-group > div:first-child { justify-content: flex-start; }
-.cmp-row { border-bottom: 1px solid var(--control); }
-.cmp-row > div:first-child { gap: 12px; font-size: 15px; }
-.cmp-row small { margin-left: auto; padding-right: 8px; font-size: 13px; color: var(--steel); letter-spacing: 0.01em; }
-.cmp-last { border-bottom: 0; }
-.cmp-group > div { padding-top: 28px; padding-bottom: 8px; }
-.cmp-group > div:first-child { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--steel); }
-.cmp-pro { background: var(--mist); }
-.cmp-head { border-bottom: 1px solid var(--control); }
-.cmp-plan { flex-direction: column; gap: 4px; padding: 24px 20px 20px !important; }
-.cmp-plan b { font-size: 17px; font-weight: 600; }
-.cmp-plan span { font-size: 13px; color: var(--steel); letter-spacing: 0.01em; }
-.cmp-plan .pill { margin-top: 12px; height: 36px; font-size: 13px; }
-.cmp-head .cmp-pro { border-radius: 20px 20px 0 0; }
-.cmp-last .cmp-pro { border-radius: 0 0 20px 20px; }
-.cmp-head .cmp-pro .pill { background: var(--ink); color: #fff; } .cmp-head .cmp-pro .pill:hover { background: #333336; }
-.sample { width: 36px; height: 36px; flex: none; display: grid; place-items: center; border-radius: 10px; background: var(--mist); }
-.sample svg { width: 20px; height: 20px; }
-.yes svg { width: 20px; height: 20px; --uw: 1.8; color: var(--ink); }
-.no { width: 14px; height: 1.5px; border-radius: 2px; background: var(--control); }
-.txt { font-size: 14px; color: var(--slate); letter-spacing: 0.01em; }
+.lede { margin: -16px auto 28px; max-width: 36em; text-align: center; color: var(--slate); text-wrap: pretty; }
 
-/* ---------- Why ---------- */
-.why-head p { margin: -16px 0 28px; max-width: 36em; color: var(--slate); }
-.why { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
-.why div { padding: 24px; border-radius: 20px; background: var(--mist); display: flex; flex-direction: column; gap: 6px; }
-.why .ic { width: 24px; height: 24px; margin-bottom: 14px; }
-.why b { font-size: 15px; font-weight: 500; }
-.why p { margin: 0; font-size: 13px; color: var(--slate); }
+/* ---------- Gallery ---------- */
+.gallery { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 32px; align-items: start; padding: 32px; border-radius: 28px; background: var(--mist); }
+.tabs { display: grid; gap: 2px; }
+.tabs .grp { margin: 0 0 6px; padding: 0 14px; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--steel); }
+.tabs .grp-pro { margin-top: 16px; }
+.gt { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px; height: 44px; padding: 0 14px; border: 0; border-radius: 12px; background: none; text-align: left; transition: background-color 150ms ease; }
+.gt .nm { display: inline-flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 500; }
+.gt .pro { display: none; }
+.gt .ct { font-size: 13px; color: var(--steel); font-variant-numeric: tabular-nums; }
+.gt:hover { background: rgba(255, 255, 255, 0.6); }
+.gt[aria-selected="true"] { background: var(--white); box-shadow: 0 0 0 1px var(--control); }
+.gt[aria-selected="true"]:focus-visible { box-shadow: 0 0 0 3px var(--ring); }
+.g-grid { --cell: 48px; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; transition: opacity 120ms ease; }
+.g-grid.dim { opacity: 0.5; }
+.g-grid li { aspect-ratio: 1; display: grid; place-items: center; border-radius: 16px; background: var(--white); }
+.g-grid li > * { grid-area: 1 / 1; }
+.g-o, .g-d, .g-pv, .g-still { display: none; width: var(--cell); height: var(--cell); }
+.g-grid[data-style="outline"] .g-o, .g-grid[data-style="duotone"] .g-d { display: block; }
+.g-grid:not([data-style="outline"]):not([data-style="duotone"]) .g-pv { display: block; }
+/* Pro previews: one-color styles are masks in the ink colour, Glass is shown as it is */
+.g-pv, .pv { background: var(--ink); -webkit-mask: var(--u) center / 100% 100% no-repeat; mask: var(--u) center / 100% 100% no-repeat; }
+.g-grid[data-style="glass"] .g-pv, .pv.c { background: var(--u) center / 100% 100% no-repeat; -webkit-mask: none; mask: none; }
+.g-still { background: var(--ink); -webkit-mask: url(pro/animated.webp) no-repeat; mask: url(pro/animated.webp) no-repeat; -webkit-mask-size: calc(var(--cell) * 16) auto; mask-size: calc(var(--cell) * 16) auto; -webkit-mask-position: calc(var(--cell) * var(--x) * -1) calc(var(--cell) * var(--y) * -1); mask-position: calc(var(--cell) * var(--x) * -1) calc(var(--cell) * var(--y) * -1); }
+@media (prefers-reduced-motion: reduce) {
+  .g-grid[data-style="animated"] .g-pv { display: none; }
+  .g-grid[data-style="animated"] .g-still { display: block; }
+}
+.g-cap { margin-top: 16px; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px; font-size: 14px; }
+.g-cap b { font-weight: 500; }
+.g-cap .look { color: var(--slate); }
+.g-cap a { color: var(--ink); font-weight: 500; text-decoration: none; }
+.g-cap a:hover { text-decoration: underline; }
+.g-note { margin: 6px 0 0; font-size: 12.5px; color: var(--steel); }
+
+/* ---------- Compare ---------- */
+.cmp { max-width: 840px; margin-inline: auto; }
+.cmp-row { display: grid; grid-template-columns: minmax(0, 1fr) 180px 180px; border-bottom: 1px solid var(--control); }
+.cmp-row > div { display: flex; align-items: center; justify-content: center; padding: 14px 16px; text-align: center; }
+.cmp-row > div:first-child { flex-direction: column; align-items: flex-start; justify-content: center; text-align: left; font-size: 15px; }
+.cmp-row small { display: block; font-size: 13px; color: var(--steel); }
+.cmp-last { border-bottom: 0; }
+.cmp-pro { background: var(--mist); }
+.cmp-head > .cmp-pro { border-radius: 20px 20px 0 0; }
+.cmp-last > .cmp-pro { border-radius: 0 0 20px 20px; }
+.cmp-plan { flex-direction: column; gap: 4px; padding: 24px 16px 20px !important; }
+.cmp-plan b { font-size: 17px; font-weight: 600; }
+.cmp-plan span { font-size: 13px; color: var(--steel); }
+.cmp-plan .pill { margin-top: 12px; height: 36px; font-size: 13px; }
+#get-pro-cmp { background: var(--ink); color: #fff; } #get-pro-cmp:hover { background: #333336; }
+.yes svg { width: 20px; height: 20px; --uw: 1.8; color: var(--ink); }
+.txt { font-size: 14px; color: var(--slate); }
+
+/* ---------- Steps ---------- */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.steps li { padding: 24px; border-radius: 20px; background: var(--mist); }
+.steps .top { display: flex; align-items: center; justify-content: space-between; }
+.steps .num { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: var(--white); font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.steps .ic { width: 24px; height: 24px; }
+.steps b { display: block; margin-top: 16px; font-size: 16px; font-weight: 500; }
+.steps p { margin: 6px 0 0; font-size: 14px; color: var(--slate); }
+.team-line { margin: 16px 0 0; text-align: center; font-size: 14px; color: var(--slate); }
 
 /* ---------- FAQ ---------- */
 .faq-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 48px; }
@@ -157,11 +240,28 @@ summary::-webkit-details-marker { display: none; }
 summary .ic { transition: rotate 200ms var(--ease-out); }
 details[open] summary .ic { rotate: 45deg; }
 details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate); }
+details p a { color: var(--ink); }
 
-/* ---------- CTA ---------- */
-.cta { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 32px; border-radius: 28px; background: var(--mist); }
-.cta b { display: block; font-size: 18px; font-weight: 500; }
-.cta p { margin: 4px 0 0; font-size: 14px; color: var(--slate); }
+/* ---------- Closing band ---------- */
+.end { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 56px 32px; border-radius: 28px; background: var(--mist); }
+.end-row { display: flex; gap: 10px; }
+.end-row > span { width: 64px; height: 64px; display: grid; place-items: center; border-radius: 16px; background: var(--white); }
+.end-row .pv, .end-row .g-still { width: 40px; height: 40px; }
+.end-row .g-still { --cell: 40px; display: none; }
+@media (prefers-reduced-motion: reduce) { .end-row .anim .pv { display: none; } .end-row .anim .g-still { display: block; } }
+.end h2 { margin: 28px 0 0; }
+.end p { margin: 10px 0 0; max-width: 34em; font-size: 15px; color: var(--slate); }
+.end-actions { margin-top: 24px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.end-actions .pill { height: 44px; }
+#get-pro-end { background: var(--ink); color: #fff; } #get-pro-end:hover { background: #333336; }
+.end small { margin-top: 12px; font-size: 13px; color: var(--steel); }
+
+/* ---------- Buy bar (phones) ---------- */
+.buybar { display: none; }
+.buybar small { display: block; font-size: 12px; color: var(--slate); }
+.buybar b { font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
+#get-pro-bar { height: 44px; background: var(--ink); color: #fff; }
+.buybar [data-tip]::after { top: auto; bottom: calc(100% + 8px); }
 
 /* ---------- Footer (shared by every page) ---------- */
 .footer { background: var(--mist); padding-block: 28px 36px; }
@@ -172,20 +272,71 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
 
 @media (max-width: 900px) {
   .plans, .faq-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
-  .why { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .plan { padding: 26px 22px; }
-  .cta { flex-direction: column; align-items: flex-start; }
+  .plan { padding: 28px 22px; border-radius: 24px; }
+  .seat-row .seats { flex: none; }
+  .presets { flex: 1 1 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .preset { padding: 0 8px; }
+  .buybar { display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: var(--white); border-top: 1px solid var(--control); transform: translateY(110%); visibility: hidden; transition: transform 200ms var(--ease-out), visibility 0s 200ms; }
+  .buybar.show { transform: none; visibility: visible; transition: transform 200ms var(--ease-out); }
+  body.has-bar { padding-bottom: calc(68px + env(safe-area-inset-bottom)); }
 }
-@media (max-width: 480px) { .why { grid-template-columns: minmax(0, 1fr); } .price b { font-size: 46px; } :root[data-cur="idr"] .price b { font-size: 36px; } }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0ms !important; } }
+@media (max-width: 760px) {
+  section { padding-top: 56px; }
+  .hero { padding-block: 36px 24px; }
+  .hero h1 { font-size: 34px; }
+  .hero .lead { font-size: 16px; }
+  .strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px 8px; }
+  .strip li { width: auto; }
+  .strip li.sep { display: none; }
+  .st .t { width: 52px; height: 52px; }
+  .st .t svg { width: 26px; height: 26px; }
+  .st .n { min-height: 28px; font-size: 11px; }
+  .proof { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; justify-content: start; }
+  .gallery { grid-template-columns: minmax(0, 1fr); gap: 16px; padding: 16px; border-radius: 22px; }
+  .tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tabs .grp { display: none; }
+  .gt { height: 36px; padding: 0 14px; border-radius: 9999px; background: var(--white); box-shadow: 0 0 0 1px var(--control); grid-template-columns: auto; }
+  .gt .nm { font-size: 13px; }
+  .gt .ct { display: none; }
+  .gt .pro { display: inline-flex; height: 16px; font-size: 9px; padding-inline: 5px; }
+  .gt[aria-selected="true"] { background: var(--ink); color: #fff; box-shadow: none; }
+  .gt[aria-selected="true"] .pro { background: #fff; color: var(--ink); }
+  .gt:hover { background: var(--white); }
+  .gt[aria-selected="true"]:hover { background: var(--ink); }
+  .g-grid { --cell: 36px; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  .g-grid li { border-radius: 12px; }
+  .g-cap { flex-direction: column; align-items: flex-start; }
+  .cmp-row { grid-template-columns: minmax(0, 1fr) 72px 84px; }
+  .cmp-row > div { padding: 12px 6px; }
+  .cmp-row > div:first-child { padding-left: 0; font-size: 14px; }
+  .cmp-row small { font-size: 12px; }
+  .txt { font-size: 12px; }
+  .cmp-plan { padding: 16px 4px 12px !important; }
+  .cmp-plan b { font-size: 15px; }
+  .cmp-plan span { font-size: 12px; }
+  .cmp-plan .pill { display: none; }
+  .steps { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .steps li { padding: 20px; }
+  .team-line { text-align: left; }
+  .end { padding: 40px 20px; border-radius: 24px; }
+  .end-row { gap: 6px; }
+  .end-row > span { width: 44px; height: 44px; border-radius: 12px; }
+  .end-row .pv, .end-row .g-still { width: 28px; height: 28px; --cell: 28px; }
+  .end h2 { font-size: 26px; }
+  .end-actions { flex-direction: column; align-self: stretch; gap: 8px; }
+}
+@media (max-width: 480px) {
+  .price b { font-size: 46px; }
+  :root[data-cur="idr"] .plan-pro .price b { font-size: 36px; }
+  #pro-was { flex-basis: 100%; font-size: 18px; }
+  :root[data-cur="idr"] #pro-was { font-size: 16px; }
+  .unit { white-space: normal; }
+}
 @media (max-width: 420px) {
   .nav-link .label { display: none; }
-  /* the Rupiah total is long: the seat picker and Get Pro stack, and the price label may wrap */
-  .plan-pro .plan-foot { flex-wrap: wrap; }
-  .plan-pro .plan-foot .pill { flex: 1 1 100%; justify-content: center; }
-  .price { flex-wrap: wrap; row-gap: 4px; }
-  .price > span { white-space: normal; }
+  .plan-pro .buy .pill { white-space: normal; height: auto; min-height: 52px; padding: 12px 16px; text-align: center; }
 }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0ms !important; } }
 </style>
 __BANNER__
 
@@ -204,99 +355,194 @@ __BANNER__
 <main class="wrap">
   <div class="narrow">
     <header class="hero">
-      <span class="badge">Upgrade to <span class="pro">PRO</span></span>
-      <h1>Simple plans. Full access.</h1>
-      <p>Outline and Duotone stay free forever. Pro adds __PRO_STYLE_WORD__ more styles, live strokes included, for one flat rate.</p>
+      <p class="eyebrow">Pricing</p>
+      <h1>Start free. Pro unlocks every style.</h1>
+      <p class="lead">Outline and Duotone are free forever under MIT. Pro adds __PRO_STYLE_WORD__ more styles and __PRO_COUNT__ more icons, drawn on the same 24 × 24 grid.</p>
+      <ul class="strip" aria-label="The same icon in all eight styles">
+        <li><a class="st" href="#styles" data-style="outline" aria-label="Outline, free style: show it below"><span class="t">__SAMPLE:outline__</span><span class="n">Outline</span><span class="m">Free</span></a></li>
+        <li><a class="st" href="#styles" data-style="duotone" aria-label="Duotone, free style: show it below"><span class="t">__SAMPLE:duotone__</span><span class="n">Duotone</span><span class="m">Free</span></a></li>
+        <li class="sep" aria-hidden="true"></li>
+        <li><a class="st" href="#styles" data-style="stroke" aria-label="Stroke, Pro style: show it below"><span class="t">__SAMPLE:stroke__</span><span class="n">Stroke</span><span class="m"><span class="pro">PRO</span></span></a></li>
+        <li><a class="st" href="#styles" data-style="stroke-duotone" aria-label="Stroke Duotone, Pro style: show it below"><span class="t">__SAMPLE:stroke-duotone__</span><span class="n">Stroke Duotone</span><span class="m"><span class="pro">PRO</span></span></a></li>
+        <li><a class="st" href="#styles" data-style="sharp" aria-label="Sharp, Pro style: show it below"><span class="t">__SAMPLE:sharp__</span><span class="n">Sharp</span><span class="m"><span class="pro">PRO</span></span></a></li>
+        <li><a class="st" href="#styles" data-style="filled" aria-label="Filled, Pro style: show it below"><span class="t">__SAMPLE:filled__</span><span class="n">Filled</span><span class="m"><span class="pro">PRO</span></span></a></li>
+        <li><a class="st" href="#styles" data-style="glass" aria-label="Glass, Pro style: show it below"><span class="t">__SAMPLE:glass__</span><span class="n">Glass</span><span class="m"><span class="pro">PRO</span></span></a></li>
+        <li><a class="st" href="#styles" data-style="animated" aria-label="Animated, Pro style: show it below"><span class="t">__SAMPLE:animated__</span><span class="n">Animated</span><span class="m"><span class="pro">PRO</span></span></a></li>
+      </ul>
     </header>
 
     <div class="plans">
-      <div class="plan">
-        <div class="plan-top"><span class="plan-name">__ICON:general/user__Free</span></div>
-        <div class="price"><b>$0</b><span>forever</span></div>
-        <div class="sub">No account needed</div>
-        <ul class="feats">
-          <li class="feat"><span class="chip">__ICON:layout/grid__</span><div><b>__COUNT__ icons</b><small>Outline and Duotone</small></div></li>
-          <li class="feat"><span class="chip">__ICON:development/code__</span><div><b>Copy as SVG or React</b><small>Straight from the website</small></div></li>
-          <li class="feat"><span class="chip">__ICON:files/download__</span><div><b>npm package</b><small>npm i meya-icons</small></div></li>
-          <li class="feat"><span class="chip">__ICON:security/shield__</span><div><b>MIT license</b><small>Free for personal and commercial work</small></div></li>
+      <div class="plan plan-pro" id="pro">
+        <div class="plan-top"><span class="plan-name">__ICON:general/star__Pro</span><span class="tag"><span class="launch">Launch offer · __OFFER_PCT__% off</span><span class="regular">All __STYLE_WORD__ styles</span></span></div>
+        <div class="price">
+          <span class="vh launch">Regular price</span>
+          <s id="pro-was" class="launch"><span class="usd">$89</span><span class="idr">Rp1.175.000</span></s>
+          <b id="pro-price"><span class="launch"><span class="usd">$62.30</span><span class="idr">Rp822.500</span></span><span class="regular"><span class="usd">$89</span><span class="idr">Rp1.175.000</span></span></b>
+          <span class="unit" id="pro-unit"><span class="launch">first year</span><span class="regular">a year</span></span>
+        </div>
+        <p class="sub" id="pro-sub"><span class="launch"><span class="usd">≈ $5.19 a month in year one · then $89 a year</span><span class="idr">≈ Rp69.000 a month in year one · then Rp1.175.000 a year</span></span><span class="regular"><span class="usd">≈ $7.42 a month, billed yearly</span><span class="idr">≈ Rp98.000 a month, billed yearly</span></span></p>
+        <p class="idr cur-note">Prices in Rupiah for visitors in Indonesia.</p>
+
+        <div class="seat-row">
+          <div class="seats" role="group" aria-label="Seats"><button type="button" id="seat-down" aria-label="Fewer seats">−</button><output id="seat-n" aria-live="polite">1 seat</output><button type="button" id="seat-up" aria-label="More seats">+</button></div>
+          <div class="presets"><button type="button" class="preset" data-seats="1" aria-pressed="true">Just me</button><button type="button" class="preset" data-seats="5" aria-pressed="false">Team of 5</button><button type="button" class="preset" data-seats="10" aria-pressed="false">Team of 10</button></div>
+        </div>
+        <div class="team">
+          <p id="team-one"><span class="usd">Extra seats: $33 a year each for seats 2–5, $15 from the 6th.</span><span class="idr">Extra seats: Rp435.000 a year each for seats 2–5, Rp195.000 from the 6th.</span></p>
+          <div id="team-rows" hidden>
+            <div class="cap">Regular yearly rate per seat</div>
+            <ul>
+              <li data-tier="0"><span>Seat 1</span><span></span></li>
+              <li data-tier="1"><span>Seats 2–5</span><span></span></li>
+              <li data-tier="2"><span>Seat 6 onward</span><span></span></li>
+            </ul>
+            <div id="seat-save"></div>
+          </div>
+          <p class="seat-def">One seat per person who uses the icons. You confirm the number of seats at checkout, and teammates get their seat by email from Polar.</p>
+          <p id="seat-max" hidden>Need more than 50 seats? Write to <a href="mailto:hello@meyalab.com">hello@meyalab.com</a>.</p>
+          <p class="vh" id="seat-summary" aria-live="polite"></p>
+        </div>
+
+        <div class="buy" data-hide-pro>
+          <a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro">Get Pro</a>
+          <p class="reassure">Secure checkout by Polar. Taxes, if any, are added there. Cancel anytime; Pro stays active until the end of your paid year.</p>
+          <button type="button" class="login-link" id="login-link" data-acct-open hidden>Already have Pro? Log in</button>
+        </div>
+        <div id="have-pro" hidden><span>You have Pro. Open any Pro icon to copy it as SVG or React.</span><a class="pill" href="./#stroke">Browse Pro icons</a></div>
+
+        <hr class="rule">
+        <p class="kicker">Everything in Free, plus</p>
+        <ul class="chips" aria-label="Pro styles"><li>Stroke</li><li>Stroke Duotone</li><li>Sharp</li><li>Filled</li><li>Glass</li><li>Animated</li></ul>
+        <ul class="checks">
+          <li>__ICON:shapes/check__<span>__PRO_COUNT__ more icons, __ALL_COUNT__ in all</span></li>
+          <li>__ICON:shapes/check__<span>Live strokes you can make thinner or bolder</span></li>
+          <li>__ICON:shapes/check__<span>New icons in every style as they ship</span></li>
+          <li>__ICON:shapes/check__<span>Copy any Pro icon as SVG or React on this site</span></li>
         </ul>
-        <div class="plan-foot"><small>Free forever</small><a class="pill pill-ink" href="./#icons">Browse free icons</a></div>
       </div>
 
-      <div class="plan plan-pro" id="pro">
-        <div class="plan-top"><span class="plan-name">__ICON:general/star__Pro</span><span class="tag">Popular</span></div>
-        <div class="price"><b id="pro-price"><span class="usd">$89</span><span class="idr">Rp1.175.000</span></b><span id="pro-unit">first seat / year</span></div>
-        <div class="sub" id="pro-sub">≈ <span class="usd">$7.40</span><span class="idr">Rp98.000</span>/month · billed yearly</div>
-        <ul class="tiers" aria-label="Price per seat">
-          <li><span>Seat 1</span><b><span class="usd">$89</span><span class="idr">Rp1.175.000</span>/yr</b></li>
-          <li><span>Seats 2–5</span><b><span class="usd">$33</span><span class="idr">Rp435.000</span>/seat</b></li>
-          <li><span>Seat 6+</span><b><span class="usd">$15</span><span class="idr">Rp195.000</span>/seat</b></li>
+      <div class="plan plan-free">
+        <div class="plan-top"><span class="plan-name">__ICON:general/user__Free</span></div>
+        <div class="price"><b>Free</b><span class="unit">forever</span></div>
+        <p class="sub">No account needed. MIT licensed.</p>
+        <ul class="checks">
+          <li>__ICON:shapes/check__<span><b>__COUNT__ icons</b><small>Outline and Duotone, plus cursors and flags</small></span></li>
+          <li>__ICON:shapes/check__<span><b>Copy as SVG or React</b><small>Straight from the website</small></span></li>
+          <li>__ICON:shapes/check__<span><b class="mono">npm i meya-icons</b><small>The free set as an npm package</small></span></li>
+          <li>__ICON:shapes/check__<span><b><a href="https://www.figma.com/community/plugin/1685393903679180914" target="_blank" rel="noopener">Free Figma plugin</a></b><small>Place icons straight onto your canvas</small></span></li>
+          <li>__ICON:shapes/check__<span><b>Personal and commercial work</b><small>Credit appreciated, not required</small></span></li>
         </ul>
-        <ul class="feats">
-          <li class="feat"><span class="chip">__ICON:layout/layers__</span><div><b>__PRO_COUNT__ more icons</b><small>__PRO_NAMES__</small></div></li>
-          <li class="feat"><span class="chip">__ICON:alerts-feedback/check-circle__</span><div><b>Everything in Free</b><small>All __ALL_COUNT__ icons in __STYLE_WORD__ styles</small></div></li>
-          <li class="feat"><span class="chip">__ICON:arrows/refresh__</span><div><b>New icons as they ship</b><small>Included for your paid year</small></div></li>
-        </ul>
-        <div class="teaser" aria-hidden="true">__PRO_PREVIEW__</div>
-        <div class="plan-foot"><div class="seats" role="group" aria-label="Seats"><button type="button" id="seat-down" aria-label="Fewer seats">−</button><output id="seat-n" aria-live="polite">1 seat</output><button type="button" id="seat-up" aria-label="More seats">+</button></div><a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro">Get Pro</a></div>
+        <div class="plan-foot"><a class="pill pill-white" href="./#icons">Browse free icons</a></div>
       </div>
     </div>
 
-    <section>
-      <h2 class="center">Choose what fits your work</h2>
-      <div class="cmp-scroll">
-        <div class="cmp" role="table" aria-label="Plan comparison">
-          <div class="cmp-row cmp-head" role="row">
-            <div role="columnheader"></div>
-            <div role="columnheader" class="cmp-plan"><b>Free</b><span>$0 forever</span><a class="pill pill-white" href="./#icons">Browse icons</a></div>
-            <div role="columnheader" class="cmp-plan cmp-pro"><b>Pro</b><span>From <span class="usd">$89</span><span class="idr">Rp1.175.000</span> / year</span><a data-polar href="#" data-tip="Coming soon" class="pill soon">Get Pro</a></div>
-          </div>
-          <div class="cmp-group" role="row"><div role="cell">Styles</div><div role="cell"></div><div role="cell" class="cmp-pro"></div></div>
-          <div class="cmp-row" role="row"><div role="cell"><span class="sample">__SAMPLE:outline__</span>Outline<small>__STYLE_N:outline__ icons</small></div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
-          <div class="cmp-row" role="row"><div role="cell"><span class="sample">__SAMPLE:duotone__</span>Duotone<small>__STYLE_N:duotone__ icons</small></div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
-          __PRO_ROWS__
-          <div class="cmp-group" role="row"><div role="cell">Extras</div><div role="cell"></div><div role="cell" class="cmp-pro"></div></div>
-          <div class="cmp-row" role="row"><div role="cell"><span class="sample">__SAMPLE:cursors/pointer__</span>Cursors<small>__N:cursors__ icons</small></div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
-          <div class="cmp-row" role="row"><div role="cell"><span class="sample">__SAMPLE:flags/japan__</span>Flags<small>__N:flags__ icons</small></div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
-          <div class="cmp-group" role="row"><div role="cell">Tools</div><div role="cell"></div><div role="cell" class="cmp-pro"></div></div>
-          <div class="cmp-row" role="row"><div role="cell">Copy as SVG or React</div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
-          <div class="cmp-row" role="row"><div role="cell">Size and colour controls</div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
-          <div class="cmp-row" role="row"><div role="cell">Live strokes you can make thinner or bolder</div><div role="cell"><span class="txt">Outlined, 1.3 px</span></div><div role="cell" class="cmp-pro"><span class="txt">Stroke style</span></div></div>
-          <div class="cmp-row" role="row"><div role="cell">npm package</div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
-          <div class="cmp-row cmp-last" role="row"><div role="cell">New icons as they ship</div><div role="cell"><span class="txt">Free styles</span></div><div role="cell" class="cmp-pro"><span class="txt">Every style</span></div></div>
+    <ul class="proof">
+      <li><a href="https://github.com/nazmijavier/meya-icons" target="_blank" rel="noopener">__ICON:development/repository__MIT open source on GitHub</a></li>
+      <li><a href="https://www.npmjs.com/package/meya-icons" target="_blank" rel="noopener">__ICON:development/terminal__<span class="mono">npm i meya-icons</span></a></li>
+      <li><a href="https://www.figma.com/community/plugin/1685393903679180914" target="_blank" rel="noopener">__ICON:images/pen-tool__Free Figma plugin</a></li>
+      <li>__ICON:finance-ecommerce/credit-card__Checkout by Polar</li>
+    </ul>
+
+    <section id="styles" aria-labelledby="styles-title">
+      <h2 class="center" id="styles-title">See every style before you buy</h2>
+      <p class="lede">The same twelve icons in all eight styles. Outline and Duotone are yours to copy now; Pro styles show as previews until you buy.</p>
+      <div class="gallery">
+        <div class="tabs" role="tablist" aria-orientation="vertical" aria-label="Styles">
+          <p class="grp">Free</p>
+          <button type="button" role="tab" class="gt" id="tab-outline" data-style="outline" data-label="Outline" data-count="__STYLE_N:outline__" data-look="1.3 px lines, outlined into shapes" data-href="./#icons" data-free aria-controls="g-panel" aria-selected="false" tabindex="-1"><span class="nm">Outline</span><span class="ct">__STYLE_N:outline__</span></button>
+          <button type="button" role="tab" class="gt" id="tab-duotone" data-style="duotone" data-label="Duotone" data-count="__STYLE_N:duotone__" data-look="The same lines, plus a 30% tint fill for depth" data-href="./#duotone" data-free aria-controls="g-panel" aria-selected="false" tabindex="-1"><span class="nm">Duotone</span><span class="ct">__STYLE_N:duotone__</span></button>
+          <p class="grp grp-pro">Pro</p>
+          <button type="button" role="tab" class="gt" id="tab-stroke" data-style="stroke" data-label="Stroke" data-count="__PRO_N:stroke__" data-look="Live 1.3 px strokes you can make thinner or bolder" data-href="./#stroke" aria-controls="g-panel" aria-selected="false" tabindex="-1"><span class="nm">Stroke<span class="pro">PRO</span></span><span class="ct">__PRO_N:stroke__</span></button>
+          <button type="button" role="tab" class="gt" id="tab-stroke-duotone" data-style="stroke-duotone" data-label="Stroke Duotone" data-count="__PRO_N:stroke-duotone__" data-look="Live strokes with a 30% tint fill, thinner or bolder" data-href="./#stroke-duotone" aria-controls="g-panel" aria-selected="false" tabindex="-1"><span class="nm">Stroke Duotone<span class="pro">PRO</span></span><span class="ct">__PRO_N:stroke-duotone__</span></button>
+          <button type="button" role="tab" class="gt" id="tab-sharp" data-style="sharp" data-label="Sharp" data-count="__PRO_N:sharp__" data-look="Strokes with square caps and mitered corners" data-href="./#sharp" aria-controls="g-panel" aria-selected="false" tabindex="-1"><span class="nm">Sharp<span class="pro">PRO</span></span><span class="ct">__PRO_N:sharp__</span></button>
+          <button type="button" role="tab" class="gt" id="tab-filled" data-style="filled" data-label="Filled" data-count="__PRO_N:filled__" data-look="Solid shapes for active and selected states" data-href="./#filled" aria-controls="g-panel" aria-selected="false" tabindex="-1"><span class="nm">Filled<span class="pro">PRO</span></span><span class="ct">__PRO_N:filled__</span></button>
+          <button type="button" role="tab" class="gt" id="tab-glass" data-style="glass" data-label="Glass" data-count="__PRO_N:glass__" data-look="Glossy glass in a blue-to-violet gradient" data-href="./#glass" aria-controls="g-panel" aria-selected="true" tabindex="0"><span class="nm">Glass<span class="pro">PRO</span></span><span class="ct">__PRO_N:glass__</span></button>
+          <button type="button" role="tab" class="gt" id="tab-animated" data-style="animated" data-label="Animated" data-count="__PRO_N:animated__" data-look="Icons that move, each with its own motion, as animated SVG" data-href="./#animated" aria-controls="g-panel" aria-selected="false" tabindex="-1"><span class="nm">Animated<span class="pro">PRO</span></span><span class="ct">__PRO_N:animated__</span></button>
+        </div>
+        <div>
+          <ul class="g-grid" id="g-panel" role="tabpanel" data-style="glass" aria-labelledby="tab-glass">
+            <li data-ref="general/home" style="--x:5;--y:0"><span class="g-o">__SAMPLE:general/home__</span><span class="g-d">__DUO:general/home__</span><span class="g-pv" style="--u:url(pro/glass/general/home.webp)"></span><span class="g-still" aria-hidden="true"></span><span class="vh">Home</span></li>
+            <li data-ref="general/search" style="--x:11;--y:0"><span class="g-o">__SAMPLE:general/search__</span><span class="g-d">__DUO:general/search__</span><span class="g-pv" style="--u:url(pro/glass/general/search.webp)"></span><span class="g-still" aria-hidden="true"></span><span class="vh">Search</span></li>
+            <li data-ref="general/settings" style="--x:12;--y:0"><span class="g-o">__SAMPLE:general/settings__</span><span class="g-d">__DUO:general/settings__</span><span class="g-pv" style="--u:url(pro/glass/general/settings.webp)"></span><span class="g-still" aria-hidden="true"></span><span class="vh">Settings</span></li>
+            <li data-ref="general/heart" style="--x:4;--y:0"><span class="g-o">__SAMPLE:general/heart__</span><span class="g-d">__DUO:general/heart__</span><span class="g-pv" style="--u:url(pro/glass/general/heart.webp)"></span><span class="g-still" aria-hidden="true"></span><span class="vh">Heart</span></li>
+            <li data-ref="general/lock" style="--x:8;--y:0"><span class="g-o">__SAMPLE:general/lock__</span><span class="g-d">__DUO:general/lock__</span><span class="g-pv" style="--u:url(pro/glass/general/lock.webp)"></span><span class="g-still" aria-hidden="true"></span><span class="vh">Lock</span></li>
+            <li data-ref="ai/sparkle" style="--x:5;--y:1"><span class="g-o">__SAMPLE:ai/sparkle__</span><span class="g-d">__DUO:ai/sparkle__</span><span class="g-pv" style="--u:url(pro/glass/ai/sparkle.webp)"></span><span class="g-still" aria-hidden="true"></span><span class="vh">Sparkle</span></li>
+            <li data-ref="communication/chat" style="--x:11;--y:1"><span class="g-o">__SAMPLE:communication/chat__</span><span class="g-d">__DUO:communication/chat__</span><span class="g-pv" style="--u:url(pro/glass/communication/chat.webp)"></span><span class="g-still" aria-hidden="true"></span><span class="vh">Chat</span></li>
+            <li data-ref="communication/send" style="--x:14;--y:1"><span class="g-o">__SAMPLE:communication/send__</span><span class="g-d">__DUO:communication/send__</span><span class="g-pv" style="--u:url(pro/glass/communication/send.webp)"></span><span class="g-still" aria-hidden="true"></span><span class="vh">Send</span></li>
+            <li data-ref="charts/bar-chart" style="--x:5;--y:2"><span class="g-o">__SAMPLE:charts/bar-chart__</span><span class="g-d">__DUO:charts/bar-chart__</span><span class="g-pv" style="--u:url(pro/glass/charts/bar-chart.webp)"></span><span class="g-still" aria-hidden="true"></span><span class="vh">Bar chart</span></li>
+            <li data-ref="files/download" style="--x:15;--y:1"><span class="g-o">__SAMPLE:files/download__</span><span class="g-d">__DUO:files/download__</span><span class="g-pv" style="--u:url(pro/glass/files/download.webp)"></span><span class="g-still" aria-hidden="true"></span><span class="vh">Download</span></li>
+            <li data-ref="finance-ecommerce/wallet" style="--x:12;--y:5"><span class="g-o">__SAMPLE:finance-ecommerce/wallet__</span><span class="g-d">__DUO:finance-ecommerce/wallet__</span><span class="g-pv" style="--u:url(pro/glass/finance-ecommerce/wallet.webp)"></span><span class="g-still" aria-hidden="true"></span><span class="vh">Wallet</span></li>
+            <li data-ref="alerts-feedback/notification" style="--x:10;--y:1"><span class="g-o">__SAMPLE:alerts-feedback/notification__</span><span class="g-d">__DUO:alerts-feedback/notification__</span><span class="g-pv" style="--u:url(pro/glass/alerts-feedback/notification.webp)"></span><span class="g-still" aria-hidden="true"></span><span class="vh">Notification</span></li>
+          </ul>
+          <div class="g-cap" aria-live="polite"><span><b id="g-name">Glass</b> · <span class="look" id="g-look">Glossy glass in a blue-to-violet gradient</span></span><a id="g-link" href="./#glass">Browse all __PRO_N:glass__ Glass icons →</a></div>
+          <p class="g-note" id="g-note">Preview only. With Pro, copy it as SVG or React. Previews are watermarked.</p>
         </div>
       </div>
     </section>
 
-    <section>
-      <div class="why-head"><h2>Why Meya Icons?</h2><p>Every icon is drawn on the same 24 × 24 grid with the same stroke, so a screen, a diagram and a deck all look like one system.</p></div>
-      <div class="why">
-        <div>__ICON:layout/grid__<b>__ALL_COUNT__ icons</b><p>__STYLE_WORD_CAP__ styles of the same shapes.</p></div>
-        <div>__ICON:development/code__<b>SVG and React</b><p>Copy either format, or install from npm.</p></div>
-        <div>__ICON:images/crop__<b>One 24 × 24 grid</b><p>Consistent weight and spacing across every icon.</p></div>
-        <div>__ICON:weather/sun__<b>Colour anything</b><p>Every icon uses currentColor and follows your text.</p></div>
+    <section aria-labelledby="cmp-title">
+      <h2 class="center" id="cmp-title">Free and Pro, side by side</h2>
+      <div class="cmp" role="table" aria-label="Plan comparison">
+        <div class="cmp-row cmp-head" role="row">
+          <div role="columnheader"><span class="vh">Feature</span></div>
+          <div role="columnheader" class="cmp-plan"><b>Free</b><span>Free forever</span><a class="pill pill-white" href="./#icons">Browse icons</a></div>
+          <div role="columnheader" class="cmp-plan cmp-pro"><b>Pro</b><span><span class="launch"><span class="usd">$62.30</span><span class="idr">Rp822.500</span> first year</span><span class="regular">From <span class="usd">$89</span><span class="idr">Rp1.175.000</span> a year</span></span><a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro-cmp" data-hide-pro>Get Pro</a></div>
+        </div>
+        <div class="cmp-row" role="row"><div role="rowheader">Styles</div><div role="cell" class="txt">Outline, Duotone</div><div role="cell" class="cmp-pro txt">All __STYLE_WORD__</div></div>
+        <div class="cmp-row" role="row"><div role="rowheader">Icons<small>Cursors and flags in both</small></div><div role="cell" class="txt">__COUNT__</div><div role="cell" class="cmp-pro txt">__ALL_COUNT__</div></div>
+        <div class="cmp-row" role="row"><div role="rowheader">Line weight<small>Stroke, Stroke Duotone and Sharp</small></div><div role="cell" class="txt">Fixed 1.3&nbsp;px</div><div role="cell" class="cmp-pro txt">Adjustable</div></div>
+        <div class="cmp-row" role="row"><div role="rowheader">Copy as SVG or React from the site</div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
+        <div class="cmp-row" role="row"><div role="rowheader">npm package and Figma plugin<small>They carry Outline and Duotone</small></div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
+        <div class="cmp-row" role="row"><div role="rowheader">Personal and client work</div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
+        <div class="cmp-row" role="row"><div role="rowheader">License</div><div role="cell" class="txt">MIT</div><div role="cell" class="cmp-pro txt">Pro, per seat</div></div>
+        <div class="cmp-row cmp-last" role="row"><div role="rowheader">New icons as they ship</div><div role="cell" class="txt">Free styles</div><div role="cell" class="cmp-pro txt">Every style</div></div>
       </div>
     </section>
 
-    <section class="faq-grid">
+    <section aria-labelledby="steps-title">
+      <h2 class="center" id="steps-title">From checkout to copy in three steps</h2>
+      <ol class="steps">
+        <li><div class="top"><span class="num">1</span>__ICON:finance-ecommerce/credit-card__</div><b>Check out with Polar</b><p>Pay in Polar's secure checkout.<span class="launch"> The launch discount is already applied.</span></p></li>
+        <li><div class="top"><span class="num">2</span>__ICON:communication/email__</div><b>Log in with an email code</b><p>Use the email you bought with. Polar emails you a 6-character code, or use your license key.</p></li>
+        <li><div class="top"><span class="num">3</span>__ICON:development/code__</div><b>Copy any Pro icon</b><p>Open an icon in any Pro style and copy it as SVG or React, right on the site.</p></li>
+      </ol>
+      <p class="team-line">Buying for a team? Each teammate accepts Polar's invitation email, then logs in with their own email.</p>
+    </section>
+
+    <section id="faq" class="faq-grid" aria-labelledby="faq-title">
       <div class="faq-side">
-        <h2>Frequently asked questions</h2>
-        <p>Still have questions? Write to <a href="mailto:hello@meyalab.com">hello@meyalab.com</a>.</p>
+        <h2 id="faq-title">Questions before you buy</h2>
+        <p>Still deciding? Write to <a href="mailto:hello@meyalab.com">hello@meyalab.com</a>.</p>
       </div>
       <div class="faq">
-        <details><summary>What's included in Pro?__ICON:shapes/plus__</summary><p>__PRO_NAMES__: __PRO_COUNT__ icons on top of the free Outline and Duotone sets, plus new icons as they're released.</p></details>
-        <details><summary>How does per-seat pricing work?__ICON:shapes/plus__</summary><p>First seat <span class="usd">$89</span><span class="idr">Rp1.175.000</span> a year, seats 2–5 <span class="usd">$33</span><span class="idr">Rp435.000</span> each, seat 6 onward <span class="usd">$15</span><span class="idr">Rp195.000</span> each. Your total is each seat at its rate.</p></details>
-        <details><summary>Can I use the icons in commercial projects?__ICON:shapes/plus__</summary><p>Yes. Outline and Duotone are MIT licensed, and Pro icons can be used in personal and client work.</p></details>
-        <details><summary>How do I get the Pro icons?__ICON:shapes/plus__</summary><p>Right after checkout, your receipt email links to your customer portal, where you download every Pro style as SVG files. New icons are added there as they're released.</p></details>
-        <details><summary>Can I cancel anytime?__ICON:shapes/plus__</summary><p>Cancel anytime; Pro stays active until the end of your paid year.</p></details>
-        <details><summary>Is there a Figma plugin?__ICON:shapes/plus__</summary><p>Yes. <a href="https://www.figma.com/community/plugin/1685393903679180914" target="_blank" rel="noopener" style="color:var(--ink)">Meya Icons for Figma</a> is free in the Figma Community and places icons straight onto your canvas, ready to recolor.</p></details>
+        <details><summary>What counts as a seat?__ICON:shapes/plus__</summary><p>One seat for each person who uses the Pro icons. Each teammate accepts Polar's invitation email, then logs in here with their own email.</p></details>
+        <details><summary>How is a team price worked out?__ICON:shapes/plus__</summary><p><span class="usd">Each seat has its own yearly rate: the first seat is $89, seats 2 to 5 are $33 each, and every seat from the 6th is $15. Three seats cost $89 + $33 + $33 = $155 a year.</span><span class="idr">Each seat has its own yearly rate: the first seat is Rp1.175.000, seats 2 to 5 are Rp435.000 each, and every seat from the 6th is Rp195.000. Three seats cost Rp1.175.000 + Rp435.000 + Rp435.000 = Rp2.045.000 a year.</span></p></details>
+        <details class="launch"><summary>How does the launch offer work?__ICON:shapes/plus__</summary><p>Every Get Pro button on this page applies the launch discount for you, so there's no code to type: __OFFER_PCT__% off your first year. From your second year, Pro renews at the regular price shown on the card.</p></details>
+        <details><summary>How do I get the Pro icons after I buy?__ICON:shapes/plus__</summary><p>Log in on this site with the email you bought with. Polar, our payment provider, emails you a 6-character sign-in code, or you can use your license key. Then open any Pro icon and copy it as SVG or React.</p></details>
+        <details><summary>Can I use the icons in client work?__ICON:shapes/plus__</summary><p>Yes. Pro icons can be used in personal and client work. Outline and Duotone are MIT licensed for personal and commercial work; credit is appreciated but not required.</p></details>
+        <details><summary>Can I cancel anytime?__ICON:shapes/plus__</summary><p>Yes. Cancel from the Polar customer portal linked in your receipt email. Pro stays active until the end of the year you paid for; after that it doesn't renew and copying Pro icons stops.</p></details>
+        <details><summary>Are Pro icons in the npm package or the Figma plugin?__ICON:shapes/plus__</summary><p>No. The npm package and the <a href="https://www.figma.com/community/plugin/1685393903679180914" target="_blank" rel="noopener">free Figma plugin</a> carry Outline and Duotone. Pro icons are copied from this site as SVG or React.</p></details>
+        <details><summary><span class="usd">Why are prices in US dollars?</span><span class="idr">Why are prices in Rupiah?</span>__ICON:shapes/plus__</summary><p>Prices show in one currency, chosen by where you are: Rupiah in Indonesia, US dollars everywhere else.</p></details>
       </div>
     </section>
 
-    <section class="last">
-      <div class="cta">
-        <div><b>Need custom icons?</b><p>Meya Lab designs icon sets for products and brands.</p></div>
-        <a class="pill pill-ink" href="https://meyalab.com/contact" target="_blank" rel="noopener">Hire us</a>
+    <section class="last" id="end">
+      <div class="end">
+        <div class="end-row" aria-hidden="true">
+          <span><span class="pv" style="--u:url(pro/stroke/charts/bar-chart.webp)"></span></span>
+          <span><span class="pv" style="--u:url(pro/stroke-duotone/communication/chat.webp)"></span></span>
+          <span><span class="pv" style="--u:url(pro/sharp/general/settings.webp)"></span></span>
+          <span><span class="pv" style="--u:url(pro/filled/general/heart.webp)"></span></span>
+          <span><span class="pv c" style="--u:url(pro/glass/ai/sparkle.webp)"></span></span>
+          <span class="anim"><span class="pv" style="--u:url(pro/animated/alerts-feedback/notification.tile.webp)"></span><span class="g-still" style="--x:10;--y:1"></span></span>
+        </div>
+        <h2>All __STYLE_WORD__ styles, one yearly price.</h2>
+        <p><span class="launch"><span class="usd">$62.30 for your first year, then $89 a year.</span><span class="idr">Rp822.500 for your first year, then Rp1.175.000 a year.</span></span><span class="regular"><span class="usd">$89 a year for one person.</span><span class="idr">Rp1.175.000 a year for one person.</span></span> Each extra seat costs less.</p>
+        <div class="end-actions">
+          <a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro-end" data-hide-pro>Get Pro</a>
+          <a class="pill pill-white" href="./#icons">Browse free icons</a>
+        </div>
+        <small>Secure checkout by Polar · Cancel anytime</small>
       </div>
     </section>
   </div>
@@ -305,33 +551,143 @@ __BANNER__
 __ACCOUNT__
 __FOOTER__
 
+<div class="buybar" id="buybar" aria-hidden="true" inert>
+  <div><small>Meya Icons Pro</small><b id="bar-price"></b></div>
+  <a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro-bar">Get Pro</a>
+</div>
+
 <script>
 (() => {
   const $ = (s) => document.querySelector(s);
-  // ---------- Billing period ----------
-  // Pro is priced per seat: one seat per person using the icons.
+  const root = document.documentElement;
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // ---------- Price ----------
+  // Pro is priced per seat, yearly and graduated: seat 1, seats 2–5 each, seat 6 onward each. During the launch the
+  // checkout links apply OFF % to the first year, so the card shows that charge, with the regular price struck.
   const MAX = 50;
-  // graduated yearly price per seat: seat 1, seats 2–5 each, seat 6 onward each (the same rates as the card)
   const RATES = { usd: [89, 33, 15], idr: [1175000, 435000, 195000] };
-  const money = { usd: (n) => "$" + n.toLocaleString("en-US"), idr: (n) => "Rp" + n.toLocaleString("id-ID") };
-  const cur = () => (document.documentElement.dataset.cur === "idr" ? "idr" : "usd");
+  const OFF = root.dataset.offer ? +"__OFFER_PCT__" : 0;
+  const cur = () => (root.dataset.cur === "idr" ? "idr" : "usd");
   const total = (n) => { const [a, b, c] = RATES[cur()]; return a + b * Math.min(Math.max(n - 1, 0), 4) + c * Math.max(n - 5, 0); };
+  const first = (list) => (OFF ? (cur() === "idr" ? Math.round((list * (100 - OFF)) / 100) : Math.round(list * (100 - OFF)) / 100) : list);
+  const fmt = (x) => cur() === "idr"
+    ? "Rp" + Math.round(x).toLocaleString("id-ID")
+    : "$" + (Number.isInteger(x) ? x.toLocaleString("en-US") : x.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+  // rounded to cents (USD) or to Rp1.000 (IDR); "≈" only when rounding changed the value
+  const approx = (x) => {
+    const r = cur() === "idr" ? Math.round(x / 1000) * 1000 : Math.round(x * 100) / 100;
+    return (Math.abs(r - x) > 1e-9 ? "≈ " : "") + fmt(r);
+  };
   let seats = 1;
   function show() {
-    $("#seat-n").textContent = seats + (seats === 1 ? " seat" : " seats");
-    $("#get-pro").textContent = `Get Pro · ${money[cur()](total(seats))}/yr`;
-    $("#seat-down").disabled = seats <= 1; $("#seat-up").disabled = seats >= MAX;
+    const n = seats, list = total(n), now = first(list), R = RATES[cur()], per = OFF ? "first year" : "a year";
+    $("#seat-n").textContent = n + (n === 1 ? " seat" : " seats");
+    $("#pro-was").textContent = fmt(list);
+    $("#pro-price").textContent = fmt(now);
+    $("#pro-unit").textContent = per;
+    $("#pro-sub").textContent = OFF
+      ? (n === 1 ? `${approx(now / 12)} a month in year one` : `${approx(now / n)} a seat in year one`) + ` · then ${fmt(list)} a year`
+      : n === 1 ? `${approx(list / 12)} a month, billed yearly` : `${approx(list / n)} a seat, billed yearly`;
+    $("#team-one").hidden = n > 1;
+    $("#team-rows").hidden = n === 1;
+    if (n > 1) {
+      const k = [1, Math.min(Math.max(n - 1, 0), 4), Math.max(n - 5, 0)];
+      document.querySelectorAll("#team-rows li").forEach((li) => {
+        const t = +li.dataset.tier;
+        li.lastElementChild.textContent = t === 0 ? fmt(R[0]) : k[t] ? `${k[t]} × ${fmt(R[t])}` : `${fmt(R[t])} each`;
+        li.classList.toggle("off", !k[t]);
+      });
+      $("#seat-save").textContent = `Team rates save ${fmt(n * R[0] - list)} a year compared with ${n} seats at ${fmt(R[0])}.`;
+    }
+    $("#seat-max").hidden = n < MAX;
+    $("#get-pro").textContent = `Get Pro · ${fmt(now)} ${per}`;
+    $("#bar-price").textContent = (n === 1 ? "" : `${n} seats · `) + `${fmt(now)} ${per}`;
+    $("#seat-summary").textContent = `${n} ${n === 1 ? "seat" : "seats"}. ` + (OFF ? `${fmt(now)} for the first year, then ${fmt(list)} a year.` : `${fmt(list)} a year.`);
+    document.querySelectorAll(".preset").forEach((p) => p.setAttribute("aria-pressed", String(+p.dataset.seats === n)));
+    $("#seat-down").disabled = n <= 1; $("#seat-up").disabled = n >= MAX;
   }
+  $("#seat-down").addEventListener("click", () => { seats = Math.max(1, seats - 1); show(); });
+  $("#seat-up").addEventListener("click", () => { seats = Math.min(MAX, seats + 1); show(); });
+  document.querySelectorAll(".preset").forEach((p) => p.addEventListener("click", () => { seats = +p.dataset.seats; show(); }));
+  show();
   // the head script guessed the currency from the time zone; the visitor's country settles it
   fetch("/api/geo").then((r) => (r.ok ? r.json() : null)).then((g) => {
     if (!g || !g.country) return;
     const c = g.country === "ID" ? "idr" : "usd";
     try { sessionStorage.setItem("meya-cur", c); } catch {}
-    if (c !== cur()) { document.documentElement.dataset.cur = c; show(); }
+    if (c !== cur()) { root.dataset.cur = c; show(); }
   }, () => {});
-  $("#seat-down").addEventListener("click", () => { seats = Math.max(1, seats - 1); show(); });
-  $("#seat-up").addEventListener("click", () => { seats = Math.min(MAX, seats + 1); show(); });
-  show();
+
+  // ---------- Style gallery ----------
+  // The same twelve icons in every style: inline SVG for the free styles, the site's Pro previews for the rest.
+  const grid = $("#g-panel"), tabs = [...document.querySelectorAll(".gt")], heroTiles = [...document.querySelectorAll(".st")];
+  const src = (style, ref) => (style === "animated" ? `pro/animated/${ref}.tile.webp` : `pro/${style}/${ref}.webp`);
+  let turn = 0;
+  function selectStyle(id, focus) {
+    const tab = tabs.find((t) => t.dataset.style === id); if (!tab) return;
+    tabs.forEach((t) => { const on = t === tab; t.setAttribute("aria-selected", String(on)); t.tabIndex = on ? 0 : -1; });
+    if (focus) tab.focus();
+    grid.setAttribute("aria-labelledby", tab.id);
+    heroTiles.forEach((t) => t.setAttribute("aria-current", String(t.dataset.style === id)));
+    const free = tab.hasAttribute("data-free");
+    $("#g-name").textContent = tab.dataset.label;
+    $("#g-look").textContent = tab.dataset.look;
+    $("#g-link").textContent = `Browse all ${tab.dataset.count} ${tab.dataset.label} icons →`;
+    $("#g-link").href = tab.dataset.href;
+    $("#g-note").textContent = free ? "Free under MIT. Copy it now as SVG or React."
+      : "Preview only. With Pro, copy it as SVG or React." + (id === "glass" ? " Previews are watermarked." : "") + (id === "animated" && reduced ? " Motion is paused because your device asks for less motion." : "");
+    if (free || (id === "animated" && reduced)) { grid.dataset.style = id; grid.classList.remove("dim"); return; }
+    // load the twelve previews first, then swap, so the grid never blanks; dim it if that takes a moment
+    const mine = ++turn, items = [...grid.children];
+    const urls = items.map((li) => src(id, li.dataset.ref));
+    const dim = setTimeout(() => grid.classList.add("dim"), 150);
+    Promise.all(urls.map((u) => new Promise((ok) => { const im = new Image(); im.onload = im.onerror = ok; im.src = u; }))).then(() => {
+      clearTimeout(dim);
+      if (mine !== turn) return;
+      items.forEach((li, i) => li.querySelector(".g-pv").style.setProperty("--u", `url(${urls[i]})`));
+      grid.dataset.style = id;
+      grid.classList.remove("dim");
+    });
+  }
+  tabs.forEach((t) => t.addEventListener("click", () => selectStyle(t.dataset.style)));
+  $(".tabs").addEventListener("keydown", (e) => {
+    const i = tabs.indexOf(document.activeElement); if (i < 0) return;
+    const to = { ArrowDown: i + 1, ArrowRight: i + 1, ArrowUp: i - 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
+    if (to === undefined) return;
+    e.preventDefault();
+    selectStyle(tabs[(to + tabs.length) % tabs.length].dataset.style, true);
+  });
+  heroTiles.forEach((t) => t.addEventListener("click", (e) => {
+    e.preventDefault();
+    selectStyle(t.dataset.style);
+    $("#styles").scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+  }));
+  heroTiles.forEach((t) => t.setAttribute("aria-current", String(t.dataset.style === "glass")));
+
+  // ---------- Buy bar (phones) ----------
+  // Shown once the Pro card's button has scrolled away, hidden again at the closing band and for Pro customers.
+  // Checked on scroll rather than with IntersectionObserver, which misses a jump straight past the button.
+  const bar = $("#buybar"), phone = matchMedia("(max-width: 900px)"), btn = $("#get-pro"), end = $("#end");
+  let queued = false;
+  function updateBar() {
+    queued = false;
+    const on = phone.matches && btn.getBoundingClientRect().bottom < 0 && end.getBoundingClientRect().top > innerHeight
+      && !(window.meyaAuth && meyaAuth.state.signedIn);
+    bar.classList.toggle("show", on);
+    bar.inert = !on; bar.setAttribute("aria-hidden", String(!on));
+    document.body.classList.toggle("has-bar", on);
+  }
+  addEventListener("scroll", () => { if (!queued) { queued = true; requestAnimationFrame(updateBar); } }, { passive: true });
+  phone.addEventListener("change", updateBar);
+
+  // ---------- Pro customers ----------
+  if (window.meyaAuth) meyaAuth.on((s) => {
+    $("#login-link").hidden = !s.configured || s.signedIn;
+    $("#have-pro").hidden = !s.signedIn;
+    updateBar();
+  });
+
   // ---------- Not released yet ----------
   document.addEventListener("click", (e) => {
     const s = e.target.closest(".soon"); if (!s) return;
