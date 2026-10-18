@@ -1,0 +1,187 @@
+<dialog class="acct" id="acct" aria-labelledby="acct-title">
+  <button type="button" class="acct-x" data-act="close" aria-label="Close">×</button>
+  <div data-view="email">
+    <h2 id="acct-title">Log in to Meya Icons Pro</h2>
+    <p>Use the email you bought Pro with, or the one your team sent your seat to. Polar, our payment provider, emails you a sign-in code.</p>
+    <form data-step="email"><label>Email<input type="email" name="email" autocomplete="email" required></label><button class="acct-go">Email me a code</button></form>
+    <button type="button" class="acct-alt" data-go="key">Use a license key instead</button>
+  </div>
+  <div data-view="pick" hidden>
+    <h2>Which account?</h2>
+    <p>This email belongs to more than one Polar account. Choose the one with Meya Icons Pro.</p>
+    <div class="acct-pick"></div>
+  </div>
+  <div data-view="code" hidden>
+    <h2>Check your email</h2>
+    <p>Enter the 6-character code Polar sent to <b class="acct-to"></b>. It works for 30 minutes.</p>
+    <form data-step="code"><label>Code<input name="code" autocomplete="one-time-code" maxlength="6" minlength="6" required spellcheck="false" autocapitalize="characters"></label><button class="acct-go">Log in</button></form>
+    <button type="button" class="acct-alt" data-go="email">Use a different email</button>
+  </div>
+  <div data-view="key" hidden>
+    <h2>Log in with a license key</h2>
+    <p>Your Meya Icons Pro license key is in your Polar customer portal, linked from your receipt email.</p>
+    <form data-step="key"><label>License key<input name="key" autocomplete="off" required spellcheck="false"></label><button class="acct-go">Log in</button></form>
+    <button type="button" class="acct-alt" data-go="email">Get an email code instead</button>
+  </div>
+  <div data-view="account" hidden>
+    <h2>You have Pro</h2>
+    <p>Signed in as <b class="acct-email"></b>. Open any Pro icon to copy it as SVG or React.</p>
+    <div class="acct-row"><button type="button" class="acct-go" data-act="close">Done</button><button type="button" class="acct-alt" data-act="logout">Log out</button></div>
+  </div>
+  <p class="acct-err" role="alert" hidden></p>
+</dialog>
+<style>
+.acct { width: min(400px, calc(100vw - 32px)); padding: 28px; border: 0; border-radius: 24px; background: var(--white, #fff); color: var(--ink, #1D1D1F); box-shadow: 0 24px 80px rgba(0, 0, 0, 0.18); font: 400 14px/1.5 var(--sans, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif); letter-spacing: -0.01em; }
+.acct::backdrop { background: rgba(0, 0, 0, 0.35); }
+.acct h2 { margin: 0 32px 8px 0; font-size: 20px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; }
+.acct p { margin: 0 0 18px; color: var(--slate, #707070); }
+.acct p b { color: var(--ink, #1D1D1F); font-weight: 500; word-break: break-all; }
+.acct form { display: grid; gap: 12px; }
+.acct label { display: grid; gap: 6px; font-size: 12px; font-weight: 500; color: var(--slate, #707070); }
+.acct input { height: 44px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--control, #E6E6E8); background: var(--white, #fff); color: inherit; font-family: inherit; font-size: 15px; font-weight: 500; letter-spacing: 0; outline: none; }
+.acct input:focus { border-color: var(--ink, #1D1D1F); box-shadow: 0 0 0 3px var(--ring, rgba(0, 113, 227, 0.28)); }
+.acct input[name="code"] { font-family: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace; letter-spacing: 0.3em; text-transform: uppercase; font-size: 18px; }
+.acct-go { height: 44px; padding: 0 20px; border: 0; border-radius: 9999px; background: var(--ink, #1D1D1F); color: #fff; font-family: inherit; font-size: 14px; font-weight: 500; line-height: 1; cursor: pointer; transition: opacity 150ms ease, scale 150ms ease; }
+.acct-go:active { scale: 0.98; }
+.acct-go[disabled] { opacity: 0.5; cursor: progress; }
+.acct-alt { margin-top: 14px; padding: 0; border: 0; background: none; color: var(--slate, #707070); font-family: inherit; font-size: 13px; font-weight: 500; line-height: 1.4; cursor: pointer; }
+.acct-alt:hover { color: var(--ink, #1D1D1F); text-decoration: underline; }
+.acct-row { display: flex; align-items: center; gap: 16px; }
+.acct-row .acct-alt { margin: 0; }
+.acct-pick { display: grid; gap: 8px; }
+.acct-pick button { height: 44px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--control, #E6E6E8); background: var(--white, #fff); color: inherit; font-family: inherit; font-size: 14px; font-weight: 500; line-height: 1; text-align: left; cursor: pointer; }
+.acct-pick button:hover { background: var(--mist, #F5F5F7); }
+.acct-x { position: absolute; top: 18px; right: 18px; width: 32px; height: 32px; border: 0; border-radius: 50%; background: var(--mist, #F5F5F7); color: var(--ink, #1D1D1F); font-size: 18px; line-height: 1; cursor: pointer; }
+.acct-err { margin: 14px 0 0 !important; padding: 10px 12px; border-radius: 12px; background: #FFF1F0; color: #B42318 !important; font-size: 13px; }
+.acct-open[hidden] { display: none !important; }
+</style>
+<script>
+// Pro login. Polar emails the customer a code (no email service of our own); the browser trades it for a Polar
+// token, and /api/auth/session checks that this person holds Meya Icons Pro before starting the site's own session.
+// The browser talks to Polar directly so Polar's per-visitor rate limit applies to each visitor, not to the site.
+// Pages listen with meyaAuth.on(fn) and open the dialog with meyaAuth.open().
+(() => {
+  const dlg = document.getElementById("acct");
+  const state = { configured: false, signedIn: false, email: null, polar: null };
+  const listeners = new Set();
+  let email = "", customerId = null;
+  const $ = (s) => dlg.querySelector(s);
+  const err = $(".acct-err");
+
+  function show(view) {
+    dlg.querySelectorAll("[data-view]").forEach((v) => (v.hidden = v.dataset.view !== view));
+    fail("");
+    const first = $(`[data-view="${view}"] input, [data-view="${view}"] .acct-pick button`);
+    if (first && dlg.open) first.focus();
+  }
+  function fail(text) { err.textContent = text; err.hidden = !text; }
+  function busy(form, on) { form.querySelectorAll("button, input").forEach((el) => (el.disabled = on)); }
+  function paint() {
+    document.querySelectorAll(".acct-open").forEach((b) => {
+      b.hidden = !state.configured;
+      b.textContent = state.signedIn ? "Account" : "Log in";
+    });
+    document.querySelectorAll("[data-hide-pro]").forEach((el) => (el.hidden = state.signedIn));
+    $(".acct-email").textContent = state.email || "";
+  }
+  function emit() { paint(); listeners.forEach((f) => { try { f(state); } catch {} }); }
+
+  async function refresh() {
+    try {
+      const r = await fetch("/api/auth/me", { credentials: "same-origin" });
+      if (r.ok) Object.assign(state, await r.json());
+    } catch {}
+    emit();
+  }
+  function open() {
+    if (!state.configured) return;
+    if (!dlg.open) dlg.showModal();
+    show(state.signedIn ? "account" : "email");
+  }
+
+  const MSG = {
+    tooMany: "Too many attempts. Wait 15 minutes, or log in with your license key.",
+    offline: "Couldn't reach Polar. Check your connection and try again.",
+  };
+  async function polar(step, payload) {
+    const r = await fetch(`${state.polar.api}/v1/customer-portal/customer-session/${step}`, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload),
+    });
+    let json = null; try { json = await r.json(); } catch {}
+    return { status: r.status, json };
+  }
+  async function site(path, payload) {
+    const r = await fetch(path, { method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+    let json = null; try { json = await r.json(); } catch {}
+    return { status: r.status, json };
+  }
+  function signedIn(json) {
+    state.signedIn = true; state.email = json.email;
+    show("account"); emit();
+  }
+  function noPro(json, status) {
+    if (status === 403) return fail(`${(json && json.email) || "This account"} doesn't have Meya Icons Pro. If your team gave you a seat, accept Polar's invitation email first, then log in again.`);
+    if (status === 401) return fail("That sign-in expired. Ask for a new code.");
+    fail("Couldn't check your Pro access. Try again in a minute.");
+  }
+
+  async function requestCode(form) {
+    busy(form, true);
+    try {
+      const r = await polar("request", { email, organization_id: state.polar.org, ...(customerId ? { customer_id: customerId } : {}) });
+      if (r.status === 202 || r.status === 200) { $(".acct-to").textContent = email; show("code"); return; }
+      if (r.status === 409 && r.json && r.json.customers) {
+        const pick = $(".acct-pick"); pick.textContent = "";
+        r.json.customers.forEach((c, i) => {
+          const b = document.createElement("button"); b.type = "button"; b.textContent = c.name || `Account ${i + 1}`;
+          b.addEventListener("click", () => { customerId = c.id; requestCode($('[data-step="email"]')); });
+          pick.append(b);
+        });
+        show("pick"); return;
+      }
+      fail(r.status === 429 ? MSG.tooMany : r.status === 422 ? "Check the email address." : MSG.offline);
+    } catch { fail(MSG.offline); } finally { busy(form, false); }
+  }
+
+  dlg.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const form = e.target, step = form.dataset.step;
+    if (step === "email") {
+      email = form.email.value.trim(); customerId = null;
+      return requestCode(form);
+    }
+    busy(form, true); fail("");
+    try {
+      if (step === "code") {
+        const code = form.code.value.trim().toUpperCase();
+        const a = await polar("authenticate", { code });
+        if (a.status !== 200 || !a.json || !a.json.token) return fail(a.status === 429 ? MSG.tooMany : a.status === 401 ? "That code is wrong or has expired." : MSG.offline);
+        const s = await site("/api/auth/session", { token: a.json.token });
+        return s.status === 200 ? signedIn(s.json) : noPro(s.json, s.status);
+      }
+      if (step === "key") {
+        const s = await site("/api/auth/license", { key: form.key.value.trim() });
+        if (s.status === 200) return signedIn(s.json);
+        return fail(s.status === 401 ? "That license key isn't active." : "Couldn't check the key. Try again in a minute.");
+      }
+    } catch { fail(MSG.offline); } finally { busy(form, false); }
+  });
+  dlg.addEventListener("input", (e) => { if (e.target.name === "code") e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ""); });
+  dlg.addEventListener("click", async (e) => {
+    if (e.target === dlg) return dlg.close(); // backdrop
+    const go = e.target.closest("[data-go]"); if (go) return show(go.dataset.go);
+    const act = e.target.closest("[data-act]"); if (!act) return;
+    if (act.dataset.act === "close") return dlg.close();
+    if (act.dataset.act === "logout") {
+      try { await site("/api/auth/logout", {}); } catch {}
+      state.signedIn = false; state.email = null; emit(); dlg.close();
+    }
+  });
+  document.addEventListener("click", (e) => {
+    if (e.target.closest(".acct-open, [data-acct-open]")) { e.preventDefault(); open(); }
+  });
+
+  window.meyaAuth = { state, open, refresh, on(fn) { listeners.add(fn); fn(state); } };
+  refresh().then(() => { if (/[?&]login\b/.test(location.search) && !state.signedIn) open(); });
+})();
+</script>

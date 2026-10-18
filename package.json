@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "description": "Open-source icons by Meya Lab. Outline and Duotone, 24\u00d724 grid, currentColor.",
   "license": "MIT",
+  "type": "module",
   "author": "Meya Lab <hello@meyalab.com> (https://meyalab.com)",
   "homepage": "https://icons.meyalab.com",
   "repository": {
@@ -35,5 +36,8 @@
   "devDependencies": {
     "canvaskit-wasm": "0.39.1"
   },
-  "private": true
+  "private": true,
+  "engines": {
+    "node": "22.x"
+  }
 }

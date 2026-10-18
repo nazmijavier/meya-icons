@@ -281,6 +281,8 @@ svg.sim .thin { fill: none; stroke: var(--tile-bg); stroke-width: max(0px, calc(
 .lock p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--slate); }
 .lock b { color: var(--ink); font-weight: 600; }
 .lock .pill { justify-content: center; }
+.lock-login { justify-self: center; padding: 0; border: 0; background: none; color: var(--slate); font: 500 13px/1.4 var(--sans); cursor: pointer; }
+.lock-login:hover { color: var(--ink); text-decoration: underline; }
 .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .actions .pill { justify-content: center; }
 .copy-swap { position: relative; width: 16px; height: 16px; flex: none; }
@@ -361,7 +363,8 @@ __BANNER__
     <div class="nav-actions">
       <a class="nav-link" href="pixel" title="Convert icons to pixel style" aria-label="Pixel Lab"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM10.5 10.5h2v2h-2z"/></svg><span class="label">Pixel Lab</span></a>
       <a class="nav-link" href="https://x.com/intent/post?text=Meya%20Icons%3A%20a%20free%2C%20adaptable%20icon%20set%20for%20interfaces%2C%20diagrams%20and%20decks&amp;url=https%3A%2F%2Ficons.meyalab.com" target="_blank" rel="noopener" title="Share on X" aria-label="Share on X"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.2 1.5h2.2L9.6 7l5.6 7.5h-4.4L7.4 10l-4 4.5H1.2l5.2-5.9L1 1.5h4.5l3.1 4.1zm-.8 11.7h1.2L4.8 2.7H3.5z"/></svg><span class="label">Share</span></a>
-      <a class="pill pill-ink" href="pricing">Upgrade to Pro</a>
+      __ACCOUNT_BUTTON__
+      <a class="pill pill-ink" href="pricing" data-hide-pro>Upgrade to Pro</a>
     </div>
   </nav>
 </div>
@@ -467,6 +470,7 @@ __BANNER__
     <div class="lock" id="p-lock" hidden>
       <p><b id="p-lock-style">Sharp</b> is part of Meya Icons Pro. Get Pro to copy it as SVG or React and to use the whole set in Figma.</p>
       <a class="pill pill-blue" href="pricing">Get Pro</a>
+      <button type="button" class="lock-login" data-acct-open hidden>Already have Pro? Log in</button>
     </div>
     <div class="code-tabs" role="tablist" aria-label="Code format">
       <button class="tab" role="tab" type="button" aria-selected="true" data-fmt="svg">SVG</button>
@@ -484,6 +488,7 @@ __BANNER__
 
 <div class="toast" id="toast" role="status" aria-live="polite"><span data-ico="shapes:check"></span><span id="toast-text">Copied</span></div>
 
+__ACCOUNT__
 __FOOTER__
 
 <script>/*__DATA__*/</script>
@@ -499,11 +504,22 @@ __FOOTER__
   const INK = "#1D1D1F";
   const state = { q: "", cat: "all", style: "outline", sw: 1.3, size: 24, fmt: "svg", color: INK, current: null };
 
+  // ---------- Pro, signed in ----------
+  // A signed-in Pro customer (site/account.html) gets each Pro icon from /api/pro when its sheet opens; after that
+  // it copies, previews and takes the stroke slider like a free icon. Signed out, Pro styles stay image previews.
+  const auth = window.meyaAuth;
+  const proOn = () => !!(auth && auth.state.signedIn);
+  const proKey = (icon, style = state.style) => `${style}/${icon.c}/${icon.n}`;
+  const proBodies = new Map(), proBusy = new Set(), proFailed = new Map();
+  // lines take the page's stroke width, as in the free sets
+  const proInner = (svg) => svg.replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim().replace(/\s*stroke-width="1\.3"/g, "");
+  const proBody = (icon) => (proOn() ? proBodies.get(proKey(icon)) : undefined);
+
   const find = (c, n) => icons.find((i) => i.c === c && i.n === n);
   const inner = (icon) => `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icon.b}</svg>`;
   const ui = (icon) => ({ b: icon.v.outline });
   // Artwork in the chosen style; interface chrome always uses outline.
-  const body = (icon) => icon.v[state.style] || icon.v.outline || Object.values(icon.v)[0];
+  const body = (icon) => proBody(icon) || icon.v[state.style] || icon.v.outline || Object.values(icon.v)[0];
   // Stroke and Stroke Duotone are Pro: their tabs preview the slider on the free outlined artwork (Outline and
   // Duotone); copying stays with Pro. The other locked stroke styles (Sharp, Animated) look different from that
   // artwork, so they show their own previews.
@@ -702,7 +718,7 @@ __FOOTER__
   // Outline and Duotone ship outlined and the other Pro tabs are previews, so there the slider rests at 1.3 and
   // says where live strokes are.
   function syncStroke(st) {
-    const live = !!st.stroke && (!st.locked || simulates(st)), ctl = $("#sw").closest(".control"), el = $("#sw"), v = live ? state.sw : 1.3;
+    const live = !!st.stroke && (!st.locked || simulates(st) || proOn()), ctl = $("#sw").closest(".control"), el = $("#sw"), v = live ? state.sw : 1.3;
     el.disabled = !live; ctl.classList.toggle("off", !live); $("#sw-pro").hidden = live;
     if (live) delete ctl.dataset.tip; else ctl.dataset.tip = "Live strokes come with Pro";
     el.value = v; el.style.setProperty("--p", ((v - el.min) / (el.max - el.min)) * 100 + "%");
@@ -830,22 +846,44 @@ __FOOTER__
   }
   function refreshSheet() {
     const icon = state.current; if (!icon) return;
-    const st = styleOf(state.style), locked = !!st.locked;
-    $("#p-stage").innerHTML = gridSvg + (simulates(st) && simSrc(icon)
+    const st = styleOf(state.style), real = st.locked ? proBody(icon) : null, locked = !!st.locked && !real;
+    const loading = locked && proOn();
+    if (loading) loadPro(icon);
+    $("#p-stage").innerHTML = gridSvg + (real
+      ? inner({ b: real.replace(REDUCE, "") }).replace("<svg ", '<svg class="glyph" ')
+      : simulates(st) && simSrc(icon)
       ? simBig(simSrc(icon))
       : locked
       ? `<span class="lk-big${st.color ? " lk-c" : ""}" style="--lk-big:url(pro/${st.id}/${icon.c}/${icon.n}.webp)" aria-hidden="true"></span>`
       : glyph(icon).replace("<svg ", '<svg class="glyph" '));
     for (const el of sheet.querySelectorAll(".actions, .code-tabs, #p-code")) el.hidden = locked;
-    $("#p-lock").hidden = !locked;
+    $("#p-lock").hidden = !locked || loading;
+    sheet.querySelector(".lock-login").hidden = !(auth && auth.state.configured);
     $("#p-lock-style").textContent = st.label;
-    $("#p-file").textContent = locked ? `Meya Icons Pro · ${st.id}/${icon.c}/${icon.n}.svg` : `icons/${state.style}/${icon.c}/${icon.n}.svg`;
+    $("#p-file").textContent = loading ? "Loading the Pro icon…" : st.locked ? `Meya Icons Pro · ${st.id}/${icon.c}/${icon.n}.svg` : `icons/${state.style}/${icon.c}/${icon.n}.svg`;
     if (!locked) $("#p-code").textContent = state.fmt === "svg" ? toSvg(icon) : toJsx(icon);
     // live strokes report their width, outlined styles their fixed 1.3 lines; solid and full-color styles nothing
     $("#p-sw").textContent = st.stroke ? fmtSw(locked && !simulates(st) ? 1.3 : state.sw) + " px" : "1.3 px, outlined";
     $("#p-sw").hidden = $("#p-sw-dt").hidden = !st.stroke && !st.outlined;
     $("#p-color").textContent = st.set || st.color ? "Full color" : "currentColor";
   }
+  async function loadPro(icon) {
+    const style = state.style, k = proKey(icon, style);
+    if (proBusy.has(k) || Date.now() - (proFailed.get(k) || 0) < 30000) return;
+    proBusy.add(k);
+    let note = "";
+    try {
+      const r = await fetch(`/api/pro?style=${encodeURIComponent(style)}&icon=${encodeURIComponent(`${icon.c}/${icon.n}`)}`, { credentials: "same-origin" });
+      if (r.ok) proBodies.set(k, proInner(await r.text()));
+      else if (r.status === 401) auth.refresh(); // the session ended: back to previews
+      else note = r.status === 404 ? "This Pro icon isn't available yet" : "Couldn't load the Pro icon. Try again in a moment";
+    } catch { note = "Couldn't load the Pro icon. Check your connection"; }
+    proBusy.delete(k);
+    if (note) { proFailed.set(k, Date.now()); toast(note); }
+    if (state.current === icon && state.style === style && !note) refreshSheet();
+  }
+  const canCopy = () => { const st = styleOf(state.style); return !st.locked || !!(state.current && proBody(state.current)); };
+
   sectionsEl.addEventListener("click", (e) => {
     const t = e.target.closest(".tile:not(.spon-tile)"); if (!t) return;
     if (t === activeTile && sheet.classList.contains("open")) return closeSheet();
@@ -858,17 +896,29 @@ __FOOTER__
     refreshSheet();
   }));
   $("#install").addEventListener("click", (e) => copy("npm i meya-icons", e.currentTarget, "Copied npm i meya-icons"));
-  $("#copy-svg").addEventListener("click", (e) => { if (!styleOf(state.style).locked) copy(toSvg(state.current), e.currentTarget, `Copied SVG for ${state.current.n}`); });
-  $("#copy-jsx").addEventListener("click", (e) => { if (!styleOf(state.style).locked) copy(toJsx(state.current), e.currentTarget, `Copied ${pascal(state.current.n)}`); });
+  $("#copy-svg").addEventListener("click", (e) => { if (canCopy()) copy(toSvg(state.current), e.currentTarget, `Copied SVG for ${state.current.n}`); });
+  $("#copy-jsx").addEventListener("click", (e) => { if (canCopy()) copy(toJsx(state.current), e.currentTarget, `Copied ${pascal(state.current.n)}`); });
 
   // ---------- Keyboard ----------
   document.addEventListener("keydown", (e) => {
     const typing = /INPUT|TEXTAREA/.test(document.activeElement.tagName);
     if (e.key === "/" && !typing) { e.preventDefault(); qEl.focus(); qEl.select(); }
     else if (e.key === "Escape") {
+      if (document.querySelector("dialog[open]")) return; // the login dialog closes itself
       if (sheet.classList.contains("open")) closeSheet();
       else if (document.activeElement === qEl) { setQuery(""); qEl.blur(); }
     }
+  });
+
+  // ---------- Pro login ----------
+  // Signing in unlocks the sheet and the stroke slider for Pro styles; signing out puts the previews back.
+  if (auth) auth.on(() => {
+    if (!proOn() && proBodies.size) {
+      proBodies.clear();
+      for (const t of tiles) t.querySelector("svg, .lk").outerHTML = glyph(icons[t.dataset.i]);
+    }
+    syncStroke(styleOf(state.style));
+    refreshSheet();
   });
 
   countChips();
