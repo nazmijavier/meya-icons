@@ -14,7 +14,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { COLOR_SETS, HIDDEN } from "./categories.mjs";
-import { PRO_DIR, PRO_SAMPLES } from "./pro.mjs";
+import { PRO_DIR, PRO_SAMPLES, sampleSlots } from "./pro.mjs";
+import { STYLES } from "./styles.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const STAGED = process.argv.includes("--staged");
@@ -59,6 +60,11 @@ for (const f of files) {
     const [w] = size, max = sprite ? CELL * COLS : BIG;
     if (w > max) bad(f, `preview is ${w}px wide, more than ${max}px: large previews can be traced back into vectors`);
     continue;
+  }
+  if (f === "scripts/pro-samples.json") {
+    const allowed = new Set(sampleSlots(STYLES.filter((s) => s.pro && s.showcase).map((s) => s.id)).map(([s, k]) => `${s}/${k}`));
+    const extra = Object.keys(JSON.parse(read(f).toString("utf8"))).filter((k) => !allowed.has(k));
+    if (extra.length) bad(f, `holds Pro drawings that are not pricing samples: ${extra.slice(0, 5).join(", ")}`);
   }
   if (f === "scripts/pro-previews.json") {
     const listed = Object.entries(JSON.parse(read(f).toString("utf8"))).flatMap(([st, m]) => m.icons.map(([k]) => `${st}/${k}`));

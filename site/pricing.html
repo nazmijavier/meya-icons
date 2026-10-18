@@ -5,6 +5,16 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=Geist+Mono:wght@400;500&display=swap">
 <link rel="icon" type="image/png" href="__FAVICON__">
 <link rel="apple-touch-icon" href="__FAVICON__">
+<script>
+// Prices show in one currency: Rupiah for visitors in Indonesia, US dollars elsewhere. The time zone gives an instant
+// guess; the page script then asks /api/geo for the visitor's country and remembers it for the session.
+(() => {
+  let cur = null;
+  try { cur = sessionStorage.getItem("meya-cur"); } catch {}
+  if (!cur) cur = /^Asia\/(Jakarta|Pontianak|Makassar|Jayapura)$/.test(Intl.DateTimeFormat().resolvedOptions().timeZone || "") ? "idr" : "usd";
+  document.documentElement.dataset.cur = cur;
+})();
+</script>
 <style>
 /* Same tokens as the icon site (DESIGN.md): white canvas, Studio Mist surfaces, flat, pill controls. */
 :root {
@@ -69,13 +79,14 @@ svg.ui path { stroke: currentColor; stroke-width: calc(var(--uw, 1.3) * 1px - 1.
 .tag { height: 24px; padding-inline: 10px; display: inline-flex; align-items: center; border-radius: 9999px; background: var(--white); color: var(--ink); font-size: 12px; font-weight: 600; }
 .price { display: flex; align-items: baseline; gap: 8px; margin-top: 24px; }
 .price b { font-size: 56px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums; }
-.price span { font-size: 14px; color: var(--steel); white-space: nowrap; }
-.plan-pro .price span, .plan-pro .sub, .plan-pro .feat small { color: rgba(255,255,255,.55); }
-.offer { margin-top: 14px; display: inline-block; padding: 6px 12px; border-radius: 9999px; background: rgba(255,255,255,.12); font-size: 13px; font-weight: 500; }
+.price > span { font-size: 14px; color: var(--steel); white-space: nowrap; }
+:root[data-cur="idr"] .price b { font-size: 44px; }
+.plan-pro .price > span, .plan-pro .sub, .plan-pro .feat small { color: rgba(255,255,255,.55); }
 .tiers { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 6px; font-size: 13px; }
-.tiers li { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 12px; align-items: baseline; }
-.tiers span, .tiers small { color: rgba(255,255,255,.55); }
-.tiers small { min-width: 88px; text-align: right; font-variant-numeric: tabular-nums; }
+.tiers li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: baseline; }
+.tiers li > span { color: rgba(255,255,255,.55); }
+.tiers b { font-variant-numeric: tabular-nums; }
+:root[data-cur="idr"] .usd, :root:not([data-cur="idr"]) .idr { display: none !important; }
 .sub { margin-top: 10px; font-size: 14px; color: var(--steel); min-height: 21px; }
 .feats { list-style: none; margin: 28px 0 0; padding: 0; display: grid; gap: 16px; }
 .feat { display: flex; gap: 12px; }
@@ -165,10 +176,11 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
   .plan { padding: 26px 22px; }
   .cta { flex-direction: column; align-items: flex-start; }
 }
-@media (max-width: 480px) { .why { grid-template-columns: minmax(0, 1fr); } .price b { font-size: 46px; } }
+@media (max-width: 480px) { .why { grid-template-columns: minmax(0, 1fr); } .price b { font-size: 46px; } :root[data-cur="idr"] .price b { font-size: 36px; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0ms !important; } }
 @media (max-width: 420px) { .nav-link .label { display: none; } }
 </style>
+__BANNER__
 
 <div class="wrap nav-wrap">
   <nav class="nav" aria-label="Site">
@@ -203,15 +215,14 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
         <div class="plan-foot"><small>Free forever</small><a class="pill pill-ink" href="./#icons">Browse free icons</a></div>
       </div>
 
-      <div class="plan plan-pro">
+      <div class="plan plan-pro" id="pro">
         <div class="plan-top"><span class="plan-name">__ICON:general/star__Pro</span><span class="tag">Popular</span></div>
-        <div class="price"><b id="pro-price">$89</b><span id="pro-unit">first seat / year</span></div>
-        <div class="sub" id="pro-sub">≈ $7.40/month · billed yearly</div>
-        <div class="offer">Launch offer: 30% off your first year — code LAUNCH30</div>
+        <div class="price"><b id="pro-price"><span class="usd">$89</span><span class="idr">Rp1.175.000</span></b><span id="pro-unit">first seat / year</span></div>
+        <div class="sub" id="pro-sub">≈ <span class="usd">$7.40</span><span class="idr">Rp98.000</span>/month · billed yearly</div>
         <ul class="tiers" aria-label="Price per seat">
-          <li><span>Seat 1</span><b>$89/yr</b><small>Rp1.175.000</small></li>
-          <li><span>Seats 2–5</span><b>$33/seat</b><small>Rp435.000</small></li>
-          <li><span>Seat 6+</span><b>$15/seat</b><small>Rp195.000</small></li>
+          <li><span>Seat 1</span><b><span class="usd">$89</span><span class="idr">Rp1.175.000</span>/yr</b></li>
+          <li><span>Seats 2–5</span><b><span class="usd">$33</span><span class="idr">Rp435.000</span>/seat</b></li>
+          <li><span>Seat 6+</span><b><span class="usd">$15</span><span class="idr">Rp195.000</span>/seat</b></li>
         </ul>
         <ul class="feats">
           <li class="feat"><span class="chip">__ICON:layout/layers__</span><div><b>__PRO_COUNT__ more icons</b><small>__PRO_NAMES__</small></div></li>
@@ -219,7 +230,7 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
           <li class="feat"><span class="chip">__ICON:arrows/refresh__</span><div><b>New icons as they ship</b><small>Included for your paid year</small></div></li>
         </ul>
         <div class="teaser" aria-hidden="true">__PRO_PREVIEW__</div>
-        <div class="plan-foot"><div class="seats" role="group" aria-label="Seats"><button type="button" id="seat-down" aria-label="Fewer seats">−</button><output id="seat-n" aria-live="polite">1 seat</output><button type="button" id="seat-up" aria-label="More seats">+</button></div><a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro">Get Pro · $89</a></div>
+        <div class="plan-foot"><div class="seats" role="group" aria-label="Seats"><button type="button" id="seat-down" aria-label="Fewer seats">−</button><output id="seat-n" aria-live="polite">1 seat</output><button type="button" id="seat-up" aria-label="More seats">+</button></div><a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro">Get Pro</a></div>
       </div>
     </div>
 
@@ -230,7 +241,7 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
           <div class="cmp-row cmp-head" role="row">
             <div role="columnheader"></div>
             <div role="columnheader" class="cmp-plan"><b>Free</b><span>$0 forever</span><a class="pill pill-white" href="./#icons">Browse icons</a></div>
-            <div role="columnheader" class="cmp-plan cmp-pro"><b>Pro</b><span>From $89 / year</span><a data-polar href="#" data-tip="Coming soon" class="pill soon">Get Pro</a></div>
+            <div role="columnheader" class="cmp-plan cmp-pro"><b>Pro</b><span>From <span class="usd">$89</span><span class="idr">Rp1.175.000</span> / year</span><a data-polar href="#" data-tip="Coming soon" class="pill soon">Get Pro</a></div>
           </div>
           <div class="cmp-group" role="row"><div role="cell">Styles</div><div role="cell"></div><div role="cell" class="cmp-pro"></div></div>
           <div class="cmp-row" role="row"><div role="cell"><span class="sample">__SAMPLE:outline__</span>Outline<small>__STYLE_N:outline__ icons</small></div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
@@ -266,7 +277,7 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
       </div>
       <div class="faq">
         <details><summary>What's included in Pro?__ICON:shapes/plus__</summary><p>__PRO_NAMES__: __PRO_COUNT__ icons on top of the free Outline and Duotone sets, plus new icons as they're released.</p></details>
-        <details><summary>How does per-seat pricing work?__ICON:shapes/plus__</summary><p>First seat $89/year, seats 2–5 $33 each, seat 6+ $15 each. Total = sum of each seat at its rate.</p></details>
+        <details><summary>How does per-seat pricing work?__ICON:shapes/plus__</summary><p>First seat <span class="usd">$89</span><span class="idr">Rp1.175.000</span> a year, seats 2–5 <span class="usd">$33</span><span class="idr">Rp435.000</span> each, seat 6 onward <span class="usd">$15</span><span class="idr">Rp195.000</span> each. Your total is each seat at its rate.</p></details>
         <details><summary>Can I use the icons in commercial projects?__ICON:shapes/plus__</summary><p>Yes. Outline and Duotone are MIT licensed, and Pro icons can be used in personal and client work.</p></details>
         <details><summary>How do I get the Pro icons?__ICON:shapes/plus__</summary><p>Right after checkout, your receipt email links to your customer portal, where you download every Pro style as SVG files. New icons are added there as they're released.</p></details>
         <details><summary>Can I cancel anytime?__ICON:shapes/plus__</summary><p>Cancel anytime; Pro stays active until the end of your paid year.</p></details>
@@ -291,14 +302,24 @@ __FOOTER__
   // ---------- Billing period ----------
   // Pro is priced per seat: one seat per person using the icons.
   const MAX = 50;
-  // graduated yearly price: seat 1 $89, seats 2–5 $33 each, seat 6+ $15 each
-  const total = (n) => 89 + 33 * Math.min(Math.max(n - 1, 0), 4) + 15 * Math.max(n - 5, 0);
+  // graduated yearly price per seat: seat 1, seats 2–5 each, seat 6 onward each (the same rates as the card)
+  const RATES = { usd: [89, 33, 15], idr: [1175000, 435000, 195000] };
+  const money = { usd: (n) => "$" + n.toLocaleString("en-US"), idr: (n) => "Rp" + n.toLocaleString("id-ID") };
+  const cur = () => (document.documentElement.dataset.cur === "idr" ? "idr" : "usd");
+  const total = (n) => { const [a, b, c] = RATES[cur()]; return a + b * Math.min(Math.max(n - 1, 0), 4) + c * Math.max(n - 5, 0); };
   let seats = 1;
   function show() {
     $("#seat-n").textContent = seats + (seats === 1 ? " seat" : " seats");
-    $("#get-pro").textContent = `Get Pro · $${total(seats).toLocaleString("en-US")}/yr`;
+    $("#get-pro").textContent = `Get Pro · ${money[cur()](total(seats))}/yr`;
     $("#seat-down").disabled = seats <= 1; $("#seat-up").disabled = seats >= MAX;
   }
+  // the head script guessed the currency from the time zone; the visitor's country settles it
+  fetch("/api/geo").then((r) => (r.ok ? r.json() : null)).then((g) => {
+    if (!g || !g.country) return;
+    const c = g.country === "ID" ? "idr" : "usd";
+    try { sessionStorage.setItem("meya-cur", c); } catch {}
+    if (c !== cur()) { document.documentElement.dataset.cur = c; show(); }
+  }, () => {});
   $("#seat-down").addEventListener("click", () => { seats = Math.max(1, seats - 1); show(); });
   $("#seat-up").addEventListener("click", () => { seats = Math.min(MAX, seats + 1); show(); });
   show();

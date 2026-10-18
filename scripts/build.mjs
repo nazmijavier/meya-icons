@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 import { CATEGORIES, COLOR_SETS, HIDDEN } from "./categories.mjs";
 import { keywordsFor } from "./keywords.mjs";
 import { PRO_DIR, PRO_SAMPLES, previewIcons, proIcons } from "./pro.mjs";
+const SAMPLES = (() => { try { return JSON.parse(fs.readFileSync(new URL("./pro-samples.json", import.meta.url), "utf8")); } catch { return {}; } })();
 import { STYLES } from "./styles.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -100,19 +101,17 @@ const PRO_STYLES = STYLES.filter((st) => st.pro && st.showcase).map((st) => st.i
 const TEASER = PRO_SAMPLES;
 let proCount = 0, proPreview = "";
 const proCounts = {};
+// Pro counts are the icons the site previews (scripts/pro-previews.json), so every computer builds the same numbers.
 for (const st of PRO_STYLES) {
-  const dir = path.join(PRO_DIR, st);
-  proCounts[st] = 0;
-  if (!fs.existsSync(dir)) continue;
-  for (const c of fs.readdirSync(dir)) if (!HIDDEN.includes(c) && fs.statSync(path.join(dir, c)).isDirectory()) proCounts[st] += fs.readdirSync(path.join(dir, c)).filter((f) => f.endsWith(".svg")).length;
+  proCounts[st] = PREVIEWS[st] ? PREVIEWS[st].icons.length : 0;
   proCount += proCounts[st];
 }
 for (const n of TEASER) {
-  // one teaser icon per slot, cycling through the Pro styles
-  const st = PRO_STYLES[TEASER.indexOf(n) % PRO_STYLES.length], f = path.join(PRO_DIR, st, n + ".svg");
-  if (!fs.existsSync(f)) continue;
-  const t = fs.readFileSync(f, "utf8"), attrs = st === "pixel" ? ' shape-rendering="crispEdges"' : "";
-  proPreview += `<span><svg viewBox="0 0 24 24" fill="none"${attrs}>${t.replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim()}</svg></span>`;
+  // one teaser icon per slot, cycling through the Pro styles; drawings from scripts/pro-samples.json
+  const st = PRO_STYLES[TEASER.indexOf(n) % PRO_STYLES.length], inner = SAMPLES[`${st}/${n}`];
+  if (!inner) continue;
+  const attrs = st === "pixel" ? ' shape-rendering="crispEdges"' : "";
+  proPreview += `<span><svg viewBox="0 0 24 24" fill="none"${attrs}>${inner}</svg></span>`;
 }
 
 // ---------- Footer shared by every page ----------
@@ -128,6 +127,33 @@ const FOOTER = `<footer class="footer">
   </div>
 </footer>`;
 
+// ---------- Offer banner (top of every page) ----------
+// The launch offer, shown site-wide. Set OFFER to null to take the banner down.
+const OFFER = { code: "LAUNCH30", text: "30% off <span class=\"promo-long\">your first year of </span>Pro" };
+const BANNER = OFFER
+  ? `<div class="promo" role="region" aria-label="Offer">
+  <p><span>${OFFER.text} with code</span> <button type="button" class="promo-code" data-code="${OFFER.code}" title="Copy code">${OFFER.code}</button> <a href="pricing#pro">Get Pro<span aria-hidden="true"> →</span></a></p>
+</div>
+<style>
+.promo { background: #1D1D1F; color: #FFFFFF; font: 500 13px/1.3 "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; letter-spacing: -0.01em; }
+.promo p { margin: 0 auto; min-height: 40px; padding: 7px 16px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px 10px; text-align: center; }
+.promo-code { font: 500 12px/1 "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace; letter-spacing: 0.04em; color: inherit; background: rgba(255, 255, 255, 0.12); border: 1px dashed rgba(255, 255, 255, 0.45); border-radius: 9999px; padding: 6px 10px; cursor: copy; transition: background-color 150ms ease; }
+.promo-code:hover { background: rgba(255, 255, 255, 0.2); }
+.promo-code.copied::after { content: " · copied"; }
+.promo a { color: inherit; opacity: 0.8; text-decoration: none; }
+.promo a:hover { opacity: 1; text-decoration: underline; }
+@media (max-width: 520px) { .promo-long { display: none; } }
+</style>
+<script>
+document.addEventListener("click", (e) => {
+  const b = e.target.closest && e.target.closest(".promo-code");
+  if (!b) return;
+  const done = () => { b.classList.add("copied"); clearTimeout(b._t); b._t = setTimeout(() => b.classList.remove("copied"), 1600); };
+  (navigator.clipboard ? navigator.clipboard.writeText(b.dataset.code) : Promise.reject()).then(done, done);
+});
+</script>`
+  : "";
+
 // ---------- Website ----------
 // On the site, default 1.3 strokes inherit from the root so the stroke slider can drive them.
 const SEARCH = fs.readFileSync(rel("site/search.js"), "utf8");
@@ -139,6 +165,7 @@ const showcaseIcons = siteIcons.map((i) => {
 });
 const fragment = fs
   .readFileSync(rel("site/template.html"), "utf8")
+  .replace("__BANNER__", BANNER)
   .replace("__FOOTER__", FOOTER)
   .replace("/*__DATA__*/", `window.MEYA=${JSON.stringify({ categories: siteCategories, styles: siteStyles, icons: showcaseIcons })};`)
   .replace("/*__SEARCH__*/", SEARCH)
@@ -198,6 +225,7 @@ if (fs.existsSync(pluginTpl)) {
 const pixelData = icons.filter((i) => i.v.outline && !COLOR_SETS.includes(i.c)).map((i) => ({ key: `${i.c}/${i.n}`, n: i.n, b: i.v.outline }));
 const pixel = fs
   .readFileSync(rel("site/pixel.html"), "utf8")
+  .replace("__BANNER__", BANNER)
   .replace("/*__DATA__*/", `window.MEYA=${JSON.stringify({ icons: pixelData })};`)
   .replaceAll("__COUNT__", String(pixelData.length))
   .replaceAll("__FAVICON__", `data:image/png;base64,${fs.readFileSync(rel("assets/favicon.png")).toString("base64")}`);
@@ -212,6 +240,7 @@ if (PUBLISH_SPONSOR_PAGE) {
   // ---------- Sponsor page (docs/sponsor.html) ----------
   const sponsor = fs
     .readFileSync(rel("site/sponsor.html"), "utf8")
+    .replace("__BANNER__", BANNER)
     .replace("__FOOTER__", FOOTER)
     .replace("/*__DATA__*/", `window.MEYA=${JSON.stringify({ icons: siteIcons.filter((i) => i.c === "shapes") })};`)
     .replaceAll("__VERSION__", VERSION)
@@ -245,6 +274,7 @@ if (PUBLISH_SPONSOR_PAGE) {
     : `<div class="cmp-row" role="row"><div role="cell"><span class="sample"></span>${st.label}<small>Coming soon</small></div><div role="cell">__NO__</div><div role="cell" class="cmp-pro"><span class="txt">Coming soon</span></div></div>`).join("\n          ");
   const page = fs
     .readFileSync(rel("site/pricing.html"), "utf8")
+    .replace("__BANNER__", BANNER)
     .replace("__PRO_ROWS__", proRows)
     .replaceAll("__PRO_NAMES__", proNames)
     .replaceAll("__STYLE_WORD_CAP__", (w => w[0].toUpperCase() + w.slice(1))(WORDS[styleCount] || String(styleCount)))
@@ -260,9 +290,12 @@ if (PUBLISH_SPONSOR_PAGE) {
     .replace(/__STYLE_N:([a-z]+)__/g, (m, st) => String(styles.find((x) => x.id === st).count))
     .replace(/__PRO_N:([a-z-]+)__/g, (m, st) => String(proCounts[st] || siteStyles.find((x) => x.id === st).count))
     .replace(/__SAMPLE:([a-z-]+)__/g, (m, st) => {
-      const f = ["outline", "duotone"].includes(st) ? rel("icons", st, "general/home.svg") : path.join(PRO_DIR, st, "general/home.svg");
-      if (!fs.existsSync(f)) return "";
-      const inner = fs.readFileSync(f, "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim();
+      // free styles from icons/, Pro styles from scripts/pro-samples.json
+      const f = rel("icons", st, "general/home.svg");
+      const inner = ["outline", "duotone"].includes(st)
+        ? fs.existsSync(f) && fs.readFileSync(f, "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim()
+        : SAMPLES[`${st}/general/home`];
+      if (!inner) return "";
       return `<svg viewBox="0 0 24 24" fill="none"${st === "pixel" ? ' shape-rendering="crispEdges"' : ""} aria-hidden="true">${inner}</svg>`;
     })
     .replaceAll('data-polar href="#" data-tip="Coming soon" class="pill soon"', POLAR_CHECKOUT ? `href="${POLAR_CHECKOUT}" target="_blank" rel="noopener" class="pill"` : 'href="#" data-tip="Coming soon" class="pill soon"')

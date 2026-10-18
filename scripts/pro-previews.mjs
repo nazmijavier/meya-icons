@@ -15,7 +15,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 import { drawMark } from "./pro-mark.mjs";
-import { PRO_DIR, previewIcons } from "./pro.mjs";
+import { PRO_DIR, previewIcons, sampleSlots } from "./pro.mjs";
 import { STYLES } from "./styles.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -106,3 +106,12 @@ for (const st of STYLES.filter((s) => s.showcase && (!only.length || only.includ
 }
 await browser.close();
 fs.writeFileSync(manifestPath, JSON.stringify(manifest) + "\n");
+
+// The pricing page's few Pro samples (sampleSlots in pro.mjs), so build.mjs never reads ../meya-icons-pro.
+const samples = {};
+for (const [st, k] of sampleSlots(STYLES.filter((s) => s.pro && s.showcase).map((s) => s.id))) {
+  const f = path.join(PRO_DIR, st, `${k}.svg`);
+  if (fs.existsSync(f)) samples[`${st}/${k}`] = fs.readFileSync(f, "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim();
+}
+fs.writeFileSync(rel("scripts/pro-samples.json"), JSON.stringify(samples, null, 1) + "\n");
+console.log(`Pricing samples: ${Object.keys(samples).length} → scripts/pro-samples.json`);

@@ -32,3 +32,12 @@ export function proIcons(style) {
 export function previewIcons(style) {
   return proIcons(style).filter((i) => !HIDDEN.includes(i.k.split("/")[0]));
 }
+
+// The pricing page's Pro samples, as [style, icon] pairs: the home icon in every shipped Pro style (the comparison
+// table), and one teaser icon per slot, cycling through those styles. pro-previews.mjs writes their drawings to
+// scripts/pro-samples.json, which build.mjs reads, so the site builds without ../meya-icons-pro.
+export function sampleSlots(proStyles) {
+  const slots = proStyles.map((st) => [st, "general/home"]);
+  PRO_SAMPLES.forEach((k, i) => slots.push([proStyles[i % proStyles.length], k]));
+  return slots.filter(([st, k], i) => slots.findIndex(([s2, k2]) => s2 === st && k2 === k) === i);
+}
