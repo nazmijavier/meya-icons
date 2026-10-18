@@ -53,7 +53,14 @@
 .acct-pick button:hover { background: var(--mist, #F5F5F7); }
 .acct-x { position: absolute; top: 18px; right: 18px; width: 32px; height: 32px; border: 0; border-radius: 50%; background: var(--mist, #F5F5F7); color: var(--ink, #1D1D1F); font-size: 18px; line-height: 1; cursor: pointer; }
 .acct-err { margin: 14px 0 0 !important; padding: 10px 12px; border-radius: 12px; background: #FFF1F0; color: #B42318 !important; font-size: 13px; }
+button.acct-open { border: 0; background: none; font-family: inherit; white-space: nowrap; cursor: pointer; }
 .acct-open[hidden] { display: none !important; }
+/* phones: with the Log in button showing, the nav has no room for Share */
+@media (max-width: 420px) { .nav-actions:has(.acct-open:not([hidden])) a.nav-link[href*="x.com/intent"] { display: none; } }
+@media (max-width: 380px) {
+  .nav-actions:has(.acct-open:not([hidden])) .nav-link { padding-inline: 9px; }
+  .nav-actions:has(.acct-open:not([hidden])) .pill { padding-inline: 14px; }
+}
 </style>
 <script>
 // Pro login. Polar emails the customer a code (no email service of our own); the browser trades it for a Polar
@@ -64,7 +71,7 @@
   const dlg = document.getElementById("acct");
   const state = { configured: false, signedIn: false, email: null, polar: null };
   const listeners = new Set();
-  let email = "", customerId = null;
+  let email = "", customerId = null, codeSentAt = 0;
   const $ = (s) => dlg.querySelector(s);
   const err = $(".acct-err");
 
@@ -78,8 +85,10 @@
   function busy(form, on) { form.querySelectorAll("button, input").forEach((el) => (el.disabled = on)); }
   function paint() {
     document.querySelectorAll(".acct-open").forEach((b) => {
+      const label = state.signedIn ? "Account" : "Log in";
       b.hidden = !state.configured;
-      b.textContent = state.signedIn ? "Account" : "Log in";
+      b.querySelector(".label").textContent = label;
+      b.setAttribute("aria-label", label);
     });
     document.querySelectorAll("[data-hide-pro]").forEach((el) => (el.hidden = state.signedIn));
     $(".acct-email").textContent = state.email || "";
@@ -96,7 +105,8 @@
   function open() {
     if (!state.configured) return;
     if (!dlg.open) dlg.showModal();
-    show(state.signedIn ? "account" : "email");
+    // a code Polar sent in the last 30 minutes still works: go back to it
+    show(state.signedIn ? "account" : Date.now() - codeSentAt < 30 * 60 * 1000 ? "code" : "email");
   }
 
   const MSG = {
@@ -116,7 +126,7 @@
     return { status: r.status, json };
   }
   function signedIn(json) {
-    state.signedIn = true; state.email = json.email;
+    state.signedIn = true; state.email = json.email; codeSentAt = 0;
     show("account"); emit();
   }
   function noPro(json, status) {
@@ -129,7 +139,7 @@
     busy(form, true);
     try {
       const r = await polar("request", { email, organization_id: state.polar.org, ...(customerId ? { customer_id: customerId } : {}) });
-      if (r.status === 202 || r.status === 200) { $(".acct-to").textContent = email; show("code"); return; }
+      if (r.status === 202 || r.status === 200) { codeSentAt = Date.now(); $(".acct-to").textContent = email; show("code"); return; }
       if (r.status === 409 && r.json && r.json.customers) {
         const pick = $(".acct-pick"); pick.textContent = "";
         r.json.customers.forEach((c, i) => {
@@ -168,12 +178,19 @@
   });
   dlg.addEventListener("input", (e) => { if (e.target.name === "code") e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ""); });
   dlg.addEventListener("click", async (e) => {
-    if (e.target === dlg) return dlg.close(); // backdrop
-    const go = e.target.closest("[data-go]"); if (go) return show(go.dataset.go);
+    if (e.target === dlg) {
+      // the backdrop, not the dialog's own padding
+      const r = dlg.getBoundingClientRect();
+      if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) dlg.close();
+      return;
+    }
+    const go = e.target.closest("[data-go]"); if (go) { if (go.dataset.go === "email") codeSentAt = 0; return show(go.dataset.go); }
     const act = e.target.closest("[data-act]"); if (!act) return;
     if (act.dataset.act === "close") return dlg.close();
     if (act.dataset.act === "logout") {
-      try { await site("/api/auth/logout", {}); } catch {}
+      let ok = false;
+      try { ok = (await site("/api/auth/logout", {})).status === 200; } catch {}
+      if (!ok) return fail("Couldn't log out. Check your connection and try again.");
       state.signedIn = false; state.email = null; emit(); dlg.close();
     }
   });

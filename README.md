@@ -156,7 +156,7 @@ Drag any SVG from [`icons/`](./icons) onto the canvas. Each icon comes in as one
    node scripts/build.mjs
    ```
 
-Stroke, Sharp, Filled, Pixel, 3D and Glass are Pro styles. Their SVGs live in `../meya-icons-pro/<style>/`, never in `icons/`, so they don't ship under the MIT license. The website shows the Pro styles that have shipped (marked `showcase` in `scripts/styles.mjs`) from image previews in `docs/pro/`, with copying locked; the others show as coming soon. Full-color styles (marked `color`) are previewed as they are, the rest as one-color shapes that follow the site's color picker. After changing a shipped Pro style's icons, refresh the previews before you build:
+Stroke, Sharp, Filled, Pixel, 3D and Glass are Pro styles. Their SVGs live in `../meya-icons-pro/<style>/`, never in `icons/`, so they don't ship under the MIT license. The website shows the Pro styles that have shipped (marked `showcase` in `scripts/styles.mjs`) from image previews in `docs/pro/`, with copying locked for everyone but signed-in Pro customers (see below); the others show as coming soon. Full-color styles (marked `color`) are previewed as they are, the rest as one-color shapes that follow the site's color picker. After changing a shipped Pro style's icons, refresh the previews before you build:
 
 ```bash
 node scripts/pro-previews.mjs   # needs Playwright: npm i -D playwright && npx playwright install chromium
@@ -177,7 +177,13 @@ node scripts/package.mjs
 
 It writes `dist/`, which is what gets published.
 
-The website is a single file at [`docs/index.html`](./docs/index.html), served by Vercel (see [`vercel.json`](./vercel.json)).
+The website is static pages in [`docs/`](./docs) plus a few Vercel functions in [`api/`](./api), served by Vercel (see [`vercel.json`](./vercel.json)):
+
+- `api/geo` tells the pricing page the visitor's country, so it shows Rupiah in Indonesia and US dollars elsewhere.
+- `api/auth/*` is the Pro login. Customers get a sign-in code from Polar by email (or use their Pro license key); the functions check with Polar that they hold the Meya Icons Pro benefit and keep a signed session cookie. Access is re-checked daily.
+- `api/pro` serves one Pro SVG at a time to signed-in customers, read from the private `meya-icons-pro` repository, so they can copy Pro icons from the site.
+
+The login stays hidden until these Vercel environment variables are set: `SESSION_SECRET` (32+ random characters), `POLAR_ORG_ID`, `POLAR_PRO_BENEFIT_ID` (the Pro product's License Keys benefit), `POLAR_ACCESS_TOKEN` (scopes `benefits:read` and `license_keys:write`) and `PRO_GITHUB_TOKEN` (fine-grained, Contents read-only on `meya-icons-pro`). Optional: `POLAR_API_URL` for Polar's sandbox, `PRO_REPO`, `PRO_REF`.
 
 ## License
 

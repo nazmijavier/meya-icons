@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   const { token } = await body(req);
   if (typeof token !== "string" || !/^polar_[a-z]+_[A-Za-z0-9_-]{10,200}$/.test(token)) return json(res, 400, { error: "invalid" });
   let r;
-  try { r = await whoHoldsPro(token); } catch { return json(res, 502, { error: "polar" }); }
+  try { r = await whoHoldsPro(token); } catch (e) { return json(res, e.outage ? 502 : 503, { error: "polar" }); }
   if (r.error) return json(res, r.error === "no_pro" ? 403 : 401, { error: r.error, email: r.who ? r.who.email : null });
   const s = start(res, r.who);
   json(res, 200, { signedIn: true, email: s.e });

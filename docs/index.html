@@ -387,6 +387,8 @@ svg.sim .thin { fill: none; stroke: var(--tile-bg); stroke-width: max(0px, calc(
 .promo-code { font: 500 12px/1 "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace; letter-spacing: 0.04em; color: inherit; background: rgba(255, 255, 255, 0.12); border: 1px dashed rgba(255, 255, 255, 0.45); border-radius: 9999px; padding: 6px 10px; cursor: copy; transition: background-color 150ms ease; }
 .promo-code:hover { background: rgba(255, 255, 255, 0.2); }
 .promo-code.copied::after { content: " · copied"; }
+.promo-code.manual { user-select: all; -webkit-user-select: all; }
+.promo-code.manual::after { content: " · press Ctrl/⌘ C"; }
 .promo a { color: inherit; opacity: 0.8; text-decoration: none; }
 .promo a:hover { opacity: 1; text-decoration: underline; }
 @media (max-width: 520px) { .promo-long { display: none; } }
@@ -395,8 +397,10 @@ svg.sim .thin { fill: none; stroke: var(--tile-bg); stroke-width: max(0px, calc(
 document.addEventListener("click", (e) => {
   const b = e.target.closest && e.target.closest(".promo-code");
   if (!b) return;
-  const done = () => { b.classList.add("copied"); clearTimeout(b._t); b._t = setTimeout(() => b.classList.remove("copied"), 1600); };
-  (navigator.clipboard ? navigator.clipboard.writeText(b.dataset.code) : Promise.reject()).then(done, done);
+  const flag = (c) => { b.classList.remove("copied", "manual"); b.classList.add(c); clearTimeout(b._t); b._t = setTimeout(() => b.classList.remove(c), c === "manual" ? 6000 : 1600); };
+  // when the clipboard is refused, select the code so it can be copied by hand
+  const manual = () => { const r = document.createRange(); r.selectNodeContents(b.firstChild); const s = getSelection(); s.removeAllRanges(); s.addRange(r); flag("manual"); };
+  (navigator.clipboard ? navigator.clipboard.writeText(b.dataset.code) : Promise.reject()).then(() => flag("copied"), manual);
 });
 </script>
 
@@ -406,7 +410,7 @@ document.addEventListener("click", (e) => {
     <div class="nav-actions">
       <a class="nav-link" href="pixel" title="Convert icons to pixel style" aria-label="Pixel Lab"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM10.5 10.5h2v2h-2z"/></svg><span class="label">Pixel Lab</span></a>
       <a class="nav-link" href="https://x.com/intent/post?text=Meya%20Icons%3A%20a%20free%2C%20adaptable%20icon%20set%20for%20interfaces%2C%20diagrams%20and%20decks&amp;url=https%3A%2F%2Ficons.meyalab.com" target="_blank" rel="noopener" title="Share on X" aria-label="Share on X"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.2 1.5h2.2L9.6 7l5.6 7.5h-4.4L7.4 10l-4 4.5H1.2l5.2-5.9L1 1.5h4.5l3.1 4.1zm-.8 11.7h1.2L4.8 2.7H3.5z"/></svg><span class="label">Share</span></a>
-      <button type="button" class="nav-link acct-open" hidden>Log in</button>
+      <button type="button" class="nav-link acct-open" aria-label="Log in" hidden><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1.5c-3 0-5.5 1.6-5.5 3.6 0 .5.4.9.9.9h9.2c.5 0 .9-.4.9-.9 0-2-2.5-3.6-5.5-3.6z"/></svg><span class="label">Log in</span></button>
       <a class="pill pill-ink" href="pricing" data-hide-pro>Upgrade to Pro</a>
     </div>
   </nav>
@@ -513,7 +517,7 @@ document.addEventListener("click", (e) => {
       <button class="pill pill-outline" id="copy-jsx" type="button"><span class="copy-swap"><span data-ico="editor:copy" class="i-copy"></span><span data-ico="shapes:check" class="i-check"></span></span>Copy JSX</button>
     </div>
     <div class="lock" id="p-lock" hidden>
-      <p><b id="p-lock-style">Sharp</b> is part of Meya Icons Pro. Get Pro to copy it as SVG or React and to use the whole set in Figma.</p>
+      <p><b>Sharp</b> is part of Meya Icons Pro. Get Pro to copy it as SVG or React and to use the whole set in Figma.</p>
       <a class="pill pill-blue" href="pricing">Get Pro</a>
       <button type="button" class="lock-login" data-acct-open hidden>Already have Pro? Log in</button>
     </div>
@@ -588,7 +592,14 @@ document.addEventListener("click", (e) => {
 .acct-pick button:hover { background: var(--mist, #F5F5F7); }
 .acct-x { position: absolute; top: 18px; right: 18px; width: 32px; height: 32px; border: 0; border-radius: 50%; background: var(--mist, #F5F5F7); color: var(--ink, #1D1D1F); font-size: 18px; line-height: 1; cursor: pointer; }
 .acct-err { margin: 14px 0 0 !important; padding: 10px 12px; border-radius: 12px; background: #FFF1F0; color: #B42318 !important; font-size: 13px; }
+button.acct-open { border: 0; background: none; font-family: inherit; white-space: nowrap; cursor: pointer; }
 .acct-open[hidden] { display: none !important; }
+/* phones: with the Log in button showing, the nav has no room for Share */
+@media (max-width: 420px) { .nav-actions:has(.acct-open:not([hidden])) a.nav-link[href*="x.com/intent"] { display: none; } }
+@media (max-width: 380px) {
+  .nav-actions:has(.acct-open:not([hidden])) .nav-link { padding-inline: 9px; }
+  .nav-actions:has(.acct-open:not([hidden])) .pill { padding-inline: 14px; }
+}
 </style>
 <script>
 // Pro login. Polar emails the customer a code (no email service of our own); the browser trades it for a Polar
@@ -599,7 +610,7 @@ document.addEventListener("click", (e) => {
   const dlg = document.getElementById("acct");
   const state = { configured: false, signedIn: false, email: null, polar: null };
   const listeners = new Set();
-  let email = "", customerId = null;
+  let email = "", customerId = null, codeSentAt = 0;
   const $ = (s) => dlg.querySelector(s);
   const err = $(".acct-err");
 
@@ -613,8 +624,10 @@ document.addEventListener("click", (e) => {
   function busy(form, on) { form.querySelectorAll("button, input").forEach((el) => (el.disabled = on)); }
   function paint() {
     document.querySelectorAll(".acct-open").forEach((b) => {
+      const label = state.signedIn ? "Account" : "Log in";
       b.hidden = !state.configured;
-      b.textContent = state.signedIn ? "Account" : "Log in";
+      b.querySelector(".label").textContent = label;
+      b.setAttribute("aria-label", label);
     });
     document.querySelectorAll("[data-hide-pro]").forEach((el) => (el.hidden = state.signedIn));
     $(".acct-email").textContent = state.email || "";
@@ -631,7 +644,8 @@ document.addEventListener("click", (e) => {
   function open() {
     if (!state.configured) return;
     if (!dlg.open) dlg.showModal();
-    show(state.signedIn ? "account" : "email");
+    // a code Polar sent in the last 30 minutes still works: go back to it
+    show(state.signedIn ? "account" : Date.now() - codeSentAt < 30 * 60 * 1000 ? "code" : "email");
   }
 
   const MSG = {
@@ -651,7 +665,7 @@ document.addEventListener("click", (e) => {
     return { status: r.status, json };
   }
   function signedIn(json) {
-    state.signedIn = true; state.email = json.email;
+    state.signedIn = true; state.email = json.email; codeSentAt = 0;
     show("account"); emit();
   }
   function noPro(json, status) {
@@ -664,7 +678,7 @@ document.addEventListener("click", (e) => {
     busy(form, true);
     try {
       const r = await polar("request", { email, organization_id: state.polar.org, ...(customerId ? { customer_id: customerId } : {}) });
-      if (r.status === 202 || r.status === 200) { $(".acct-to").textContent = email; show("code"); return; }
+      if (r.status === 202 || r.status === 200) { codeSentAt = Date.now(); $(".acct-to").textContent = email; show("code"); return; }
       if (r.status === 409 && r.json && r.json.customers) {
         const pick = $(".acct-pick"); pick.textContent = "";
         r.json.customers.forEach((c, i) => {
@@ -703,12 +717,19 @@ document.addEventListener("click", (e) => {
   });
   dlg.addEventListener("input", (e) => { if (e.target.name === "code") e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ""); });
   dlg.addEventListener("click", async (e) => {
-    if (e.target === dlg) return dlg.close(); // backdrop
-    const go = e.target.closest("[data-go]"); if (go) return show(go.dataset.go);
+    if (e.target === dlg) {
+      // the backdrop, not the dialog's own padding
+      const r = dlg.getBoundingClientRect();
+      if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) dlg.close();
+      return;
+    }
+    const go = e.target.closest("[data-go]"); if (go) { if (go.dataset.go === "email") codeSentAt = 0; return show(go.dataset.go); }
     const act = e.target.closest("[data-act]"); if (!act) return;
     if (act.dataset.act === "close") return dlg.close();
     if (act.dataset.act === "logout") {
-      try { await site("/api/auth/logout", {}); } catch {}
+      let ok = false;
+      try { ok = (await site("/api/auth/logout", {})).status === 200; } catch {}
+      if (!ok) return fail("Couldn't log out. Check your connection and try again.");
       state.signedIn = false; state.email = null; emit(); dlg.close();
     }
   });
@@ -795,7 +816,9 @@ document.addEventListener("click", (e) => {
   const inner = (icon) => `<svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icon.b}</svg>`;
   const ui = (icon) => ({ b: icon.v.outline });
   // Artwork in the chosen style; interface chrome always uses outline.
-  const body = (icon) => proBody(icon) || icon.v[state.style] || icon.v.outline || Object.values(icon.v)[0];
+  const body = (icon) => icon.v[state.style] || icon.v.outline || Object.values(icon.v)[0];
+  // what the sheet copies: the loaded Pro drawing for a signed-in customer, else the site's own artwork
+  const copyBody = (icon) => proBody(icon) || body(icon);
   // Stroke and Stroke Duotone are Pro: their tabs preview the slider on the free outlined artwork (Outline and
   // Duotone); copying stays with Pro. The other locked stroke styles (Sharp, Animated) look different from that
   // artwork, so they show their own previews.
@@ -859,14 +882,14 @@ document.addEventListener("click", (e) => {
   // ---------- Copy ----------
   const paint = (code) => (state.color === INK ? code : code.replaceAll("currentColor", state.color));
   function toSvg(icon) {
-    const code = paint(body(icon)).replace(/></g, ">\n  <");
+    const code = paint(copyBody(icon)).replace(/></g, ">\n  <");
     const st = styleOf(state.style);
     const attrs = (st.stroke ? ` stroke="${state.color === INK ? "currentColor" : state.color}" stroke-width="${fmtSw(state.sw)}"` : "") + (st.round ? ' stroke-linecap="round" stroke-linejoin="round"' : "");
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${state.size}" height="${state.size}" viewBox="0 0 24 24" fill="none"${attrs}>\n  ${code}\n</svg>`;
   }
   function toJsx(icon) {
     // an animated icon carries its CSS in a <style>: JSX takes it as a template literal, and class as className
-    const raw = paint(body(icon)), css = (raw.match(/<style>([\s\S]*?)<\/style>/) || [])[1];
+    const raw = paint(copyBody(icon)), css = (raw.match(/<style>([\s\S]*?)<\/style>/) || [])[1];
     const code = raw.replace(/<style>[\s\S]*?<\/style>/, "<style>@@CSS@@</style>").replace(/ class="/g, ' className="')
       .replace(/ ([a-z]+)-([a-z])([a-z-]*)=/g, (m, a, b, rest) => ` ${a}${b.toUpperCase()}${rest.replace(/-([a-z])/g, (x, y) => y.toUpperCase())}=`)
       .replace(/style="mask-type:([a-z]+)"/g, 'style={{ maskType: "$1" }}')
@@ -996,7 +1019,9 @@ document.addEventListener("click", (e) => {
   function syncStroke(st) {
     const live = !!st.stroke && (!st.locked || simulates(st) || proOn()), ctl = $("#sw").closest(".control"), el = $("#sw"), v = live ? state.sw : 1.3;
     el.disabled = !live; ctl.classList.toggle("off", !live); $("#sw-pro").hidden = live;
-    if (live) delete ctl.dataset.tip; else ctl.dataset.tip = "Live strokes come with Pro";
+    if (!live) ctl.dataset.tip = "Live strokes come with Pro";
+    else if (st.locked && !simulates(st)) ctl.dataset.tip = "Sets the stroke of the Pro icon you open and copy";
+    else delete ctl.dataset.tip;
     el.value = v; el.style.setProperty("--p", ((v - el.min) / (el.max - el.min)) * 100 + "%");
     $("#sw-out").textContent = v.toFixed(2);
   }
@@ -1111,8 +1136,8 @@ document.addEventListener("click", (e) => {
     activeTile = tile; tile.setAttribute("aria-current", "true");
     $("#p-title").textContent = title(icon.n);
     $("#p-cat").textContent = catLabel[icon.c];
-    refreshSheet();
     sheet.classList.add("open"); sheet.setAttribute("aria-hidden", "false");
+    refreshSheet();
     document.body.classList.add("sheet-open");
   }
   function closeSheet() {
@@ -1123,8 +1148,10 @@ document.addEventListener("click", (e) => {
   function refreshSheet() {
     const icon = state.current; if (!icon) return;
     const st = styleOf(state.style), real = st.locked ? proBody(icon) : null, locked = !!st.locked && !real;
-    const loading = locked && proOn();
-    if (loading) loadPro(icon);
+    // a signed-in customer's Pro icon loads only while its sheet is showing
+    if (locked && proOn() && sheet.classList.contains("open")) loadPro(icon);
+    const loading = locked && proBusy.has(proKey(icon));
+    const failed = locked && proOn() && !loading && Date.now() - (proFailed.get(proKey(icon)) || 0) < 30000;
     $("#p-stage").innerHTML = gridSvg + (real
       ? inner({ b: real.replace(REDUCE, "") }).replace("<svg ", '<svg class="glyph" ')
       : simulates(st) && simSrc(icon)
@@ -1134,8 +1161,11 @@ document.addEventListener("click", (e) => {
       : glyph(icon).replace("<svg ", '<svg class="glyph" '));
     for (const el of sheet.querySelectorAll(".actions, .code-tabs, #p-code")) el.hidden = locked;
     $("#p-lock").hidden = !locked || loading;
-    sheet.querySelector(".lock-login").hidden = !(auth && auth.state.configured);
-    $("#p-lock-style").textContent = st.label;
+    $("#p-lock p").innerHTML = failed
+      ? `<b>${st.label}</b>: this icon couldn't be loaded. It may not be published yet. Try again in a moment.`
+      : `<b>${st.label}</b> is part of Meya Icons Pro. Get Pro to copy it as SVG or React and to use the whole set in Figma.`;
+    $("#p-lock .pill").hidden = failed;
+    sheet.querySelector(".lock-login").hidden = failed || proOn() || !(auth && auth.state.configured);
     $("#p-file").textContent = loading ? "Loading the Pro icon…" : st.locked ? `Meya Icons Pro · ${st.id}/${icon.c}/${icon.n}.svg` : `icons/${state.style}/${icon.c}/${icon.n}.svg`;
     if (!locked) $("#p-code").textContent = state.fmt === "svg" ? toSvg(icon) : toJsx(icon);
     // live strokes report their width, outlined styles their fixed 1.3 lines; solid and full-color styles nothing
@@ -1147,16 +1177,18 @@ document.addEventListener("click", (e) => {
     const style = state.style, k = proKey(icon, style);
     if (proBusy.has(k) || Date.now() - (proFailed.get(k) || 0) < 30000) return;
     proBusy.add(k);
-    let note = "";
+    let note = "", ended = false;
     try {
       const r = await fetch(`/api/pro?style=${encodeURIComponent(style)}&icon=${encodeURIComponent(`${icon.c}/${icon.n}`)}`, { credentials: "same-origin" });
       if (r.ok) proBodies.set(k, proInner(await r.text()));
-      else if (r.status === 401) auth.refresh(); // the session ended: back to previews
+      else if (r.status === 401) ended = true; // the session ended: back to previews
       else note = r.status === 404 ? "This Pro icon isn't available yet" : "Couldn't load the Pro icon. Try again in a moment";
     } catch { note = "Couldn't load the Pro icon. Check your connection"; }
     proBusy.delete(k);
-    if (note) { proFailed.set(k, Date.now()); toast(note); }
-    if (state.current === icon && state.style === style && !note) refreshSheet();
+    if (note || ended) proFailed.set(k, Date.now()); // no retry for 30 s, whatever happens next
+    if (note) toast(note);
+    if (ended) await auth.refresh(); // re-renders through auth.on
+    else if (state.current === icon && state.style === style) refreshSheet();
   }
   const canCopy = () => { const st = styleOf(state.style); return !st.locked || !!(state.current && proBody(state.current)); };
 
@@ -1189,10 +1221,7 @@ document.addEventListener("click", (e) => {
   // ---------- Pro login ----------
   // Signing in unlocks the sheet and the stroke slider for Pro styles; signing out puts the previews back.
   if (auth) auth.on(() => {
-    if (!proOn() && proBodies.size) {
-      proBodies.clear();
-      for (const t of tiles) t.querySelector("svg, .lk").outerHTML = glyph(icons[t.dataset.i]);
-    }
+    if (!proOn()) { proBodies.clear(); proFailed.clear(); }
     syncStroke(styleOf(state.style));
     refreshSheet();
   });

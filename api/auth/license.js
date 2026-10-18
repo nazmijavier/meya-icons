@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   const key = String((await body(req)).key || "").trim();
   if (key.length < 8 || key.length > 200) return json(res, 400, { error: "invalid" });
   let r;
-  try { r = await licenseHolder(key); } catch { return json(res, 502, { error: "polar" }); }
+  try { r = await licenseHolder(key); } catch (e) { return json(res, e.outage ? 502 : 503, { error: "polar" }); }
   if (r.error) return json(res, 401, { error: r.error });
   const s = start(res, r.who);
   json(res, 200, { signedIn: true, email: s.e });

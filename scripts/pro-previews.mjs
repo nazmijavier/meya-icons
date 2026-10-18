@@ -107,11 +107,26 @@ for (const st of STYLES.filter((s) => s.showcase && (!only.length || only.includ
 await browser.close();
 fs.writeFileSync(manifestPath, JSON.stringify(manifest) + "\n");
 
-// The pricing page's few Pro samples (sampleSlots in pro.mjs), so build.mjs never reads ../meya-icons-pro.
+// The pricing page's few Pro samples (sampleSlots in pro.mjs), so build.mjs never reads ../meya-icons-pro. Only the
+// styles rendered in this run are refreshed; a sample whose source is missing here keeps its committed drawing.
+const samplesPath = rel("scripts/pro-samples.json");
+const old = fs.existsSync(samplesPath) ? JSON.parse(fs.readFileSync(samplesPath, "utf8")) : {};
 const samples = {};
 for (const [st, k] of sampleSlots(STYLES.filter((s) => s.pro && s.showcase).map((s) => s.id))) {
-  const f = path.join(PRO_DIR, st, `${k}.svg`);
-  if (fs.existsSync(f)) samples[`${st}/${k}`] = fs.readFileSync(f, "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim();
+  const key = `${st}/${k}`, f = path.join(PRO_DIR, st, `${k}.svg`);
+  if ((!only.length || only.includes(st)) && fs.existsSync(f)) samples[key] = fs.readFileSync(f, "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim();
+  else if (old[key]) samples[key] = old[key];
+  else console.warn(`${key}: no drawing in ${PRO_DIR} and none committed, the pricing page shows no sample there`);
 }
-fs.writeFileSync(rel("scripts/pro-samples.json"), JSON.stringify(samples, null, 1) + "\n");
+fs.writeFileSync(samplesPath, JSON.stringify(samples, null, 1) + "\n");
 console.log(`Pricing samples: ${Object.keys(samples).length} → scripts/pro-samples.json`);
+
+// Signed-in customers copy Pro icons from the private repository (api/pro.js), not from this folder: warn when
+// the previews show icons that are not pushed there yet.
+try {
+  const dirty = execFileSync("git", ["-C", PRO_DIR, "status", "--porcelain"], { encoding: "utf8" }).trim();
+  const ahead = execFileSync("git", ["-C", PRO_DIR, "rev-list", "--count", "@{u}..HEAD"], { encoding: "utf8" }).trim();
+  if (dirty || ahead !== "0") console.warn(`${PRO_DIR} has ${dirty ? "uncommitted changes" : ""}${dirty && ahead !== "0" ? " and " : ""}${ahead !== "0" ? `${ahead} unpushed commit(s)` : ""}: commit and push it so signed-in customers can copy every previewed icon.`);
+} catch {
+  console.warn(`${PRO_DIR} is not a clone of the private repository: signed-in customers copy from there, so push these icons to it.`);
+}

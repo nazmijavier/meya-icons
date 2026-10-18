@@ -129,6 +129,8 @@ textarea.input { min-height: 180px; padding: 18px 24px; border-radius: 28px; res
 .promo-code { font: 500 12px/1 "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace; letter-spacing: 0.04em; color: inherit; background: rgba(255, 255, 255, 0.12); border: 1px dashed rgba(255, 255, 255, 0.45); border-radius: 9999px; padding: 6px 10px; cursor: copy; transition: background-color 150ms ease; }
 .promo-code:hover { background: rgba(255, 255, 255, 0.2); }
 .promo-code.copied::after { content: " · copied"; }
+.promo-code.manual { user-select: all; -webkit-user-select: all; }
+.promo-code.manual::after { content: " · press Ctrl/⌘ C"; }
 .promo a { color: inherit; opacity: 0.8; text-decoration: none; }
 .promo a:hover { opacity: 1; text-decoration: underline; }
 @media (max-width: 520px) { .promo-long { display: none; } }
@@ -137,8 +139,10 @@ textarea.input { min-height: 180px; padding: 18px 24px; border-radius: 28px; res
 document.addEventListener("click", (e) => {
   const b = e.target.closest && e.target.closest(".promo-code");
   if (!b) return;
-  const done = () => { b.classList.add("copied"); clearTimeout(b._t); b._t = setTimeout(() => b.classList.remove("copied"), 1600); };
-  (navigator.clipboard ? navigator.clipboard.writeText(b.dataset.code) : Promise.reject()).then(done, done);
+  const flag = (c) => { b.classList.remove("copied", "manual"); b.classList.add(c); clearTimeout(b._t); b._t = setTimeout(() => b.classList.remove(c), c === "manual" ? 6000 : 1600); };
+  // when the clipboard is refused, select the code so it can be copied by hand
+  const manual = () => { const r = document.createRange(); r.selectNodeContents(b.firstChild); const s = getSelection(); s.removeAllRanges(); s.addRange(r); flag("manual"); };
+  (navigator.clipboard ? navigator.clipboard.writeText(b.dataset.code) : Promise.reject()).then(() => flag("copied"), manual);
 });
 </script>
 

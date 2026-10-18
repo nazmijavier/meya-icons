@@ -178,7 +178,14 @@ details p { margin: 0; padding: 0 20px 18px; font-size: 14px; color: var(--slate
 }
 @media (max-width: 480px) { .why { grid-template-columns: minmax(0, 1fr); } .price b { font-size: 46px; } :root[data-cur="idr"] .price b { font-size: 36px; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0ms !important; } }
-@media (max-width: 420px) { .nav-link .label { display: none; } }
+@media (max-width: 420px) {
+  .nav-link .label { display: none; }
+  /* the Rupiah total is long: the seat picker and Get Pro stack, and the price label may wrap */
+  .plan-pro .plan-foot { flex-wrap: wrap; }
+  .plan-pro .plan-foot .pill { flex: 1 1 100%; justify-content: center; }
+  .price { flex-wrap: wrap; row-gap: 4px; }
+  .price > span { white-space: normal; }
+}
 </style>
 __BANNER__
 

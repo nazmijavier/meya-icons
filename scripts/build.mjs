@@ -140,6 +140,8 @@ const BANNER = OFFER
 .promo-code { font: 500 12px/1 "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace; letter-spacing: 0.04em; color: inherit; background: rgba(255, 255, 255, 0.12); border: 1px dashed rgba(255, 255, 255, 0.45); border-radius: 9999px; padding: 6px 10px; cursor: copy; transition: background-color 150ms ease; }
 .promo-code:hover { background: rgba(255, 255, 255, 0.2); }
 .promo-code.copied::after { content: " · copied"; }
+.promo-code.manual { user-select: all; -webkit-user-select: all; }
+.promo-code.manual::after { content: " · press Ctrl/⌘ C"; }
 .promo a { color: inherit; opacity: 0.8; text-decoration: none; }
 .promo a:hover { opacity: 1; text-decoration: underline; }
 @media (max-width: 520px) { .promo-long { display: none; } }
@@ -148,8 +150,10 @@ const BANNER = OFFER
 document.addEventListener("click", (e) => {
   const b = e.target.closest && e.target.closest(".promo-code");
   if (!b) return;
-  const done = () => { b.classList.add("copied"); clearTimeout(b._t); b._t = setTimeout(() => b.classList.remove("copied"), 1600); };
-  (navigator.clipboard ? navigator.clipboard.writeText(b.dataset.code) : Promise.reject()).then(done, done);
+  const flag = (c) => { b.classList.remove("copied", "manual"); b.classList.add(c); clearTimeout(b._t); b._t = setTimeout(() => b.classList.remove(c), c === "manual" ? 6000 : 1600); };
+  // when the clipboard is refused, select the code so it can be copied by hand
+  const manual = () => { const r = document.createRange(); r.selectNodeContents(b.firstChild); const s = getSelection(); s.removeAllRanges(); s.addRange(r); flag("manual"); };
+  (navigator.clipboard ? navigator.clipboard.writeText(b.dataset.code) : Promise.reject()).then(() => flag("copied"), manual);
 });
 </script>`
   : "";
@@ -157,7 +161,8 @@ document.addEventListener("click", (e) => {
 // ---------- Pro login (site/account.html) ----------
 // The nav button and login dialog on the home and pricing pages. Both stay hidden until the login is configured
 // on Vercel (see api/_lib/polar.js), so the site works the same without it.
-const ACCOUNT_BUTTON = `<button type="button" class="nav-link acct-open" hidden>Log in</button>`;
+// On phones (≤ 420 px) nav labels hide and the icon stays, as for the other nav links.
+const ACCOUNT_BUTTON = `<button type="button" class="nav-link acct-open" aria-label="Log in" hidden><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1.5c-3 0-5.5 1.6-5.5 3.6 0 .5.4.9.9.9h9.2c.5 0 .9-.4.9-.9 0-2-2.5-3.6-5.5-3.6z"/></svg><span class="label">Log in</span></button>`;
 const ACCOUNT = fs.readFileSync(rel("site/account.html"), "utf8");
 // Which Pro styles /api/pro may serve, and which categories stay private: generated so the server matches the site.
 fs.writeFileSync(
