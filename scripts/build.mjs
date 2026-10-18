@@ -94,7 +94,7 @@ const siteCategories = categories.map((c) => ({ ...c, counts: { ...c.counts, ...
 
 // ---------- Pro teaser (the full PRO sets stay in ../meya-icons-pro) ----------
 // Paste the Polar checkout link here to switch "Get Pro" on.
-const POLAR_CHECKOUT = "";
+const POLAR_CHECKOUT = "https://buy.polar.sh/polar_cl_uUy8cBvgRtyC9pjDe2xcwaCr9XAHLMGrP8Hz307L1Od";
 // Pro styles that have shipped are the showcase ones (browsable on the site); the others show as coming soon.
 const PRO_STYLES = STYLES.filter((st) => st.pro && st.showcase).map((st) => st.id);
 const TEASER = PRO_SAMPLES;
@@ -247,6 +247,7 @@ if (PUBLISH_SPONSOR_PAGE) {
     .readFileSync(rel("site/pricing.html"), "utf8")
     .replace("__PRO_ROWS__", proRows)
     .replaceAll("__PRO_NAMES__", proNames)
+    .replaceAll("__STYLE_WORD_CAP__", (w => w[0].toUpperCase() + w.slice(1))(WORDS[styleCount] || String(styleCount)))
     .replaceAll("__STYLE_WORD__", WORDS[styleCount] || String(styleCount))
     .replaceAll("__PRO_STYLE_WORD__", WORDS[PRO_STYLES.length] || String(PRO_STYLES.length))
     .replace("__FOOTER__", FOOTER)
@@ -257,8 +258,8 @@ if (PUBLISH_SPONSOR_PAGE) {
       `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true">${fs.readFileSync(rel("icons", "outline", ref + ".svg"), "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim()}</svg>`)
     .replace(/__N:([a-z-]+)__/g, (m, cat) => String(icons.filter((i) => i.c === cat).length))
     .replace(/__STYLE_N:([a-z]+)__/g, (m, st) => String(styles.find((x) => x.id === st).count))
-    .replace(/__PRO_N:([a-z]+)__/g, (m, st) => String(proCounts[st] || siteStyles.find((x) => x.id === st).count))
-    .replace(/__SAMPLE:([a-z]+)__/g, (m, st) => {
+    .replace(/__PRO_N:([a-z-]+)__/g, (m, st) => String(proCounts[st] || siteStyles.find((x) => x.id === st).count))
+    .replace(/__SAMPLE:([a-z-]+)__/g, (m, st) => {
       const f = ["outline", "duotone"].includes(st) ? rel("icons", st, "general/home.svg") : path.join(PRO_DIR, st, "general/home.svg");
       if (!fs.existsSync(f)) return "";
       const inner = fs.readFileSync(f, "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim();
