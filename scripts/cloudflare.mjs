@@ -4,6 +4,8 @@
 //   node scripts/cloudflare.mjs prepare   finds the account, sets up its workers.dev name if it has none
 //   node scripts/cloudflare.mjs secrets   gives the Worker SESSION_SECRET (made once, never shown) and whichever of
 //                                         POLAR_ORG_ID, POLAR_PRO_BENEFIT_ID, POLAR_ACCESS_TOKEN, PRO_GITHUB_TOKEN are set
+//                                         and missing on it; with --update, also replaces the ones it has
+//   node scripts/cloudflare.mjs version   remembers the live version, so a deploy that fails its checks can go back
 //   node scripts/cloudflare.mjs status    how icons.meyalab.com is served
 //   node scripts/cloudflare.mjs cutover   sends icons.meyalab.com to the Worker: https only, a route, a proxied record
 //   node scripts/cloudflare.mjs rollback  undoes exactly what cutover changed, so icons.meyalab.com goes back
@@ -78,6 +80,9 @@ const unmark = (r) => (r.comment || "").slice(WAS_DNS_ONLY.length).replace(/^; /
 
 async function prepare() {
   const c = await context();
+  // wrangler prints the login email and the token's accounts when Cloudflare refuses it: keep them out of the log
+  try { mask((await cf("GET", "/user")).email); } catch {}
+  try { for (const a of await cf("GET", "/accounts?per_page=50")) { mask(a.id); mask(a.name); } } catch {}
   setEnv("CLOUDFLARE_ACCOUNT_ID", c.account);
   let sub;
   try { sub = (await cf("GET", `/accounts/${c.account}/workers/subdomain`)).subdomain; } catch (e) { if (!e.codes || !e.codes.includes(10007)) throw e; }
@@ -97,10 +102,11 @@ async function secrets() {
   const c = await context();
   if (!(await deployed(c))) fail(`the ${WORKER} Worker is not deployed yet`);
   const have = new Set((await cf("GET", `/accounts/${c.account}/workers/scripts/${WORKER}/secrets`)).map((s) => s.name));
-  const put = {};
+  const put = {}, update = process.argv.includes("--update");
   // made once: a new value would sign every customer out
   if (!have.has("SESSION_SECRET")) put.SESSION_SECRET = crypto.randomBytes(48).toString("base64url");
-  for (const k of PRO_SECRETS) if (process.env[k]) put[k] = process.env[k];
+  // only what is missing, unless asked: every change makes a new version, and a deploy should not
+  for (const k of PRO_SECRETS) if (process.env[k] && (update || !have.has(k))) put[k] = process.env[k];
   Object.values(put).forEach(mask);
   const names = Object.keys(put);
   if (names.length) {
@@ -111,6 +117,16 @@ async function secrets() {
   const all = new Set([...have, ...names]);
   const missing = ["SESSION_SECRET", ...PRO_SECRETS].filter((k) => !all.has(k));
   console.log(missing.length ? `The Pro login stays hidden or partial until these are set (as repository secrets): ${missing.join(", ")}` : "Every secret the Pro login uses is set");
+}
+
+async function version() {
+  const c = await context();
+  if (!(await deployed(c))) return console.log(`The ${WORKER} Worker is not deployed yet: nothing to go back to`);
+  const [latest] = (await cf("GET", `/accounts/${c.account}/workers/scripts/${WORKER}/deployments`)).deployments || [];
+  const live = latest && [...latest.versions].sort((a, b) => b.percentage - a.percentage)[0];
+  if (!live) return console.log("No deployment found: nothing to go back to");
+  setEnv("PREVIOUS_VERSION", live.version_id);
+  console.log(`Live version before this deploy: ${live.version_id}`);
 }
 
 async function status() {
@@ -199,7 +215,7 @@ async function rollback() {
   console.log(`${HOST} goes back to the old host`);
 }
 
-const tasks = { prepare, secrets, status, cutover, rollback };
+const tasks = { prepare, secrets, version, status, cutover, rollback };
 const task = tasks[process.argv[2]];
 if (!task) fail(`usage: node scripts/cloudflare.mjs ${Object.keys(tasks).join("|")}`);
 await task().catch((e) => fail(e.message));

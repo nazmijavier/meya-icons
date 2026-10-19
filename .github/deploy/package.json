@@ -1,0 +1,8 @@
+{
+  "name": "meya-icons-deploy",
+  "private": true,
+  "description": "The wrangler the Deploy workflow runs, pinned with its whole dependency tree by package-lock.json.",
+  "devDependencies": {
+    "wrangler": "4.151.1"
+  }
+}

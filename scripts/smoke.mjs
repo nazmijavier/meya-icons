@@ -8,7 +8,14 @@ if (!/^https?:\/\/[^/]+$/.test(base)) {
 let fails = 0;
 const check = (ok, what) => { console.log(`${ok ? "ok  " : "FAIL"} ${what}`); if (!ok) fails++; };
 const note = (ok, what) => console.log(`${ok ? "ok  " : "warn"} ${what}`);
-const get = (p, opts) => fetch(base + p, { redirect: "manual", signal: AbortSignal.timeout(15000), ...opts });
+// Exit 4: Cloudflare's bot protection challenged this check (GitHub's runners can look like bots), so the site was
+// not verified, which is no reason to undo anything.
+function challenged(r) {
+  if (!r.headers.has("cf-mitigated")) return r;
+  console.error(`${base} answered with a Cloudflare challenge (${r.headers.get("cf-mitigated")}): it cannot be checked from here`);
+  process.exit(4);
+}
+const get = (p, opts) => fetch(base + p, { redirect: "manual", signal: AbortSignal.timeout(15000), ...opts }).then(challenged);
 
 // Wait until the new host answers: a new workers.dev name takes a minute or two to resolve, and after a DNS change
 // some resolvers still send visitors to the old host (Vercel) for a while. The new host answering with an error is
