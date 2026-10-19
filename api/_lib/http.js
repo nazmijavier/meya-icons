@@ -6,9 +6,20 @@ export function json(status, body, headers = new Headers()) {
   return new Response(JSON.stringify(body), { status, headers });
 }
 
+// The JSON bodies the functions take are a few hundred bytes: a body over MAX_BODY is dropped unread, not parsed.
+const MAX_BODY = 4096;
+
 export async function body(request) {
   try {
-    const b = await request.json();
+    if (!request.body || Number(request.headers.get("content-length")) > MAX_BODY) return {};
+    const reader = request.body.getReader(), dec = new TextDecoder();
+    let text = "", size = 0;
+    for (let r; !(r = await reader.read()).done; ) {
+      size += r.value.byteLength;
+      if (size > MAX_BODY) { reader.cancel().catch(() => {}); return {}; }
+      text += dec.decode(r.value, { stream: true });
+    }
+    const b = JSON.parse(text + dec.decode());
     return b && typeof b === "object" ? b : {};
   } catch {
     return {};

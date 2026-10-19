@@ -18,5 +18,9 @@
   },
   // keep variables added in the dashboard when a deploy runs
   "keep_vars": true,
+  // the workers.dev address, which the Deploy workflow checks; no per-version addresses, so an old version (with
+  // the secrets it was deployed with) is gone once a newer one is live
+  "workers_dev": true,
+  "preview_urls": false,
   "observability": { "enabled": true }
 }

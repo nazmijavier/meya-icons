@@ -18,6 +18,13 @@ for (let i = 0; ; i++) {
 
 let r = await get("/");
 check(r.status === 200 && /<title>Meya Icons/.test(await r.text()), "/ is the icon site");
+check(/max-age=\d{7,}/.test(r.headers.get("strict-transport-security") || ""), "pages send HSTS (docs/_headers)");
+// the custom domain: plain http must go to https (the zone's "Always Use HTTPS"), so keys never travel in clear text
+const host = new URL(base).hostname;
+if (base.startsWith("https://") && !host.endsWith(".workers.dev")) {
+  r = await fetch(`http://${host}/pricing`, { redirect: "manual", signal: AbortSignal.timeout(15000) }).catch(() => null);
+  check(r && [301, 302, 307, 308].includes(r.status) && (r.headers.get("location") || "").startsWith(`https://${host}/`), `http:// redirects to https:// (${r ? r.status : "no answer"})`);
+}
 r = await get("/pricing");
 check(r.status === 200 && /<title>Pricing/.test(await r.text()), "/pricing is the pricing page");
 r = await get("/pricing.html");

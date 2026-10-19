@@ -6,3 +6,5 @@ meya-icons-pro/
 *.zip
 .wrangler/
 .dev.vars*
+.env
+.env.*

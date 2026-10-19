@@ -25,7 +25,7 @@ async function call(path, { token, method = "GET", body } = {}) {
   try {
     r = await fetch(API() + path, {
       method,
-      headers: { Accept: "application/json", ...(body ? { "Content-Type": "application/json" } : {}), ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+      headers: { Accept: "application/json", "User-Agent": "meya-icons-site", ...(body ? { "Content-Type": "application/json" } : {}), ...(token ? { Authorization: `Bearer ${token}` } : {}) },
       body: body ? JSON.stringify(body) : undefined,
       signal: AbortSignal.timeout(8000),
     });
