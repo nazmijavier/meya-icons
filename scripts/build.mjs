@@ -129,7 +129,7 @@ const FOOTER = `<footer class="footer">
 
 // ---------- Offer banner (top of every page) ----------
 // The launch offer, shown site-wide. Set OFFER to null to take the banner down.
-const OFFER = { code: "LAUNCH30", pct: 30, text: "30% off <span class=\"promo-long\">your first year of </span>Pro" };
+const OFFER = { code: "LAUNCH50", pct: 50, text: "50% off <span class=\"promo-long\">your first year of </span>Pro" };
 const BANNER = OFFER
   ? `<div class="promo" role="region" aria-label="Offer">
   <p><span>${OFFER.text} with code</span> <button type="button" class="promo-code" data-code="${OFFER.code}" title="Copy code">${OFFER.code}</button> <a href="pricing#pro">Get Pro<span aria-hidden="true"> →</span></a></p>

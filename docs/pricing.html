@@ -35,7 +35,7 @@
   try { cur = sessionStorage.getItem("meya-cur"); } catch {}
   if (!cur) cur = /^Asia\/(Jakarta|Pontianak|Makassar|Jayapura)$/.test(Intl.DateTimeFormat().resolvedOptions().timeZone || "") ? "idr" : "usd";
   document.documentElement.dataset.cur = cur;
-  if (+"30" > 0) document.documentElement.dataset.offer = "on";
+  if (+"50" > 0) document.documentElement.dataset.offer = "on";
 })();
 </script>
 <style>
@@ -362,7 +362,7 @@ details p a { color: var(--ink); }
 </head>
 <body>
 <div class="promo" role="region" aria-label="Offer">
-  <p><span>30% off <span class="promo-long">your first year of </span>Pro with code</span> <button type="button" class="promo-code" data-code="LAUNCH30" title="Copy code">LAUNCH30</button> <a href="pricing#pro">Get Pro<span aria-hidden="true"> →</span></a></p>
+  <p><span>50% off <span class="promo-long">your first year of </span>Pro with code</span> <button type="button" class="promo-code" data-code="LAUNCH50" title="Copy code">LAUNCH50</button> <a href="pricing#pro">Get Pro<span aria-hidden="true"> →</span></a></p>
 </div>
 <style>
 .promo { background: #1D1D1F; color: #FFFFFF; font: 500 13px/1.3 "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; letter-spacing: -0.01em; }
@@ -437,14 +437,14 @@ document.addEventListener("click", (e) => {
 
     <div class="plans">
       <div class="plan plan-pro" id="pro">
-        <div class="plan-top"><span class="plan-name"><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M10.52 3.541c.281-.568.846-.92 1.48-.92.634 0 1.199.352 1.48.92l1.894 3.839 4.237.615c.627.092 1.136.521 1.332 1.123.195.603.036 1.25-.418 1.692l-3.065 2.988.723 4.219c.107.625-.143 1.242-.656 1.614-.513.373-1.177.42-1.738.126l-3.789-1.992-3.789 1.992c-.561.294-1.225.247-1.738-.126-.512-.372-.763-.989-.656-1.614l.724-4.219-3.066-2.988c-.454-.442-.613-1.089-.417-1.692.195-.602.705-1.031 1.331-1.123l4.237-.615 1.894-3.839zm1.166.575-2.046 4.146c-.093.19-.279.325-.489.355l-4.575.665c-.14.02-.238.103-.282.238-.044.136-.013.26.088.359l3.311 3.227c.151.148.222.366.187.575l-.782 4.556c-.024.14.024.259.139.342.116.084.243.093.369.027l4.092-2.151c.187-.099.417-.099.605 0l4.091 2.151c.126.066.254.057.369-.027.115-.083.163-.202.139-.342l-.781-4.556c-.036-.209.035-.427.186-.575l3.311-3.227c.102-.099.132-.223.088-.359-.044-.135-.141-.218-.282-.238l-4.575-.665c-.21-.03-.395-.165-.489-.355l-2.046-4.146c-.063-.127-.172-.195-.314-.195-.142 0-.251.068-.314.195z" fill="currentColor" fill-rule="evenodd"/></svg>Pro</span><span class="tag"><span class="launch">Launch offer · 30% off</span><span class="regular">All eight styles</span></span></div>
+        <div class="plan-top"><span class="plan-name"><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M10.52 3.541c.281-.568.846-.92 1.48-.92.634 0 1.199.352 1.48.92l1.894 3.839 4.237.615c.627.092 1.136.521 1.332 1.123.195.603.036 1.25-.418 1.692l-3.065 2.988.723 4.219c.107.625-.143 1.242-.656 1.614-.513.373-1.177.42-1.738.126l-3.789-1.992-3.789 1.992c-.561.294-1.225.247-1.738-.126-.512-.372-.763-.989-.656-1.614l.724-4.219-3.066-2.988c-.454-.442-.613-1.089-.417-1.692.195-.602.705-1.031 1.331-1.123l4.237-.615 1.894-3.839zm1.166.575-2.046 4.146c-.093.19-.279.325-.489.355l-4.575.665c-.14.02-.238.103-.282.238-.044.136-.013.26.088.359l3.311 3.227c.151.148.222.366.187.575l-.782 4.556c-.024.14.024.259.139.342.116.084.243.093.369.027l4.092-2.151c.187-.099.417-.099.605 0l4.091 2.151c.126.066.254.057.369-.027.115-.083.163-.202.139-.342l-.781-4.556c-.036-.209.035-.427.186-.575l3.311-3.227c.102-.099.132-.223.088-.359-.044-.135-.141-.218-.282-.238l-4.575-.665c-.21-.03-.395-.165-.489-.355l-2.046-4.146c-.063-.127-.172-.195-.314-.195-.142 0-.251.068-.314.195z" fill="currentColor" fill-rule="evenodd"/></svg>Pro</span><span class="tag"><span class="launch">Launch offer · 50% off</span><span class="regular">All eight styles</span></span></div>
         <div class="price">
           <span class="vh launch">Regular price</span>
-          <s id="pro-was" class="launch"><span class="usd">$89</span><span class="idr">Rp1.175.000</span></s>
-          <b id="pro-price"><span class="launch"><span class="usd">$62.30</span><span class="idr">Rp822.500</span></span><span class="regular"><span class="usd">$89</span><span class="idr">Rp1.175.000</span></span></b>
+          <s id="pro-was" class="launch"><span class="usd">$60</span><span class="idr">Rp790.000</span></s>
+          <b id="pro-price"><span class="launch"><span class="usd">$30</span><span class="idr">Rp395.000</span></span><span class="regular"><span class="usd">$60</span><span class="idr">Rp790.000</span></span></b>
           <span class="unit" id="pro-unit"><span class="launch">first year</span><span class="regular">a year</span></span>
         </div>
-        <p class="sub" id="pro-sub"><span class="launch"><span class="usd">≈ $5.19 a month in year one · then $89 a year</span><span class="idr">≈ Rp69.000 a month in year one · then Rp1.175.000 a year</span></span><span class="regular"><span class="usd">≈ $7.42 a month, billed yearly</span><span class="idr">≈ Rp98.000 a month, billed yearly</span></span></p>
+        <p class="sub" id="pro-sub"><span class="launch"><span class="usd">$2.50 a month in year one · then $60 a year</span><span class="idr">≈ Rp33.000 a month in year one · then Rp790.000 a year</span></span><span class="regular"><span class="usd">$5 a month, billed yearly</span><span class="idr">≈ Rp66.000 a month, billed yearly</span></span></p>
         <p class="idr cur-note">Prices in Rupiah for visitors in Indonesia.</p>
 
         <div class="seat-row">
@@ -452,7 +452,7 @@ document.addEventListener("click", (e) => {
           <div class="presets"><button type="button" class="preset" data-seats="1" aria-pressed="true">Just me</button><button type="button" class="preset" data-seats="5" aria-pressed="false">Team of 5</button><button type="button" class="preset" data-seats="10" aria-pressed="false">Team of 10</button></div>
         </div>
         <div class="team">
-          <p id="team-one"><span class="usd">Extra seats: $33 a year each for seats 2–5, $15 from the 6th.</span><span class="idr">Extra seats: Rp435.000 a year each for seats 2–5, Rp195.000 from the 6th.</span></p>
+          <p id="team-one"><span class="usd">Extra seats: $22 a year each for seats 2–5, $10 from the 6th.</span><span class="idr">Extra seats: Rp290.000 a year each for seats 2–5, Rp130.000 from the 6th.</span></p>
           <div id="team-rows" hidden>
             <div class="cap">Regular yearly rate per seat</div>
             <ul>
@@ -468,7 +468,7 @@ document.addEventListener("click", (e) => {
         </div>
 
         <div class="buy" data-hide-pro>
-          <a href="https://buy.polar.sh/polar_cl_uUy8cBvgRtyC9pjDe2xcwaCr9XAHLMGrP8Hz307L1Od?discount_code=LAUNCH30" target="_blank" rel="noopener" class="pill" id="get-pro">Get Pro</a>
+          <a href="https://buy.polar.sh/polar_cl_uUy8cBvgRtyC9pjDe2xcwaCr9XAHLMGrP8Hz307L1Od?discount_code=LAUNCH50" target="_blank" rel="noopener" class="pill" id="get-pro">Get Pro</a>
           <p class="reassure">Secure checkout by Polar. Taxes, if any, are added there. Cancel anytime; Pro stays active until the end of your paid year.</p>
           <button type="button" class="login-link" id="login-link" data-acct-open hidden>Already have Pro? Log in</button>
         </div>
@@ -577,7 +577,7 @@ document.addEventListener("click", (e) => {
         <div class="cmp-row cmp-head" role="row">
           <div role="columnheader"><span class="vh">Feature</span></div>
           <div role="columnheader" class="cmp-plan"><b>Free</b><span>Free forever</span><a class="pill pill-white" href="./#icons">Browse icons</a></div>
-          <div role="columnheader" class="cmp-plan cmp-pro"><b>Pro</b><span><span class="launch"><span class="usd">$62.30</span><span class="idr">Rp822.500</span> first year</span><span class="regular">From <span class="usd">$89</span><span class="idr">Rp1.175.000</span> a year</span></span><a href="https://buy.polar.sh/polar_cl_uUy8cBvgRtyC9pjDe2xcwaCr9XAHLMGrP8Hz307L1Od?discount_code=LAUNCH30" target="_blank" rel="noopener" class="pill" id="get-pro-cmp" data-hide-pro>Get Pro</a></div>
+          <div role="columnheader" class="cmp-plan cmp-pro"><b>Pro</b><span><span class="launch"><span class="usd">$30</span><span class="idr">Rp395.000</span> first year</span><span class="regular">From <span class="usd">$60</span><span class="idr">Rp790.000</span> a year</span></span><a href="https://buy.polar.sh/polar_cl_uUy8cBvgRtyC9pjDe2xcwaCr9XAHLMGrP8Hz307L1Od?discount_code=LAUNCH50" target="_blank" rel="noopener" class="pill" id="get-pro-cmp" data-hide-pro>Get Pro</a></div>
         </div>
         <div class="cmp-row" role="row"><div role="rowheader">Styles</div><div role="cell" class="txt">Outline, Duotone</div><div role="cell" class="cmp-pro txt">All eight</div></div>
         <div class="cmp-row" role="row"><div role="rowheader">Icons<small>Cursors and flags in both</small></div><div role="cell" class="txt">2,454</div><div role="cell" class="cmp-pro txt">7,951</div></div>
@@ -607,8 +607,8 @@ document.addEventListener("click", (e) => {
       </div>
       <div class="faq">
         <details><summary>What counts as a seat?<svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M12.65 5.115v6.235h6.235c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-6.235v6.235c0 .357-.293.65-.65.65-.357 0-.65-.293-.65-.65v-6.235h-6.235c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65h6.235v-6.235c0-.357.293-.65.65-.65.357 0 .65.293.65.65z" fill="currentColor" fill-rule="evenodd"/></svg></summary><p>One seat for each person who uses the Pro icons. Each teammate accepts Polar's invitation email, then logs in here with their own email.</p></details>
-        <details><summary>How is a team price worked out?<svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M12.65 5.115v6.235h6.235c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-6.235v6.235c0 .357-.293.65-.65.65-.357 0-.65-.293-.65-.65v-6.235h-6.235c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65h6.235v-6.235c0-.357.293-.65.65-.65.357 0 .65.293.65.65z" fill="currentColor" fill-rule="evenodd"/></svg></summary><p><span class="usd">Each seat has its own yearly rate: the first seat is $89, seats 2 to 5 are $33 each, and every seat from the 6th is $15. Three seats cost $89 + $33 + $33 = $155 a year.</span><span class="idr">Each seat has its own yearly rate: the first seat is Rp1.175.000, seats 2 to 5 are Rp435.000 each, and every seat from the 6th is Rp195.000. Three seats cost Rp1.175.000 + Rp435.000 + Rp435.000 = Rp2.045.000 a year.</span></p></details>
-        <details class="launch"><summary>How does the launch offer work?<svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M12.65 5.115v6.235h6.235c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-6.235v6.235c0 .357-.293.65-.65.65-.357 0-.65-.293-.65-.65v-6.235h-6.235c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65h6.235v-6.235c0-.357.293-.65.65-.65.357 0 .65.293.65.65z" fill="currentColor" fill-rule="evenodd"/></svg></summary><p>Every Get Pro button on this page applies the launch discount for you, so there's no code to type: 30% off your first year. From your second year, Pro renews at the regular price shown on the card.</p></details>
+        <details><summary>How is a team price worked out?<svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M12.65 5.115v6.235h6.235c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-6.235v6.235c0 .357-.293.65-.65.65-.357 0-.65-.293-.65-.65v-6.235h-6.235c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65h6.235v-6.235c0-.357.293-.65.65-.65.357 0 .65.293.65.65z" fill="currentColor" fill-rule="evenodd"/></svg></summary><p><span class="usd">Each seat has its own yearly rate: the first seat is $60, seats 2 to 5 are $22 each, and every seat from the 6th is $10. Three seats cost $60 + $22 + $22 = $104 a year.</span><span class="idr">Each seat has its own yearly rate: the first seat is Rp790.000, seats 2 to 5 are Rp290.000 each, and every seat from the 6th is Rp130.000. Three seats cost Rp790.000 + Rp290.000 + Rp290.000 = Rp1.370.000 a year.</span></p></details>
+        <details class="launch"><summary>How does the launch offer work?<svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M12.65 5.115v6.235h6.235c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-6.235v6.235c0 .357-.293.65-.65.65-.357 0-.65-.293-.65-.65v-6.235h-6.235c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65h6.235v-6.235c0-.357.293-.65.65-.65.357 0 .65.293.65.65z" fill="currentColor" fill-rule="evenodd"/></svg></summary><p>Every Get Pro button on this page applies the launch discount for you, so there's no code to type: 50% off your first year. From your second year, Pro renews at the regular price shown on the card.</p></details>
         <details><summary>How do I get the Pro icons after I buy?<svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M12.65 5.115v6.235h6.235c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-6.235v6.235c0 .357-.293.65-.65.65-.357 0-.65-.293-.65-.65v-6.235h-6.235c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65h6.235v-6.235c0-.357.293-.65.65-.65.357 0 .65.293.65.65z" fill="currentColor" fill-rule="evenodd"/></svg></summary><p>Log in on this site with the email you bought with. Polar, our payment provider, emails you a 6-character sign-in code, or you can use your license key. Then open any Pro icon and copy it as SVG or React.</p></details>
         <details><summary>Can I use the icons in client work?<svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M12.65 5.115v6.235h6.235c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-6.235v6.235c0 .357-.293.65-.65.65-.357 0-.65-.293-.65-.65v-6.235h-6.235c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65h6.235v-6.235c0-.357.293-.65.65-.65.357 0 .65.293.65.65z" fill="currentColor" fill-rule="evenodd"/></svg></summary><p>Yes. Pro icons can be used in personal and client work. Outline and Duotone are MIT licensed for personal and commercial work; credit is appreciated but not required.</p></details>
         <details><summary>Can I cancel anytime?<svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M12.65 5.115v6.235h6.235c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-6.235v6.235c0 .357-.293.65-.65.65-.357 0-.65-.293-.65-.65v-6.235h-6.235c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65h6.235v-6.235c0-.357.293-.65.65-.65.357 0 .65.293.65.65z" fill="currentColor" fill-rule="evenodd"/></svg></summary><p>Yes. Cancel from the Polar customer portal linked in your receipt email. Pro stays active until the end of the year you paid for; after that it doesn't renew and copying Pro icons stops.</p></details>
@@ -628,9 +628,9 @@ document.addEventListener("click", (e) => {
           <span class="anim"><span class="pv" style="--u:url(pro/animated/alerts-feedback/notification.tile.webp)"></span><span class="g-still" style="--x:10;--y:1"></span></span>
         </div>
         <h2>All eight styles, one yearly price.</h2>
-        <p><span class="launch"><span class="usd">$62.30 for your first year, then $89 a year.</span><span class="idr">Rp822.500 for your first year, then Rp1.175.000 a year.</span></span><span class="regular"><span class="usd">$89 a year for one person.</span><span class="idr">Rp1.175.000 a year for one person.</span></span> Each extra seat costs less.</p>
+        <p><span class="launch"><span class="usd">$30 for your first year, then $60 a year.</span><span class="idr">Rp395.000 for your first year, then Rp790.000 a year.</span></span><span class="regular"><span class="usd">$60 a year for one person.</span><span class="idr">Rp790.000 a year for one person.</span></span> Each extra seat costs less.</p>
         <div class="end-actions">
-          <a href="https://buy.polar.sh/polar_cl_uUy8cBvgRtyC9pjDe2xcwaCr9XAHLMGrP8Hz307L1Od?discount_code=LAUNCH30" target="_blank" rel="noopener" class="pill" id="get-pro-end" data-hide-pro>Get Pro</a>
+          <a href="https://buy.polar.sh/polar_cl_uUy8cBvgRtyC9pjDe2xcwaCr9XAHLMGrP8Hz307L1Od?discount_code=LAUNCH50" target="_blank" rel="noopener" class="pill" id="get-pro-end" data-hide-pro>Get Pro</a>
           <a class="pill pill-white" href="./#icons">Browse free icons</a>
         </div>
         <small>Secure checkout by Polar · Cancel anytime</small>
@@ -858,7 +858,7 @@ button.acct-open { border: 0; background: none; font-family: inherit; white-spac
 
 <div class="buybar" id="buybar" aria-hidden="true" inert>
   <div><small>Meya Icons Pro</small><b id="bar-price"></b></div>
-  <a href="https://buy.polar.sh/polar_cl_uUy8cBvgRtyC9pjDe2xcwaCr9XAHLMGrP8Hz307L1Od?discount_code=LAUNCH30" target="_blank" rel="noopener" class="pill" id="get-pro-bar">Get Pro</a>
+  <a href="https://buy.polar.sh/polar_cl_uUy8cBvgRtyC9pjDe2xcwaCr9XAHLMGrP8Hz307L1Od?discount_code=LAUNCH50" target="_blank" rel="noopener" class="pill" id="get-pro-bar">Get Pro</a>
 </div>
 
 <script>
@@ -871,8 +871,8 @@ button.acct-open { border: 0; background: none; font-family: inherit; white-spac
   // Pro is priced per seat, yearly and graduated: seat 1, seats 2–5 each, seat 6 onward each. During the launch the
   // checkout links apply OFF % to the first year, so the card shows that charge, with the regular price struck.
   const MAX = 50;
-  const RATES = { usd: [89, 33, 15], idr: [1175000, 435000, 195000] };
-  const OFF = root.dataset.offer ? +"30" : 0;
+  const RATES = { usd: [60, 22, 10], idr: [790000, 290000, 130000] };
+  const OFF = root.dataset.offer ? +"50" : 0;
   const cur = () => (root.dataset.cur === "idr" ? "idr" : "usd");
   const total = (n) => { const [a, b, c] = RATES[cur()]; return a + b * Math.min(Math.max(n - 1, 0), 4) + c * Math.max(n - 5, 0); };
   const first = (list) => (OFF ? (cur() === "idr" ? Math.round((list * (100 - OFF)) / 100) : Math.round(list * (100 - OFF)) / 100) : list);
