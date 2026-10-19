@@ -177,10 +177,15 @@ async function cutover() {
   // 3. a proxied record, so requests reach Cloudflare: the name keeps answering throughout, no gap
   const web = (await records(c)).filter((r) => WEB.includes(r.type));
   if (!web.length) {
-    // the name has no record of its own (a wildcard may answer for it): add one just for it
-    await cf("POST", `/zones/${c.zone}/dns_records`, { type: "AAAA", name: HOST, content: "100::", proxied: true, ttl: 1, comment: PLACEHOLDER });
-    console.log(`Added a proxied record for ${HOST}`);
-    changed = true;
+    // the name has no record of its own: a proxied wildcard already brings its requests to Cloudflare and the
+    // route; otherwise add a record just for it
+    const wild = (await named(c, `*.${ZONE}`)).filter((r) => WEB.includes(r.type));
+    if (wild.length && wild.every((r) => r.proxied)) console.log(`${HOST} answers through the proxied *.${ZONE}: no DNS change needed`);
+    else {
+      await cf("POST", `/zones/${c.zone}/dns_records`, { type: "AAAA", name: HOST, content: "100::", proxied: true, ttl: 1, comment: PLACEHOLDER });
+      console.log(`Added a proxied record for ${HOST}`);
+      changed = true;
+    }
   }
   for (const r of web.filter((r) => !r.proxied)) {
     await cf("PATCH", `/zones/${c.zone}/dns_records/${r.id}`, { proxied: true, comment: [WAS_DNS_ONLY, r.comment].filter(Boolean).join("; ").slice(0, 100) });
