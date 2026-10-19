@@ -91,6 +91,7 @@ button.acct-open { border: 0; background: none; font-family: inherit; white-spac
       b.setAttribute("aria-label", label);
     });
     document.querySelectorAll("[data-hide-pro]").forEach((el) => (el.hidden = state.signedIn));
+    document.querySelectorAll("[data-show-pro]").forEach((el) => (el.hidden = !state.signedIn));
     $(".acct-email").textContent = state.email || "";
   }
   function emit() { paint(); listeners.forEach((f) => { try { f(state); } catch {} }); }

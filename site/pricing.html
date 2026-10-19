@@ -71,16 +71,6 @@ svg.ui path { stroke: currentColor; stroke-width: calc(var(--uw, 1.3) * 1px - 1.
 .pill { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 16px; border: 0; border-radius: 9999px; font-size: 14px; font-weight: 500; text-decoration: none; white-space: nowrap; transition-property: background-color, scale; transition-duration: 150ms; }
 .pill:active { scale: 0.97; }
 .pill-ink { background: var(--ink); color: #fff; } .pill-ink:hover { background: #333336; }
-/* Pro buttons: the label in a blue-to-violet gradient that drifts slowly (still when motion is reduced). Each stop
-   keeps 4.5:1 contrast on its button: the deep set on light buttons, the pale set on dark ones. */
-.pro-grad { --g1: #2563EB; --g2: #6448F6; --g3: #7C3AED;
-  background: linear-gradient(90deg, var(--g1), var(--g2), var(--g3), var(--g1)) 0 0 / 200% 100% repeat-x;
-  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
-  animation: pro-drift 6s linear infinite; }
-.pill-ink .pro-grad { --g1: #7DD3FC; --g2: #A5B4FC; --g3: #C4B5FD; }
-@keyframes pro-drift { to { background-position: 200% 0; } }
-/* held still, the whole sweep shows once */
-@media (prefers-reduced-motion: reduce) { .pro-grad { animation: none; background-image: linear-gradient(90deg, var(--g1), var(--g2), var(--g3)); background-size: 100% 100%; } }
 .pill-white { background: var(--white); color: var(--ink); box-shadow: 0 0 0 1px var(--control); } .pill-white:hover { background: var(--frost); }
 
 /* ---------- Hero ---------- */
@@ -192,7 +182,7 @@ h2 { margin: 0 0 28px; font-size: clamp(26px, 3.2vw, 36px); font-weight: 500; le
 .cmp-plan b { font-size: 17px; font-weight: 600; }
 .cmp-plan span { font-size: 13px; color: var(--steel); }
 .cmp-plan .pill { margin-top: 12px; height: 36px; font-size: 13px; }
-#get-pro-cmp { background: var(--ink); color: #fff; } #get-pro-cmp .pro-grad, #get-pro-end .pro-grad, #get-pro-bar .pro-grad { --g1: #7DD3FC; --g2: #A5B4FC; --g3: #C4B5FD; } #get-pro-cmp:hover { background: #333336; }
+#get-pro-cmp { background: var(--ink); color: #fff; } #get-pro-cmp:hover { background: #333336; }
 .yes svg { width: 20px; height: 20px; --uw: 1.8; color: var(--ink); }
 .txt { font-size: 14px; color: var(--slate); }
 
@@ -365,7 +355,7 @@ __BANNER__
         </div>
         <p class="desc"><span class="launch">Then <span class="usd">$60</span><span class="idr">Rp790.000</span> a year per person. </span><span class="regular">Per person, billed yearly. </span>Extra seats cost less.</p>
         <div class="cta" data-hide-pro>
-          <a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro"><span class="pro-grad">Get Pro</span></a>
+          <a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro">Get Pro</a>
           <button type="button" class="login-link" id="login-link" data-acct-open hidden>Already have Pro? Log in</button>
         </div>
         <div id="have-pro" hidden><span>You have Pro. Open any Pro icon to copy it.</span><a class="pill" href="./#stroke">Browse Pro icons</a></div>
@@ -428,7 +418,7 @@ __BANNER__
         <div class="cmp-row cmp-head" role="row">
           <div role="columnheader"><span class="vh">Feature</span></div>
           <div role="columnheader" class="cmp-plan"><b>Free</b><span>Free forever</span><a class="pill pill-white" href="./#icons">Browse icons</a></div>
-          <div role="columnheader" class="cmp-plan cmp-pro"><b>Pro</b><span><span class="launch"><span class="usd">$30</span><span class="idr">Rp395.000</span> first year</span><span class="regular">From <span class="usd">$60</span><span class="idr">Rp790.000</span> a year</span></span><a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro-cmp" data-hide-pro><span class="pro-grad">Get Pro</span></a></div>
+          <div role="columnheader" class="cmp-plan cmp-pro"><b>Pro</b><span><span class="launch"><span class="usd">$30</span><span class="idr">Rp395.000</span> first year</span><span class="regular">From <span class="usd">$60</span><span class="idr">Rp790.000</span> a year</span></span><a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro-cmp" data-hide-pro>Get Pro</a></div>
         </div>
         <div class="cmp-row" role="row"><div role="rowheader">Styles</div><div role="cell" class="txt">Outline, Duotone</div><div role="cell" class="cmp-pro txt">All __STYLE_WORD__</div></div>
         <div class="cmp-row" role="row"><div role="rowheader">Icons<small>Cursors and flags in both</small></div><div role="cell" class="txt">__COUNT__</div><div role="cell" class="cmp-pro txt">__ALL_COUNT__</div></div>
@@ -481,7 +471,7 @@ __BANNER__
         <h2>All __STYLE_WORD__ styles, one yearly price.</h2>
         <p><span class="launch"><span class="usd">$30 for your first year, then $60 a year.</span><span class="idr">Rp395.000 for your first year, then Rp790.000 a year.</span></span><span class="regular"><span class="usd">$60 a year for one person.</span><span class="idr">Rp790.000 a year for one person.</span></span> Each extra seat costs less.</p>
         <div class="end-actions">
-          <a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro-end" data-hide-pro><span class="pro-grad">Get Pro</span></a>
+          <a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro-end" data-hide-pro>Get Pro</a>
           <a class="pill pill-white" href="./#icons">Browse free icons</a>
         </div>
         <small>Secure checkout by Polar · Cancel anytime</small>
@@ -495,7 +485,7 @@ __FOOTER__
 
 <div class="buybar" id="buybar" aria-hidden="true" inert>
   <div><small>Meya Icons Pro</small><b id="bar-price"><span class="launch"><span class="usd">$30</span><span class="idr">Rp395.000</span> first year</span><span class="regular"><span class="usd">$60</span><span class="idr">Rp790.000</span> a year</span></b></div>
-  <a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro-bar"><span class="pro-grad">Get Pro</span></a>
+  <a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro-bar">Get Pro</a>
 </div>
 
 <script>
