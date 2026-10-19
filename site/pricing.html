@@ -93,71 +93,51 @@ svg.ui path { stroke: currentColor; stroke-width: calc(var(--uw, 1.3) * 1px - 1.
 .st .m { font-size: 11px; color: var(--steel); line-height: 18px; }
 
 /* ---------- Plans ---------- */
-.plans { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 16px; align-items: stretch; margin-top: 8px; }
-.plan { display: flex; flex-direction: column; padding: 40px; border-radius: 28px; background: var(--mist); }
+/* Two cards on one set of rows (subgrid), so price, button, rule and list line up side by side.
+   The details (team rates, currency, cancelling) live in the FAQ. */
+.plans { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 16px; margin-top: 8px; }
+.plan { display: grid; grid-row: span 8; grid-template-rows: subgrid; row-gap: 0; align-content: start; padding: 36px; border-radius: 28px; background: var(--mist); }
 .plan-pro { background: var(--ink); color: #fff; }
-.plan-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.plan-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 28px; }
 .plan-name { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 500; }
-.tag { height: 24px; padding-inline: 10px; display: inline-flex; align-items: center; border-radius: 9999px; background: var(--white); color: var(--ink); font-size: 12px; font-weight: 600; white-space: nowrap; }
-.price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin-top: 28px; }
-.price b { font-size: 64px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums; }
-:root[data-cur="idr"] .plan-pro .price b { font-size: 48px; }
-#pro-was { font-size: 24px; font-weight: 500; letter-spacing: -0.02em; color: rgba(255, 255, 255, 0.45); text-decoration-thickness: 1.5px; font-variant-numeric: tabular-nums; }
-.unit { font-size: 14px; color: var(--steel); white-space: nowrap; }
-.plan-pro .unit { color: rgba(255, 255, 255, 0.55); }
-.sub { margin: 8px 0 0; min-height: 21px; font-size: 14px; color: var(--steel); }
-.plan-pro .sub { color: rgba(255, 255, 255, 0.55); }
-.cur-note { margin: 4px 0 0; font-size: 12px; color: rgba(255, 255, 255, 0.4); }
-.seat-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 24px; }
+.tag { height: 28px; padding-inline: 12px; display: inline-flex; align-items: center; border-radius: 9999px; background: var(--white); color: var(--ink); font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+.price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-top: 32px; }
+.price b { font-size: 56px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums; }
+:root[data-cur="idr"] .price b { font-size: 44px; }
+#pro-was { font-size: 20px; letter-spacing: -0.02em; color: rgba(255, 255, 255, 0.4); text-decoration-thickness: 1.5px; font-variant-numeric: tabular-nums; }
+.sub { margin: 10px 0 0; font-size: 14px; color: var(--slate); }
+.plan-pro .sub { color: rgba(255, 255, 255, 0.6); }
+.seat-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; min-height: 40px; margin-top: 28px; }
 .seats { display: inline-flex; align-items: center; gap: 2px; height: 40px; padding: 4px; border-radius: 9999px; background: rgba(255, 255, 255, 0.1); }
 .seats button { width: 32px; height: 32px; border: 0; border-radius: 50%; background: none; color: #fff; font-size: 18px; line-height: 1; }
 .seats button:hover { background: rgba(255, 255, 255, 0.12); }
 .seats button:disabled { opacity: 0.35; cursor: default; background: none; }
 .seats output { min-width: 72px; text-align: center; font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums; }
-.presets { display: flex; gap: 8px; }
-.preset { height: 36px; padding: 0 14px; border: 0; border-radius: 9999px; background: rgba(255, 255, 255, 0.08); color: #fff; font-size: 13px; font-weight: 500; white-space: nowrap; transition: background-color 150ms ease; }
-.preset:hover { background: rgba(255, 255, 255, 0.14); }
-.preset[aria-pressed="true"] { background: #fff; color: var(--ink); }
-.team { margin-top: 14px; font-size: 13px; color: rgba(255, 255, 255, 0.55); }
-.team p { margin: 0; }
-#team-rows { padding: 14px 16px; border-radius: 16px; background: rgba(255, 255, 255, 0.06); }
-#team-rows .cap { font-size: 12px; }
-#team-rows ul { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; }
-#team-rows li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; color: #fff; font-variant-numeric: tabular-nums; }
-#team-rows li > span:first-child { color: rgba(255, 255, 255, 0.55); }
-#team-rows li.off { opacity: 0.4; }
-#seat-save { margin-top: 10px; color: rgba(255, 255, 255, 0.8); }
-.seat-def { margin: 8px 0 0; font-size: 12px; color: rgba(255, 255, 255, 0.55); }
-.seat-def a, #seat-max a { color: inherit; }
-#seat-max { margin: 4px 0 0; font-size: 12px; color: rgba(255, 255, 255, 0.8); }
-.buy { margin-top: 20px; }
-.plan-pro .buy .pill { width: 100%; height: 52px; background: #fff; color: var(--ink); font-size: 15px; }
-.plan-pro .buy .pill:hover { background: var(--mist-2); }
-.reassure { margin: 10px 0 0; text-align: center; font-size: 12.5px; color: rgba(255, 255, 255, 0.55); }
+.note { font-size: 13px; color: var(--slate); }
+.plan-pro .note { color: rgba(255, 255, 255, 0.5); }
+#seat-max { flex-basis: 100%; margin: 0; font-size: 12px; color: rgba(255, 255, 255, 0.8); }
+#seat-max a { color: inherit; }
+.cta { margin-top: 16px; }
+.cta .pill { width: 100%; height: 52px; font-size: 15px; }
+.plan-pro .cta .pill { background: #fff; color: var(--ink); }
+.plan-pro .cta .pill:hover { background: var(--mist-2); }
+.reassure { margin: 12px 0 0; text-align: center; font-size: 13px; color: var(--steel); }
+.plan-pro .reassure { color: rgba(255, 255, 255, 0.5); }
 .login-link { display: block; margin: 6px auto 0; padding: 0; border: 0; background: none; color: rgba(255, 255, 255, 0.8); font-size: 13px; }
 .login-link:hover { color: #fff; text-decoration: underline; }
-#have-pro { margin-top: 20px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; font-size: 14px; }
-#have-pro .pill { background: #fff; color: var(--ink); }
-.rule { height: 1px; margin: 28px 0 22px; border: 0; background: rgba(255, 255, 255, 0.12); }
-.kicker { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255, 255, 255, 0.45); }
-.chips { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
-.chips li { height: 28px; padding: 0 12px; display: inline-flex; align-items: center; border-radius: 9999px; background: rgba(255, 255, 255, 0.08); font-size: 12.5px; font-weight: 500; }
-.checks { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 10px; font-size: 14px; }
+#have-pro { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; font-size: 14px; }
+#have-pro .pill { width: auto; height: 40px; font-size: 14px; }
+.rule { width: 100%; height: 1px; margin: 28px 0 24px; border: 0; background: var(--control); }
+.plan-pro .rule { background: rgba(255, 255, 255, 0.12); }
+.chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-content: flex-start; gap: 6px; }
+.chips li { height: 28px; padding: 0 12px; display: inline-flex; align-items: center; border-radius: 9999px; background: var(--white); font-size: 12.5px; font-weight: 500; }
+.plan-pro .chips li { background: rgba(255, 255, 255, 0.08); }
+.checks { list-style: none; margin: 20px 0 0; padding: 0; display: grid; align-content: start; gap: 12px; font-size: 14px; }
 .checks li { display: flex; align-items: flex-start; gap: 10px; }
-.checks .ic { width: 16px; height: 16px; margin-top: 2px; --uw: 1.8; }
-.plan-free .checks { margin-top: 28px; gap: 14px; }
-.plan-free .checks b { display: block; font-size: 14px; font-weight: 500; }
-.plan-free .checks small { display: block; font-size: 13px; color: var(--slate); }
-.plan-free .checks a { color: inherit; }
-.plan-free .price b { letter-spacing: -0.045em; }
-.plan-foot { margin-top: auto; padding-top: 28px; }
-.plan-foot .pill { width: 100%; height: 48px; }
+.checks .ic { width: 16px; height: 16px; margin-top: 2px; --uw: 1.8; color: var(--steel); }
+.plan-pro .checks .ic { color: rgba(255, 255, 255, 0.6); }
+.checks a, .reassure a { color: inherit; text-underline-offset: 2px; }
 
-/* ---------- Proof ---------- */
-.proof { list-style: none; margin: 24px 0 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 28px; font-size: 13px; font-weight: 500; color: var(--slate); }
-.proof li, .proof a { display: inline-flex; align-items: center; gap: 8px; color: var(--slate); text-decoration: none; }
-.proof a:hover { color: var(--ink); }
-.proof .ic { width: 16px; height: 16px; color: var(--steel); }
 
 /* ---------- Sections ---------- */
 section { padding-block: 72px 0; }
@@ -273,9 +253,7 @@ details p a { color: var(--ink); }
 @media (max-width: 900px) {
   .plans, .faq-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .plan { padding: 28px 22px; border-radius: 24px; }
-  .seat-row .seats { flex: none; }
-  .presets { flex: 1 1 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
-  .preset { padding: 0 8px; }
+  .plan-free .seat-row { min-height: 0; margin-top: 4px; }
   .buybar { display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: var(--white); border-top: 1px solid var(--control); transform: translateY(110%); visibility: hidden; transition: transform 200ms var(--ease-out), visibility 0s 200ms; }
   .buybar.show { transform: none; visibility: visible; transition: transform 200ms var(--ease-out); }
   body.has-bar { padding-bottom: calc(68px + env(safe-area-inset-bottom)); }
@@ -291,7 +269,6 @@ details p a { color: var(--ink); }
   .st .t { width: 52px; height: 52px; }
   .st .t svg { width: 26px; height: 26px; }
   .st .n { min-height: 28px; font-size: 11px; }
-  .proof { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; justify-content: start; }
   .gallery { grid-template-columns: minmax(0, 1fr); gap: 16px; padding: 16px; border-radius: 22px; }
   .tabs { display: flex; flex-wrap: wrap; gap: 6px; }
   .tabs .grp { display: none; }
@@ -327,14 +304,11 @@ details p a { color: var(--ink); }
 }
 @media (max-width: 480px) {
   .price b { font-size: 46px; }
-  :root[data-cur="idr"] .plan-pro .price b { font-size: 36px; }
-  #pro-was { flex-basis: 100%; font-size: 18px; }
-  :root[data-cur="idr"] #pro-was { font-size: 16px; }
-  .unit { white-space: normal; }
+  :root[data-cur="idr"] .price b { font-size: 36px; }
+  #pro-was { font-size: 17px; }
 }
 @media (max-width: 420px) {
   .nav-link .label { display: none; }
-  .plan-pro .buy .pill { white-space: normal; height: auto; min-height: 52px; padding: 12px 16px; text-align: center; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0ms !important; } }
 </style>
@@ -373,75 +347,57 @@ __BANNER__
 
     <div class="plans">
       <div class="plan plan-pro" id="pro">
-        <div class="plan-top"><span class="plan-name">__ICON:general/star__Pro</span><span class="tag"><span class="launch">Launch offer · __OFFER_PCT__% off</span><span class="regular">All __STYLE_WORD__ styles</span></span></div>
+        <div class="plan-top"><span class="plan-name">__ICON:general/star__Pro</span><span class="tag launch">Launch offer −__OFFER_PCT__%</span></div>
         <div class="price">
+          <b id="pro-price"><span class="launch"><span class="usd">$30</span><span class="idr">Rp395.000</span></span><span class="regular"><span class="usd">$60</span><span class="idr">Rp790.000</span></span></b>
           <span class="vh launch">Regular price</span>
           <s id="pro-was" class="launch"><span class="usd">$60</span><span class="idr">Rp790.000</span></s>
-          <b id="pro-price"><span class="launch"><span class="usd">$30</span><span class="idr">Rp395.000</span></span><span class="regular"><span class="usd">$60</span><span class="idr">Rp790.000</span></span></b>
-          <span class="unit" id="pro-unit"><span class="launch">first year</span><span class="regular">a year</span></span>
         </div>
-        <p class="sub" id="pro-sub"><span class="launch"><span class="usd">$2.50 a month in year one · then $60 a year</span><span class="idr">≈ Rp33.000 a month in year one · then Rp790.000 a year</span></span><span class="regular"><span class="usd">$5 a month, billed yearly</span><span class="idr">≈ Rp66.000 a month, billed yearly</span></span></p>
-        <p class="idr cur-note">Prices in Rupiah for visitors in Indonesia.</p>
-
+        <p class="sub" id="pro-sub"><span class="launch"><span class="usd">First year, then $60 a year</span><span class="idr">First year, then Rp790.000 a year</span></span><span class="regular">A year</span></p>
         <div class="seat-row">
           <div class="seats" role="group" aria-label="Seats"><button type="button" id="seat-down" aria-label="Fewer seats">−</button><output id="seat-n" aria-live="polite">1 seat</output><button type="button" id="seat-up" aria-label="More seats">+</button></div>
-          <div class="presets"><button type="button" class="preset" data-seats="1" aria-pressed="true">Just me</button><button type="button" class="preset" data-seats="5" aria-pressed="false">Team of 5</button><button type="button" class="preset" data-seats="10" aria-pressed="false">Team of 10</button></div>
-        </div>
-        <div class="team">
-          <p id="team-one"><span class="usd">Extra seats: $22 a year each for seats 2–5, $10 from the 6th.</span><span class="idr">Extra seats: Rp290.000 a year each for seats 2–5, Rp130.000 from the 6th.</span></p>
-          <div id="team-rows" hidden>
-            <div class="cap">Regular yearly rate per seat</div>
-            <ul>
-              <li data-tier="0"><span>Seat 1</span><span></span></li>
-              <li data-tier="1"><span>Seats 2–5</span><span></span></li>
-              <li data-tier="2"><span>Seat 6 onward</span><span></span></li>
-            </ul>
-            <div id="seat-save"></div>
-          </div>
-          <p class="seat-def">One seat per person who uses the icons. You confirm the number of seats at checkout, and teammates get their seat by email from Polar.</p>
+          <span class="note">One seat per person</span>
           <p id="seat-max" hidden>Need more than 50 seats? Write to <a href="mailto:hello@meyalab.com">hello@meyalab.com</a>.</p>
           <p class="vh" id="seat-summary" aria-live="polite"></p>
         </div>
-
-        <div class="buy" data-hide-pro>
-          <a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro">Get Pro</a>
-          <p class="reassure">Secure checkout by Polar. Taxes, if any, are added there. Cancel anytime; Pro stays active until the end of your paid year.</p>
-          <button type="button" class="login-link" id="login-link" data-acct-open hidden>Already have Pro? Log in</button>
+        <div class="cta">
+          <div class="buy" data-hide-pro>
+            <a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro">Get Pro</a>
+            <p class="reassure">Checkout by Polar · Cancel anytime</p>
+            <button type="button" class="login-link" id="login-link" data-acct-open hidden>Already have Pro? Log in</button>
+          </div>
+          <div id="have-pro" hidden><span>You have Pro.</span><a class="pill" href="./#stroke">Browse Pro icons</a></div>
         </div>
-        <div id="have-pro" hidden><span>You have Pro. Open any Pro icon to copy it as SVG or React.</span><a class="pill" href="./#stroke">Browse Pro icons</a></div>
-
         <hr class="rule">
-        <p class="kicker">Everything in Free, plus</p>
         <ul class="chips" aria-label="Pro styles"><li>Stroke</li><li>Stroke Duotone</li><li>Sharp</li><li>Filled</li><li>Glass</li><li>Animated</li></ul>
         <ul class="checks">
-          <li>__ICON:shapes/check__<span>__PRO_COUNT__ more icons, __ALL_COUNT__ in all</span></li>
-          <li>__ICON:shapes/check__<span>Live strokes you can make thinner or bolder</span></li>
-          <li>__ICON:shapes/check__<span>New icons in every style as they ship</span></li>
-          <li>__ICON:shapes/check__<span>Copy any Pro icon as SVG or React on this site</span></li>
+          <li>__ICON:shapes/check__<span>Everything in Free</span></li>
+          <li>__ICON:shapes/check__<span>__ALL_COUNT__ icons in all</span></li>
+          <li>__ICON:shapes/check__<span>Live strokes, any weight</span></li>
+          <li>__ICON:shapes/check__<span>New icons as they ship</span></li>
         </ul>
       </div>
 
       <div class="plan plan-free">
         <div class="plan-top"><span class="plan-name">__ICON:general/user__Free</span></div>
-        <div class="price"><b>Free</b><span class="unit">forever</span></div>
-        <p class="sub">No account needed. MIT licensed.</p>
+        <div class="price"><b><span class="usd">$0</span><span class="idr">Rp0</span></b></div>
+        <p class="sub">Forever</p>
+        <div class="seat-row"><span class="note">No account needed</span></div>
+        <div class="cta">
+          <a class="pill pill-white" href="./#icons">Browse free icons</a>
+          <p class="reassure"><a href="https://github.com/nazmijavier/meya-icons" target="_blank" rel="noopener">MIT licensed</a> · Commercial use OK</p>
+        </div>
+        <hr class="rule">
+        <ul class="chips" aria-label="Free styles"><li>Outline</li><li>Duotone</li><li>Cursors</li><li>Flags</li></ul>
         <ul class="checks">
-          <li>__ICON:shapes/check__<span><b>__COUNT__ icons</b><small>Outline and Duotone, plus cursors and flags</small></span></li>
-          <li>__ICON:shapes/check__<span><b>Copy as SVG or React</b><small>Straight from the website</small></span></li>
-          <li>__ICON:shapes/check__<span><b class="mono">npm i meya-icons</b><small>The free set as an npm package</small></span></li>
-          <li>__ICON:shapes/check__<span><b><a href="https://www.figma.com/community/plugin/1685393903679180914" target="_blank" rel="noopener">Free Figma plugin</a></b><small>Place icons straight onto your canvas</small></span></li>
-          <li>__ICON:shapes/check__<span><b>Personal and commercial work</b><small>Credit appreciated, not required</small></span></li>
+          <li>__ICON:shapes/check__<span>__COUNT__ icons</span></li>
+          <li>__ICON:shapes/check__<span>Copy as SVG or React</span></li>
+          <li>__ICON:shapes/check__<span><a href="https://www.npmjs.com/package/meya-icons" target="_blank" rel="noopener">npm package</a></span></li>
+          <li>__ICON:shapes/check__<span><a href="https://www.figma.com/community/plugin/1685393903679180914" target="_blank" rel="noopener">Figma plugin</a></span></li>
         </ul>
-        <div class="plan-foot"><a class="pill pill-white" href="./#icons">Browse free icons</a></div>
       </div>
     </div>
 
-    <ul class="proof">
-      <li><a href="https://github.com/nazmijavier/meya-icons" target="_blank" rel="noopener">__ICON:development/repository__MIT open source on GitHub</a></li>
-      <li><a href="https://www.npmjs.com/package/meya-icons" target="_blank" rel="noopener">__ICON:development/terminal__<span class="mono">npm i meya-icons</span></a></li>
-      <li><a href="https://www.figma.com/community/plugin/1685393903679180914" target="_blank" rel="noopener">__ICON:images/pen-tool__Free Figma plugin</a></li>
-      <li>__ICON:finance-ecommerce/credit-card__Checkout by Polar</li>
-    </ul>
 
     <section id="styles" aria-labelledby="styles-title">
       <h2 class="center" id="styles-title">See every style before you buy</h2>
@@ -574,42 +530,22 @@ __FOOTER__
   const fmt = (x) => cur() === "idr"
     ? "Rp" + Math.round(x).toLocaleString("id-ID")
     : "$" + (Number.isInteger(x) ? x.toLocaleString("en-US") : x.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-  // rounded to cents (USD) or to Rp1.000 (IDR); "≈" only when rounding changed the value
-  const approx = (x) => {
-    const r = cur() === "idr" ? Math.round(x / 1000) * 1000 : Math.round(x * 100) / 100;
-    return (Math.abs(r - x) > 1e-9 ? "≈ " : "") + fmt(r);
-  };
   let seats = 1;
+  // The card shows the total for the chosen seats; how a team price is worked out is in the FAQ.
   function show() {
-    const n = seats, list = total(n), now = first(list), R = RATES[cur()], per = OFF ? "first year" : "a year";
+    const n = seats, list = total(n), now = first(list), per = OFF ? "first year" : "a year";
+    const who = n === 1 ? "" : `${n} seats · `;
     $("#seat-n").textContent = n + (n === 1 ? " seat" : " seats");
     $("#pro-was").textContent = fmt(list);
     $("#pro-price").textContent = fmt(now);
-    $("#pro-unit").textContent = per;
-    $("#pro-sub").textContent = OFF
-      ? (n === 1 ? `${approx(now / 12)} a month in year one` : `${approx(now / n)} a seat in year one`) + ` · then ${fmt(list)} a year`
-      : n === 1 ? `${approx(list / 12)} a month, billed yearly` : `${approx(list / n)} a seat, billed yearly`;
-    $("#team-one").hidden = n > 1;
-    $("#team-rows").hidden = n === 1;
-    if (n > 1) {
-      const k = [1, Math.min(Math.max(n - 1, 0), 4), Math.max(n - 5, 0)];
-      document.querySelectorAll("#team-rows li").forEach((li) => {
-        const t = +li.dataset.tier;
-        li.lastElementChild.textContent = t === 0 ? fmt(R[0]) : k[t] ? `${k[t]} × ${fmt(R[t])}` : `${fmt(R[t])} each`;
-        li.classList.toggle("off", !k[t]);
-      });
-      $("#seat-save").textContent = `Team rates save ${fmt(n * R[0] - list)} a year compared with ${n} seats at ${fmt(R[0])}.`;
-    }
+    $("#pro-sub").textContent = who + (OFF ? `${n === 1 ? "F" : "f"}irst year, then ${fmt(list)} a year` : `${n === 1 ? "A" : "a"} year`);
     $("#seat-max").hidden = n < MAX;
-    $("#get-pro").textContent = `Get Pro · ${fmt(now)} ${per}`;
-    $("#bar-price").textContent = (n === 1 ? "" : `${n} seats · `) + `${fmt(now)} ${per}`;
+    $("#bar-price").textContent = who + `${fmt(now)} ${per}`;
     $("#seat-summary").textContent = `${n} ${n === 1 ? "seat" : "seats"}. ` + (OFF ? `${fmt(now)} for the first year, then ${fmt(list)} a year.` : `${fmt(list)} a year.`);
-    document.querySelectorAll(".preset").forEach((p) => p.setAttribute("aria-pressed", String(+p.dataset.seats === n)));
     $("#seat-down").disabled = n <= 1; $("#seat-up").disabled = n >= MAX;
   }
   $("#seat-down").addEventListener("click", () => { seats = Math.max(1, seats - 1); show(); });
   $("#seat-up").addEventListener("click", () => { seats = Math.min(MAX, seats + 1); show(); });
-  document.querySelectorAll(".preset").forEach((p) => p.addEventListener("click", () => { seats = +p.dataset.seats; show(); }));
   show();
   // the head script guessed the currency from the time zone; the visitor's country settles it
   fetch("/api/geo").then((r) => (r.ok ? r.json() : null)).then((g) => {

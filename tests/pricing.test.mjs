@@ -40,7 +40,9 @@ for (const cur of ["usd", "idr"]) {
     const btn = await page.$("#get-pro");
     const box = await btn.boundingBox();
     if (vp.width === 1440) ok(box && box.y + box.height <= vp.height, `${tag}: Get Pro is on the first screen (bottom ${Math.round(box.y + box.height)}px)`);
-    ok((await btn.textContent()).includes(cur === "idr" ? "Rp" : "$"), `${tag}: button carries the price: ${await btn.textContent()}`);
+    ok((await btn.textContent()).trim() === "Get Pro", `${tag}: button reads Get Pro: ${await btn.textContent()}`);
+    const rows = await page.evaluate(() => [".cta", ".rule", ".checks"].map((s) => [...document.querySelectorAll(`.plan ${s}`)].map((el) => Math.round(el.getBoundingClientRect().top))));
+    if (vp.width === 1440) ok(rows.every(([a, b]) => a === b), `${tag}: both cards line up (button, rule, list) ${JSON.stringify(rows)}`);
     ok(!errors.length, `${tag}: no script errors ${errors.join(" | ")}`);
     await page.screenshot({ path: `${OUT}/full-${tag}.png`, fullPage: true });
     await page.screenshot({ path: `${OUT}/top-${tag}.png` });
@@ -53,14 +55,13 @@ for (const cur of ["usd", "idr"]) {
   const { ctx, page } = await open({ width: 1440, height: 900 }, "usd");
   ok((await page.textContent("#pro-price")) === "$30", `1 seat: first-year price ${await page.textContent("#pro-price")}`);
   ok((await page.textContent("#pro-was")) === "$60", "1 seat: regular price struck");
-  ok(await page.isHidden("#team-rows"), "1 seat: no team table");
-  await page.click('.preset[data-seats="5"]');
+  ok((await page.textContent("#pro-sub")) === "First year, then $60 a year", `1 seat: ${await page.textContent("#pro-sub")}`);
+  for (let i = 0; i < 4; i++) await page.click("#seat-up");
   // 60 + 4 × 22 = 148, 50% off → 74
   ok((await page.textContent("#pro-price")) === "$74", `5 seats: ${await page.textContent("#pro-price")}`);
   ok((await page.textContent("#pro-was")) === "$148", `5 seats regular: ${await page.textContent("#pro-was")}`);
-  ok(await page.isVisible("#team-rows"), "5 seats: team table shows");
-  ok((await page.textContent("#seat-save")).includes("$152"), `5 seats saving: ${await page.textContent("#seat-save")}`);
-  await page.click('.preset[data-seats="10"]');
+  ok((await page.textContent("#pro-sub")) === "5 seats · first year, then $148 a year", `5 seats: ${await page.textContent("#pro-sub")}`);
+  for (let i = 0; i < 5; i++) await page.click("#seat-up");
   // 60 + 88 + 5 × 10 = 198 → 99
   ok((await page.textContent("#pro-price")) === "$99", `10 seats: ${await page.textContent("#pro-price")}`);
   await page.screenshot({ path: `${OUT}/card-10-seats.png`, clip: await (await page.$("#pro")).boundingBox() });
@@ -100,7 +101,7 @@ for (const cur of ["usd", "idr"]) {
 {
   const { ctx, page } = await open({ width: 1440, height: 900 }, "idr");
   ok((await page.textContent("#pro-price")) === "Rp395.000", `IDR 1 seat: ${await page.textContent("#pro-price")}`);
-  await page.click('.preset[data-seats="5"]');
+  for (let i = 0; i < 4; i++) await page.click("#seat-up");
   // 790.000 + 4 × 290.000 = 1.950.000 → 975.000
   ok((await page.textContent("#pro-price")) === "Rp975.000", `IDR 5 seats: ${await page.textContent("#pro-price")}`);
   await page.screenshot({ path: `${OUT}/card-idr-5.png`, clip: await (await page.$("#pro")).boundingBox() });

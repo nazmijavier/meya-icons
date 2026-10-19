@@ -114,71 +114,51 @@ svg.ui path { stroke: currentColor; stroke-width: calc(var(--uw, 1.3) * 1px - 1.
 .st .m { font-size: 11px; color: var(--steel); line-height: 18px; }
 
 /* ---------- Plans ---------- */
-.plans { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 16px; align-items: stretch; margin-top: 8px; }
-.plan { display: flex; flex-direction: column; padding: 40px; border-radius: 28px; background: var(--mist); }
+/* Two cards on one set of rows (subgrid), so price, button, rule and list line up side by side.
+   The details (team rates, currency, cancelling) live in the FAQ. */
+.plans { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 16px; margin-top: 8px; }
+.plan { display: grid; grid-row: span 8; grid-template-rows: subgrid; row-gap: 0; align-content: start; padding: 36px; border-radius: 28px; background: var(--mist); }
 .plan-pro { background: var(--ink); color: #fff; }
-.plan-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.plan-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 28px; }
 .plan-name { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 500; }
-.tag { height: 24px; padding-inline: 10px; display: inline-flex; align-items: center; border-radius: 9999px; background: var(--white); color: var(--ink); font-size: 12px; font-weight: 600; white-space: nowrap; }
-.price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin-top: 28px; }
-.price b { font-size: 64px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums; }
-:root[data-cur="idr"] .plan-pro .price b { font-size: 48px; }
-#pro-was { font-size: 24px; font-weight: 500; letter-spacing: -0.02em; color: rgba(255, 255, 255, 0.45); text-decoration-thickness: 1.5px; font-variant-numeric: tabular-nums; }
-.unit { font-size: 14px; color: var(--steel); white-space: nowrap; }
-.plan-pro .unit { color: rgba(255, 255, 255, 0.55); }
-.sub { margin: 8px 0 0; min-height: 21px; font-size: 14px; color: var(--steel); }
-.plan-pro .sub { color: rgba(255, 255, 255, 0.55); }
-.cur-note { margin: 4px 0 0; font-size: 12px; color: rgba(255, 255, 255, 0.4); }
-.seat-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 24px; }
+.tag { height: 28px; padding-inline: 12px; display: inline-flex; align-items: center; border-radius: 9999px; background: var(--white); color: var(--ink); font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+.price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-top: 32px; }
+.price b { font-size: 56px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums; }
+:root[data-cur="idr"] .price b { font-size: 44px; }
+#pro-was { font-size: 20px; letter-spacing: -0.02em; color: rgba(255, 255, 255, 0.4); text-decoration-thickness: 1.5px; font-variant-numeric: tabular-nums; }
+.sub { margin: 10px 0 0; font-size: 14px; color: var(--slate); }
+.plan-pro .sub { color: rgba(255, 255, 255, 0.6); }
+.seat-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; min-height: 40px; margin-top: 28px; }
 .seats { display: inline-flex; align-items: center; gap: 2px; height: 40px; padding: 4px; border-radius: 9999px; background: rgba(255, 255, 255, 0.1); }
 .seats button { width: 32px; height: 32px; border: 0; border-radius: 50%; background: none; color: #fff; font-size: 18px; line-height: 1; }
 .seats button:hover { background: rgba(255, 255, 255, 0.12); }
 .seats button:disabled { opacity: 0.35; cursor: default; background: none; }
 .seats output { min-width: 72px; text-align: center; font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums; }
-.presets { display: flex; gap: 8px; }
-.preset { height: 36px; padding: 0 14px; border: 0; border-radius: 9999px; background: rgba(255, 255, 255, 0.08); color: #fff; font-size: 13px; font-weight: 500; white-space: nowrap; transition: background-color 150ms ease; }
-.preset:hover { background: rgba(255, 255, 255, 0.14); }
-.preset[aria-pressed="true"] { background: #fff; color: var(--ink); }
-.team { margin-top: 14px; font-size: 13px; color: rgba(255, 255, 255, 0.55); }
-.team p { margin: 0; }
-#team-rows { padding: 14px 16px; border-radius: 16px; background: rgba(255, 255, 255, 0.06); }
-#team-rows .cap { font-size: 12px; }
-#team-rows ul { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; }
-#team-rows li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; color: #fff; font-variant-numeric: tabular-nums; }
-#team-rows li > span:first-child { color: rgba(255, 255, 255, 0.55); }
-#team-rows li.off { opacity: 0.4; }
-#seat-save { margin-top: 10px; color: rgba(255, 255, 255, 0.8); }
-.seat-def { margin: 8px 0 0; font-size: 12px; color: rgba(255, 255, 255, 0.55); }
-.seat-def a, #seat-max a { color: inherit; }
-#seat-max { margin: 4px 0 0; font-size: 12px; color: rgba(255, 255, 255, 0.8); }
-.buy { margin-top: 20px; }
-.plan-pro .buy .pill { width: 100%; height: 52px; background: #fff; color: var(--ink); font-size: 15px; }
-.plan-pro .buy .pill:hover { background: var(--mist-2); }
-.reassure { margin: 10px 0 0; text-align: center; font-size: 12.5px; color: rgba(255, 255, 255, 0.55); }
+.note { font-size: 13px; color: var(--slate); }
+.plan-pro .note { color: rgba(255, 255, 255, 0.5); }
+#seat-max { flex-basis: 100%; margin: 0; font-size: 12px; color: rgba(255, 255, 255, 0.8); }
+#seat-max a { color: inherit; }
+.cta { margin-top: 16px; }
+.cta .pill { width: 100%; height: 52px; font-size: 15px; }
+.plan-pro .cta .pill { background: #fff; color: var(--ink); }
+.plan-pro .cta .pill:hover { background: var(--mist-2); }
+.reassure { margin: 12px 0 0; text-align: center; font-size: 13px; color: var(--steel); }
+.plan-pro .reassure { color: rgba(255, 255, 255, 0.5); }
 .login-link { display: block; margin: 6px auto 0; padding: 0; border: 0; background: none; color: rgba(255, 255, 255, 0.8); font-size: 13px; }
 .login-link:hover { color: #fff; text-decoration: underline; }
-#have-pro { margin-top: 20px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; font-size: 14px; }
-#have-pro .pill { background: #fff; color: var(--ink); }
-.rule { height: 1px; margin: 28px 0 22px; border: 0; background: rgba(255, 255, 255, 0.12); }
-.kicker { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255, 255, 255, 0.45); }
-.chips { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
-.chips li { height: 28px; padding: 0 12px; display: inline-flex; align-items: center; border-radius: 9999px; background: rgba(255, 255, 255, 0.08); font-size: 12.5px; font-weight: 500; }
-.checks { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 10px; font-size: 14px; }
+#have-pro { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; font-size: 14px; }
+#have-pro .pill { width: auto; height: 40px; font-size: 14px; }
+.rule { width: 100%; height: 1px; margin: 28px 0 24px; border: 0; background: var(--control); }
+.plan-pro .rule { background: rgba(255, 255, 255, 0.12); }
+.chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-content: flex-start; gap: 6px; }
+.chips li { height: 28px; padding: 0 12px; display: inline-flex; align-items: center; border-radius: 9999px; background: var(--white); font-size: 12.5px; font-weight: 500; }
+.plan-pro .chips li { background: rgba(255, 255, 255, 0.08); }
+.checks { list-style: none; margin: 20px 0 0; padding: 0; display: grid; align-content: start; gap: 12px; font-size: 14px; }
 .checks li { display: flex; align-items: flex-start; gap: 10px; }
-.checks .ic { width: 16px; height: 16px; margin-top: 2px; --uw: 1.8; }
-.plan-free .checks { margin-top: 28px; gap: 14px; }
-.plan-free .checks b { display: block; font-size: 14px; font-weight: 500; }
-.plan-free .checks small { display: block; font-size: 13px; color: var(--slate); }
-.plan-free .checks a { color: inherit; }
-.plan-free .price b { letter-spacing: -0.045em; }
-.plan-foot { margin-top: auto; padding-top: 28px; }
-.plan-foot .pill { width: 100%; height: 48px; }
+.checks .ic { width: 16px; height: 16px; margin-top: 2px; --uw: 1.8; color: var(--steel); }
+.plan-pro .checks .ic { color: rgba(255, 255, 255, 0.6); }
+.checks a, .reassure a { color: inherit; text-underline-offset: 2px; }
 
-/* ---------- Proof ---------- */
-.proof { list-style: none; margin: 24px 0 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 28px; font-size: 13px; font-weight: 500; color: var(--slate); }
-.proof li, .proof a { display: inline-flex; align-items: center; gap: 8px; color: var(--slate); text-decoration: none; }
-.proof a:hover { color: var(--ink); }
-.proof .ic { width: 16px; height: 16px; color: var(--steel); }
 
 /* ---------- Sections ---------- */
 section { padding-block: 72px 0; }
@@ -294,9 +274,7 @@ details p a { color: var(--ink); }
 @media (max-width: 900px) {
   .plans, .faq-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .plan { padding: 28px 22px; border-radius: 24px; }
-  .seat-row .seats { flex: none; }
-  .presets { flex: 1 1 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
-  .preset { padding: 0 8px; }
+  .plan-free .seat-row { min-height: 0; margin-top: 4px; }
   .buybar { display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: var(--white); border-top: 1px solid var(--control); transform: translateY(110%); visibility: hidden; transition: transform 200ms var(--ease-out), visibility 0s 200ms; }
   .buybar.show { transform: none; visibility: visible; transition: transform 200ms var(--ease-out); }
   body.has-bar { padding-bottom: calc(68px + env(safe-area-inset-bottom)); }
@@ -312,7 +290,6 @@ details p a { color: var(--ink); }
   .st .t { width: 52px; height: 52px; }
   .st .t svg { width: 26px; height: 26px; }
   .st .n { min-height: 28px; font-size: 11px; }
-  .proof { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; justify-content: start; }
   .gallery { grid-template-columns: minmax(0, 1fr); gap: 16px; padding: 16px; border-radius: 22px; }
   .tabs { display: flex; flex-wrap: wrap; gap: 6px; }
   .tabs .grp { display: none; }
@@ -348,14 +325,11 @@ details p a { color: var(--ink); }
 }
 @media (max-width: 480px) {
   .price b { font-size: 46px; }
-  :root[data-cur="idr"] .plan-pro .price b { font-size: 36px; }
-  #pro-was { flex-basis: 100%; font-size: 18px; }
-  :root[data-cur="idr"] #pro-was { font-size: 16px; }
-  .unit { white-space: normal; }
+  :root[data-cur="idr"] .price b { font-size: 36px; }
+  #pro-was { font-size: 17px; }
 }
 @media (max-width: 420px) {
   .nav-link .label { display: none; }
-  .plan-pro .buy .pill { white-space: normal; height: auto; min-height: 52px; padding: 12px 16px; text-align: center; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0ms !important; } }
 </style>
@@ -437,75 +411,57 @@ document.addEventListener("click", (e) => {
 
     <div class="plans">
       <div class="plan plan-pro" id="pro">
-        <div class="plan-top"><span class="plan-name"><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M10.52 3.541c.281-.568.846-.92 1.48-.92.634 0 1.199.352 1.48.92l1.894 3.839 4.237.615c.627.092 1.136.521 1.332 1.123.195.603.036 1.25-.418 1.692l-3.065 2.988.723 4.219c.107.625-.143 1.242-.656 1.614-.513.373-1.177.42-1.738.126l-3.789-1.992-3.789 1.992c-.561.294-1.225.247-1.738-.126-.512-.372-.763-.989-.656-1.614l.724-4.219-3.066-2.988c-.454-.442-.613-1.089-.417-1.692.195-.602.705-1.031 1.331-1.123l4.237-.615 1.894-3.839zm1.166.575-2.046 4.146c-.093.19-.279.325-.489.355l-4.575.665c-.14.02-.238.103-.282.238-.044.136-.013.26.088.359l3.311 3.227c.151.148.222.366.187.575l-.782 4.556c-.024.14.024.259.139.342.116.084.243.093.369.027l4.092-2.151c.187-.099.417-.099.605 0l4.091 2.151c.126.066.254.057.369-.027.115-.083.163-.202.139-.342l-.781-4.556c-.036-.209.035-.427.186-.575l3.311-3.227c.102-.099.132-.223.088-.359-.044-.135-.141-.218-.282-.238l-4.575-.665c-.21-.03-.395-.165-.489-.355l-2.046-4.146c-.063-.127-.172-.195-.314-.195-.142 0-.251.068-.314.195z" fill="currentColor" fill-rule="evenodd"/></svg>Pro</span><span class="tag"><span class="launch">Launch offer · 50% off</span><span class="regular">All eight styles</span></span></div>
+        <div class="plan-top"><span class="plan-name"><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M10.52 3.541c.281-.568.846-.92 1.48-.92.634 0 1.199.352 1.48.92l1.894 3.839 4.237.615c.627.092 1.136.521 1.332 1.123.195.603.036 1.25-.418 1.692l-3.065 2.988.723 4.219c.107.625-.143 1.242-.656 1.614-.513.373-1.177.42-1.738.126l-3.789-1.992-3.789 1.992c-.561.294-1.225.247-1.738-.126-.512-.372-.763-.989-.656-1.614l.724-4.219-3.066-2.988c-.454-.442-.613-1.089-.417-1.692.195-.602.705-1.031 1.331-1.123l4.237-.615 1.894-3.839zm1.166.575-2.046 4.146c-.093.19-.279.325-.489.355l-4.575.665c-.14.02-.238.103-.282.238-.044.136-.013.26.088.359l3.311 3.227c.151.148.222.366.187.575l-.782 4.556c-.024.14.024.259.139.342.116.084.243.093.369.027l4.092-2.151c.187-.099.417-.099.605 0l4.091 2.151c.126.066.254.057.369-.027.115-.083.163-.202.139-.342l-.781-4.556c-.036-.209.035-.427.186-.575l3.311-3.227c.102-.099.132-.223.088-.359-.044-.135-.141-.218-.282-.238l-4.575-.665c-.21-.03-.395-.165-.489-.355l-2.046-4.146c-.063-.127-.172-.195-.314-.195-.142 0-.251.068-.314.195z" fill="currentColor" fill-rule="evenodd"/></svg>Pro</span><span class="tag launch">Launch offer −50%</span></div>
         <div class="price">
+          <b id="pro-price"><span class="launch"><span class="usd">$30</span><span class="idr">Rp395.000</span></span><span class="regular"><span class="usd">$60</span><span class="idr">Rp790.000</span></span></b>
           <span class="vh launch">Regular price</span>
           <s id="pro-was" class="launch"><span class="usd">$60</span><span class="idr">Rp790.000</span></s>
-          <b id="pro-price"><span class="launch"><span class="usd">$30</span><span class="idr">Rp395.000</span></span><span class="regular"><span class="usd">$60</span><span class="idr">Rp790.000</span></span></b>
-          <span class="unit" id="pro-unit"><span class="launch">first year</span><span class="regular">a year</span></span>
         </div>
-        <p class="sub" id="pro-sub"><span class="launch"><span class="usd">$2.50 a month in year one · then $60 a year</span><span class="idr">≈ Rp33.000 a month in year one · then Rp790.000 a year</span></span><span class="regular"><span class="usd">$5 a month, billed yearly</span><span class="idr">≈ Rp66.000 a month, billed yearly</span></span></p>
-        <p class="idr cur-note">Prices in Rupiah for visitors in Indonesia.</p>
-
+        <p class="sub" id="pro-sub"><span class="launch"><span class="usd">First year, then $60 a year</span><span class="idr">First year, then Rp790.000 a year</span></span><span class="regular">A year</span></p>
         <div class="seat-row">
           <div class="seats" role="group" aria-label="Seats"><button type="button" id="seat-down" aria-label="Fewer seats">−</button><output id="seat-n" aria-live="polite">1 seat</output><button type="button" id="seat-up" aria-label="More seats">+</button></div>
-          <div class="presets"><button type="button" class="preset" data-seats="1" aria-pressed="true">Just me</button><button type="button" class="preset" data-seats="5" aria-pressed="false">Team of 5</button><button type="button" class="preset" data-seats="10" aria-pressed="false">Team of 10</button></div>
-        </div>
-        <div class="team">
-          <p id="team-one"><span class="usd">Extra seats: $22 a year each for seats 2–5, $10 from the 6th.</span><span class="idr">Extra seats: Rp290.000 a year each for seats 2–5, Rp130.000 from the 6th.</span></p>
-          <div id="team-rows" hidden>
-            <div class="cap">Regular yearly rate per seat</div>
-            <ul>
-              <li data-tier="0"><span>Seat 1</span><span></span></li>
-              <li data-tier="1"><span>Seats 2–5</span><span></span></li>
-              <li data-tier="2"><span>Seat 6 onward</span><span></span></li>
-            </ul>
-            <div id="seat-save"></div>
-          </div>
-          <p class="seat-def">One seat per person who uses the icons. You confirm the number of seats at checkout, and teammates get their seat by email from Polar.</p>
+          <span class="note">One seat per person</span>
           <p id="seat-max" hidden>Need more than 50 seats? Write to <a href="mailto:hello@meyalab.com">hello@meyalab.com</a>.</p>
           <p class="vh" id="seat-summary" aria-live="polite"></p>
         </div>
-
-        <div class="buy" data-hide-pro>
-          <a href="https://buy.polar.sh/polar_cl_uUy8cBvgRtyC9pjDe2xcwaCr9XAHLMGrP8Hz307L1Od?discount_code=LAUNCH50" target="_blank" rel="noopener" class="pill" id="get-pro">Get Pro</a>
-          <p class="reassure">Secure checkout by Polar. Taxes, if any, are added there. Cancel anytime; Pro stays active until the end of your paid year.</p>
-          <button type="button" class="login-link" id="login-link" data-acct-open hidden>Already have Pro? Log in</button>
+        <div class="cta">
+          <div class="buy" data-hide-pro>
+            <a href="https://buy.polar.sh/polar_cl_uUy8cBvgRtyC9pjDe2xcwaCr9XAHLMGrP8Hz307L1Od?discount_code=LAUNCH50" target="_blank" rel="noopener" class="pill" id="get-pro">Get Pro</a>
+            <p class="reassure">Checkout by Polar · Cancel anytime</p>
+            <button type="button" class="login-link" id="login-link" data-acct-open hidden>Already have Pro? Log in</button>
+          </div>
+          <div id="have-pro" hidden><span>You have Pro.</span><a class="pill" href="./#stroke">Browse Pro icons</a></div>
         </div>
-        <div id="have-pro" hidden><span>You have Pro. Open any Pro icon to copy it as SVG or React.</span><a class="pill" href="./#stroke">Browse Pro icons</a></div>
-
         <hr class="rule">
-        <p class="kicker">Everything in Free, plus</p>
         <ul class="chips" aria-label="Pro styles"><li>Stroke</li><li>Stroke Duotone</li><li>Sharp</li><li>Filled</li><li>Glass</li><li>Animated</li></ul>
         <ul class="checks">
-          <li><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M6.803 11.223l3.523 3.522 6.871-6.871c.26-.26.689-.251.938.02.234.256.226.655-.019.9l-7.33 7.33c-.253.252-.667.252-.92 0l-3.982-3.982c-.253-.253-.252-.666 0-.919.252-.253.667-.253.919 0z" fill="currentColor" fill-rule="evenodd"/></svg><span>5,497 more icons, 7,951 in all</span></li>
-          <li><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M6.803 11.223l3.523 3.522 6.871-6.871c.26-.26.689-.251.938.02.234.256.226.655-.019.9l-7.33 7.33c-.253.252-.667.252-.92 0l-3.982-3.982c-.253-.253-.252-.666 0-.919.252-.253.667-.253.919 0z" fill="currentColor" fill-rule="evenodd"/></svg><span>Live strokes you can make thinner or bolder</span></li>
-          <li><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M6.803 11.223l3.523 3.522 6.871-6.871c.26-.26.689-.251.938.02.234.256.226.655-.019.9l-7.33 7.33c-.253.252-.667.252-.92 0l-3.982-3.982c-.253-.253-.252-.666 0-.919.252-.253.667-.253.919 0z" fill="currentColor" fill-rule="evenodd"/></svg><span>New icons in every style as they ship</span></li>
-          <li><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M6.803 11.223l3.523 3.522 6.871-6.871c.26-.26.689-.251.938.02.234.256.226.655-.019.9l-7.33 7.33c-.253.252-.667.252-.92 0l-3.982-3.982c-.253-.253-.252-.666 0-.919.252-.253.667-.253.919 0z" fill="currentColor" fill-rule="evenodd"/></svg><span>Copy any Pro icon as SVG or React on this site</span></li>
+          <li><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M6.803 11.223l3.523 3.522 6.871-6.871c.26-.26.689-.251.938.02.234.256.226.655-.019.9l-7.33 7.33c-.253.252-.667.252-.92 0l-3.982-3.982c-.253-.253-.252-.666 0-.919.252-.253.667-.253.919 0z" fill="currentColor" fill-rule="evenodd"/></svg><span>Everything in Free</span></li>
+          <li><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M6.803 11.223l3.523 3.522 6.871-6.871c.26-.26.689-.251.938.02.234.256.226.655-.019.9l-7.33 7.33c-.253.252-.667.252-.92 0l-3.982-3.982c-.253-.253-.252-.666 0-.919.252-.253.667-.253.919 0z" fill="currentColor" fill-rule="evenodd"/></svg><span>7,951 icons in all</span></li>
+          <li><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M6.803 11.223l3.523 3.522 6.871-6.871c.26-.26.689-.251.938.02.234.256.226.655-.019.9l-7.33 7.33c-.253.252-.667.252-.92 0l-3.982-3.982c-.253-.253-.252-.666 0-.919.252-.253.667-.253.919 0z" fill="currentColor" fill-rule="evenodd"/></svg><span>Live strokes, any weight</span></li>
+          <li><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M6.803 11.223l3.523 3.522 6.871-6.871c.26-.26.689-.251.938.02.234.256.226.655-.019.9l-7.33 7.33c-.253.252-.667.252-.92 0l-3.982-3.982c-.253-.253-.252-.666 0-.919.252-.253.667-.253.919 0z" fill="currentColor" fill-rule="evenodd"/></svg><span>New icons as they ship</span></li>
         </ul>
       </div>
 
       <div class="plan plan-free">
         <div class="plan-top"><span class="plan-name"><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M16.276 7.214c0 .703-.157 1.402-.494 2.021-.338.622-.849 1.169-1.435 1.563-.58.39-1.251.617-1.946.676-.696.059-1.41-.032-2.056-.302-.655-.274-1.229-.728-1.679-1.276-.437-.53-.738-1.16-.865-1.836-.132-.694-.101-1.441.104-2.119.202-.665.581-1.26 1.071-1.751.864-.863 1.929-1.281 3.149-1.251.524.014 1.046.115 1.53.318.485.203.924.504 1.302.868.871.838 1.319 1.88 1.319 3.089zm-1.3 0c0-.814-.296-1.529-.871-2.104-.576-.576-1.291-.872-2.105-.872-.814 0-1.529.296-2.104.872-.576.575-.872 1.29-.872 2.104 0 .814.296 1.529.872 2.105.575.575 1.29.872 2.104.872.814 0 1.529-.297 2.105-.872.575-.576.871-1.291.871-2.105zm-6.415 5.471h6.878c.618 0 1.236.109 1.808.348 1.226.512 2.263 1.633 2.659 2.903.241.773.294 1.712.054 2.491-.221.717-.695 1.341-1.294 1.788-.609.455-1.319.671-2.077.671h-9.178c-.758 0-1.468-.216-2.077-.671-.599-.447-1.073-1.071-1.294-1.788-.24-.779-.187-1.718.054-2.491.396-1.27 1.433-2.391 2.659-2.903.572-.239 1.19-.348 1.808-.348zm-1.15 6.901h9.178c.491 0 .956-.147 1.345-.449.376-.292.669-.694.798-1.154.145-.516.089-1.151-.07-1.659-.216-.686-.675-1.285-1.253-1.71-.579-.426-1.253-.629-1.97-.629h-6.878c-.728 0-1.41.209-1.994.647-.566.424-1.016 1.015-1.229 1.692-.159.508-.215 1.143-.07 1.659.132.469.434.879.822 1.172.384.29.841.431 1.321.431z" fill="currentColor" fill-rule="evenodd"/></svg>Free</span></div>
-        <div class="price"><b>Free</b><span class="unit">forever</span></div>
-        <p class="sub">No account needed. MIT licensed.</p>
+        <div class="price"><b><span class="usd">$0</span><span class="idr">Rp0</span></b></div>
+        <p class="sub">Forever</p>
+        <div class="seat-row"><span class="note">No account needed</span></div>
+        <div class="cta">
+          <a class="pill pill-white" href="./#icons">Browse free icons</a>
+          <p class="reassure"><a href="https://github.com/nazmijavier/meya-icons" target="_blank" rel="noopener">MIT licensed</a> · Commercial use OK</p>
+        </div>
+        <hr class="rule">
+        <ul class="chips" aria-label="Free styles"><li>Outline</li><li>Duotone</li><li>Cursors</li><li>Flags</li></ul>
         <ul class="checks">
-          <li><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M6.803 11.223l3.523 3.522 6.871-6.871c.26-.26.689-.251.938.02.234.256.226.655-.019.9l-7.33 7.33c-.253.252-.667.252-.92 0l-3.982-3.982c-.253-.253-.252-.666 0-.919.252-.253.667-.253.919 0z" fill="currentColor" fill-rule="evenodd"/></svg><span><b>2,454 icons</b><small>Outline and Duotone, plus cursors and flags</small></span></li>
-          <li><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M6.803 11.223l3.523 3.522 6.871-6.871c.26-.26.689-.251.938.02.234.256.226.655-.019.9l-7.33 7.33c-.253.252-.667.252-.92 0l-3.982-3.982c-.253-.253-.252-.666 0-.919.252-.253.667-.253.919 0z" fill="currentColor" fill-rule="evenodd"/></svg><span><b>Copy as SVG or React</b><small>Straight from the website</small></span></li>
-          <li><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M6.803 11.223l3.523 3.522 6.871-6.871c.26-.26.689-.251.938.02.234.256.226.655-.019.9l-7.33 7.33c-.253.252-.667.252-.92 0l-3.982-3.982c-.253-.253-.252-.666 0-.919.252-.253.667-.253.919 0z" fill="currentColor" fill-rule="evenodd"/></svg><span><b class="mono">npm i meya-icons</b><small>The free set as an npm package</small></span></li>
-          <li><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M6.803 11.223l3.523 3.522 6.871-6.871c.26-.26.689-.251.938.02.234.256.226.655-.019.9l-7.33 7.33c-.253.252-.667.252-.92 0l-3.982-3.982c-.253-.253-.252-.666 0-.919.252-.253.667-.253.919 0z" fill="currentColor" fill-rule="evenodd"/></svg><span><b><a href="https://www.figma.com/community/plugin/1685393903679180914" target="_blank" rel="noopener">Free Figma plugin</a></b><small>Place icons straight onto your canvas</small></span></li>
-          <li><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M6.803 11.223l3.523 3.522 6.871-6.871c.26-.26.689-.251.938.02.234.256.226.655-.019.9l-7.33 7.33c-.253.252-.667.252-.92 0l-3.982-3.982c-.253-.253-.252-.666 0-.919.252-.253.667-.253.919 0z" fill="currentColor" fill-rule="evenodd"/></svg><span><b>Personal and commercial work</b><small>Credit appreciated, not required</small></span></li>
+          <li><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M6.803 11.223l3.523 3.522 6.871-6.871c.26-.26.689-.251.938.02.234.256.226.655-.019.9l-7.33 7.33c-.253.252-.667.252-.92 0l-3.982-3.982c-.253-.253-.252-.666 0-.919.252-.253.667-.253.919 0z" fill="currentColor" fill-rule="evenodd"/></svg><span>2,454 icons</span></li>
+          <li><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M6.803 11.223l3.523 3.522 6.871-6.871c.26-.26.689-.251.938.02.234.256.226.655-.019.9l-7.33 7.33c-.253.252-.667.252-.92 0l-3.982-3.982c-.253-.253-.252-.666 0-.919.252-.253.667-.253.919 0z" fill="currentColor" fill-rule="evenodd"/></svg><span>Copy as SVG or React</span></li>
+          <li><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M6.803 11.223l3.523 3.522 6.871-6.871c.26-.26.689-.251.938.02.234.256.226.655-.019.9l-7.33 7.33c-.253.252-.667.252-.92 0l-3.982-3.982c-.253-.253-.252-.666 0-.919.252-.253.667-.253.919 0z" fill="currentColor" fill-rule="evenodd"/></svg><span><a href="https://www.npmjs.com/package/meya-icons" target="_blank" rel="noopener">npm package</a></span></li>
+          <li><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M6.803 11.223l3.523 3.522 6.871-6.871c.26-.26.689-.251.938.02.234.256.226.655-.019.9l-7.33 7.33c-.253.252-.667.252-.92 0l-3.982-3.982c-.253-.253-.252-.666 0-.919.252-.253.667-.253.919 0z" fill="currentColor" fill-rule="evenodd"/></svg><span><a href="https://www.figma.com/community/plugin/1685393903679180914" target="_blank" rel="noopener">Figma plugin</a></span></li>
         </ul>
-        <div class="plan-foot"><a class="pill pill-white" href="./#icons">Browse free icons</a></div>
       </div>
     </div>
 
-    <ul class="proof">
-      <li><a href="https://github.com/nazmijavier/meya-icons" target="_blank" rel="noopener"><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M11.35 14.331v-4.744h-2.448c-.277 0-.554 0-.831.005-.089.002-.177.004-.266.008-.06.003-.122.003-.18.017-.128.029-.243.098-.358.158-.195.102-.361.191-.533.333-.134.111-.255.239-.359.379-.079.106-.169.243-.219.364-.113.274-.151.896-.17 1.194-.047.761-.056 1.524-.06 2.286.408.101.779.31 1.087.594.647.594.934 1.382.829 2.254-.077.642-.39 1.193-.874 1.618-.479.421-1.056.63-1.692.63-.648 0-1.233-.217-1.716-.651-.471-.423-.775-.965-.851-1.597-.104-.872.182-1.66.829-2.254.309-.284.68-.493 1.088-.594.001-.44.005-.881.014-1.321.009-.441.023-.883.062-1.323.029-.333.07-.668.149-.994.067-.273.149-.464.295-.705.245-.406.569-.759.955-1.033.168-.12.346-.219.529-.314.244-.127.48-.246.753-.301.214-.044.438-.042.656-.046.288-.006.575-.007.863-.007h2.448v-3.063c0-.357.293-.65.65-.65.357 0 .65.293.65.65v3.063h2.448c.287 0 .575.001.863.007.217.004.442.002.656.046.273.055.509.174.753.301.182.095.361.194.528.314.387.274.711.627.956 1.033.145.241.228.432.294.705.08.326.121.661.15.994.039.44.053.882.062 1.323.009.44.012.881.014 1.321.408.101.779.31 1.088.594.647.594.933 1.382.829 2.254-.078.642-.391 1.193-.874 1.618-.479.421-1.057.63-1.693.63-.648 0-1.233-.217-1.715-.651-.471-.423-.775-.965-.851-1.597-.105-.872.181-1.66.828-2.254.309-.284.68-.493 1.087-.594-.003-.762-.012-1.525-.059-2.286-.019-.298-.057-.92-.17-1.194-.053-.128-.153-.277-.237-.387-.1-.131-.214-.251-.341-.356-.172-.142-.338-.231-.533-.333-.115-.06-.231-.129-.358-.158-.058-.014-.12-.014-.18-.017-.089-.004-.177-.006-.266-.008-.277-.005-.554-.005-.831-.005h-2.448v4.744c.408.101.779.31 1.088.594.647.594.933 1.382.828 2.254-.077.642-.39 1.193-.874 1.618-.478.421-1.056.63-1.692.63-.648 0-1.233-.217-1.716-.651-.471-.423-.775-.965-.85-1.597-.105-.872.181-1.66.828-2.254.309-.284.68-.493 1.088-.594zm-6.984 1.6c.315-.315.745-.439 1.181-.35.406.082.762.384.921.766.162.392.116.868-.127 1.217-.249.357-.629.563-1.065.563-.361 0-.682-.139-.932-.399-.109-.115-.2-.247-.26-.394-.061-.146-.091-.304-.094-.462-.008-.361.121-.686.376-.941zm6.724 0c.247-.247.561-.377.91-.377.349 0 .662.13.909.377.247.247.377.56.377.909 0 .35-.13.663-.377.91-.247.247-.56.377-.909.377-.349 0-.663-.13-.91-.377-.246-.247-.376-.56-.376-.91 0-.349.13-.662.376-.909zm6.725 0c.315-.315.744-.439 1.18-.35.406.082.763.384.921.766.163.392.117.868-.126 1.217-.249.357-.63.563-1.066.563-.361 0-.681-.139-.931-.399-.11-.115-.2-.247-.261-.394-.06-.146-.09-.304-.094-.462-.007-.361.122-.686.377-.941z" fill="currentColor" fill-rule="evenodd"/></svg>MIT open source on GitHub</a></li>
-      <li><a href="https://www.npmjs.com/package/meya-icons" target="_blank" rel="noopener"><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M4.012 3.297l2.2 1.8c.316.259.315.748 0 1.006l-2.2 1.8c-.285.233-.712.181-.932-.113-.208-.278-.16-.674.108-.893l1.586-1.297-1.586-1.297c-.276-.226-.317-.638-.091-.915.226-.276.638-.317.915-.091zm4.588 1.653h11.8c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-11.8c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65zm-4.588 4.747 2.2 1.8c.316.259.315.748 0 1.006l-2.2 1.8c-.277.226-.689.185-.915-.091-.226-.277-.185-.689.091-.915l1.586-1.297-1.586-1.297c-.276-.226-.317-.638-.091-.915.226-.276.638-.317.915-.091zm4.588 1.653h7c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-7c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65zm-4.588 4.747 2.2 1.8c.316.259.316.748 0 1.006l-2.2 1.8c-.285.233-.712.181-.932-.113-.208-.278-.16-.674.108-.893l1.586-1.297-1.586-1.297c-.276-.226-.317-.638-.091-.915.226-.276.638-.317.915-.091zm5.088.303h1.6c.275 0 .5.225.5.5v3c0 .275-.225.5-.5.5h-1.6c-.275 0-.5-.225-.5-.5v-3c0-.275.225-.5.5-.5z" fill="currentColor" fill-rule="evenodd"/></svg><span class="mono">npm i meya-icons</span></a></li>
-      <li><a href="https://www.figma.com/community/plugin/1685393903679180914" target="_blank" rel="noopener"><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M17.409 3.762l2.829 2.829c.336.336.512.762.512 1.237 0 .475-.176.901-.512 1.237l-.955.955c-.336.336-.762.513-1.237.513-.475 0-.902-.177-1.238-.513l-2.828-2.828c-.336-.336-.513-.763-.513-1.238 0-.475.177-.901.513-1.237l.954-.955c.337-.336.763-.512 1.238-.512.475 0 .901.176 1.237.512zm-.919.919c-.176-.176-.46-.176-.636 0l-.955.955c-.176.176-.176.46 0 .636l2.828 2.829c.176.176.461.176.637 0l.955-.955c.175-.176.176-.46 0-.636zm-5.776 2.929c.242-.456.629-.73 1.139-.807.511-.077.961.072 1.327.437l3.58 3.58c.365.366.514.816.437 1.327-.077.51-.351.897-.807 1.139l-8.477 4.491c-.485.257-1.082.167-1.47-.221-.387-.387-.477-.984-.22-1.469l4.491-8.477zm1.149.609-1.375 2.595c.379-.196.824-.253 1.244-.188.414.065.786.266 1.081.561.302.302.505.686.565 1.11.058.412 0 .844-.192 1.215l2.595-1.375c.15-.079.179-.278.06-.397l-3.581-3.581c-.119-.119-.318-.089-.397.06zm-.959 4.877c.274.274.716.274.99 0 .274-.274.274-.716 0-.99-.274-.274-.716-.274-.99 0-.274.274-.274.716 0 .99zm-1.492-.252c.025.222.086.439.185.639l-1.114 1.114zm-.009 2.673 1.114-1.114c.2.099.417.16.639.185z" fill="currentColor" fill-rule="evenodd"/></svg>Free Figma plugin</a></li>
-      <li><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M4.8 4.55h14.4c.834 0 1.567.304 2.157.893.589.59.893 1.323.893 2.157v8.8c0 .834-.304 1.567-.893 2.157-.59.589-1.323.893-2.157.893h-14.4c-.834 0-1.567-.304-2.157-.893-.589-.59-.893-1.323-.893-2.157v-8.8c0-.834.304-1.567.893-2.157.59-.589 1.323-.893 2.157-.893zm0 1.3c-.475 0-.901.177-1.237.513-.336.336-.513.762-.513 1.237v8.8c0 .475.177.901.513 1.237.336.336.762.513 1.237.513h14.4c.475 0 .901-.177 1.237-.513.336-.336.513-.762.513-1.237v-8.8c0-.475-.177-.901-.513-1.237-.336-.336-.762-.513-1.237-.513zm13.747 1.103c.587.588 1.01 1.307 1.193 2.121.18.803.145 1.694-.119 2.475-.207.613-.56 1.166-1.008 1.63-.142.148-.268.241-.48.256-.186.014-.373-.056-.506-.188-.207-.207-.249-.537-.1-.789.059-.102.151-.179.229-.266.114-.127.219-.262.312-.405.314-.485.472-1.049.481-1.624.011-.608-.138-1.21-.465-1.725-.097-.152-.207-.296-.328-.43-.054-.06-.114-.115-.166-.176-.086-.102-.139-.23-.151-.363-.051-.601.681-.943 1.108-.516zm-12.147.797h2.4c.448 0 .85.166 1.167.483.317.317.483.719.483 1.167v1.4c0 .448-.166.85-.483 1.167-.317.317-.719.483-1.167.483h-2.4c-.448 0-.85-.166-1.167-.483-.317-.317-.483-.719-.483-1.167v-1.4c0-.448.166-.85.483-1.167.317-.317.719-.483 1.167-.483zm10.291.507c.924.647 1.226 1.881.705 2.882-.163.312-.396.582-.681.787-.145.104-.317.154-.495.127-.174-.026-.334-.125-.435-.27-.162-.231-.153-.549.02-.772.079-.101.192-.161.282-.251.145-.144.233-.332.256-.536.029-.256-.03-.519-.197-.72-.045-.053-.096-.102-.151-.145-.03-.024-.063-.045-.093-.07-.137-.114-.223-.284-.233-.463-.031-.539.578-.879 1.022-.569zm-10.291.793c-.194 0-.35.156-.35.35v1.4c0 .194.156.35.35.35h2.4c.194 0 .35-.156.35-.35v-1.4c0-.194-.156-.35-.35-.35zm-1 5.5h6c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-6c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65z" fill="currentColor" fill-rule="evenodd"/></svg>Checkout by Polar</li>
-    </ul>
 
     <section id="styles" aria-labelledby="styles-title">
       <h2 class="center" id="styles-title">See every style before you buy</h2>
@@ -879,42 +835,22 @@ button.acct-open { border: 0; background: none; font-family: inherit; white-spac
   const fmt = (x) => cur() === "idr"
     ? "Rp" + Math.round(x).toLocaleString("id-ID")
     : "$" + (Number.isInteger(x) ? x.toLocaleString("en-US") : x.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-  // rounded to cents (USD) or to Rp1.000 (IDR); "≈" only when rounding changed the value
-  const approx = (x) => {
-    const r = cur() === "idr" ? Math.round(x / 1000) * 1000 : Math.round(x * 100) / 100;
-    return (Math.abs(r - x) > 1e-9 ? "≈ " : "") + fmt(r);
-  };
   let seats = 1;
+  // The card shows the total for the chosen seats; how a team price is worked out is in the FAQ.
   function show() {
-    const n = seats, list = total(n), now = first(list), R = RATES[cur()], per = OFF ? "first year" : "a year";
+    const n = seats, list = total(n), now = first(list), per = OFF ? "first year" : "a year";
+    const who = n === 1 ? "" : `${n} seats · `;
     $("#seat-n").textContent = n + (n === 1 ? " seat" : " seats");
     $("#pro-was").textContent = fmt(list);
     $("#pro-price").textContent = fmt(now);
-    $("#pro-unit").textContent = per;
-    $("#pro-sub").textContent = OFF
-      ? (n === 1 ? `${approx(now / 12)} a month in year one` : `${approx(now / n)} a seat in year one`) + ` · then ${fmt(list)} a year`
-      : n === 1 ? `${approx(list / 12)} a month, billed yearly` : `${approx(list / n)} a seat, billed yearly`;
-    $("#team-one").hidden = n > 1;
-    $("#team-rows").hidden = n === 1;
-    if (n > 1) {
-      const k = [1, Math.min(Math.max(n - 1, 0), 4), Math.max(n - 5, 0)];
-      document.querySelectorAll("#team-rows li").forEach((li) => {
-        const t = +li.dataset.tier;
-        li.lastElementChild.textContent = t === 0 ? fmt(R[0]) : k[t] ? `${k[t]} × ${fmt(R[t])}` : `${fmt(R[t])} each`;
-        li.classList.toggle("off", !k[t]);
-      });
-      $("#seat-save").textContent = `Team rates save ${fmt(n * R[0] - list)} a year compared with ${n} seats at ${fmt(R[0])}.`;
-    }
+    $("#pro-sub").textContent = who + (OFF ? `${n === 1 ? "F" : "f"}irst year, then ${fmt(list)} a year` : `${n === 1 ? "A" : "a"} year`);
     $("#seat-max").hidden = n < MAX;
-    $("#get-pro").textContent = `Get Pro · ${fmt(now)} ${per}`;
-    $("#bar-price").textContent = (n === 1 ? "" : `${n} seats · `) + `${fmt(now)} ${per}`;
+    $("#bar-price").textContent = who + `${fmt(now)} ${per}`;
     $("#seat-summary").textContent = `${n} ${n === 1 ? "seat" : "seats"}. ` + (OFF ? `${fmt(now)} for the first year, then ${fmt(list)} a year.` : `${fmt(list)} a year.`);
-    document.querySelectorAll(".preset").forEach((p) => p.setAttribute("aria-pressed", String(+p.dataset.seats === n)));
     $("#seat-down").disabled = n <= 1; $("#seat-up").disabled = n >= MAX;
   }
   $("#seat-down").addEventListener("click", () => { seats = Math.max(1, seats - 1); show(); });
   $("#seat-up").addEventListener("click", () => { seats = Math.min(MAX, seats + 1); show(); });
-  document.querySelectorAll(".preset").forEach((p) => p.addEventListener("click", () => { seats = +p.dataset.seats; show(); }));
   show();
   // the head script guessed the currency from the time zone; the visitor's country settles it
   fetch("/api/geo").then((r) => (r.ok ? r.json() : null)).then((g) => {
