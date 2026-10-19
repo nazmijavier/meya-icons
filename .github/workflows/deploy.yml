@@ -36,6 +36,8 @@ jobs:
     # only this branch goes live: main still has files that must not
     if: github.ref == 'refs/heads/claude/continue-session-012dkbuoexzgfm3ew4ku9qxr-thmfk3'
     runs-on: ubuntu-latest
+    # a step that hangs must not hold the queue (the custom-domain check may wait 15 minutes for DNS)
+    timeout-minutes: 45
     env:
       READY: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
       TASK: ${{ inputs.task || 'deploy' }}
@@ -56,6 +58,7 @@ jobs:
       # wrangler and its whole dependency tree as package-lock.json pins them, installed with no secret around
       - name: Install wrangler
         if: env.READY == 'true'
+        timeout-minutes: 10
         run: npm ci --prefix .github/deploy --no-audit --no-fund
       - name: Cloudflare account
         if: env.READY == 'true'
@@ -72,11 +75,13 @@ jobs:
         run: node scripts/cloudflare.mjs version
       - name: Deploy the Worker
         if: env.READY == 'true' && env.TASK == 'deploy'
+        timeout-minutes: 10
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: '"$WRANGLER_BIN" deploy'
       - name: Worker secrets
         if: env.READY == 'true' && (env.TASK == 'deploy' || env.TASK == 'secrets')
+        timeout-minutes: 10
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           POLAR_ORG_ID: ${{ secrets.POLAR_ORG_ID }}
@@ -88,6 +93,7 @@ jobs:
       - name: Check the workers.dev copy
         id: dev
         if: env.READY == 'true' && env.TASK != 'status' && env.TASK != 'rollback'
+        timeout-minutes: 10
         shell: bash
         run: |
           set +e
@@ -120,6 +126,7 @@ jobs:
       - name: Check icons.meyalab.com
         id: domain
         if: env.READY == 'true' && env.ON_WORKER == '1'
+        timeout-minutes: 30
         shell: bash
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -139,6 +146,7 @@ jobs:
       # a deploy whose copy fails its checks does not stay live
       - name: Put the previous version back
         if: failure() && env.TASK == 'deploy' && env.PREVIOUS_VERSION != '' && (steps.dev.outcome == 'failure' || steps.domain.outcome == 'failure')
+        timeout-minutes: 10
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: '"$WRANGLER_BIN" rollback "$PREVIOUS_VERSION" --message "Checks failed after deploy" --yes'
