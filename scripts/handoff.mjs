@@ -5,7 +5,8 @@
 // once the run ends, so the sealed file stays unreadable.
 //   node scripts/handoff.mjs seal <public key> < secrets.json > .github/handoff/<run id>.sealed
 //   node scripts/handoff.mjs receive   (in the workflow)
-// Only POLAR_ACCESS_TOKEN and PRO_GITHUB_TOKEN are accepted, and each is checked with Polar or GitHub first.
+// Only POLAR_ACCESS_TOKEN and PRO_GITHUB_TOKEN are accepted, and each is checked with Polar or GitHub first: one
+// they refuse is not set; one they could not be asked about (no answer) is set, with a warning.
 import crypto from "node:crypto";
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
@@ -45,9 +46,27 @@ function fail(why) {
   process.exit(1);
 }
 
-// Does the token do what the site needs? Names and HTTP statuses only are printed, never a value.
+// Does the token do what the site needs? "ok", "unknown: ..." (no answer) or why it was refused. Names and HTTP
+// statuses only are printed, never a value.
+class NoAnswer extends Error {}
 async function works(name, value) {
-  const get = (url, auth) => fetch(url, { headers: { Authorization: `Bearer ${auth}`, Accept: "application/json", "User-Agent": "meya-icons-handoff" }, signal: AbortSignal.timeout(20000) });
+  try { return await check(name, value); } catch (e) {
+    if (e instanceof NoAnswer) return `unknown: ${e.message}`;
+    throw e;
+  }
+}
+async function check(name, value) {
+  // two tries of 30 seconds each (HANDOFF_CHECK_MS in tests); a refusal is an answer, no answer is not
+  const wait = Number(process.env.HANDOFF_CHECK_MS || 30000);
+  const get = async (url, auth) => {
+    for (let i = 0; ; i++) {
+      try {
+        return await fetch(url, { headers: { Authorization: `Bearer ${auth}`, Accept: "application/json", "User-Agent": "meya-icons-handoff" }, signal: AbortSignal.timeout(wait) });
+      } catch (e) {
+        if (i === 1) throw new NoAnswer(`no answer from ${new URL(url).host} (${e.name === "TimeoutError" ? "timed out" : e.message})`);
+      }
+    }
+  };
   if (name === "PRO_GITHUB_TOKEN") {
     const repo = process.env.PRO_REPO || "nazmijavier/meya-icons-pro";
     const r = await get(`${process.env.GITHUB_API_URL || "https://api.github.com"}/repos/${repo}`, value);
@@ -96,8 +115,9 @@ async function receive() {
     if (!ACCEPTED[name]) { console.log(`Skipped ${name}: not a secret this hand-off sets`); continue; }
     if (!ACCEPTED[name].test(value)) { console.log(`Skipped ${name}: not shaped like one`); continue; }
     const verdict = await works(name, value);
-    if (verdict !== "ok") { console.log(`Skipped ${name}: ${verdict}`); continue; }
-    console.log(`${name} works`);
+    if (verdict.startsWith("unknown: ")) console.log(`::warning::${name} could not be checked, ${verdict.slice(9)}: set anyway`);
+    else if (verdict !== "ok") { console.log(`Skipped ${name}: ${verdict}`); continue; }
+    else console.log(`${name} works`);
     put[name] = value;
   }
   if (!Object.keys(put).length) { await status("failure", `run ${GITHUB_RUN_ID}: nothing usable`); fail("no usable secret arrived"); }
@@ -109,5 +129,17 @@ async function receive() {
 
 const [command, arg] = process.argv.slice(2);
 if (command === "seal") process.stdout.write(seal(arg, fs.readFileSync(0, "utf8")));
-else if (command === "receive") await receive().catch((e) => fail(e.message));
+else if (command === "receive") {
+  await receive().catch(async (e) => {
+    // leave the published status saying it failed, not pending
+    const { GITHUB_TOKEN, GITHUB_REPOSITORY, GITHUB_RUN_ID, GITHUB_SHA } = process.env;
+    await fetch(`${process.env.GITHUB_API_URL || "https://api.github.com"}/repos/${GITHUB_REPOSITORY}/statuses/${GITHUB_SHA}`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${GITHUB_TOKEN}`, Accept: "application/vnd.github+json", "Content-Type": "application/json", "User-Agent": "meya-icons-handoff" },
+      body: JSON.stringify({ state: "failure", context: "meya-icons/handoff", description: `run ${GITHUB_RUN_ID}: failed` }),
+      signal: AbortSignal.timeout(20000),
+    }).catch(() => {});
+    fail(e.message);
+  });
+}
 else if (import.meta.url === `file://${process.argv[1]}`) fail("usage: node scripts/handoff.mjs seal <public key> < secrets.json | receive");
