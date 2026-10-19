@@ -4,8 +4,9 @@ name: Deploy
 #   push to the branch below, or task "deploy": Pro guard, wrangler deploy, Worker secrets, then checks of the
 #     deployed copy (and of icons.meyalab.com once it is served by the Worker)
 #   task "status": how icons.meyalab.com is served
-#   task "cutover": sends icons.meyalab.com to the Worker with no gap, then checks it; moves it back if checks fail
-#   task "rollback": sends icons.meyalab.com back to the old host
+#   task "cutover": checks the workers.dev copy, sends icons.meyalab.com to the Worker with no gap, then checks it;
+#     if those checks fail, it undoes what it changed
+#   task "rollback": undoes the cutover, then waits for the old host to answer again
 # Needs the repository secret CLOUDFLARE_API_TOKEN (see scripts/cloudflare.mjs for its permissions). Optional
 # repository secrets POLAR_ORG_ID, POLAR_PRO_BENEFIT_ID, POLAR_ACCESS_TOKEN and PRO_GITHUB_TOKEN are copied to the
 # Worker. Only this branch deploys: main still has files that must not go live.
@@ -23,8 +24,9 @@ on:
 permissions:
   contents: read
 
+# a rollback never waits behind a deploy or a cutover
 concurrency:
-  group: deploy
+  group: ${{ inputs.task == 'rollback' && 'rollback' || 'deploy' }}
   cancel-in-progress: false
 
 jobs:
@@ -53,11 +55,7 @@ jobs:
         run: node scripts/guard.mjs
       - name: Deploy the Worker
         if: env.READY == 'true' && env.TASK == 'deploy'
-        shell: bash
-        run: |
-          npx --yes wrangler@4.151.1 deploy 2>&1 | tee deploy.log
-          url=$(grep -oE 'https://[a-z0-9.-]+\.workers\.dev' deploy.log | head -1 || true)
-          echo "WORKERS_URL=$url" >> "$GITHUB_ENV"
+        run: npx --yes wrangler@4.151.1 deploy
       - name: Worker secrets
         if: env.READY == 'true' && env.TASK == 'deploy'
         env:
@@ -66,18 +64,26 @@ jobs:
           POLAR_ACCESS_TOKEN: ${{ secrets.POLAR_ACCESS_TOKEN }}
           PRO_GITHUB_TOKEN: ${{ secrets.PRO_GITHUB_TOKEN }}
         run: node scripts/cloudflare.mjs secrets
+      # a cutover only moves the domain to a Worker that passes these checks
       - name: Check the workers.dev copy
-        if: env.READY == 'true' && env.TASK == 'deploy' && env.WORKERS_URL != ''
+        if: env.READY == 'true' && (env.TASK == 'deploy' || env.TASK == 'cutover')
         run: node scripts/smoke.mjs "$WORKERS_URL"
       - name: Move icons.meyalab.com to the Worker
         if: env.READY == 'true' && env.TASK == 'cutover'
         run: node scripts/cloudflare.mjs cutover
       - name: Move icons.meyalab.com back
         if: env.READY == 'true' && env.TASK == 'rollback'
-        run: node scripts/cloudflare.mjs rollback
+        run: |
+          node scripts/cloudflare.mjs rollback
+          SMOKE_EXPECT=old SMOKE_WAIT=600 node scripts/smoke.mjs https://icons.meyalab.com
       - name: Status
         if: env.READY == 'true'
-        run: node scripts/cloudflare.mjs status
+        run: |
+          node scripts/cloudflare.mjs status
+          # what the rest of the internet sees (all public)
+          echo "Name servers: $(dig +short NS meyalab.com | tr '\n' ' ')"
+          echo "icons.meyalab.com resolves to: $(dig +short icons.meyalab.com | tr '\n' ' ')"
+          curl -sSI --max-time 15 https://icons.meyalab.com/ | grep -iE '^(HTTP|server|x-vercel-id|cf-ray|location)' || true
       - name: Check icons.meyalab.com
         if: env.READY == 'true' && env.ON_WORKER == '1'
         shell: bash
@@ -86,8 +92,10 @@ jobs:
           # wait up to 15 minutes for resolvers that still hold the old answer
           SMOKE_WAIT=900 node scripts/smoke.mjs https://icons.meyalab.com
           code=$?
-          if [ "$code" = 1 ] && [ "$TASK" = cutover ]; then
-            echo "::error::icons.meyalab.com failed its checks on the Worker, so it goes back to the old host"
+          # undo only what this run changed: a re-run of a finished cutover never sends a live site back
+          if [ "$code" = 1 ] && [ "$TASK" = cutover ] && [ "$CUTOVER_CHANGED" = 1 ]; then
+            echo "::error::icons.meyalab.com failed its checks on the Worker, so the cutover is undone"
             node scripts/cloudflare.mjs rollback
+            SMOKE_EXPECT=old SMOKE_WAIT=600 node scripts/smoke.mjs https://icons.meyalab.com
           fi
           exit $code

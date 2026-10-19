@@ -6,7 +6,8 @@
 //                                         POLAR_ORG_ID, POLAR_PRO_BENEFIT_ID, POLAR_ACCESS_TOKEN, PRO_GITHUB_TOKEN are set
 //   node scripts/cloudflare.mjs status    how icons.meyalab.com is served
 //   node scripts/cloudflare.mjs cutover   sends icons.meyalab.com to the Worker: https only, a route, a proxied record
-//   node scripts/cloudflare.mjs rollback  removes the route, so icons.meyalab.com goes back to the old host
+//   node scripts/cloudflare.mjs rollback  undoes exactly what cutover changed, so icons.meyalab.com goes back
+// Cutover marks each DNS record it changes in the record's comment; rollback reverses only marked records.
 // The repository is public and so are its workflow logs: ids are masked, secret values are never printed.
 import crypto from "node:crypto";
 import { execFileSync } from "node:child_process";
@@ -19,16 +20,20 @@ const WORKER = fs.readFileSync(new URL("../wrangler.jsonc", import.meta.url), "u
 // the same wrangler as the deploy step in deploy.yml
 const WRANGLER = process.env.WRANGLER_BIN ? [process.env.WRANGLER_BIN] : ["npx", "--yes", "wrangler@4.151.1"];
 const PRO_SECRETS = ["POLAR_ORG_ID", "POLAR_PRO_BENEFIT_ID", "POLAR_ACCESS_TOKEN", "PRO_GITHUB_TOKEN"];
+// what cutover writes in the comment of a record it changed (Cloudflare keeps up to 100 characters)
+const WAS_DNS_ONLY = "meya-icons cutover: was DNS only", PLACEHOLDER = "meya-icons cutover: placeholder";
 const ACTIONS = !!process.env.GITHUB_ACTIONS;
 
 function fail(why) {
   console.log(ACTIONS ? `::error::${why}` : `error: ${why}`);
   process.exit(1);
 }
+const warn = (why) => console.log(ACTIONS ? `::warning::${why}` : `warning: ${why}`);
 const mask = (v) => { if (ACTIONS && v) console.log(`::add-mask::${v}`); };
 const setEnv = (k, v) => { if (process.env.GITHUB_ENV) fs.appendFileSync(process.env.GITHUB_ENV, `${k}=${v}\n`); };
 
 async function cf(method, path, body) {
+  const where = `${method} ${path.split("?")[0].replace(/[0-9a-f]{32}/g, "…")}`;
   let r;
   try {
     r = await fetch(API + path, {
@@ -38,12 +43,12 @@ async function cf(method, path, body) {
       signal: AbortSignal.timeout(30000),
     });
   } catch (e) {
-    throw new Error(`${method} ${path.split("?")[0].replace(/[0-9a-f]{32}/g, "…")}: ${e.message}`);
+    throw new Error(`${where}: ${e.message}`);
   }
   const j = await r.json().catch(() => null);
   if (!j || !j.success) {
     const errors = (j && j.errors) || [];
-    const e = new Error(`${method} ${path.split("?")[0].replace(/[0-9a-f]{32}/g, "…")}: HTTP ${r.status} ${errors.map((x) => `${x.code} ${x.message}`).join("; ")}`);
+    const e = new Error(`${where}: HTTP ${r.status} ${errors.map((x) => `${x.code} ${x.message}`).join("; ")}`);
     e.codes = errors.map((x) => x.code);
     throw e;
   }
@@ -57,14 +62,19 @@ async function context() {
   const zone = zones.find((z) => z.name === ZONE);
   if (!zone) fail(`the API token cannot see ${ZONE}: give it Zone > Zone > Read on that zone`);
   mask(zone.id); mask(zone.account.id);
-  return { zone: zone.id, account: zone.account.id };
+  return { zone: zone.id, account: zone.account.id, status: zone.status, type: zone.type, ns: zone.name_servers || [] };
 }
 
-const records = async (c) => (await cf("GET", `/zones/${c.zone}/dns_records?name=${HOST}`)).filter((r) => r.name === HOST);
+const WEB = ["A", "AAAA", "CNAME"];
+const named = async (c, name) => (await cf("GET", `/zones/${c.zone}/dns_records?name=${encodeURIComponent(name)}&per_page=100`)).filter((r) => r.name === name);
+const records = (c) => named(c, HOST);
 const routes = async (c) => (await cf("GET", `/zones/${c.zone}/workers/routes`)).filter((r) => r.pattern === PATTERN);
 const deployed = async (c) => (await cf("GET", `/accounts/${c.account}/workers/scripts`)).some((s) => s.id === WORKER);
 const setting = async (c, id) => (await cf("GET", `/zones/${c.zone}/settings/${id}`)).value;
 const oldHost = (r) => /vercel/i.test(r.content) || /^76\.76\.21\./.test(r.content);
+const show = (r) => `${r.type} ${r.content} (${r.proxied ? "proxied" : "DNS only"}, ttl ${r.ttl === 1 ? "auto" : r.ttl})`;
+const marked = (r, mark) => (r.comment || "").startsWith(mark);
+const unmark = (r) => (r.comment || "").slice(WAS_DNS_ONLY.length).replace(/^; /, "");
 
 async function prepare() {
   const c = await context();
@@ -79,6 +89,7 @@ async function prepare() {
     if (!sub) fail("could not set up a workers.dev name: open Workers & Pages once in the Cloudflare dashboard");
     console.log(`Set up the account's workers.dev name: ${sub}.workers.dev`);
   }
+  setEnv("WORKERS_URL", `https://${WORKER}.${sub}.workers.dev`);
   console.log(`Cloudflare account found; ${ZONE} zone visible; workers.dev name ${sub}.workers.dev`);
 }
 
@@ -104,45 +115,64 @@ async function secrets() {
 
 async function status() {
   const c = await context();
-  const [isDeployed, recs, rts, https, ssl] = await Promise.all([deployed(c), records(c), routes(c), setting(c, "always_use_https"), setting(c, "ssl")]);
-  const live = rts.some((r) => r.script === WORKER) && recs.some((r) => r.proxied);
+  const [isDeployed, recs, wild, rts, https, ssl] = await Promise.all([deployed(c), records(c), named(c, `*.${ZONE}`), routes(c), setting(c, "always_use_https"), setting(c, "ssl")]);
+  const web = recs.filter((r) => WEB.includes(r.type)), wildWeb = wild.filter((r) => WEB.includes(r.type));
+  // the record that answers for the name: its own, or else the wildcard
+  const answering = web.length ? web : wildWeb;
+  const live = rts.some((r) => r.script === WORKER) && answering.some((r) => r.proxied);
+  console.log(`Zone ${ZONE}: ${c.status}, ${c.type} setup, Cloudflare name servers ${c.ns.join(", ") || "none"}`);
   console.log(`Worker ${WORKER}: ${isDeployed ? "deployed" : "not deployed"}`);
-  console.log(`DNS ${HOST}: ${recs.map((r) => `${r.type} ${r.content} (${r.proxied ? "proxied" : "DNS only"}, ttl ${r.ttl === 1 ? "auto" : r.ttl})`).join("; ") || "no record"}`);
+  console.log(`DNS ${HOST}: ${recs.map(show).join("; ") || "no record of its own"}`);
+  console.log(`DNS *.${ZONE}: ${wild.map(show).join("; ") || "no wildcard"}`);
   console.log(`Route ${PATTERN}: ${rts.map((r) => r.script || "no Worker").join(", ") || "none"}`);
   console.log(`Always Use HTTPS: ${https}; SSL mode: ${ssl}`);
-  console.log(live ? `${HOST} is served by the ${WORKER} Worker` : `${HOST} is still served by the old host`);
+  console.log(live ? `${HOST} is served by the ${WORKER} Worker` : `${HOST} is not served by the Worker`);
   setEnv("ON_WORKER", live ? "1" : "0");
 }
 
 async function cutover() {
   const c = await context();
+  if (c.status !== "active" || c.type !== "full") fail(`${ZONE} is ${c.status} with a ${c.type} setup on Cloudflare: its DNS must be active on Cloudflare for a route to work`);
   if (!(await deployed(c))) fail(`deploy the ${WORKER} Worker before moving ${HOST} to it`);
-  // 1. plain http goes to https before the Worker takes over: logins must never travel in clear text
+  let changed = false;
+  // 1. plain http goes to https, so logins never travel in clear text. The setting covers the whole zone, so it is
+  //    only turned on when every proxied name is covered by Cloudflare's certificate (the apex and one level down).
   if ((await setting(c, "always_use_https")) !== "on") {
-    await cf("PATCH", `/zones/${c.zone}/settings/always_use_https`, { value: "on" });
-    console.log(`Turned on Always Use HTTPS for ${ZONE}`);
+    const proxied = (await cf("GET", `/zones/${c.zone}/dns_records?proxied=true&per_page=5000`)).filter((r) => WEB.includes(r.type));
+    const deep = proxied.filter((r) => r.name.split(".").length > ZONE.split(".").length + 1);
+    if (deep.length) warn(`Always Use HTTPS left off: ${deep.length} proxied name(s) sit deeper than one level and have no edge certificate; pages still send HSTS`);
+    else {
+      await cf("PATCH", `/zones/${c.zone}/settings/always_use_https`, { value: "on" });
+      console.log(`Turned on Always Use HTTPS for ${ZONE} (${proxied.length} proxied name(s), all covered by its certificate)`);
+    }
   }
   // 2. the route first: once the record is proxied, every request must already go to the Worker
   const mine = await routes(c);
   if (!mine.length) {
     await cf("POST", `/zones/${c.zone}/workers/routes`, { pattern: PATTERN, script: WORKER });
     console.log(`Added the route ${PATTERN} → ${WORKER}`);
+    changed = true;
   } else if (mine[0].script !== WORKER) {
     await cf("PUT", `/zones/${c.zone}/workers/routes/${mine[0].id}`, { pattern: PATTERN, script: WORKER });
     console.log(`Pointed the route ${PATTERN} at ${WORKER}`);
+    changed = true;
   }
+  if (!(await routes(c)).some((r) => r.script === WORKER)) fail(`the route ${PATTERN} is gone (a rollback ran meanwhile?): DNS left as it was`);
   // 3. a proxied record, so requests reach Cloudflare: the name keeps answering throughout, no gap
-  const recs = await records(c);
-  const web = recs.filter((r) => ["A", "AAAA", "CNAME"].includes(r.type));
+  const web = (await records(c)).filter((r) => WEB.includes(r.type));
   if (!web.length) {
-    await cf("POST", `/zones/${c.zone}/dns_records`, { type: "AAAA", name: HOST, content: "100::", proxied: true, ttl: 1, comment: `served by the ${WORKER} Worker` });
+    // the name has no record of its own (a wildcard may answer for it): add one just for it
+    await cf("POST", `/zones/${c.zone}/dns_records`, { type: "AAAA", name: HOST, content: "100::", proxied: true, ttl: 1, comment: PLACEHOLDER });
     console.log(`Added a proxied record for ${HOST}`);
+    changed = true;
   }
   for (const r of web.filter((r) => !r.proxied)) {
-    await cf("PATCH", `/zones/${c.zone}/dns_records/${r.id}`, { proxied: true });
-    console.log(`Proxied the ${r.type} record ${HOST} → ${r.content} (it was DNS only, ttl ${r.ttl === 1 ? "auto" : r.ttl})`);
+    await cf("PATCH", `/zones/${c.zone}/dns_records/${r.id}`, { proxied: true, comment: [WAS_DNS_ONLY, r.comment].filter(Boolean).join("; ").slice(0, 100) });
+    console.log(`Proxied the record ${HOST} → ${show(r)}`);
+    changed = true;
   }
-  console.log(`${HOST} now goes to the ${WORKER} Worker`);
+  if (changed) setEnv("CUTOVER_CHANGED", "1");
+  console.log(changed ? `${HOST} now goes to the ${WORKER} Worker` : `${HOST} already went to the ${WORKER} Worker: nothing changed`);
 }
 
 async function rollback() {
@@ -151,11 +181,19 @@ async function rollback() {
     await cf("DELETE", `/zones/${c.zone}/workers/routes/${r.id}`);
     console.log(`Removed the route ${PATTERN} → ${WORKER}`);
   }
-  // Vercel expects browsers to reach it directly; proxied, it only works when Cloudflare talks to it over https
-  if (!["full", "strict"].includes(await setting(c, "ssl"))) {
-    for (const r of (await records(c)).filter((r) => r.proxied && oldHost(r))) {
+  const ssl = await setting(c, "ssl");
+  for (const r of await records(c)) {
+    if (marked(r, PLACEHOLDER)) {
+      // the record cutover added: without it, the name answers as before (through the wildcard, if there is one)
+      await cf("DELETE", `/zones/${c.zone}/dns_records/${r.id}`);
+      console.log(`Removed the record cutover added for ${HOST}`);
+    } else if (marked(r, WAS_DNS_ONLY)) {
+      await cf("PATCH", `/zones/${c.zone}/dns_records/${r.id}`, { proxied: false, comment: unmark(r) });
+      console.log(`Set the record ${HOST} → ${r.content} back to DNS only`);
+    } else if (r.proxied && oldHost(r) && !["full", "strict"].includes(ssl)) {
+      // proxied to Vercel over plain http, Vercel would answer with a redirect loop
       await cf("PATCH", `/zones/${c.zone}/dns_records/${r.id}`, { proxied: false });
-      console.log(`Set the ${r.type} record ${HOST} → ${r.content} back to DNS only`);
+      console.log(`Set the record ${HOST} → ${r.content} to DNS only`);
     }
   }
   console.log(`${HOST} goes back to the old host`);

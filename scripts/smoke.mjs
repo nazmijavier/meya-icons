@@ -7,21 +7,31 @@ if (!/^https?:\/\/[^/]+$/.test(base)) {
 }
 let fails = 0;
 const check = (ok, what) => { console.log(`${ok ? "ok  " : "FAIL"} ${what}`); if (!ok) fails++; };
+const note = (ok, what) => console.log(`${ok ? "ok  " : "warn"} ${what}`);
 const get = (p, opts) => fetch(base + p, { redirect: "manual", signal: AbortSignal.timeout(15000), ...opts });
 
 // Wait until the new host answers: a new workers.dev name takes a minute or two to resolve, and after a DNS change
-// some resolvers still send visitors to the old host (Vercel) for a while. Exit 3: still the old host, nothing checked.
-const WAIT = Number(process.env.SMOKE_WAIT || 180);
-let seen = "no answer";
+// some resolvers still send visitors to the old host (Vercel) for a while. The new host answering with an error is
+// not worth waiting for: after a minute the checks run and fail. Exit 3: still the old host, nothing checked.
+// SMOKE_EXPECT=old: only wait for the old host to answer again (after a rollback).
+const WAIT = Number(process.env.SMOKE_WAIT || 180), EXPECT_OLD = process.env.SMOKE_EXPECT === "old";
+let seen = "no answer", errorSince = null;
 for (let t = 0; ; t += 10) {
-  try {
-    const r = await get("/");
-    seen = r.headers.has("x-vercel-id") ? "the old host (Vercel)" : `HTTP ${r.status}`;
-    if (r.status === 200 && !r.headers.has("x-vercel-id")) break;
-  } catch (e) { seen = `no answer (${e.cause ? e.cause.code || e.cause.message : e.message})`; }
+  let a = null;
+  try { a = await get("/"); } catch (e) { seen = `no answer (${e.cause ? e.cause.code || e.cause.message : e.message})`; }
+  if (a) {
+    const old = a.headers.has("x-vercel-id");
+    seen = old ? `the old host (Vercel), HTTP ${a.status}` : `the new host, HTTP ${a.status}`;
+    if (EXPECT_OLD && old && a.status === 200) { console.log(`ok   ${base} answers from the old host again`); process.exit(0); }
+    if (!EXPECT_OLD && !old) {
+      if (a.status === 200) break;
+      errorSince ??= t;
+      if (t - errorSince >= 60) break;
+    }
+  }
   if (t >= WAIT) {
     console.error(`${base} still gives ${seen} after ${WAIT}s`);
-    process.exit(seen.startsWith("the old host") ? 3 : 1);
+    process.exit(!EXPECT_OLD && seen.startsWith("the old host") ? 3 : 1);
   }
   await new Promise((r) => setTimeout(r, 10000));
 }
@@ -29,11 +39,12 @@ for (let t = 0; ; t += 10) {
 let r = await get("/");
 check(r.status === 200 && /<title>Meya Icons/.test(await r.text()), "/ is the icon site");
 check(/max-age=\d{7,}/.test(r.headers.get("strict-transport-security") || ""), "pages send HSTS (docs/_headers)");
-// the custom domain: plain http must go to https (the zone's "Always Use HTTPS"), so keys never travel in clear text
+// the custom domain: plain http should go to https (the zone's "Always Use HTTPS"), so keys never travel in clear
+// text. Only a warning: cutover leaves that zone-wide setting off when it would break another name.
 const host = new URL(base).hostname;
 if (base.startsWith("https://") && !host.endsWith(".workers.dev")) {
   r = await fetch(`http://${host}/pricing`, { redirect: "manual", signal: AbortSignal.timeout(15000) }).catch(() => null);
-  check(r && [301, 302, 307, 308].includes(r.status) && (r.headers.get("location") || "").startsWith(`https://${host}/`), `http:// redirects to https:// (${r ? r.status : "no answer"})`);
+  note(r && [301, 302, 307, 308].includes(r.status) && (r.headers.get("location") || "").startsWith(`https://${host}/`), `http:// redirects to https:// (${r ? r.status : "no answer"})`);
 }
 r = await get("/pricing");
 check(r.status === 200 && /<title>Pricing/.test(await r.text()), "/pricing is the pricing page");
