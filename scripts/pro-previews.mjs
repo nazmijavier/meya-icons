@@ -1,6 +1,8 @@
 // Renders image previews of the PRO showcase styles (see `showcase` in styles.mjs) from ../meya-icons-pro.
 // The site shows these images instead of the vector files, so Pro icons can be browsed but not copied.
-// Usage: node scripts/pro-previews.mjs [style ...]   (no styles: every showcase style)
+// Usage: node scripts/pro-previews.mjs [--add] [style ...]   (no styles: every showcase style)
+//   --add  only the icons the previews don't have yet: they go on the end of each sprite and the rest stay as
+//          they are, so a computer without every Pro icon can still add new ones
 // Needs Playwright with Chromium: npm i -D playwright && npx playwright install chromium
 // Writes docs/pro/<style>.webp (one sprite for the grid), docs/pro/<style>/<category>/<name>.webp (large, for the
 // details sheet) and scripts/pro-previews.json, which build.mjs reads.
@@ -63,25 +65,35 @@ const manifestPath = rel("scripts/pro-previews.json");
 const manifest = fs.existsSync(manifestPath) ? JSON.parse(fs.readFileSync(manifestPath, "utf8")) : {};
 const browser = await chromium.launch();
 const page = await browser.newPage();
-const only = process.argv.slice(2);
+const ADD = process.argv.includes("--add");
+const only = process.argv.slice(2).filter((a) => a !== "--add");
 for (const st of STYLES.filter((s) => s.showcase && (!only.length || only.includes(s.id)))) {
-  const icons = previewIcons(st.id);
+  let icons = previewIcons(st.id);
   if (!icons.length) { console.log(`${st.label}: no icons in ${path.join(PRO_DIR, st.id)}, skipped`); continue; }
+  const had = ADD && manifest[st.id] ? manifest[st.id].icons : null;
+  if (had) {
+    const known = new Set(had.map(([k]) => k));
+    icons = icons.filter((i) => !known.has(i.k));
+    if (!icons.length) { console.log(`${st.label}: no new icons`); continue; }
+  }
+  const base = had ? "data:image/webp;base64," + fs.readFileSync(rel("docs/pro", `${st.id}.webp`)).toString("base64") : null;
   // One-color styles render black on transparent: the site only uses the alpha channel, as a mask filled with
   // the icon colour. Full-color styles render as they are and the site shows the image itself.
   // an animated icon's still frame is the icon without its motion
   const still = (svg) => (st.animated ? svg.replace(/<style>[\s\S]*?<\/style>\s*/, "") : svg);
   const sources = icons.map((i) => "data:image/svg+xml;base64," + Buffer.from(st.color ? still(i.svg) : still(i.svg).replace(/currentColor/g, "#000")).toString("base64"));
-  const files = await page.evaluate(async ({ sources, CELL, COLS, BIG, mark }) => {
+  const files = await page.evaluate(async ({ sources, CELL, COLS, BIG, mark, base, offset }) => {
     // full-color previews are the picture itself, so the large ones carry a watermark (pro-mark.mjs)
     const drawMark = mark && new Function(`return ${mark}`)();
     const load = (src) => new Promise((ok, no) => { const im = new Image(); im.onload = () => ok(im); im.onerror = no; im.src = src; });
     const webp = (c) => new Promise((ok) => c.toBlob((b) => { const r = new FileReader(); r.onload = () => ok(r.result.split(",")[1]); r.readAsDataURL(b); }, "image/webp", 0.8));
     const imgs = await Promise.all(sources.map(load));
     const sprite = document.createElement("canvas");
-    sprite.width = COLS * CELL; sprite.height = Math.ceil(imgs.length / COLS) * CELL;
+    sprite.width = COLS * CELL; sprite.height = Math.ceil((offset + imgs.length) / COLS) * CELL;
     const sx = sprite.getContext("2d");
-    imgs.forEach((im, k) => sx.drawImage(im, (k % COLS) * CELL, Math.floor(k / COLS) * CELL, CELL, CELL));
+    // with --add, the sprite so far, then the new cells after its last one
+    if (base) sx.drawImage(await load(base), 0, 0);
+    imgs.forEach((im, k) => sx.drawImage(im, ((offset + k) % COLS) * CELL, Math.floor((offset + k) / COLS) * CELL, CELL, CELL));
     const big = [];
     for (const im of imgs) {
       const c = document.createElement("canvas"); c.width = c.height = BIG;
@@ -91,8 +103,8 @@ for (const st of STYLES.filter((s) => s.showcase && (!only.length || only.includ
       big.push(await webp(c));
     }
     return { sprite: await webp(sprite), big };
-  }, { sources, CELL, COLS, BIG, mark: st.color ? drawMark.toString() : null });
-  fs.rmSync(rel("docs/pro", st.id), { recursive: true, force: true });
+  }, { sources, CELL, COLS, BIG, mark: st.color ? drawMark.toString() : null, base, offset: had ? had.length : 0 });
+  if (!had) fs.rmSync(rel("docs/pro", st.id), { recursive: true, force: true });
   fs.mkdirSync(rel("docs/pro"), { recursive: true });
   fs.writeFileSync(rel("docs/pro", `${st.id}.webp`), Buffer.from(files.sprite, "base64"));
   icons.forEach((i, k) => {
@@ -101,20 +113,21 @@ for (const st of STYLES.filter((s) => s.showcase && (!only.length || only.includ
     fs.writeFileSync(f, Buffer.from(files.big[k], "base64"));
   });
   if (st.animated) await moving(st, icons);
-  manifest[st.id] = { cols: COLS, icons: icons.map((i) => [i.k, i.h]) };
-  console.log(`${st.label}: ${icons.length} previews → docs/pro/${st.id}.webp and docs/pro/${st.id}/`);
+  manifest[st.id] = { cols: COLS, icons: [...(had || []), ...icons.map((i) => [i.k, i.h])] };
+  console.log(`${st.label}: ${icons.length} ${had ? "new " : ""}previews → docs/pro/${st.id}.webp and docs/pro/${st.id}/`);
 }
 await browser.close();
 fs.writeFileSync(manifestPath, JSON.stringify(manifest) + "\n");
 
 // The pricing page's few Pro samples (sampleSlots in pro.mjs), so build.mjs never reads ../meya-icons-pro. Only the
-// styles rendered in this run are refreshed; a sample whose source is missing here keeps its committed drawing.
+// styles rendered in this run are refreshed (none with --add); a sample whose source is missing here keeps its
+// committed drawing.
 const samplesPath = rel("scripts/pro-samples.json");
 const old = fs.existsSync(samplesPath) ? JSON.parse(fs.readFileSync(samplesPath, "utf8")) : {};
 const samples = {};
 for (const [st, k] of sampleSlots(STYLES.filter((s) => s.pro && s.showcase).map((s) => s.id))) {
   const key = `${st}/${k}`, f = path.join(PRO_DIR, st, `${k}.svg`);
-  if ((!only.length || only.includes(st)) && fs.existsSync(f)) samples[key] = fs.readFileSync(f, "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim();
+  if (!ADD && (!only.length || only.includes(st)) && fs.existsSync(f)) samples[key] = fs.readFileSync(f, "utf8").replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "").trim();
   else if (old[key]) samples[key] = old[key];
   else console.warn(`${key}: no drawing in ${PRO_DIR} and none committed, the pricing page shows no sample there`);
 }

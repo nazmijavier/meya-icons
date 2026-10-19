@@ -22,6 +22,7 @@ export const CATEGORIES = [
   ["weather", "Weather"],
   ["nature", "Nature"],
   ["health", "Health"],
+  ["fitness", "Fitness"],
   ["food", "Food & Drink"],
   ["home", "Home & Living"],
   ["shapes", "Shapes"],
