@@ -76,8 +76,10 @@ for (const f of files) {
 
 // With the Pro folder at hand, look for its drawings in the text files about to go public.
 if (fs.existsSync(PRO_DIR)) {
+  // every free icon is public, staged or not: a shape one of them already ships (a ground line, a circle) is no leak
   const free = new Set();
-  for (const f of files) if (/^icons\/.*\.svg$/.test(f)) for (const [, d] of read(f).toString("utf8").matchAll(/\sd="([^"]{60,})"/g)) free.add(d);
+  const freeFiles = new Set([...files, ...git("ls-files", "-z", "icons").split("\0")].filter((f) => /^icons\/.*\.svg$/.test(f)));
+  for (const f of freeFiles) if (STAGED || fs.existsSync(path.join(root, f))) for (const [, d] of read(f).toString("utf8").matchAll(/\sd="([^"]{60,})"/g)) free.add(d);
   const isSample = (k) => PRO_SAMPLES.includes(k.split(path.sep).slice(1).join("/").replace(/\.svg$/, ""));
   const pro = new Map(), sample = new Set();
   const walk = (dir) => {
