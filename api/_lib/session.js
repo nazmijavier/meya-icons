@@ -24,8 +24,8 @@ function cookieHeader(value, maxAge) {
   return `${COOKIE}=${value}; Path=/; Max-Age=${maxAge}; HttpOnly; Secure; SameSite=Lax`;
 }
 
-function read(req) {
-  const raw = (req.headers.cookie || "").split(/;\s*/).find((c) => c.startsWith(COOKIE + "="));
+function read(request) {
+  const raw = (request.headers.get("cookie") || "").split(/;\s*/).find((c) => c.startsWith(COOKIE + "="));
   if (!raw) return null;
   const [data, mac] = raw.slice(COOKIE.length + 1).split(".");
   if (!data || !mac) return null;
@@ -40,18 +40,19 @@ function read(req) {
   }
 }
 
+// The functions below write the cookie into `headers`, the response headers the caller returns.
 // who: { email, customer_id, member_id, key_id?, key_hash? } (the key fields when signed in with a license key)
-export function start(res, who) {
+export function start(headers, who) {
   const t = now();
   const s = { e: who.email || "", c: who.customer_id || null, m: who.member_id || null, chk: t, exp: t + LIFETIME() };
   if (who.key_id) { s.k = who.key_id; s.h = who.key_hash; }
   const data = b64(JSON.stringify(s));
-  res.setHeader("Set-Cookie", cookieHeader(`${data}.${sign(data)}`, LIFETIME()));
+  headers.set("Set-Cookie", cookieHeader(`${data}.${sign(data)}`, LIFETIME()));
   return s;
 }
 
-export function end(res) {
-  res.setHeader("Set-Cookie", cookieHeader("", 0));
+export function end(headers) {
+  headers.set("Set-Cookie", cookieHeader("", 0));
 }
 
 // Re-check verdicts per warm instance, so a stale cookie replayed many times does not call Polar on every request.
@@ -59,8 +60,8 @@ const rechecks = new Map(); // member or customer (+ key) -> { ok, at }
 const RECHECK_MEMO = 10 * 60 * 1000;
 
 // The signed-in Pro customer, or null. Re-checks with Polar when the last check is over a day old.
-export async function current(req, res) {
-  const s = read(req);
+export async function current(request, headers) {
+  const s = read(request);
   if (!s) return null;
   if (now() - s.chk < RECHECK || !process.env.POLAR_ACCESS_TOKEN) return s;
   const who = `${s.m || s.c}|${s.k || ""}`, memo = rechecks.get(who);
@@ -77,16 +78,16 @@ export async function current(req, res) {
     if (rechecks.size > 5000) rechecks.clear();
     rechecks.set(who, { ok, at: Date.now() });
   }
-  if (!ok) { end(res); return null; }
+  if (!ok) { end(headers); return null; }
   const fresh = { ...s, chk: now() };
   const data = b64(JSON.stringify(fresh));
-  res.setHeader("Set-Cookie", cookieHeader(`${data}.${sign(data)}`, fresh.exp - now()));
+  headers.set("Set-Cookie", cookieHeader(`${data}.${sign(data)}`, fresh.exp - now()));
   return fresh;
 }
 
 // POSTs must come from this site (the cookie is SameSite=Lax, this blocks the rest).
-export function sameOrigin(req) {
-  const origin = req.headers.origin;
+export function sameOrigin(request) {
+  const origin = request.headers.get("origin");
   if (!origin) return true;
-  try { return new URL(origin).host === req.headers.host; } catch { return false; }
+  try { return new URL(origin).host === new URL(request.url).host; } catch { return false; }
 }

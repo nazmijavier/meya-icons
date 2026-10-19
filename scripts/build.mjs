@@ -160,7 +160,7 @@ document.addEventListener("click", (e) => {
 
 // ---------- Pro login (site/account.html) ----------
 // The nav button and login dialog on the home and pricing pages. Both stay hidden until the login is configured
-// on Vercel (see api/_lib/polar.js), so the site works the same without it.
+// on the server (see api/_lib/polar.js), so the site works the same without it.
 // On phones (≤ 420 px) nav labels hide and the icon stays, as for the other nav links.
 const ACCOUNT_BUTTON = `<button type="button" class="nav-link acct-open" aria-label="Log in" hidden><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1.5c-3 0-5.5 1.6-5.5 3.6 0 .5.4.9.9.9h9.2c.5 0 .9-.4.9-.9 0-2-2.5-3.6-5.5-3.6z"/></svg><span class="label">Log in</span></button>`;
 const ACCOUNT = fs.readFileSync(rel("site/account.html"), "utf8");

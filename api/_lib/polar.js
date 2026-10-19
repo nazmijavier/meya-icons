@@ -1,4 +1,4 @@
-// Calls to Polar. Settings come from Vercel environment variables:
+// Calls to Polar. Settings come from environment variables (on Cloudflare: the Worker's Variables and Secrets):
 //   POLAR_ORG_ID          the organization's id (Polar > Settings > General)
 //   POLAR_PRO_BENEFIT_ID  the id of the "Meya Icons Pro" License Keys benefit on the Pro product (not the zip download)
 //   POLAR_ACCESS_TOKEN    an organization access token with the scopes benefits:read, license_keys:read and

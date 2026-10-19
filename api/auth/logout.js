@@ -2,9 +2,9 @@
 import { json } from "../_lib/http.js";
 import { end, sameOrigin } from "../_lib/session.js";
 
-export default function handler(req, res) {
-  if (req.method !== "POST") return json(res, 405, { error: "method" });
-  if (!sameOrigin(req)) return json(res, 403, { error: "origin" });
-  end(res);
-  json(res, 200, { signedIn: false });
+export function POST(request) {
+  if (!sameOrigin(request)) return json(403, { error: "origin" });
+  const headers = new Headers();
+  end(headers);
+  return json(200, { signedIn: false }, headers);
 }

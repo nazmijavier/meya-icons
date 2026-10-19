@@ -1,0 +1,22 @@
+// Cloudflare Workers settings for icons.meyalab.com (worker.js says what runs where).
+// Secrets (SESSION_SECRET, POLAR_*, PRO_GITHUB_TOKEN) are set in the dashboard, under the Worker's
+// Settings > Variables and Secrets; README.md lists them. The custom domain is attached there too, not here,
+// so a deploy never touches it.
+{
+  "name": "meya-icons",
+  "main": "worker.js",
+  "compatibility_date": "2026-09-01",
+  // node:crypto and Buffer for the session cookie; secrets and variables are also readable as process.env
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    // only docs/ is published: the rest of the repository never is
+    "directory": "./docs",
+    // /pricing serves pricing.html, and /pricing.html redirects to /pricing
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "none",
+    "run_worker_first": ["/api/*"]
+  },
+  // keep variables added in the dashboard when a deploy runs
+  "keep_vars": true,
+  "observability": { "enabled": true }
+}

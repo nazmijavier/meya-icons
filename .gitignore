@@ -4,3 +4,5 @@ dist/
 admin/
 meya-icons-pro/
 *.zip
+.wrangler/
+.dev.vars*

@@ -3,8 +3,9 @@ import { json } from "../_lib/http.js";
 import { API, ORG, configured } from "../_lib/polar.js";
 import { current } from "../_lib/session.js";
 
-export default async function handler(req, res) {
-  if (!configured()) return json(res, 200, { configured: false, signedIn: false });
-  const s = await current(req, res);
-  json(res, 200, { configured: true, signedIn: !!s, email: s ? s.e : null, polar: { api: API(), org: ORG() } });
+export async function GET(request) {
+  if (!configured()) return json(200, { configured: false, signedIn: false });
+  const headers = new Headers();
+  const s = await current(request, headers);
+  return json(200, { configured: true, signedIn: !!s, email: s ? s.e : null, polar: { api: API(), org: ORG() } }, headers);
 }

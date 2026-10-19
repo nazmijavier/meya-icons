@@ -177,13 +177,17 @@ node scripts/package.mjs
 
 It writes `dist/`, which is what gets published.
 
-The website is static pages in [`docs/`](./docs) plus a few Vercel functions in [`api/`](./api), served by Vercel (see [`vercel.json`](./vercel.json)):
+The website is static pages in [`docs/`](./docs) plus a few functions in [`api/`](./api), hosted on Cloudflare Workers (see [`wrangler.jsonc`](./wrangler.jsonc) and [`worker.js`](./worker.js)). Workers static assets serve `docs/` and nothing else from the repository; requests to `/api/*` run the functions:
 
 - `api/geo` tells the pricing page the visitor's country, so it shows Rupiah in Indonesia and US dollars elsewhere.
 - `api/auth/*` is the Pro login. Customers get a sign-in code from Polar by email (or use their Pro license key); the functions check with Polar that they hold the Meya Icons Pro benefit and keep a signed session cookie. Access is re-checked daily.
 - `api/pro` serves one Pro SVG at a time to signed-in customers, read from the private `meya-icons-pro` repository, so they can copy Pro icons from the site.
 
-The login stays hidden until these Vercel environment variables are set: `SESSION_SECRET` (32+ random characters), `POLAR_ORG_ID`, `POLAR_PRO_BENEFIT_ID` (the Pro product's License Keys benefit), `POLAR_ACCESS_TOKEN` (scopes `benefits:read` and `license_keys:write`) and `PRO_GITHUB_TOKEN` (fine-grained, Contents read-only on `meya-icons-pro`). Optional: `POLAR_API_URL` for Polar's sandbox, `PRO_REPO`, `PRO_REF`.
+The login stays hidden until these are set as secrets on the Worker (Cloudflare dashboard, the Worker's Settings > Variables and Secrets): `SESSION_SECRET` (32+ random characters), `POLAR_ORG_ID`, `POLAR_PRO_BENEFIT_ID` (the Pro product's License Keys benefit), `POLAR_ACCESS_TOKEN` (scopes `benefits:read` and `license_keys:write`) and `PRO_GITHUB_TOKEN` (fine-grained, Contents read-only on `meya-icons-pro`). Optional: `POLAR_API_URL` for Polar's sandbox, `PRO_REPO`, `PRO_REF`.
+
+The [Deploy](./.github/workflows/deploy.yml) workflow publishes the site: it runs the Pro guard, then `wrangler deploy`, then [`scripts/smoke.mjs`](./scripts/smoke.mjs) against the deployed copy. It needs the repository secrets `CLOUDFLARE_API_TOKEN` (Cloudflare's "Edit Cloudflare Workers" token template) and `CLOUDFLARE_ACCOUNT_ID`, and only runs from the branch it names. To run the site locally with the functions: `npx wrangler dev`, with the variables in a `.dev.vars` file (git ignores it).
+
+Each function takes a Web `Request` and returns a `Response`, the form Vercel also runs: [`vercel.json`](./vercel.json) is the previous host's setting, kept until the move to Cloudflare is finished.
 
 ## License
 

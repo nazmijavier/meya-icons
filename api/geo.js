@@ -1,7 +1,8 @@
-// The visitor's country, from Vercel's edge (x-vercel-ip-country). The pricing page uses it to show Rupiah in Indonesia
-// and US dollars elsewhere. Nothing is stored.
-export default function handler(req, res) {
-  const country = String(req.headers["x-vercel-ip-country"] || "").toUpperCase().slice(0, 2) || null;
-  res.setHeader("Cache-Control", "private, no-store");
-  res.status(200).json({ country });
+// The visitor's country: Cloudflare's request.cf.country, or Vercel's x-vercel-ip-country header. The pricing page
+// uses it to show Rupiah in Indonesia and US dollars elsewhere. Nothing is stored.
+import { json } from "./_lib/http.js";
+
+export function GET(request) {
+  const country = String(request.cf?.country || request.headers.get("x-vercel-ip-country") || "").toUpperCase().slice(0, 2) || null;
+  return json(200, { country });
 }

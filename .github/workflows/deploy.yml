@@ -1,0 +1,58 @@
+name: Deploy
+
+# Publishes the site to Cloudflare Workers (wrangler.jsonc) once the Pro guard passes, then checks the deployed copy.
+# Needs two repository secrets: CLOUDFLARE_API_TOKEN (Cloudflare's "Edit Cloudflare Workers" token template) and
+# CLOUDFLARE_ACCOUNT_ID. Only the branch below deploys: main still has files that must not go live.
+on:
+  push:
+    branches: [claude/continue-session-012dkbuoexzgfm3ew4ku9qxr-thmfk3]
+  workflow_dispatch:
+    inputs:
+      check_url:
+        description: "Also check this address after deploying, e.g. https://icons.meyalab.com"
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      READY: ${{ secrets.CLOUDFLARE_API_TOKEN != '' && secrets.CLOUDFLARE_ACCOUNT_ID != '' }}
+    steps:
+      - name: Cloudflare secrets
+        if: env.READY != 'true'
+        run: echo "::notice::CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID are not set in this repository's secrets yet, so nothing was deployed."
+      - uses: actions/checkout@v4
+        if: env.READY == 'true'
+      - uses: actions/setup-node@v4
+        if: env.READY == 'true'
+        with:
+          node-version: 22
+      - name: Pro guard
+        if: env.READY == 'true'
+        run: node scripts/guard.mjs
+      - name: Deploy to Cloudflare
+        if: env.READY == 'true'
+        shell: bash
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          WRANGLER_SEND_METRICS: "false"
+        run: |
+          npx --yes wrangler@4.151.1 deploy 2>&1 | tee deploy.log
+          url=$(grep -oE 'https://[a-z0-9.-]+\.workers\.dev' deploy.log | head -1 || true)
+          echo "WORKERS_URL=$url" >> "$GITHUB_ENV"
+      - name: Check the deployed site
+        if: env.READY == 'true' && env.WORKERS_URL != ''
+        run: node scripts/smoke.mjs "$WORKERS_URL"
+      - name: Check another address
+        if: env.READY == 'true' && inputs.check_url != ''
+        env:
+          CHECK_URL: ${{ inputs.check_url }}
+        run: node scripts/smoke.mjs "$CHECK_URL"

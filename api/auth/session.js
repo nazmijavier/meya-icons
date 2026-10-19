@@ -5,15 +5,15 @@ import { body, json } from "../_lib/http.js";
 import { configured, whoHoldsPro } from "../_lib/polar.js";
 import { sameOrigin, start } from "../_lib/session.js";
 
-export default async function handler(req, res) {
-  if (req.method !== "POST") return json(res, 405, { error: "method" });
-  if (!sameOrigin(req)) return json(res, 403, { error: "origin" });
-  if (!configured()) return json(res, 503, { error: "not_configured" });
-  const { token } = await body(req);
-  if (typeof token !== "string" || !/^polar_[a-z]+_[A-Za-z0-9_-]{10,200}$/.test(token)) return json(res, 400, { error: "invalid" });
+export async function POST(request) {
+  if (!sameOrigin(request)) return json(403, { error: "origin" });
+  if (!configured()) return json(503, { error: "not_configured" });
+  const { token } = await body(request);
+  if (typeof token !== "string" || !/^polar_[a-z]+_[A-Za-z0-9_-]{10,200}$/.test(token)) return json(400, { error: "invalid" });
   let r;
-  try { r = await whoHoldsPro(token); } catch (e) { return json(res, e.outage ? 502 : 503, { error: "polar" }); }
-  if (r.error) return json(res, r.error === "no_pro" ? 403 : 401, { error: r.error, email: r.who ? r.who.email : null });
-  const s = start(res, r.who);
-  json(res, 200, { signedIn: true, email: s.e });
+  try { r = await whoHoldsPro(token); } catch (e) { return json(e.outage ? 502 : 503, { error: "polar" }); }
+  if (r.error) return json(r.error === "no_pro" ? 403 : 401, { error: r.error, email: r.who ? r.who.email : null });
+  const headers = new Headers();
+  const s = start(headers, r.who);
+  return json(200, { signedIn: true, email: s.e }, headers);
 }
