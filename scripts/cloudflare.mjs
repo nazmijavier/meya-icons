@@ -1,6 +1,8 @@
 // The Cloudflare side of icons.meyalab.com, run by the Deploy workflow (.github/workflows/deploy.yml).
-// Needs CLOUDFLARE_API_TOKEN: Cloudflare's "Edit Cloudflare Workers" token template, plus Zone > DNS > Edit,
-// Zone > Zone Settings > Edit and Zone > Zone > Read, on the meyalab.com zone.
+// Needs CLOUDFLARE_API_TOKEN with, at least: Account > Workers Scripts > Edit, and on the meyalab.com zone Zone > Read,
+// Workers Routes > Edit, Zone Settings > Read and DNS > Read. A cutover that has to turn on Always Use HTTPS needs
+// Zone Settings > Edit, and one where icons.meyalab.com is not proxied yet needs DNS > Edit (the first cutover, on a
+// zone whose *.meyalab.com was already proxied, only needed the former).
 //   node scripts/cloudflare.mjs prepare   finds the account, sets up its workers.dev name if it has none
 //   node scripts/cloudflare.mjs secrets   gives the Worker SESSION_SECRET (made once, never shown) and whichever of
 //                                         POLAR_ACCESS_TOKEN and PRO_GITHUB_TOKEN are set and missing on it; with
