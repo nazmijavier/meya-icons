@@ -7,6 +7,10 @@ import * as license from "./api/auth/license.js";
 import * as logout from "./api/auth/logout.js";
 import * as me from "./api/auth/me.js";
 import * as session from "./api/auth/session.js";
+import * as pluginLicense from "./api/plugin/license.js";
+import * as pluginMe from "./api/plugin/me.js";
+import * as pluginPro from "./api/plugin/pro.js";
+import * as pluginSession from "./api/plugin/session.js";
 
 const ROUTES = {
   "/api/geo": geo,
@@ -15,6 +19,11 @@ const ROUTES = {
   "/api/auth/logout": logout,
   "/api/auth/me": me,
   "/api/auth/session": session,
+  // the Figma plugin's login and Pro icons, with a bearer token instead of the cookie
+  "/api/plugin/license": pluginLicense,
+  "/api/plugin/me": pluginMe,
+  "/api/plugin/pro": pluginPro,
+  "/api/plugin/session": pluginSession,
 };
 
 export default {

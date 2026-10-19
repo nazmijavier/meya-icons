@@ -1,2 +1,7 @@
 /*
   Strict-Transport-Security: max-age=63072000
+
+# The Figma plugin shows the Pro preview sprites as CSS masks, which browsers fetch with CORS, from a window with no
+# origin of its own.
+/pro/*
+  Access-Control-Allow-Origin: *

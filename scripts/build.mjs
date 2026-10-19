@@ -75,8 +75,9 @@ const categories = CATEGORIES.map(([id, label]) => ({
 })).filter((c) => c.count);
 
 // ---------- PRO showcase: browsable on the site from image previews, never as vectors ----------
-// Previews come from scripts/pro-previews.mjs. Showcase styles stay out of the free counts, the README tables,
-// the npm package and the Figma plugin data. Their icons carry "@<n>", the cell in docs/pro/<style>.webp.
+// Previews come from scripts/pro-previews.mjs. Showcase styles stay out of the free counts, the README tables
+// and the npm package. Their icons carry "@<n>", the cell in docs/pro/<style>.webp; the site and the Figma plugin
+// show that cell, and a signed-in Pro customer gets the drawing itself from /api/pro (or /api/plugin/pro).
 const PREVIEWS = fs.existsSync(rel("scripts/pro-previews.json")) ? JSON.parse(fs.readFileSync(rel("scripts/pro-previews.json"), "utf8")) : {};
 const showcase = {};
 for (const st of STYLES.filter((s) => s.showcase && !variants[s.id].size && PREVIEWS[s.id])) {
@@ -226,13 +227,17 @@ if (ARGS[0]) fs.writeFileSync(ARGS[0], fragment);
 
 // ---------- Figma plugin UI (kept outside this repo) ----------
 // The plugin lives in ../meya-icons-pro/figma-plugin, so this step is skipped when it is not there.
+// It gets the site's data with the Pro preview cells (their images load from SITE). Not Animated: Figma doesn't
+// play an SVG's animation.
 const pluginDir = rel("../meya-icons-pro/figma-plugin");
 const pluginTpl = path.join(pluginDir, "ui-template.html");
 let builtPlugin = false;
 if (fs.existsSync(pluginTpl)) {
+  const pluginStyles = siteStyles.filter((st) => !st.animated);
+  const pluginIcons = showcaseIcons.map((i) => ({ ...i, v: Object.fromEntries(Object.entries(i.v).filter(([id]) => pluginStyles.some((st) => st.id === id))) }));
   const figmaUi = fs
     .readFileSync(pluginTpl, "utf8")
-    .replace("/*__DATA__*/", `window.MEYA=${JSON.stringify({ categories, styles, icons: siteIcons })};`)
+    .replace("/*__DATA__*/", `window.MEYA=${JSON.stringify({ site: SITE, checkout: CHECKOUT_URL, categories: siteCategories, styles: pluginStyles, icons: pluginIcons })};`)
   .replace("/*__SEARCH__*/", SEARCH);
   const at = figmaUi.indexOf("</style>") + 8;
   fs.writeFileSync(
