@@ -60,6 +60,20 @@ button { cursor: pointer; }
 .pill-blue { background: var(--blue); color: #fff; }
 .pill-blue:hover { background: #0077ED; }
 .pill-outline { background: transparent; color: var(--ink); box-shadow: 0 0 0 1px var(--steel); }
+/* Pro buttons: the label in a blue-to-violet gradient that drifts slowly (still when motion is reduced). Each stop
+   keeps 4.5:1 contrast on its button: the deep set on light buttons, the pale set on dark ones. */
+.pro-grad { --g1: #2563EB; --g2: #6448F6; --g3: #7C3AED;
+  background: linear-gradient(90deg, var(--g1), var(--g2), var(--g3), var(--g1)) 0 0 / 200% 100% repeat-x;
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  animation: pro-drift 6s linear infinite; }
+.pill-ink .pro-grad { --g1: #7DD3FC; --g2: #A5B4FC; --g3: #C4B5FD; }
+@keyframes pro-drift { to { background-position: 200% 0; } }
+/* held still, the whole sweep shows once */
+@media (prefers-reduced-motion: reduce) { .pro-grad { animation: none; background-image: linear-gradient(90deg, var(--g1), var(--g2), var(--g3)); background-size: 100% 100%; } }
+/* Upgrade: a white pill ringed in the same gradient. */
+.pill-pro { border: 1.5px solid transparent; color: #6448F6;
+  background: linear-gradient(var(--white), var(--white)) padding-box, linear-gradient(90deg, #2563EB, #6448F6, #7C3AED) border-box; }
+.pill-pro:hover { background: linear-gradient(var(--frost), var(--frost)) padding-box, linear-gradient(90deg, #2563EB, #6448F6, #7C3AED) border-box; }
 .pill-outline:hover { background: var(--mist); }
 .pill-soon { background: var(--mist); color: var(--steel); cursor: default; }
 .pill-soon:hover { background: var(--mist-2); }
@@ -364,7 +378,7 @@ __BANNER__
       <a class="nav-link" href="pixel" title="Convert icons to pixel style" aria-label="Pixel Lab"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM10.5 10.5h2v2h-2z"/></svg><span class="label">Pixel Lab</span></a>
       <a class="nav-link" href="https://x.com/intent/post?text=Meya%20Icons%3A%20a%20free%2C%20adaptable%20icon%20set%20for%20interfaces%2C%20diagrams%20and%20decks&amp;url=https%3A%2F%2Ficons.meyalab.com" target="_blank" rel="noopener" title="Share on X" aria-label="Share on X"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.2 1.5h2.2L9.6 7l5.6 7.5h-4.4L7.4 10l-4 4.5H1.2l5.2-5.9L1 1.5h4.5l3.1 4.1zm-.8 11.7h1.2L4.8 2.7H3.5z"/></svg><span class="label">Share</span></a>
       __ACCOUNT_BUTTON__
-      <a class="pill pill-ink" href="pricing" data-hide-pro>Upgrade to Pro</a>
+      <a class="pill pill-ink" href="pricing" data-hide-pro><span class="pro-grad">Upgrade to Pro</span></a>
     </div>
   </nav>
 </div>
@@ -379,6 +393,7 @@ __BANNER__
         Figma Plugins
       </a>
       <a class="pill pill-ink" href="#icons">Browse __COUNT__ icons</a>
+      <a class="pill pill-pro" href="pricing" data-hide-pro><span data-ico="ai:sparkle"></span><span class="pro-grad">Upgrade to Pro</span></a>
     </div>
     <button class="install" id="install" type="button" data-tip="Copy" aria-label="Copy npm install command">
       <code>npm i meya-icons</code><span class="copy-swap"><span data-ico="editor:copy" class="i-copy"></span><span data-ico="shapes:check" class="i-check"></span></span>
