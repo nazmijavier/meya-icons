@@ -93,39 +93,51 @@ svg.ui path { stroke: currentColor; stroke-width: calc(var(--uw, 1.3) * 1px - 1.
 .st .m { font-size: 11px; color: var(--steel); line-height: 18px; }
 
 /* ---------- Plans ---------- */
-/* Two quiet cards of one size: name, price, one line, the button, four features. Pro is the dark one. */
-.plans { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; max-width: 860px; margin: 8px auto 0; }
-.plan { display: flex; flex-direction: column; padding: 32px; border-radius: 24px; background: var(--white); box-shadow: inset 0 0 0 1px var(--control); }
-.plan-pro { background: var(--ink); color: #fff; box-shadow: none; }
-.plan-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 24px; }
-.plan-name { margin: 0; font-size: 15px; font-weight: 500; }
-.tag { height: 24px; padding-inline: 10px; display: inline-flex; align-items: center; border-radius: 9999px; background: rgba(255, 255, 255, 0.12); font-size: 12px; font-weight: 500; white-space: nowrap; }
-.price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; margin-top: 28px; }
-.price b { font-size: 48px; font-weight: 500; letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums; }
-:root[data-cur="idr"] .price b { font-size: 40px; }
-.unit { font-size: 14px; color: var(--steel); white-space: nowrap; }
-.plan-pro .unit { color: rgba(255, 255, 255, 0.55); }
-.desc { margin: 10px 0 0; min-height: 42px; font-size: 14px; color: var(--slate); text-wrap: pretty; }
-.plan-pro .desc { color: rgba(255, 255, 255, 0.55); }
-.cta { margin-top: 24px; }
-.cta .pill { width: 100%; height: 44px; }
+/* Two cards on one set of rows (subgrid), so price, button, rule and list line up side by side.
+   The details (team rates, currency, cancelling) live in the FAQ. */
+.plans { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 16px; margin-top: 8px; }
+.plan { display: grid; grid-row: span 8; grid-template-rows: subgrid; row-gap: 0; align-content: start; padding: 36px; border-radius: 28px; background: var(--mist); }
+.plan-pro { background: var(--ink); color: #fff; }
+.plan-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 28px; }
+.plan-name { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 500; }
+.tag { height: 28px; padding-inline: 12px; display: inline-flex; align-items: center; border-radius: 9999px; background: var(--white); color: var(--ink); font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+.price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-top: 32px; }
+.price b { font-size: 56px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums; }
+:root[data-cur="idr"] .price b { font-size: 44px; }
+#pro-was { font-size: 20px; letter-spacing: -0.02em; color: rgba(255, 255, 255, 0.4); text-decoration-thickness: 1.5px; font-variant-numeric: tabular-nums; }
+.sub { margin: 10px 0 0; font-size: 14px; color: var(--slate); }
+.plan-pro .sub { color: rgba(255, 255, 255, 0.6); }
+.seat-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; min-height: 40px; margin-top: 28px; }
+.seats { display: inline-flex; align-items: center; gap: 2px; height: 40px; padding: 4px; border-radius: 9999px; background: rgba(255, 255, 255, 0.1); }
+.seats button { width: 32px; height: 32px; border: 0; border-radius: 50%; background: none; color: #fff; font-size: 18px; line-height: 1; }
+.seats button:hover { background: rgba(255, 255, 255, 0.12); }
+.seats button:disabled { opacity: 0.35; cursor: default; background: none; }
+.seats output { min-width: 72px; text-align: center; font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.note { font-size: 13px; color: var(--slate); }
+.plan-pro .note { color: rgba(255, 255, 255, 0.5); }
+#seat-max { flex-basis: 100%; margin: 0; font-size: 12px; color: rgba(255, 255, 255, 0.8); }
+#seat-max a { color: inherit; }
+.cta { margin-top: 16px; }
+.cta .pill { width: 100%; height: 52px; font-size: 15px; }
 .plan-pro .cta .pill { background: #fff; color: var(--ink); }
 .plan-pro .cta .pill:hover { background: var(--mist-2); }
-.login-link { display: block; margin: 10px auto 0; padding: 0; border: 0; background: none; color: rgba(255, 255, 255, 0.7); font-size: 13px; }
+.reassure { margin: 12px 0 0; text-align: center; font-size: 13px; color: var(--steel); }
+.plan-pro .reassure { color: rgba(255, 255, 255, 0.5); }
+.login-link { display: block; margin: 6px auto 0; padding: 0; border: 0; background: none; color: rgba(255, 255, 255, 0.8); font-size: 13px; }
 .login-link:hover { color: #fff; text-decoration: underline; }
-#have-pro { margin-top: 24px; display: grid; gap: 10px; font-size: 14px; color: rgba(255, 255, 255, 0.7); }
-#have-pro .pill { width: 100%; height: 44px; background: #fff; color: var(--ink); }
-.feats { list-style: none; margin: 28px 0 0; padding: 0; display: grid; gap: 12px; font-size: 14px; }
-.feats li { display: flex; align-items: flex-start; gap: 10px; }
-.feats .ic { width: 16px; height: 16px; margin-top: 2px; color: var(--steel); --uw: 1.8; }
-.plan-pro .feats .ic { color: rgba(255, 255, 255, 0.55); }
-.feats a { color: inherit; }
+#have-pro { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; font-size: 14px; }
+#have-pro .pill { width: auto; height: 40px; font-size: 14px; }
+.rule { width: 100%; height: 1px; margin: 28px 0 24px; border: 0; background: var(--control); }
+.plan-pro .rule { background: rgba(255, 255, 255, 0.12); }
+.chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-content: flex-start; gap: 6px; }
+.chips li { height: 28px; padding: 0 12px; display: inline-flex; align-items: center; border-radius: 9999px; background: var(--white); font-size: 12.5px; font-weight: 500; }
+.plan-pro .chips li { background: rgba(255, 255, 255, 0.08); }
+.checks { list-style: none; margin: 20px 0 0; padding: 0; display: grid; align-content: start; gap: 12px; font-size: 14px; }
+.checks li { display: flex; align-items: flex-start; gap: 10px; }
+.checks .ic { width: 16px; height: 16px; margin-top: 2px; --uw: 1.8; color: var(--steel); }
+.plan-pro .checks .ic { color: rgba(255, 255, 255, 0.6); }
+.checks a, .reassure a { color: inherit; text-underline-offset: 2px; }
 
-/* ---------- Proof ---------- */
-.proof { list-style: none; margin: 24px 0 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 28px; font-size: 13px; font-weight: 500; color: var(--slate); }
-.proof li, .proof a { display: inline-flex; align-items: center; gap: 8px; color: var(--slate); text-decoration: none; }
-.proof a:hover { color: var(--ink); }
-.proof .ic { width: 16px; height: 16px; color: var(--steel); }
 
 /* ---------- Sections ---------- */
 section { padding-block: 72px 0; }
@@ -240,9 +252,8 @@ details p a { color: var(--ink); }
 
 @media (max-width: 900px) {
   .plans, .faq-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
-  .plan { padding: 28px 22px; }
-  .plan-pro { order: -1; }
-  .desc { min-height: 0; }
+  .plan { padding: 28px 22px; border-radius: 24px; }
+  .plan-free .seat-row { min-height: 0; margin-top: 4px; }
   .buybar { display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: var(--white); border-top: 1px solid var(--control); transform: translateY(110%); visibility: hidden; transition: transform 200ms var(--ease-out), visibility 0s 200ms; }
   .buybar.show { transform: none; visibility: visible; transition: transform 200ms var(--ease-out); }
   body.has-bar { padding-bottom: calc(68px + env(safe-area-inset-bottom)); }
@@ -258,7 +269,6 @@ details p a { color: var(--ink); }
   .st .t { width: 52px; height: 52px; }
   .st .t svg { width: 26px; height: 26px; }
   .st .n { min-height: 28px; font-size: 11px; }
-  .proof { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; justify-content: start; }
   .gallery { grid-template-columns: minmax(0, 1fr); gap: 16px; padding: 16px; border-radius: 22px; }
   .tabs { display: flex; flex-wrap: wrap; gap: 6px; }
   .tabs .grp { display: none; }
@@ -293,7 +303,9 @@ details p a { color: var(--ink); }
   .end-actions { flex-direction: column; align-self: stretch; gap: 8px; }
 }
 @media (max-width: 480px) {
-  :root[data-cur="idr"] .price b { font-size: 34px; }
+  .price b { font-size: 46px; }
+  :root[data-cur="idr"] .price b { font-size: 36px; }
+  #pro-was { font-size: 17px; }
 }
 @media (max-width: 420px) {
   .nav-link .label { display: none; }
@@ -334,46 +346,58 @@ __BANNER__
     </header>
 
     <div class="plans">
-      <div class="plan plan-free">
-        <div class="plan-top"><p class="plan-name">Free</p></div>
-        <div class="price"><b><span class="usd">$0</span><span class="idr">Rp0</span></b><span class="unit">forever</span></div>
-        <p class="desc">Outline and Duotone under MIT. No account needed.</p>
-        <div class="cta"><a class="pill pill-white" href="./#icons">Browse free icons</a></div>
-        <ul class="feats">
-          <li>__ICON:shapes/check__<span>__COUNT__ icons, with cursors and flags</span></li>
-          <li>__ICON:shapes/check__<span>Copy as SVG or React</span></li>
-          <li>__ICON:shapes/check__<span>npm package and <a href="https://www.figma.com/community/plugin/1685393903679180914" target="_blank" rel="noopener">Figma plugin</a></span></li>
-          <li>__ICON:shapes/check__<span>Personal and commercial work</span></li>
+      <div class="plan plan-pro" id="pro">
+        <div class="plan-top"><span class="plan-name">__ICON:general/star__Pro</span><span class="tag launch">Launch offer −__OFFER_PCT__%</span></div>
+        <div class="price">
+          <b id="pro-price"><span class="launch"><span class="usd">$30</span><span class="idr">Rp395.000</span></span><span class="regular"><span class="usd">$60</span><span class="idr">Rp790.000</span></span></b>
+          <span class="vh launch">Regular price</span>
+          <s id="pro-was" class="launch"><span class="usd">$60</span><span class="idr">Rp790.000</span></s>
+        </div>
+        <p class="sub" id="pro-sub"><span class="launch"><span class="usd">First year, then $60 a year</span><span class="idr">First year, then Rp790.000 a year</span></span><span class="regular">A year</span></p>
+        <div class="seat-row">
+          <div class="seats" role="group" aria-label="Seats"><button type="button" id="seat-down" aria-label="Fewer seats">−</button><output id="seat-n" aria-live="polite">1 seat</output><button type="button" id="seat-up" aria-label="More seats">+</button></div>
+          <span class="note">One seat per person</span>
+          <p id="seat-max" hidden>Need more than 50 seats? Write to <a href="mailto:hello@meyalab.com">hello@meyalab.com</a>.</p>
+          <p class="vh" id="seat-summary" aria-live="polite"></p>
+        </div>
+        <div class="cta">
+          <div class="buy" data-hide-pro>
+            <a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro">Get Pro</a>
+            <p class="reassure">Checkout by Polar · Cancel anytime</p>
+            <button type="button" class="login-link" id="login-link" data-acct-open hidden>Already have Pro? Log in</button>
+          </div>
+          <div id="have-pro" hidden><span>You have Pro.</span><a class="pill" href="./#stroke">Browse Pro icons</a></div>
+        </div>
+        <hr class="rule">
+        <ul class="chips" aria-label="Pro styles"><li>Stroke</li><li>Stroke Duotone</li><li>Sharp</li><li>Filled</li><li>Glass</li><li>Animated</li></ul>
+        <ul class="checks">
+          <li>__ICON:shapes/check__<span>Everything in Free</span></li>
+          <li>__ICON:shapes/check__<span>__ALL_COUNT__ icons in all</span></li>
+          <li>__ICON:shapes/check__<span>Live strokes, any weight</span></li>
+          <li>__ICON:shapes/check__<span>New icons as they ship</span></li>
         </ul>
       </div>
 
-      <div class="plan plan-pro" id="pro">
-        <div class="plan-top"><p class="plan-name">Pro</p><span class="tag launch">__OFFER_PCT__% off the first year</span></div>
-        <div class="price">
-          <b id="pro-price"><span class="launch"><span class="usd">$30</span><span class="idr">Rp395.000</span></span><span class="regular"><span class="usd">$60</span><span class="idr">Rp790.000</span></span></b>
-          <span class="unit"><span class="launch">first year</span><span class="regular">a year</span></span>
+      <div class="plan plan-free">
+        <div class="plan-top"><span class="plan-name">__ICON:general/user__Free</span></div>
+        <div class="price"><b><span class="usd">$0</span><span class="idr">Rp0</span></b></div>
+        <p class="sub">Forever</p>
+        <div class="seat-row"><span class="note">No account needed</span></div>
+        <div class="cta">
+          <a class="pill pill-white" href="./#icons">Browse free icons</a>
+          <p class="reassure"><a href="https://github.com/nazmijavier/meya-icons" target="_blank" rel="noopener">MIT licensed</a> · Commercial use OK</p>
         </div>
-        <p class="desc"><span class="launch">Then <span class="usd">$60</span><span class="idr">Rp790.000</span> a year per person. </span><span class="regular">Per person, billed yearly. </span>Extra seats cost less.</p>
-        <div class="cta" data-hide-pro>
-          <a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro">Get Pro</a>
-          <button type="button" class="login-link" id="login-link" data-acct-open hidden>Already have Pro? Log in</button>
-        </div>
-        <div id="have-pro" hidden><span>You have Pro. Open any Pro icon to copy it.</span><a class="pill" href="./#stroke">Browse Pro icons</a></div>
-        <ul class="feats">
-          <li>__ICON:shapes/check__<span>All __STYLE_WORD__ styles, __ALL_COUNT__ icons</span></li>
-          <li>__ICON:shapes/check__<span>Live strokes you can make thinner or bolder</span></li>
-          <li>__ICON:shapes/check__<span>New icons in every style as they ship</span></li>
-          <li>__ICON:shapes/check__<span>Copy any Pro icon as SVG or React</span></li>
+        <hr class="rule">
+        <ul class="chips" aria-label="Free styles"><li>Outline</li><li>Duotone</li><li>Cursors</li><li>Flags</li></ul>
+        <ul class="checks">
+          <li>__ICON:shapes/check__<span>__COUNT__ icons</span></li>
+          <li>__ICON:shapes/check__<span>Copy as SVG or React</span></li>
+          <li>__ICON:shapes/check__<span><a href="https://www.npmjs.com/package/meya-icons" target="_blank" rel="noopener">npm package</a></span></li>
+          <li>__ICON:shapes/check__<span><a href="https://www.figma.com/community/plugin/1685393903679180914" target="_blank" rel="noopener">Figma plugin</a></span></li>
         </ul>
       </div>
     </div>
 
-    <ul class="proof">
-      <li><a href="https://github.com/nazmijavier/meya-icons" target="_blank" rel="noopener">__ICON:development/repository__MIT open source on GitHub</a></li>
-      <li><a href="https://www.npmjs.com/package/meya-icons" target="_blank" rel="noopener">__ICON:development/terminal__<span class="mono">npm i meya-icons</span></a></li>
-      <li><a href="https://www.figma.com/community/plugin/1685393903679180914" target="_blank" rel="noopener">__ICON:images/pen-tool__Free Figma plugin</a></li>
-      <li>__ICON:finance-ecommerce/credit-card__Checkout by Polar</li>
-    </ul>
 
     <section id="styles" aria-labelledby="styles-title">
       <h2 class="center" id="styles-title">See every style before you buy</h2>
@@ -484,7 +508,7 @@ __ACCOUNT__
 __FOOTER__
 
 <div class="buybar" id="buybar" aria-hidden="true" inert>
-  <div><small>Meya Icons Pro</small><b id="bar-price"><span class="launch"><span class="usd">$30</span><span class="idr">Rp395.000</span> first year</span><span class="regular"><span class="usd">$60</span><span class="idr">Rp790.000</span> a year</span></b></div>
+  <div><small>Meya Icons Pro</small><b id="bar-price"></b></div>
   <a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro-bar">Get Pro</a>
 </div>
 
@@ -495,13 +519,40 @@ __FOOTER__
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // ---------- Price ----------
-  // The prices are in the markup in both currencies (.usd, .idr) and with and without the launch offer (.launch,
-  // .regular); CSS shows one. The head script guessed the currency from the time zone; the visitor's country settles it.
+  // Pro is priced per seat, yearly and graduated: seat 1, seats 2–5 each, seat 6 onward each. During the launch the
+  // checkout links apply OFF % to the first year, so the card shows that charge, with the regular price struck.
+  const MAX = 50;
+  const RATES = { usd: [60, 22, 10], idr: [790000, 290000, 130000] };
+  const OFF = root.dataset.offer ? +"__OFFER_PCT__" : 0;
+  const cur = () => (root.dataset.cur === "idr" ? "idr" : "usd");
+  const total = (n) => { const [a, b, c] = RATES[cur()]; return a + b * Math.min(Math.max(n - 1, 0), 4) + c * Math.max(n - 5, 0); };
+  const first = (list) => (OFF ? (cur() === "idr" ? Math.round((list * (100 - OFF)) / 100) : Math.round(list * (100 - OFF)) / 100) : list);
+  const fmt = (x) => cur() === "idr"
+    ? "Rp" + Math.round(x).toLocaleString("id-ID")
+    : "$" + (Number.isInteger(x) ? x.toLocaleString("en-US") : x.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+  let seats = 1;
+  // The card shows the total for the chosen seats; how a team price is worked out is in the FAQ.
+  function show() {
+    const n = seats, list = total(n), now = first(list), per = OFF ? "first year" : "a year";
+    const who = n === 1 ? "" : `${n} seats · `;
+    $("#seat-n").textContent = n + (n === 1 ? " seat" : " seats");
+    $("#pro-was").textContent = fmt(list);
+    $("#pro-price").textContent = fmt(now);
+    $("#pro-sub").textContent = who + (OFF ? `${n === 1 ? "F" : "f"}irst year, then ${fmt(list)} a year` : `${n === 1 ? "A" : "a"} year`);
+    $("#seat-max").hidden = n < MAX;
+    $("#bar-price").textContent = who + `${fmt(now)} ${per}`;
+    $("#seat-summary").textContent = `${n} ${n === 1 ? "seat" : "seats"}. ` + (OFF ? `${fmt(now)} for the first year, then ${fmt(list)} a year.` : `${fmt(list)} a year.`);
+    $("#seat-down").disabled = n <= 1; $("#seat-up").disabled = n >= MAX;
+  }
+  $("#seat-down").addEventListener("click", () => { seats = Math.max(1, seats - 1); show(); });
+  $("#seat-up").addEventListener("click", () => { seats = Math.min(MAX, seats + 1); show(); });
+  show();
+  // the head script guessed the currency from the time zone; the visitor's country settles it
   fetch("/api/geo").then((r) => (r.ok ? r.json() : null)).then((g) => {
     if (!g || !g.country) return;
     const c = g.country === "ID" ? "idr" : "usd";
     try { sessionStorage.setItem("meya-cur", c); } catch {}
-    root.dataset.cur = c;
+    if (c !== cur()) { root.dataset.cur = c; show(); }
   }, () => {});
 
   // ---------- Style gallery ----------
