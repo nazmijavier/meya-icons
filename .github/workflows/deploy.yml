@@ -1,16 +1,24 @@
 name: Deploy
 
-# Publishes the site to Cloudflare Workers (wrangler.jsonc) once the Pro guard passes, then checks the deployed copy.
-# Needs two repository secrets: CLOUDFLARE_API_TOKEN (Cloudflare's "Edit Cloudflare Workers" token template) and
-# CLOUDFLARE_ACCOUNT_ID. Only the branch below deploys: main still has files that must not go live.
+# The site on Cloudflare Workers (wrangler.jsonc), driven by scripts/cloudflare.mjs.
+#   push to the branch below, or task "deploy": Pro guard, wrangler deploy, Worker secrets, then checks of the
+#     deployed copy (and of icons.meyalab.com once it is served by the Worker)
+#   task "status": how icons.meyalab.com is served
+#   task "cutover": sends icons.meyalab.com to the Worker with no gap, then checks it; moves it back if checks fail
+#   task "rollback": sends icons.meyalab.com back to the old host
+# Needs the repository secret CLOUDFLARE_API_TOKEN (see scripts/cloudflare.mjs for its permissions). Optional
+# repository secrets POLAR_ORG_ID, POLAR_PRO_BENEFIT_ID, POLAR_ACCESS_TOKEN and PRO_GITHUB_TOKEN are copied to the
+# Worker. Only this branch deploys: main still has files that must not go live.
 on:
   push:
     branches: [claude/continue-session-012dkbuoexzgfm3ew4ku9qxr-thmfk3]
   workflow_dispatch:
     inputs:
-      check_url:
-        description: "Also check this address after deploying, e.g. https://icons.meyalab.com"
-        required: false
+      task:
+        description: "What to do"
+        type: choice
+        options: [deploy, status, cutover, rollback]
+        default: deploy
 
 permissions:
   contents: read
@@ -20,39 +28,66 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  cloudflare:
     runs-on: ubuntu-latest
     env:
-      READY: ${{ secrets.CLOUDFLARE_API_TOKEN != '' && secrets.CLOUDFLARE_ACCOUNT_ID != '' }}
+      READY: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
+      TASK: ${{ inputs.task || 'deploy' }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      WRANGLER_SEND_METRICS: "false"
     steps:
-      - name: Cloudflare secrets
+      - name: Cloudflare token
         if: env.READY != 'true'
-        run: echo "::notice::CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID are not set in this repository's secrets yet, so nothing was deployed."
+        run: echo "::notice::The CLOUDFLARE_API_TOKEN repository secret is not set yet, so nothing was done."
       - uses: actions/checkout@v4
         if: env.READY == 'true'
       - uses: actions/setup-node@v4
         if: env.READY == 'true'
         with:
           node-version: 22
+      - name: Cloudflare account
+        if: env.READY == 'true'
+        run: node scripts/cloudflare.mjs prepare
       - name: Pro guard
-        if: env.READY == 'true'
+        if: env.READY == 'true' && env.TASK == 'deploy'
         run: node scripts/guard.mjs
-      - name: Deploy to Cloudflare
-        if: env.READY == 'true'
+      - name: Deploy the Worker
+        if: env.READY == 'true' && env.TASK == 'deploy'
         shell: bash
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          WRANGLER_SEND_METRICS: "false"
         run: |
           npx --yes wrangler@4.151.1 deploy 2>&1 | tee deploy.log
           url=$(grep -oE 'https://[a-z0-9.-]+\.workers\.dev' deploy.log | head -1 || true)
           echo "WORKERS_URL=$url" >> "$GITHUB_ENV"
-      - name: Check the deployed site
-        if: env.READY == 'true' && env.WORKERS_URL != ''
-        run: node scripts/smoke.mjs "$WORKERS_URL"
-      - name: Check another address
-        if: env.READY == 'true' && inputs.check_url != ''
+      - name: Worker secrets
+        if: env.READY == 'true' && env.TASK == 'deploy'
         env:
-          CHECK_URL: ${{ inputs.check_url }}
-        run: node scripts/smoke.mjs "$CHECK_URL"
+          POLAR_ORG_ID: ${{ secrets.POLAR_ORG_ID }}
+          POLAR_PRO_BENEFIT_ID: ${{ secrets.POLAR_PRO_BENEFIT_ID }}
+          POLAR_ACCESS_TOKEN: ${{ secrets.POLAR_ACCESS_TOKEN }}
+          PRO_GITHUB_TOKEN: ${{ secrets.PRO_GITHUB_TOKEN }}
+        run: node scripts/cloudflare.mjs secrets
+      - name: Check the workers.dev copy
+        if: env.READY == 'true' && env.TASK == 'deploy' && env.WORKERS_URL != ''
+        run: node scripts/smoke.mjs "$WORKERS_URL"
+      - name: Move icons.meyalab.com to the Worker
+        if: env.READY == 'true' && env.TASK == 'cutover'
+        run: node scripts/cloudflare.mjs cutover
+      - name: Move icons.meyalab.com back
+        if: env.READY == 'true' && env.TASK == 'rollback'
+        run: node scripts/cloudflare.mjs rollback
+      - name: Status
+        if: env.READY == 'true'
+        run: node scripts/cloudflare.mjs status
+      - name: Check icons.meyalab.com
+        if: env.READY == 'true' && env.ON_WORKER == '1'
+        shell: bash
+        run: |
+          set +e
+          # wait up to 15 minutes for resolvers that still hold the old answer
+          SMOKE_WAIT=900 node scripts/smoke.mjs https://icons.meyalab.com
+          code=$?
+          if [ "$code" = 1 ] && [ "$TASK" = cutover ]; then
+            echo "::error::icons.meyalab.com failed its checks on the Worker, so it goes back to the old host"
+            node scripts/cloudflare.mjs rollback
+          fi
+          exit $code

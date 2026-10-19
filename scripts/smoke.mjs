@@ -9,10 +9,20 @@ let fails = 0;
 const check = (ok, what) => { console.log(`${ok ? "ok  " : "FAIL"} ${what}`); if (!ok) fails++; };
 const get = (p, opts) => fetch(base + p, { redirect: "manual", signal: AbortSignal.timeout(15000), ...opts });
 
-// a new workers.dev name can take a minute or two to resolve
-for (let i = 0; ; i++) {
-  try { if ((await get("/")).status === 200) break; } catch {}
-  if (i === 18) { console.error(`${base} did not answer within 3 minutes`); process.exit(1); }
+// Wait until the new host answers: a new workers.dev name takes a minute or two to resolve, and after a DNS change
+// some resolvers still send visitors to the old host (Vercel) for a while. Exit 3: still the old host, nothing checked.
+const WAIT = Number(process.env.SMOKE_WAIT || 180);
+let seen = "no answer";
+for (let t = 0; ; t += 10) {
+  try {
+    const r = await get("/");
+    seen = r.headers.has("x-vercel-id") ? "the old host (Vercel)" : `HTTP ${r.status}`;
+    if (r.status === 200 && !r.headers.has("x-vercel-id")) break;
+  } catch (e) { seen = `no answer (${e.cause ? e.cause.code || e.cause.message : e.message})`; }
+  if (t >= WAIT) {
+    console.error(`${base} still gives ${seen} after ${WAIT}s`);
+    process.exit(seen.startsWith("the old host") ? 3 : 1);
+  }
   await new Promise((r) => setTimeout(r, 10000));
 }
 
