@@ -3,8 +3,8 @@
 // Zone > Zone Settings > Edit and Zone > Zone > Read, on the meyalab.com zone.
 //   node scripts/cloudflare.mjs prepare   finds the account, sets up its workers.dev name if it has none
 //   node scripts/cloudflare.mjs secrets   gives the Worker SESSION_SECRET (made once, never shown) and whichever of
-//                                         POLAR_ORG_ID, POLAR_PRO_BENEFIT_ID, POLAR_ACCESS_TOKEN, PRO_GITHUB_TOKEN are set
-//                                         and missing on it; with --update, also replaces the ones it has
+//                                         POLAR_ACCESS_TOKEN and PRO_GITHUB_TOKEN are set and missing on it; with
+//                                         --update, also replaces the ones it has (the Polar ids are in wrangler.jsonc)
 //   node scripts/cloudflare.mjs version   remembers the live version, so a deploy that fails its checks can go back
 //   node scripts/cloudflare.mjs status    how icons.meyalab.com is served
 //   node scripts/cloudflare.mjs cutover   sends icons.meyalab.com to the Worker: https only, a route, a proxied record
@@ -21,7 +21,7 @@ const ZONE = "meyalab.com", HOST = "icons.meyalab.com", PATTERN = `${HOST}/*`;
 const WORKER = fs.readFileSync(new URL("../wrangler.jsonc", import.meta.url), "utf8").match(/"name":\s*"([^"]+)"/)[1];
 // the same wrangler as the deploy step in deploy.yml
 const WRANGLER = process.env.WRANGLER_BIN ? [process.env.WRANGLER_BIN] : ["npx", "--yes", "wrangler@4.151.1"];
-const PRO_SECRETS = ["POLAR_ORG_ID", "POLAR_PRO_BENEFIT_ID", "POLAR_ACCESS_TOKEN", "PRO_GITHUB_TOKEN"];
+const PRO_SECRETS = ["POLAR_ACCESS_TOKEN", "PRO_GITHUB_TOKEN"];
 // what cutover writes in the comment of a record it changed (Cloudflare keeps up to 100 characters)
 const WAS_DNS_ONLY = "meya-icons cutover: was DNS only", PLACEHOLDER = "meya-icons cutover: placeholder";
 const ACTIONS = !!process.env.GITHUB_ACTIONS;

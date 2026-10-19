@@ -1,7 +1,7 @@
 // Cloudflare Workers settings for icons.meyalab.com (worker.js says what runs where).
-// Secrets (SESSION_SECRET, POLAR_*, PRO_GITHUB_TOKEN) are set in the dashboard, under the Worker's
-// Settings > Variables and Secrets; README.md lists them. The custom domain is attached there too, not here,
-// so a deploy never touches it.
+// Secrets (SESSION_SECRET, POLAR_ACCESS_TOKEN, PRO_GITHUB_TOKEN) are given to the Worker by the Deploy workflow
+// (scripts/cloudflare.mjs); README.md lists them. The route for icons.meyalab.com is set by its cutover task, not
+// here, so a deploy never touches it.
 {
   "name": "meya-icons",
   "main": "worker.js",
@@ -15,6 +15,11 @@
     "html_handling": "auto-trailing-slash",
     "not_found_handling": "none",
     "run_worker_first": ["/api/*"]
+  },
+  // Polar identifiers, not secrets: the organization, and the Pro product's License Keys benefit
+  "vars": {
+    "POLAR_ORG_ID": "3ae81f50-c647-4fd2-89be-a68e8b4d22c6",
+    "POLAR_PRO_BENEFIT_ID": "2c450b0a-477e-49fb-91cb-dbd408756d06"
   },
   // keep variables added in the dashboard when a deploy runs
   "keep_vars": true,

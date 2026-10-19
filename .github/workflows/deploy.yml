@@ -3,15 +3,15 @@ name: Deploy
 # The site on Cloudflare Workers (wrangler.jsonc), driven by scripts/cloudflare.mjs.
 #   push to the branch below, or task "deploy": Pro guard, wrangler deploy, missing Worker secrets, then checks of
 #     the workers.dev copy and, once it serves it, of icons.meyalab.com; failed checks put the previous version back
-#   task "secrets": replaces the Worker's Polar and GitHub secrets with the repository's
+#   task "secrets": replaces the Worker's POLAR_ACCESS_TOKEN and PRO_GITHUB_TOKEN with the repository's
 #   task "status": how icons.meyalab.com is served
 #   task "cutover": checks the workers.dev copy, sends icons.meyalab.com to the Worker with no gap, then checks it;
 #     if those checks fail, it undoes what it changed
 #   task "rollback": undoes the cutover, then waits for the old host to answer again
 # Tasks are started through the API (gh workflow run deploy.yml --ref <this branch> -f task=status): GitHub shows
 # no "Run workflow" button for a workflow that is not on the default branch.
-# Needs the repository secret CLOUDFLARE_API_TOKEN (see scripts/cloudflare.mjs for its permissions). Optional
-# repository secrets POLAR_ORG_ID, POLAR_PRO_BENEFIT_ID, POLAR_ACCESS_TOKEN and PRO_GITHUB_TOKEN go to the Worker.
+# Needs the repository secret CLOUDFLARE_API_TOKEN (see scripts/cloudflare.mjs for its permissions). The repository
+# secrets POLAR_ACCESS_TOKEN and PRO_GITHUB_TOKEN go to the Worker (the Polar ids are in wrangler.jsonc).
 on:
   push:
     branches: [claude/continue-session-012dkbuoexzgfm3ew4ku9qxr-thmfk3]
@@ -84,8 +84,6 @@ jobs:
         timeout-minutes: 10
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          POLAR_ORG_ID: ${{ secrets.POLAR_ORG_ID }}
-          POLAR_PRO_BENEFIT_ID: ${{ secrets.POLAR_PRO_BENEFIT_ID }}
           POLAR_ACCESS_TOKEN: ${{ secrets.POLAR_ACCESS_TOKEN }}
           PRO_GITHUB_TOKEN: ${{ secrets.PRO_GITHUB_TOKEN }}
         run: node scripts/cloudflare.mjs secrets $([ "$TASK" = secrets ] && echo --update)

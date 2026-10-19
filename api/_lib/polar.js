@@ -1,6 +1,7 @@
-// Calls to Polar. Settings come from environment variables (on Cloudflare: the Worker's Variables and Secrets):
-//   POLAR_ORG_ID          the organization's id (Polar > Settings > General)
-//   POLAR_PRO_BENEFIT_ID  the id of the "Meya Icons Pro" License Keys benefit on the Pro product (not the zip download)
+// Calls to Polar. Settings come from environment variables (on Cloudflare: wrangler.jsonc's vars and the Worker's
+// secrets):
+//   POLAR_ORG_ID          the organization's id (Polar > Settings > General), in wrangler.jsonc
+//   POLAR_PRO_BENEFIT_ID  the id of the "Meya Icons Pro" License Keys benefit on the Pro product, in wrangler.jsonc
 //   POLAR_ACCESS_TOKEN    an organization access token with the scopes benefits:read, license_keys:read and
 //                         license_keys:write: it checks access at login and daily, and validates license keys
 //   POLAR_API_URL         optional, https://sandbox-api.polar.sh to test against Polar's sandbox
@@ -10,7 +11,8 @@ export const API = () => (process.env.POLAR_API_URL || "https://api.polar.sh").r
 export const ORG = () => process.env.POLAR_ORG_ID || "";
 export const BENEFIT = () => process.env.POLAR_PRO_BENEFIT_ID || "";
 const ORG_TOKEN = () => process.env.POLAR_ACCESS_TOKEN || "";
-export const configured = () => !!(ORG() && BENEFIT() && (process.env.SESSION_SECRET || "").length >= 32);
+// The login only shows once a signed-in customer can also get the Pro icons (PRO_GITHUB_TOKEN, see api/pro.js).
+export const configured = () => !!(ORG() && BENEFIT() && (process.env.SESSION_SECRET || "").length >= 32 && process.env.PRO_GITHUB_TOKEN);
 
 // A short fingerprint of a license key, so a session can tell whether its key was rotated without storing the key.
 export const keyHash = (key) => crypto.createHash("sha256").update(String(key)).digest("base64url").slice(0, 16);
