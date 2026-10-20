@@ -3,6 +3,7 @@
 //                                  otherwise Node: docs/ as static files, /api/* through the same handlers
 //   polar   http://localhost:4200  fake Polar API (customer-session request/authenticate, user, grants, license keys)
 //   github  http://localhost:4300  fake GitHub contents API, answered from the local Pro folder
+import crypto from "node:crypto";
 import fs from "node:fs";
 import http from "node:http";
 import os from "node:os";
@@ -14,12 +15,16 @@ import { fileURLToPath } from "node:url";
 export const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 export const PRO = process.env.MEYA_PRO || path.resolve(REPO, "../meya-icons-pro");
 const ORG = "11111111-1111-4111-8111-111111111111", BENEFIT = "22222222-2222-4222-8222-222222222222";
+// an access code for the tests (api/_lib/access.js), listed by its hash
+export const ACCESS_CODE = "MEYA-TEST0-TEST1-TEST2-TEST3";
+const accessHash = crypto.createHash("sha256").update("meya-access:" + ACCESS_CODE.replace(/[\s-]/g, "")).digest("hex");
 Object.assign(process.env, {
+  PRO_ACCESS_CODES: `tester:${accessHash}`,
   SESSION_SECRET: "test-secret-0123456789-abcdefghijklmnopqrstuvwxyz",
   POLAR_ORG_ID: ORG, POLAR_PRO_BENEFIT_ID: BENEFIT, POLAR_ACCESS_TOKEN: "polar_oat_testorgtoken", POLAR_API_URL: "http://localhost:4200",
   PRO_GITHUB_TOKEN: "ghp_test", GITHUB_API_URL: "http://localhost:4300",
 });
-const VARS = ["SESSION_SECRET", "POLAR_ORG_ID", "POLAR_PRO_BENEFIT_ID", "POLAR_ACCESS_TOKEN", "POLAR_API_URL", "PRO_GITHUB_TOKEN", "GITHUB_API_URL"];
+const VARS = ["SESSION_SECRET", "POLAR_ORG_ID", "POLAR_PRO_BENEFIT_ID", "POLAR_ACCESS_TOKEN", "POLAR_API_URL", "PRO_GITHUB_TOKEN", "GITHUB_API_URL", "PRO_ACCESS_CODES"];
 export const MODE = process.env.SITE === "workerd" ? "workerd" : "node";
 
 // ---------- fake Polar ----------

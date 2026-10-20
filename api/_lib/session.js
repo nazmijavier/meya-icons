@@ -3,6 +3,7 @@
 // The Figma plugin holds the same session as a bearer token instead (its window has no origin of its own, so no
 // cookie reaches the site from it). A token is marked t: "plugin", so a cookie and a token never pass for each other.
 import crypto from "node:crypto";
+import { accessListed } from "./access.js";
 import { licenseKeyActive, proGrantedTo } from "./polar.js";
 
 // __Host-: the browser only accepts it Secure, on Path=/, for this exact host (no other meyalab.com subdomain)
@@ -54,11 +55,13 @@ function read(request) {
   }
 }
 
-// who: { email, customer_id, member_id, key_id?, key_hash? } (the key fields when signed in with a license key)
+// who: { email, customer_id, member_id, key_id?, key_hash?, access?, access_hash? } (the key fields when signed
+// in with a license key, the access fields with an access code)
 function session(who) {
   const t = now();
   const s = { e: who.email || "", c: who.customer_id || null, m: who.member_id || null, chk: t, exp: t + LIFETIME() };
   if (who.key_id) { s.k = who.key_id; s.h = who.key_hash; }
+  if (who.access) { s.a = who.access; s.ah = who.access_hash; }
   return s;
 }
 
@@ -87,6 +90,12 @@ const RECHECK_MEMO = 10 * 60 * 1000;
 export async function current(request, headers) {
   const s = read(request);
   if (!s) return null;
+  // an access-code session has no Polar account to re-check: it lasts while its code is listed
+  if (s.a) {
+    if (accessListed(s.a, s.ah)) return s;
+    if (!s.t) end(headers);
+    return null;
+  }
   if (now() - s.chk < RECHECK || !process.env.POLAR_ACCESS_TOKEN) return s;
   const who = `${s.m || s.c}|${s.k || ""}`, memo = rechecks.get(who);
   let ok;

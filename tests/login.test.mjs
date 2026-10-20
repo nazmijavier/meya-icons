@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
-import { start, stop, log, revoke, disableKey, missing, MODE, REPO, PRO } from "./serve.mjs";
+import { start, stop, log, revoke, disableKey, missing, ACCESS_CODE, MODE, REPO, PRO } from "./serve.mjs";
 
 // Playwright from this folder's node_modules, or from PWDIR (a folder that has it); CHROMIUM_PATH for a browser of
 // your own. Usage: node tests/login.test.mjs <screenshot folder>   (SITE=workerd: under wrangler dev, see serve.mjs)
@@ -254,6 +254,37 @@ ok(res.status === 401, "re-check: a disabled license key ends its sessions");
 disableKey(false);
 res = await fetch("http://localhost:4100/api/pro?style=sharp&icon=general/home", { headers: { cookie: `__Host-meya_pro=${data2}.${mac2.slice(0, -1)}é` } });
 ok(res.status === 401, "a non-ASCII cookie signature → 401, not a crash");
+
+// 15b. an access code (PRO_ACCESS_CODES) signs in without Polar, on the site and in the Figma plugin
+const before = log.length;
+const typed = ACCESS_CODE.toLowerCase().replace(/-/g, " ");
+res = await fetch("http://localhost:4100/api/auth/license", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ key: typed }) });
+const codeCookie = (res.headers.get("set-cookie") || "").split(";")[0];
+ok(res.status === 200 && (await res.json()).email === "tester (access code)" && codeCookie.startsWith("__Host-meya_pro="), "access code: signed in on the site, typed in lower case with spaces");
+res = await fetch("http://localhost:4100/api/pro?style=sharp&icon=general/home", { headers: { cookie: codeCookie } });
+ok(res.status === 200 && /<svg/.test(await res.text()), "access code: Pro icons copy");
+ok(!log.slice(before).some((l) => /\/v1\//.test(l)), "access code: Polar is never asked");
+res = await fetch("http://localhost:4100/api/auth/license", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ key: "MEYA-TEST0-TEST1-TEST2-TEST4" }) });
+ok(res.status === 401, "a code one letter off is refused");
+res = await fetch("http://localhost:4100/api/plugin/license", { method: "POST", headers: { Origin: "null", "Content-Type": "application/json" }, body: JSON.stringify({ key: ACCESS_CODE }) });
+const codeToken = res.status === 200 ? (await res.json()).token : null;
+res = codeToken && await fetch("http://localhost:4100/api/plugin/pro?style=sharp&icon=general/home", { headers: { Origin: "null", Authorization: `Bearer ${codeToken}` } });
+ok(!!res && res.status === 200, "access code: the Figma plugin signs in and places Pro icons");
+const [cd] = codeCookie.split("=")[1].split(".");
+const codeSession = JSON.parse(Buffer.from(cd, "base64url").toString());
+const old3 = Math.floor(Date.now() / 1000) - 2 * 86400;
+const data4 = Buffer.from(JSON.stringify({ ...codeSession, chk: old3 })).toString("base64url");
+const mac4 = crypto.createHmac("sha256", process.env.SESSION_SECRET).update(data4).digest("base64url");
+res = await fetch("http://localhost:4100/api/pro?style=sharp&icon=general/home", { headers: { cookie: `__Host-meya_pro=${data4}.${mac4}` } });
+ok(res.status === 200, "access code: still in after a day (no Polar account to re-check)");
+if (MODE === "node") {
+  // the Worker reads its variables on each request; in Node the test can take the code off the list
+  const keep = process.env.PRO_ACCESS_CODES;
+  process.env.PRO_ACCESS_CODES = "";
+  res = await fetch("http://localhost:4100/api/pro?style=sharp&icon=general/home", { headers: { cookie: codeCookie } });
+  ok(res.status === 401 && /Max-Age=0/.test(res.headers.get("set-cookie") || ""), "access code taken off the list → its sessions end");
+  process.env.PRO_ACCESS_CODES = keep;
+}
 
 // 16. the host: functions, unknown paths, and (on Cloudflare) clean URLs; GitHub gets a User-Agent
 res = await fetch("http://localhost:4100/api/auth/logout");

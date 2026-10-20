@@ -16,10 +16,12 @@
     "not_found_handling": "none",
     "run_worker_first": ["/api/*"]
   },
-  // Polar identifiers, not secrets: the organization, and the Pro product's License Keys benefit
+  // Polar identifiers, not secrets: the organization, and the Pro product's License Keys benefit. PRO_ACCESS_CODES:
+  // access codes that open Pro without Polar, as "label:sha256" pairs (only hashes, see api/_lib/access.js)
   "vars": {
     "POLAR_ORG_ID": "3ae81f50-c647-4fd2-89be-a68e8b4d22c6",
-    "POLAR_PRO_BENEFIT_ID": "2c450b0a-477e-49fb-91cb-dbd408756d06"
+    "POLAR_PRO_BENEFIT_ID": "2c450b0a-477e-49fb-91cb-dbd408756d06",
+    "PRO_ACCESS_CODES": "owner:8960ebad42a311bfdb1b5d1a2618929017de242661e34a52f62bbe32267223aa"
   },
   // keep variables added in the dashboard when a deploy runs
   "keep_vars": true,
