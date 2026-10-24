@@ -55,8 +55,6 @@
 .acct-err { margin: 14px 0 0 !important; padding: 10px 12px; border-radius: 12px; background: #FFF1F0; color: #B42318 !important; font-size: 13px; }
 button.acct-open { border: 0; background: none; font-family: inherit; white-space: nowrap; cursor: pointer; }
 .acct-open[hidden] { display: none !important; }
-/* phones: with the Log in button showing, the nav has no room for Share */
-@media (max-width: 420px) { .nav-actions:has(.acct-open:not([hidden])) a.nav-link[href*="x.com/intent"] { display: none; } }
 @media (max-width: 380px) {
   .nav-actions:has(.acct-open:not([hidden])) .nav-link { padding-inline: 9px; }
   .nav-actions:has(.acct-open:not([hidden])) .pill { padding-inline: 14px; }
