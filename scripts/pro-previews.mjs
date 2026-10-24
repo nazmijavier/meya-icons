@@ -71,10 +71,16 @@ for (const st of STYLES.filter((s) => s.showcase && (!only.length || only.includ
   let icons = previewIcons(st.id);
   if (!icons.length) { console.log(`${st.label}: no icons in ${path.join(PRO_DIR, st.id)}, skipped`); continue; }
   const had = ADD && manifest[st.id] ? manifest[st.id].icons : null;
+  // with --add, an icon already in the sprite is redrawn in its own cell when its drawing changed, and a new one
+  // goes after the last cell
+  let cells = icons.map((_, k) => k), redrawn = 0;
   if (had) {
-    const known = new Set(had.map(([k]) => k));
-    icons = icons.filter((i) => !known.has(i.k));
-    if (!icons.length) { console.log(`${st.label}: no new icons`); continue; }
+    const known = new Map(had.map(([k, h], n) => [k, { h, n }]));
+    const fresh = icons.filter((i) => !known.has(i.k)), changed = icons.filter((i) => known.has(i.k) && known.get(i.k).h !== i.h);
+    icons = [...changed, ...fresh];
+    cells = [...changed.map((i) => known.get(i.k).n), ...fresh.map((_, k) => had.length + k)];
+    redrawn = changed.length;
+    if (!icons.length) { console.log(`${st.label}: no new or changed icons`); continue; }
   }
   const base = had ? "data:image/webp;base64," + fs.readFileSync(rel("docs/pro", `${st.id}.webp`)).toString("base64") : null;
   // One-color styles render black on transparent: the site only uses the alpha channel, as a mask filled with
@@ -82,18 +88,22 @@ for (const st of STYLES.filter((s) => s.showcase && (!only.length || only.includ
   // an animated icon's still frame is the icon without its motion
   const still = (svg) => (st.animated ? svg.replace(/<style>[\s\S]*?<\/style>\s*/, "") : svg);
   const sources = icons.map((i) => "data:image/svg+xml;base64," + Buffer.from(st.color ? still(i.svg) : still(i.svg).replace(/currentColor/g, "#000")).toString("base64"));
-  const files = await page.evaluate(async ({ sources, CELL, COLS, BIG, mark, base, offset }) => {
+  const files = await page.evaluate(async ({ sources, CELL, COLS, BIG, mark, base, cells, total }) => {
     // full-color previews are the picture itself, so the large ones carry a watermark (pro-mark.mjs)
     const drawMark = mark && new Function(`return ${mark}`)();
     const load = (src) => new Promise((ok, no) => { const im = new Image(); im.onload = () => ok(im); im.onerror = no; im.src = src; });
     const webp = (c) => new Promise((ok) => c.toBlob((b) => { const r = new FileReader(); r.onload = () => ok(r.result.split(",")[1]); r.readAsDataURL(b); }, "image/webp", 0.8));
     const imgs = await Promise.all(sources.map(load));
     const sprite = document.createElement("canvas");
-    sprite.width = COLS * CELL; sprite.height = Math.ceil((offset + imgs.length) / COLS) * CELL;
+    sprite.width = COLS * CELL; sprite.height = Math.ceil(total / COLS) * CELL;
     const sx = sprite.getContext("2d");
-    // with --add, the sprite so far, then the new cells after its last one
+    // with --add, the sprite so far, each changed cell cleared and redrawn, then the new cells after its last one
     if (base) sx.drawImage(await load(base), 0, 0);
-    imgs.forEach((im, k) => sx.drawImage(im, ((offset + k) % COLS) * CELL, Math.floor((offset + k) / COLS) * CELL, CELL, CELL));
+    imgs.forEach((im, k) => {
+      const x = (cells[k] % COLS) * CELL, y = Math.floor(cells[k] / COLS) * CELL;
+      sx.clearRect(x, y, CELL, CELL);
+      sx.drawImage(im, x, y, CELL, CELL);
+    });
     const big = [];
     for (const im of imgs) {
       const c = document.createElement("canvas"); c.width = c.height = BIG;
@@ -103,7 +113,7 @@ for (const st of STYLES.filter((s) => s.showcase && (!only.length || only.includ
       big.push(await webp(c));
     }
     return { sprite: await webp(sprite), big };
-  }, { sources, CELL, COLS, BIG, mark: st.color ? drawMark.toString() : null, base, offset: had ? had.length : 0 });
+  }, { sources, CELL, COLS, BIG, mark: st.color ? drawMark.toString() : null, base, cells, total: had ? had.length + icons.length - redrawn : icons.length });
   if (!had) fs.rmSync(rel("docs/pro", st.id), { recursive: true, force: true });
   fs.mkdirSync(rel("docs/pro"), { recursive: true });
   fs.writeFileSync(rel("docs/pro", `${st.id}.webp`), Buffer.from(files.sprite, "base64"));
@@ -113,8 +123,10 @@ for (const st of STYLES.filter((s) => s.showcase && (!only.length || only.includ
     fs.writeFileSync(f, Buffer.from(files.big[k], "base64"));
   });
   if (st.animated) await moving(st, icons);
-  manifest[st.id] = { cols: COLS, icons: [...(had || []), ...icons.map((i) => [i.k, i.h])] };
-  console.log(`${st.label}: ${icons.length} ${had ? "new " : ""}previews → docs/pro/${st.id}.webp and docs/pro/${st.id}/`);
+  const all = had ? had.map(([k, h]) => [k, h]) : [];
+  icons.forEach((i, k) => { all[cells[k]] = [i.k, i.h]; });
+  manifest[st.id] = { cols: COLS, icons: all };
+  console.log(`${st.label}: ${had ? `${icons.length - redrawn} new, ${redrawn} redrawn` : icons.length} previews → docs/pro/${st.id}.webp and docs/pro/${st.id}/`);
 }
 await browser.close();
 fs.writeFileSync(manifestPath, JSON.stringify(manifest) + "\n");
