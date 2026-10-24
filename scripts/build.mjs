@@ -97,6 +97,9 @@ const siteCategories = categories.map((c) => ({ ...c, counts: { ...c.counts, ...
 // ---------- Pro teaser (the full PRO sets stay in ../meya-icons-pro) ----------
 // Paste the Polar checkout link here to switch "Get Pro" on.
 const POLAR_CHECKOUT = "https://buy.polar.sh/polar_cl_uUy8cBvgRtyC9pjDe2xcwaCr9XAHLMGrP8Hz307L1Od";
+// Paste the Polar checkout link of the one-time Lifetime product here to switch "Get Pro for life" on. It has no
+// launch code: the offer is for the first year of the yearly plan.
+const POLAR_LIFETIME = "";
 // Pro styles that have shipped are the showcase ones (browsable on the site); the others show as coming soon.
 const PRO_STYLES = STYLES.filter((st) => st.pro && st.showcase).map((st) => st.id);
 const TEASER = PRO_SAMPLES;
@@ -323,6 +326,7 @@ if (PUBLISH_SPONSOR_PAGE) {
       if (!inner) return "";
       return `<svg viewBox="0 0 24 24" fill="none"${st === "pixel" ? ' shape-rendering="crispEdges"' : ""} aria-hidden="true">${inner}</svg>`;
     })
+    .replaceAll('data-polar-life href="#" data-tip="Coming soon" class="pill soon', POLAR_LIFETIME ? `href="${POLAR_LIFETIME}" target="_blank" rel="noopener" class="pill` : 'href="#" data-tip="Coming soon" class="pill soon')
     .replaceAll('data-polar href="#" data-tip="Coming soon" class="pill soon"', CHECKOUT_URL ? `href="${CHECKOUT_URL}" target="_blank" rel="noopener" class="pill"` : 'href="#" data-tip="Coming soon" class="pill soon"')
     .replaceAll("__VERSION__", VERSION)
     .replaceAll("__COUNT__", total.toLocaleString("en-US"))

@@ -119,7 +119,14 @@ svg.ui path { stroke: currentColor; stroke-width: calc(var(--uw, 1.3) * 1px - 1.
 .plans { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 16px; margin-top: 8px; }
 .plan { display: grid; grid-row: span 8; grid-template-rows: subgrid; row-gap: 0; align-content: start; padding: 36px; border-radius: 28px; background: var(--mist); }
 .plan-pro { background: var(--ink); color: #fff; }
-.plan-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 28px; }
+.plan-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; min-height: 28px; }
+.plan-head { display: inline-flex; align-items: center; gap: 10px; }
+/* Pro yearly or for life: one card, the switch shows one set of prices and buttons (data-term on the card) */
+.term { display: inline-flex; gap: 2px; padding: 3px; border-radius: 9999px; background: rgba(255, 255, 255, 0.1); }
+.term button { height: 28px; padding: 0 12px; border: 0; border-radius: 9999px; background: none; color: rgba(255, 255, 255, 0.7); font-size: 12.5px; font-weight: 500; }
+.term button:hover { color: #fff; }
+.term button[aria-pressed="true"] { background: #fff; color: var(--ink); }
+#pro:not([data-term="life"]) .lifetime, #pro[data-term="life"] .yearly { display: none !important; }
 .plan-name { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 500; }
 .tag { height: 28px; padding-inline: 12px; display: inline-flex; align-items: center; border-radius: 9999px; background: var(--white); color: var(--ink); font-size: 12.5px; font-weight: 600; white-space: nowrap; }
 .price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-top: 32px; }
@@ -411,23 +418,31 @@ document.addEventListener("click", (e) => {
 
     <div class="plans">
       <div class="plan plan-pro" id="pro">
-        <div class="plan-top"><span class="plan-name"><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M10.52 3.541c.281-.568.846-.92 1.48-.92.634 0 1.199.352 1.48.92l1.894 3.839 4.237.615c.627.092 1.136.521 1.332 1.123.195.603.036 1.25-.418 1.692l-3.065 2.988.723 4.219c.107.625-.143 1.242-.656 1.614-.513.373-1.177.42-1.738.126l-3.789-1.992-3.789 1.992c-.561.294-1.225.247-1.738-.126-.512-.372-.763-.989-.656-1.614l.724-4.219-3.066-2.988c-.454-.442-.613-1.089-.417-1.692.195-.602.705-1.031 1.331-1.123l4.237-.615 1.894-3.839zm1.166.575-2.046 4.146c-.093.19-.279.325-.489.355l-4.575.665c-.14.02-.238.103-.282.238-.044.136-.013.26.088.359l3.311 3.227c.151.148.222.366.187.575l-.782 4.556c-.024.14.024.259.139.342.116.084.243.093.369.027l4.092-2.151c.187-.099.417-.099.605 0l4.091 2.151c.126.066.254.057.369-.027.115-.083.163-.202.139-.342l-.781-4.556c-.036-.209.035-.427.186-.575l3.311-3.227c.102-.099.132-.223.088-.359-.044-.135-.141-.218-.282-.238l-4.575-.665c-.21-.03-.395-.165-.489-.355l-2.046-4.146c-.063-.127-.172-.195-.314-.195-.142 0-.251.068-.314.195z" fill="currentColor" fill-rule="evenodd"/></svg>Pro</span><span class="tag launch">Launch offer −50%</span></div>
-        <div class="price">
-          <b id="pro-price"><span class="launch"><span class="usd">$30</span><span class="idr">Rp395.000</span></span><span class="regular"><span class="usd">$60</span><span class="idr">Rp790.000</span></span></b>
-          <span class="vh launch">Regular price</span>
-          <s id="pro-was" class="launch"><span class="usd">$60</span><span class="idr">Rp790.000</span></s>
+        <div class="plan-top">
+          <span class="plan-head"><span class="plan-name"><svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M10.52 3.541c.281-.568.846-.92 1.48-.92.634 0 1.199.352 1.48.92l1.894 3.839 4.237.615c.627.092 1.136.521 1.332 1.123.195.603.036 1.25-.418 1.692l-3.065 2.988.723 4.219c.107.625-.143 1.242-.656 1.614-.513.373-1.177.42-1.738.126l-3.789-1.992-3.789 1.992c-.561.294-1.225.247-1.738-.126-.512-.372-.763-.989-.656-1.614l.724-4.219-3.066-2.988c-.454-.442-.613-1.089-.417-1.692.195-.602.705-1.031 1.331-1.123l4.237-.615 1.894-3.839zm1.166.575-2.046 4.146c-.093.19-.279.325-.489.355l-4.575.665c-.14.02-.238.103-.282.238-.044.136-.013.26.088.359l3.311 3.227c.151.148.222.366.187.575l-.782 4.556c-.024.14.024.259.139.342.116.084.243.093.369.027l4.092-2.151c.187-.099.417-.099.605 0l4.091 2.151c.126.066.254.057.369-.027.115-.083.163-.202.139-.342l-.781-4.556c-.036-.209.035-.427.186-.575l3.311-3.227c.102-.099.132-.223.088-.359-.044-.135-.141-.218-.282-.238l-4.575-.665c-.21-.03-.395-.165-.489-.355l-2.046-4.146c-.063-.127-.172-.195-.314-.195-.142 0-.251.068-.314.195z" fill="currentColor" fill-rule="evenodd"/></svg>Pro</span><span class="tag launch yearly">Launch offer −50%</span></span>
+          <div class="term" role="group" aria-label="Pay yearly or once"><button type="button" data-plan="year" aria-pressed="true">Yearly</button><button type="button" data-plan="life" aria-pressed="false">Lifetime</button></div>
         </div>
-        <p class="sub" id="pro-sub"><span class="launch"><span class="usd">First year, then $60 a year</span><span class="idr">First year, then Rp790.000 a year</span></span><span class="regular">A year</span></p>
+        <div class="price">
+          <b class="lifetime"><span class="usd">$149</span><span class="idr">Rp1.990.000</span></b>
+          <b id="pro-price" class="yearly"><span class="launch"><span class="usd">$30</span><span class="idr">Rp395.000</span></span><span class="regular"><span class="usd">$60</span><span class="idr">Rp790.000</span></span></b>
+          <span class="vh launch yearly">Regular price</span>
+          <s id="pro-was" class="launch yearly"><span class="usd">$60</span><span class="idr">Rp790.000</span></s>
+        </div>
+        <p class="sub lifetime">Pay once, Pro for good</p>
+        <p class="sub yearly" id="pro-sub"><span class="launch"><span class="usd">First year, then $60 a year</span><span class="idr">First year, then Rp790.000 a year</span></span><span class="regular">A year</span></p>
         <div class="seat-row">
-          <div class="seats" role="group" aria-label="Seats"><button type="button" id="seat-down" aria-label="Fewer seats">−</button><output id="seat-n" aria-live="polite">1 seat</output><button type="button" id="seat-up" aria-label="More seats">+</button></div>
-          <span class="note">One seat per person</span>
+          <div class="seats yearly" role="group" aria-label="Seats"><button type="button" id="seat-down" aria-label="Fewer seats">−</button><output id="seat-n" aria-live="polite">1 seat</output><button type="button" id="seat-up" aria-label="More seats">+</button></div>
+          <span class="note yearly">One seat per person</span>
+          <span class="note lifetime">One code for one person</span>
           <p id="seat-max" hidden>Need more than 50 seats? Write to <a href="mailto:hello@meyalab.com">hello@meyalab.com</a>.</p>
           <p class="vh" id="seat-summary" aria-live="polite"></p>
         </div>
         <div class="cta">
           <div class="buy" data-hide-pro>
-            <a href="https://buy.polar.sh/polar_cl_uUy8cBvgRtyC9pjDe2xcwaCr9XAHLMGrP8Hz307L1Od?discount_code=LAUNCH50" target="_blank" rel="noopener" class="pill" id="get-pro">Get Pro</a>
-            <p class="reassure">Checkout by Polar · Cancel anytime</p>
+            <a data-polar href="#" data-tip="Coming soon" class="pill soon yearly" id="get-pro">Get Pro</a>
+            <a href="#" data-tip="Coming soon" class="pill soon lifetime" id="get-pro-life">Get Pro for life</a>
+            <p class="reassure yearly">Checkout by Polar · Cancel anytime</p>
+            <p class="reassure lifetime">Checkout by Polar · One payment, no renewal</p>
             <button type="button" class="login-link" id="login-link" data-acct-open hidden>Already have Pro? Log in</button>
           </div>
           <div id="have-pro" hidden><span>You have Pro.</span><a class="pill" href="./#stroke">Browse Pro icons</a></div>
@@ -565,6 +580,7 @@ document.addEventListener("click", (e) => {
         <details><summary>What counts as a seat?<svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M12.65 5.115v6.235h6.235c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-6.235v6.235c0 .357-.293.65-.65.65-.357 0-.65-.293-.65-.65v-6.235h-6.235c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65h6.235v-6.235c0-.357.293-.65.65-.65.357 0 .65.293.65.65z" fill="currentColor" fill-rule="evenodd"/></svg></summary><p>One seat for each person who uses the Pro icons. Each teammate accepts Polar's invitation email, then logs in here with their own email.</p></details>
         <details><summary>How is a team price worked out?<svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M12.65 5.115v6.235h6.235c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-6.235v6.235c0 .357-.293.65-.65.65-.357 0-.65-.293-.65-.65v-6.235h-6.235c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65h6.235v-6.235c0-.357.293-.65.65-.65.357 0 .65.293.65.65z" fill="currentColor" fill-rule="evenodd"/></svg></summary><p><span class="usd">Each seat has its own yearly rate: the first seat is $60, seats 2 to 5 are $22 each, and every seat from the 6th is $10. Three seats cost $60 + $22 + $22 = $104 a year.</span><span class="idr">Each seat has its own yearly rate: the first seat is Rp790.000, seats 2 to 5 are Rp290.000 each, and every seat from the 6th is Rp130.000. Three seats cost Rp790.000 + Rp290.000 + Rp290.000 = Rp1.370.000 a year.</span></p></details>
         <details class="launch"><summary>How does the launch offer work?<svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M12.65 5.115v6.235h6.235c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-6.235v6.235c0 .357-.293.65-.65.65-.357 0-.65-.293-.65-.65v-6.235h-6.235c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65h6.235v-6.235c0-.357.293-.65.65-.65.357 0 .65.293.65.65z" fill="currentColor" fill-rule="evenodd"/></svg></summary><p>Every Get Pro button on this page applies the launch discount for you, so there's no code to type: 50% off your first year. From your second year, Pro renews at the regular price shown on the card.</p></details>
+        <details><summary>Is there a lifetime plan?<svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M12.65 5.115v6.235h6.235c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-6.235v6.235c0 .357-.293.65-.65.65-.357 0-.65-.293-.65-.65v-6.235h-6.235c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65h6.235v-6.235c0-.357.293-.65.65-.65.357 0 .65.293.65.65z" fill="currentColor" fill-rule="evenodd"/></svg></summary><p>Yes. Switch the Pro card to Lifetime: <span class="usd">$149</span><span class="idr">Rp1.990.000</span>, paid once, with no renewal. It is for one person: Polar sends you one license key, and you log in with it or with your email. You keep Pro, and the icons added later, for good.</p></details>
         <details><summary>How do I get the Pro icons after I buy?<svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M12.65 5.115v6.235h6.235c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-6.235v6.235c0 .357-.293.65-.65.65-.357 0-.65-.293-.65-.65v-6.235h-6.235c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65h6.235v-6.235c0-.357.293-.65.65-.65.357 0 .65.293.65.65z" fill="currentColor" fill-rule="evenodd"/></svg></summary><p>Log in on this site with the email you bought with. Polar, our payment provider, emails you a 6-character sign-in code, or you can use your license key. Then open any Pro icon and copy it as SVG or React.</p></details>
         <details><summary>Can I use the icons in client work?<svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M12.65 5.115v6.235h6.235c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-6.235v6.235c0 .357-.293.65-.65.65-.357 0-.65-.293-.65-.65v-6.235h-6.235c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65h6.235v-6.235c0-.357.293-.65.65-.65.357 0 .65.293.65.65z" fill="currentColor" fill-rule="evenodd"/></svg></summary><p>Yes. Pro icons can be used in personal and client work. Outline and Duotone are MIT licensed for personal and commercial work; credit is appreciated but not required.</p></details>
         <details><summary>Can I cancel anytime?<svg class="ic ui" viewBox="0 0 24 24" fill="none" stroke-linejoin="round" aria-hidden="true"><path d="M12.65 5.115v6.235h6.235c.357 0 .65.293.65.65 0 .357-.293.65-.65.65h-6.235v6.235c0 .357-.293.65-.65.65-.357 0-.65-.293-.65-.65v-6.235h-6.235c-.357 0-.65-.293-.65-.65 0-.357.293-.65.65-.65h6.235v-6.235c0-.357.293-.65.65-.65.357 0 .65.293.65.65z" fill="currentColor" fill-rule="evenodd"/></svg></summary><p>Yes. Cancel from the Polar customer portal linked in your receipt email. Pro stays active until the end of the year you paid for; after that it doesn't renew and copying Pro icons stops.</p></details>
@@ -836,7 +852,9 @@ button.acct-open { border: 0; background: none; font-family: inherit; white-spac
   const fmt = (x) => cur() === "idr"
     ? "Rp" + Math.round(x).toLocaleString("id-ID")
     : "$" + (Number.isInteger(x) ? x.toLocaleString("en-US") : x.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-  let seats = 1;
+  let seats = 1, term = "year";
+  // Lifetime: one payment, one person (a lifetime licence covers its buyer only)
+  const LIFE = { usd: 149, idr: 1990000 };
   // The card shows the total for the chosen seats; how a team price is worked out is in the FAQ.
   function show() {
     const n = seats, list = total(n), now = first(list), per = OFF ? "first year" : "a year";
@@ -849,7 +867,22 @@ button.acct-open { border: 0; background: none; font-family: inherit; white-spac
     $("#bar-price").textContent = who + `${fmt(now)} ${per}`;
     $("#seat-summary").textContent = `${n} ${n === 1 ? "seat" : "seats"}. ` + (OFF ? `${fmt(now)} for the first year, then ${fmt(list)} a year.` : `${fmt(list)} a year.`);
     $("#seat-down").disabled = n <= 1; $("#seat-up").disabled = n >= MAX;
+    if (term === "life") $("#bar-price").textContent = `${fmt(LIFE[cur()])} once`;
   }
+  // Yearly or lifetime: the card switches its prices and buttons, and the phone bar's button follows
+  const card = $("#pro"), barBtn = $("#get-pro-bar");
+  const yearBtn = { href: barBtn.getAttribute("href"), soon: barBtn.classList.contains("soon") };
+  document.querySelectorAll(".term [data-plan]").forEach((b) => b.addEventListener("click", () => {
+    term = b.dataset.plan;
+    card.dataset.term = term;
+    document.querySelectorAll(".term [data-plan]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    const life = $("#get-pro-life"), to = term === "life" ? { href: life.getAttribute("href"), soon: life.classList.contains("soon") } : yearBtn;
+    barBtn.setAttribute("href", to.href);
+    barBtn.classList.toggle("soon", to.soon);
+    if (to.soon) barBtn.dataset.tip = "Coming soon"; else delete barBtn.dataset.tip;
+    if (!to.soon) { barBtn.target = "_blank"; barBtn.rel = "noopener"; }
+    show();
+  }));
   $("#seat-down").addEventListener("click", () => { seats = Math.max(1, seats - 1); show(); });
   $("#seat-up").addEventListener("click", () => { seats = Math.min(MAX, seats + 1); show(); });
   show();
@@ -908,9 +941,10 @@ button.acct-open { border: 0; background: none; font-family: inherit; white-spac
   heroTiles.forEach((t) => t.setAttribute("aria-current", String(t.dataset.style === "glass")));
 
   // ---------- Buy bar (phones) ----------
-  // Shown once the Pro card's button has scrolled away, hidden again at the closing band and for Pro customers.
+  // Shown once the Pro card's buttons (yearly or lifetime) have scrolled away, hidden again at the closing band and for
+  // Pro customers.
   // Checked on scroll rather than with IntersectionObserver, which misses a jump straight past the button.
-  const bar = $("#buybar"), phone = matchMedia("(max-width: 900px)"), btn = $("#get-pro"), end = $("#end");
+  const bar = $("#buybar"), phone = matchMedia("(max-width: 900px)"), btn = $("#pro .buy"), end = $("#end");
   let queued = false;
   function updateBar() {
     queued = false;
