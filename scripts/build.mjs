@@ -130,7 +130,7 @@ const FOOTER = `<footer class="footer">
 
 // ---------- Offer banner (top of every page) ----------
 // The launch offer, shown site-wide. Set OFFER to null to take the banner down.
-const OFFER = { code: "LAUNCH50", pct: 50, text: "50% off <span class=\"promo-long\">your first year of </span>Pro" };
+const OFFER = null;
 const BANNER = OFFER
   ? `<div class="promo" role="region" aria-label="Offer">
   <p><span>${OFFER.text} with code</span> <button type="button" class="promo-code" data-code="${OFFER.code}" title="Copy code">${OFFER.code}</button> <a href="pricing#pro">Get Pro<span aria-hidden="true"> →</span></a></p>
@@ -175,6 +175,11 @@ fs.writeFileSync(
     `export const HIDDEN = ${JSON.stringify(HIDDEN)};\n`
 );
 // The checkout link applies the launch code by itself (Polar's discount_code parameter).
+// EMBED_CHECKOUT = true makes Get Pro open Polar's checkout as an overlay on the page (Polar's embed script,
+// pinned) instead of a new tab. Off for now: with this checkout link, Polar sends embedded requests (the ones
+// carrying embed_origin) to its home page, so the overlay stays blank. Turn it on once Polar accepts the embed.
+const EMBED_CHECKOUT = false;
+const POLAR_EMBED = "https://cdn.jsdelivr.net/npm/@polar-sh/checkout@0.6.0/dist/embed.global.js";
 const CHECKOUT_URL = POLAR_CHECKOUT && OFFER ? `${POLAR_CHECKOUT}?discount_code=${encodeURIComponent(OFFER.code)}` : POLAR_CHECKOUT;
 
 // ---------- Website ----------
@@ -314,6 +319,7 @@ if (PUBLISH_SPONSOR_PAGE) {
     .replaceAll("__STYLE_WORD__", WORDS[styleCount] || String(styleCount))
     .replaceAll("__PRO_STYLE_WORD__", WORDS[PRO_STYLES.length] || String(PRO_STYLES.length))
     .replace("__FOOTER__", FOOTER)
+    .replace("__POLAR_EMBED__", CHECKOUT_URL && EMBED_CHECKOUT ? `<script src="${POLAR_EMBED}" defer data-auto-init></script>` : "")
     .replace(/__ICON:([a-z-]+\/[a-z-]+)__/g, (m, ref) => outlineIcon(ref))
     .replaceAll("__YES__", `<span class="yes" aria-label="Included">${check}</span>`)
     // the style gallery: the same icons inline in Outline and Duotone
@@ -330,7 +336,7 @@ if (PUBLISH_SPONSOR_PAGE) {
       if (!inner) return "";
       return `<svg viewBox="0 0 24 24" fill="none"${st === "pixel" ? ' shape-rendering="crispEdges"' : ""} aria-hidden="true">${inner}</svg>`;
     })
-    .replaceAll('data-polar href="#" data-tip="Coming soon" class="pill soon"', CHECKOUT_URL ? `href="${CHECKOUT_URL}" target="_blank" rel="noopener" class="pill"` : 'href="#" data-tip="Coming soon" class="pill soon"')
+    .replaceAll('data-polar href="#" data-tip="Coming soon" class="pill soon"', CHECKOUT_URL ? `href="${CHECKOUT_URL}"${EMBED_CHECKOUT ? ' data-polar-checkout data-polar-checkout-theme="dark"' : ""} target="_blank" rel="noopener" class="pill"` : 'href="#" data-tip="Coming soon" class="pill soon"')
     .replaceAll("__VERSION__", VERSION)
     .replaceAll("__COUNT__", total.toLocaleString("en-US"))
     .replaceAll("__PRO_COUNT__", proCount.toLocaleString("en-US"))

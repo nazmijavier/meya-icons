@@ -1,4 +1,5 @@
-// Pricing page QA: screenshots and layout checks at desktop and phone sizes, in USD and in Rupiah.
+// Pricing page QA: screenshots and layout checks at desktop and phone sizes. Prices are in US dollars for everyone,
+// including visitors from Indonesia.
 import path from "node:path";
 import { createRequire } from "node:module";
 import { start, stop } from "./serve.mjs";
@@ -26,11 +27,11 @@ for (const cur of ["usd", "idr"]) {
   for (const vp of [{ width: 1440, height: 900 }, { width: 375, height: 812 }, { width: 360, height: 740 }]) {
     const tag = `${vp.width}-${cur}`;
     const { ctx, page, errors } = await open(vp, cur);
-    ok(await page.evaluate(() => document.documentElement.dataset.cur) === cur, `${tag}: currency is ${cur}`);
     const text = await page.evaluate(() => document.body.innerText);
     ok(!/__[A-Z]/.test(text), `${tag}: no build placeholders in the text`);
     ok(!/\bIDR\b/.test(text), `${tag}: no "IDR" shown`);
-    ok(cur === "idr" ? !/\$\d/.test(text) : !/Rp\d/.test(text), `${tag}: only one currency visible`);
+    ok(!/Rp\d/.test(text) && text.includes("$29"), `${tag}: price shown in US dollars`);
+    ok(!/a year|per seat|first year|subscription,? then|Cancel anytime/i.test(text), `${tag}: no yearly or per-seat wording`);
     const wide = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
     ok(wide <= 0, `${tag}: no horizontal scroll (${wide}px over)`);
     const over = await page.evaluate(() => [...document.querySelectorAll("main *, .nav *")].filter((el) => {
@@ -41,6 +42,7 @@ for (const cur of ["usd", "idr"]) {
     const box = await btn.boundingBox();
     if (vp.width === 1440) ok(box && box.y + box.height <= vp.height, `${tag}: Get Pro is on the first screen (bottom ${Math.round(box.y + box.height)}px)`);
     ok((await btn.textContent()).trim() === "Get Pro", `${tag}: button reads Get Pro: ${await btn.textContent()}`);
+    ok(await btn.evaluate((a) => /^https:\/\/buy\.polar\.sh\//.test(a.href)), `${tag}: Get Pro links to the Polar checkout`);
     const rows = await page.evaluate(() => [".cta", ".rule", ".checks"].map((s) => [...document.querySelectorAll(`.plan ${s}`)].map((el) => Math.round(el.getBoundingClientRect().top))));
     if (vp.width === 1440) ok(rows.every(([a, b]) => a === b), `${tag}: both cards line up (button, rule, list) ${JSON.stringify(rows)}`);
     ok(!errors.length, `${tag}: no script errors ${errors.join(" | ")}`);
@@ -50,23 +52,13 @@ for (const cur of ["usd", "idr"]) {
   }
 }
 
-// seats and team math
+// one price, paid once
 {
   const { ctx, page } = await open({ width: 1440, height: 900 }, "usd");
-  ok((await page.textContent("#pro-price")) === "$30", `1 seat: first-year price ${await page.textContent("#pro-price")}`);
-  ok((await page.textContent("#pro-was")) === "$60", "1 seat: regular price struck");
-  ok((await page.textContent("#pro-sub")) === "First year, then $60 a year", `1 seat: ${await page.textContent("#pro-sub")}`);
-  for (let i = 0; i < 4; i++) await page.click("#seat-up");
-  // 60 + 4 × 22 = 148, 50% off → 74
-  ok((await page.textContent("#pro-price")) === "$74", `5 seats: ${await page.textContent("#pro-price")}`);
-  ok((await page.textContent("#pro-was")) === "$148", `5 seats regular: ${await page.textContent("#pro-was")}`);
-  ok((await page.textContent("#pro-sub")) === "5 seats · first year, then $148 a year", `5 seats: ${await page.textContent("#pro-sub")}`);
-  for (let i = 0; i < 5; i++) await page.click("#seat-up");
-  // 60 + 88 + 5 × 10 = 198 → 99
-  ok((await page.textContent("#pro-price")) === "$99", `10 seats: ${await page.textContent("#pro-price")}`);
-  await page.screenshot({ path: `${OUT}/card-10-seats.png`, clip: await (await page.$("#pro")).boundingBox() });
-  for (let i = 0; i < 40; i++) await page.click("#seat-up");
-  ok((await page.textContent("#seat-n")) === "50 seats" && (await page.isDisabled("#seat-up")) && (await page.isVisible("#seat-max")), "50 seats: stepper stops and the contact line shows");
+  ok((await page.textContent("#pro-price")).trim() === "$29", `price: ${await page.textContent("#pro-price")}`);
+  ok((await page.textContent("#pro-sub")).trim() === "One payment, yours to keep", `price line: ${await page.textContent("#pro-sub")}`);
+  ok(!(await page.$("#seat-up")) && !(await page.$("#pro-was")), "no seat picker and no struck price");
+  await page.screenshot({ path: `${OUT}/card-pro.png`, clip: await (await page.$("#pro")).boundingBox() });
 
   // the gallery switches style
   ok((await page.getAttribute("#g-panel", "data-style")) === "glass", "gallery starts on Glass");
@@ -97,17 +89,6 @@ for (const cur of ["usd", "idr"]) {
   await ctx.close();
 }
 
-// IDR math
-{
-  const { ctx, page } = await open({ width: 1440, height: 900 }, "idr");
-  ok((await page.textContent("#pro-price")) === "Rp395.000", `IDR 1 seat: ${await page.textContent("#pro-price")}`);
-  for (let i = 0; i < 4; i++) await page.click("#seat-up");
-  // 790.000 + 4 × 290.000 = 1.950.000 → 975.000
-  ok((await page.textContent("#pro-price")) === "Rp975.000", `IDR 5 seats: ${await page.textContent("#pro-price")}`);
-  await page.screenshot({ path: `${OUT}/card-idr-5.png`, clip: await (await page.$("#pro")).boundingBox() });
-  await ctx.close();
-}
-
 // phone buy bar
 {
   const { ctx, page } = await open({ width: 375, height: 812 }, "usd");
@@ -115,7 +96,7 @@ for (const cur of ["usd", "idr"]) {
   await page.evaluate(() => document.querySelector("#styles").scrollIntoView());
   await page.waitForTimeout(500);
   ok(await page.evaluate(() => document.querySelector("#buybar").classList.contains("show")), "phone: buy bar shows once Get Pro scrolled away");
-  ok((await page.textContent("#bar-price")).includes("$30"), `phone: bar price ${await page.textContent("#bar-price")}`);
+  ok((await page.textContent("#bar-price")).includes("$29 once"), `phone: bar price ${await page.textContent("#bar-price")}`);
   await page.screenshot({ path: `${OUT}/phone-bar.png` });
   await page.evaluate(() => document.querySelector("#end").scrollIntoView());
   await page.waitForTimeout(500);

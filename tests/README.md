@@ -4,8 +4,8 @@ End-to-end checks for the website and the scripts that deploy it. Nothing here i
 
 | File | What it checks |
 | --- | --- |
-| `login.test.mjs` | The Pro login and Pro icons end to end in a real browser: Polar email-code and license-key login (against a stand-in Polar), copying Pro SVGs, the daily re-check, tampered cookies, the Origin check, phones, the offer banner. With `SITE=workerd` it runs the real Worker under `wrangler dev` (Cloudflare's runtime) and also checks clean URLs, 404s, HSTS and that repository files are not served. |
-| `pricing.test.mjs` | The pricing page at 1440, 375 and 360 px in USD and Rupiah: no build placeholders, one currency at a time, no horizontal scroll, the seat maths, the style gallery, the phone buy bar. Writes screenshots. |
+| `login.test.mjs` | The Pro login and Pro icons end to end in a real browser: Polar email-code and license-key login (against a stand-in Polar), copying Pro SVGs, the daily re-check, tampered cookies, the Origin check, phones, no offer banner. With `SITE=workerd` it runs the real Worker under `wrangler dev` (Cloudflare's runtime) and also checks clean URLs, 404s, HSTS and that repository files are not served. |
+| `pricing.test.mjs` | The pricing page at 1440, 375 and 360 px for US and Indonesian visitors: no build placeholders, the $29 one-time price in US dollars, no horizontal scroll, the style gallery, the phone buy bar. Writes screenshots. |
 | `serve.mjs` | The stand-ins both use: the site (Node, or the Worker under `wrangler dev`), a fake Polar and a fake GitHub contents API that reads `../meya-icons-pro`. |
 | `cloudflare/*.test.mjs` | `scripts/cloudflare.mjs` (prepare, secrets, status, cutover, rollback) against a stand-in Cloudflare API, and `scripts/handoff.mjs` (sealed secrets) against stand-in GitHub and Polar. |
 
