@@ -96,7 +96,8 @@ const siteCategories = categories.map((c) => ({ ...c, counts: { ...c.counts, ...
 
 // ---------- Pro teaser (the full PRO sets stay in ../meya-icons-pro) ----------
 // Paste the Polar checkout link here to switch "Get Pro" on.
-const POLAR_CHECKOUT = "https://buy.polar.sh/polar_cl_uUy8cBvgRtyC9pjDe2xcwaCr9XAHLMGrP8Hz307L1Od";
+// "Website - Pricing page (Lifetime)": the Meya Icons Pro (Lifetime) product, $29 one-time, License Keys benefit.
+const POLAR_CHECKOUT = "https://buy.polar.sh/polar_cl_q1mr0sJ5SrWwjHDULEIcYpqVicPmC4nyfxh8j0HNACB";
 // Pro styles that have shipped are the showcase ones (browsable on the site); the others show as coming soon.
 const PRO_STYLES = STYLES.filter((st) => st.pro && st.showcase).map((st) => st.id);
 const TEASER = PRO_SAMPLES;
@@ -175,10 +176,10 @@ fs.writeFileSync(
     `export const HIDDEN = ${JSON.stringify(HIDDEN)};\n`
 );
 // The checkout link applies the launch code by itself (Polar's discount_code parameter).
-// EMBED_CHECKOUT = true makes Get Pro open Polar's checkout as an overlay on the page (Polar's embed script,
-// pinned) instead of a new tab. Off for now: with this checkout link, Polar sends embedded requests (the ones
-// carrying embed_origin) to its home page, so the overlay stays blank. Turn it on once Polar accepts the embed.
-const EMBED_CHECKOUT = false;
+// Get Pro opens Polar's checkout as an overlay on the page (Polar's embed script, pinned). Polar only allows the
+// hosts listed in its Settings > Embedding > Embed hosts (icons.meyalab.com); anywhere else, such as a local
+// preview, the overlay stays blank. If the script doesn't load, the button is a plain link to the checkout.
+const EMBED_CHECKOUT = true;
 const POLAR_EMBED = "https://cdn.jsdelivr.net/npm/@polar-sh/checkout@0.6.0/dist/embed.global.js";
 const CHECKOUT_URL = POLAR_CHECKOUT && OFFER ? `${POLAR_CHECKOUT}?discount_code=${encodeURIComponent(OFFER.code)}` : POLAR_CHECKOUT;
 

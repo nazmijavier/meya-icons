@@ -42,7 +42,7 @@ for (const cur of ["usd", "idr"]) {
     const box = await btn.boundingBox();
     if (vp.width === 1440) ok(box && box.y + box.height <= vp.height, `${tag}: Get Pro is on the first screen (bottom ${Math.round(box.y + box.height)}px)`);
     ok((await btn.textContent()).trim() === "Get Pro", `${tag}: button reads Get Pro: ${await btn.textContent()}`);
-    ok(await btn.evaluate((a) => /^https:\/\/buy\.polar\.sh\//.test(a.href)), `${tag}: Get Pro links to the Polar checkout`);
+    ok(await btn.evaluate((a) => a.hasAttribute("data-polar-checkout") && /^https:\/\/buy\.polar\.sh\//.test(a.href)), `${tag}: Get Pro opens the Polar checkout overlay`);
     const rows = await page.evaluate(() => [".cta", ".rule", ".checks"].map((s) => [...document.querySelectorAll(`.plan ${s}`)].map((el) => Math.round(el.getBoundingClientRect().top))));
     if (vp.width === 1440) ok(rows.every(([a, b]) => a === b), `${tag}: both cards line up (button, rule, list) ${JSON.stringify(rows)}`);
     ok(!errors.length, `${tag}: no script errors ${errors.join(" | ")}`);
