@@ -96,7 +96,8 @@ const siteCategories = categories.map((c) => ({ ...c, counts: { ...c.counts, ...
 
 // ---------- Pro teaser (the full PRO sets stay in ../meya-icons-pro) ----------
 // Paste the Polar checkout link here to switch "Get Pro" on.
-const POLAR_CHECKOUT = "https://buy.polar.sh/polar_cl_uUy8cBvgRtyC9pjDe2xcwaCr9XAHLMGrP8Hz307L1Od";
+// "Website - Pricing page (Lifetime)": the Meya Icons Pro (Lifetime) product, $29 one-time, License Keys benefit.
+const POLAR_CHECKOUT = "https://buy.polar.sh/polar_cl_q1mr0sJ5SrWwjHDULEIcYpqVicPmC4nyfxh8j0HNACB";
 // Pro styles that have shipped are the showcase ones (browsable on the site); the others show as coming soon.
 const PRO_STYLES = STYLES.filter((st) => st.pro && st.showcase).map((st) => st.id);
 const TEASER = PRO_SAMPLES;
@@ -130,7 +131,7 @@ const FOOTER = `<footer class="footer">
 
 // ---------- Offer banner (top of every page) ----------
 // The launch offer, shown site-wide. Set OFFER to null to take the banner down.
-const OFFER = { code: "LAUNCH50", pct: 50, text: "50% off <span class=\"promo-long\">your first year of </span>Pro" };
+const OFFER = null;
 const BANNER = OFFER
   ? `<div class="promo" role="region" aria-label="Offer">
   <p><span>${OFFER.text} with code</span> <button type="button" class="promo-code" data-code="${OFFER.code}" title="Copy code">${OFFER.code}</button> <a href="pricing#pro">Get Pro<span aria-hidden="true"> →</span></a></p>
@@ -175,6 +176,11 @@ fs.writeFileSync(
     `export const HIDDEN = ${JSON.stringify(HIDDEN)};\n`
 );
 // The checkout link applies the launch code by itself (Polar's discount_code parameter).
+// Get Pro opens Polar's checkout as an overlay on the page (Polar's embed script, pinned). Polar only allows the
+// hosts listed in its Settings > Embedding > Embed hosts (icons.meyalab.com); anywhere else, such as a local
+// preview, the overlay stays blank. If the script doesn't load, the button is a plain link to the checkout.
+const EMBED_CHECKOUT = true;
+const POLAR_EMBED = "https://cdn.jsdelivr.net/npm/@polar-sh/checkout@0.6.0/dist/embed.global.js";
 const CHECKOUT_URL = POLAR_CHECKOUT && OFFER ? `${POLAR_CHECKOUT}?discount_code=${encodeURIComponent(OFFER.code)}` : POLAR_CHECKOUT;
 
 // ---------- Website ----------
@@ -314,6 +320,7 @@ if (PUBLISH_SPONSOR_PAGE) {
     .replaceAll("__STYLE_WORD__", WORDS[styleCount] || String(styleCount))
     .replaceAll("__PRO_STYLE_WORD__", WORDS[PRO_STYLES.length] || String(PRO_STYLES.length))
     .replace("__FOOTER__", FOOTER)
+    .replace("__POLAR_EMBED__", CHECKOUT_URL && EMBED_CHECKOUT ? `<script src="${POLAR_EMBED}" defer data-auto-init></script>` : "")
     .replace(/__ICON:([a-z-]+\/[a-z-]+)__/g, (m, ref) => outlineIcon(ref))
     .replaceAll("__YES__", `<span class="yes" aria-label="Included">${check}</span>`)
     // the style gallery: the same icons inline in Outline and Duotone
@@ -330,7 +337,7 @@ if (PUBLISH_SPONSOR_PAGE) {
       if (!inner) return "";
       return `<svg viewBox="0 0 24 24" fill="none"${st === "pixel" ? ' shape-rendering="crispEdges"' : ""} aria-hidden="true">${inner}</svg>`;
     })
-    .replaceAll('data-polar href="#" data-tip="Coming soon" class="pill soon"', CHECKOUT_URL ? `href="${CHECKOUT_URL}" target="_blank" rel="noopener" class="pill"` : 'href="#" data-tip="Coming soon" class="pill soon"')
+    .replaceAll('data-polar href="#" data-tip="Coming soon" class="pill soon"', CHECKOUT_URL ? `href="${CHECKOUT_URL}"${EMBED_CHECKOUT ? ' data-polar-checkout data-polar-checkout-theme="dark"' : ""} target="_blank" rel="noopener" class="pill"` : 'href="#" data-tip="Coming soon" class="pill soon"')
     .replaceAll("__VERSION__", VERSION)
     .replaceAll("__COUNT__", total.toLocaleString("en-US"))
     .replaceAll("__PRO_COUNT__", proCount.toLocaleString("en-US"))

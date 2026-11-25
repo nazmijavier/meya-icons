@@ -134,11 +134,11 @@ ok(r.status() === 403, "login POST from another site → 403");
 r = await page.request.get("http://localhost:4100/api/pro?style=sharp&icon=general/home");
 ok(r.status() === 200 && /svg/.test(r.headers()["content-type"]) && /default-src 'none'/.test(r.headers()["content-security-policy"] || ""), "Pro SVG served with a locked-down CSP");
 
-// 10. pricing page: login button and Rupiah from /api/geo
+// 10. pricing page: login button, and US dollars even for an Indonesian visitor
 await page.goto("http://localhost:4100/pricing");
 await page.waitForSelector(".acct-open:not([hidden])");
 ok((await page.textContent(".acct-open")).trim() === "Account", "pricing: signed-in state carries over");
-ok((await page.evaluate(() => document.documentElement.dataset.cur)) === "idr", "pricing: Rupiah for an Indonesian visitor");
+ok(!(await page.evaluate(() => document.documentElement.dataset.cur)) && !/Rp\d/.test(await page.evaluate(() => document.body.innerText)), "pricing: US dollars only, even for an Indonesian visitor");
 ok(await page.isVisible("#have-pro") && !(await page.isVisible("#get-pro")) && !(await page.isVisible("#get-pro-cmp")) && !(await page.isVisible("#get-pro-end")) && !(await page.isVisible("#login-link")),
   "pricing: a Pro customer sees 'You have Pro', no Get Pro or Log in");
 {
@@ -200,7 +200,7 @@ await page.waitForTimeout(1500);
 ok(proCalls.length <= 2, `after the session ends: ${proCalls.length} /api/pro call(s), no loop`);
 ok(await page.isVisible("#p-lock .pill"), "after the session ends: the sheet offers Get Pro again");
 
-// 13. phones: nothing wider than the screen, login configured, Rupiah visitor
+// 13. phones: nothing wider than the screen, login configured, Indonesian visitor
 for (const width of [360, 390]) {
   const pc = await browser.newContext({ viewport: { width, height: 800 }, timezoneId: "Asia/Jakarta", isMobile: true, hasTouch: true });
   const pp = await pc.newPage();
@@ -215,13 +215,8 @@ for (const width of [360, 390]) {
   await pc.close();
 }
 
-// 14. the banner admits when the clipboard is refused
-const bc = await browser.newContext({ viewport: { width: 1280, height: 400 } });
-await bc.addInitScript(() => { Object.defineProperty(navigator, "clipboard", { value: { writeText: () => Promise.reject(new Error("denied")) } }); });
-const bp = await bc.newPage(); await bp.goto("http://localhost:4100/pricing");
-await bp.click(".promo-code");
-ok(await bp.$eval(".promo-code", (b) => b.classList.contains("manual") && !b.classList.contains("copied") && getSelection().toString() === "LAUNCH50"), "banner: refused clipboard → code selected, 'press Ctrl/⌘ C'");
-await bc.close();
+// 14. no offer banner on any page
+for (const url of ["/", "/pricing"]) { await page.goto("http://localhost:4100" + url); ok(!(await page.$(".promo")), `${url}: no offer banner`); }
 
 ok(errors.length === 0, `no page errors${errors.length ? ": " + errors.join(" | ") : ""}`);
 await browser.close();

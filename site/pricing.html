@@ -1,22 +1,10 @@
 <title>Pricing · Meya Icons</title>
-<meta name="description" content="Outline and Duotone are free forever under MIT. Pro adds __PRO_NAMES__: __PRO_COUNT__ more icons, priced per seat and billed yearly.">
+<meta name="description" content="Outline and Duotone are free forever under MIT. Pro adds __PRO_NAMES__: __PRO_COUNT__ more icons, for $29, paid once.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&family=Geist+Mono:wght@400;500&display=swap">
 <link rel="icon" type="image/png" href="__FAVICON__">
 <link rel="apple-touch-icon" href="__FAVICON__">
-<script>
-// Prices show in one currency: Rupiah for visitors in Indonesia, US dollars elsewhere. The time zone gives an instant
-// guess; the page script then asks /api/geo for the visitor's country and remembers it for the session.
-// data-offer marks the launch offer (OFFER in build.mjs), so the struck regular price and first-year price show.
-(() => {
-  let cur = null;
-  try { cur = sessionStorage.getItem("meya-cur"); } catch {}
-  if (!cur) cur = /^Asia\/(Jakarta|Pontianak|Makassar|Jayapura)$/.test(Intl.DateTimeFormat().resolvedOptions().timeZone || "") ? "idr" : "usd";
-  document.documentElement.dataset.cur = cur;
-  if (+"__OFFER_PCT__" > 0) document.documentElement.dataset.offer = "on";
-})();
-</script>
 <style>
 /* Same tokens as the icon site (DESIGN.md): white canvas, Studio Mist surfaces, flat, pill controls. */
 :root {
@@ -49,10 +37,6 @@ button { font: inherit; color: inherit; letter-spacing: inherit; cursor: pointer
 svg.ui path { stroke: currentColor; stroke-width: calc(var(--uw, 1.3) * 1px - 1.3px); }
 .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .mono { font-family: var(--mono); font-size: 12.5px; letter-spacing: 0; }
-
-/* One currency at a time (data-cur), and the launch offer on or off (data-offer). */
-:root[data-cur="idr"] .usd, :root:not([data-cur="idr"]) .idr { display: none !important; }
-:root:not([data-offer]) .launch, :root[data-offer] .regular { display: none !important; }
 
 /* ---------- Tooltip ---------- */
 [data-tip] { position: relative; }
@@ -103,20 +87,11 @@ svg.ui path { stroke: currentColor; stroke-width: calc(var(--uw, 1.3) * 1px - 1.
 .tag { height: 28px; padding-inline: 12px; display: inline-flex; align-items: center; border-radius: 9999px; background: var(--white); color: var(--ink); font-size: 12.5px; font-weight: 600; white-space: nowrap; }
 .price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-top: 32px; }
 .price b { font-size: 56px; font-weight: 500; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums; }
-:root[data-cur="idr"] .price b { font-size: 44px; }
-#pro-was { font-size: 20px; letter-spacing: -0.02em; color: rgba(255, 255, 255, 0.4); text-decoration-thickness: 1.5px; font-variant-numeric: tabular-nums; }
 .sub { margin: 10px 0 0; font-size: 14px; color: var(--slate); }
 .plan-pro .sub { color: rgba(255, 255, 255, 0.6); }
 .seat-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; min-height: 40px; margin-top: 28px; }
-.seats { display: inline-flex; align-items: center; gap: 2px; height: 40px; padding: 4px; border-radius: 9999px; background: rgba(255, 255, 255, 0.1); }
-.seats button { width: 32px; height: 32px; border: 0; border-radius: 50%; background: none; color: #fff; font-size: 18px; line-height: 1; }
-.seats button:hover { background: rgba(255, 255, 255, 0.12); }
-.seats button:disabled { opacity: 0.35; cursor: default; background: none; }
-.seats output { min-width: 72px; text-align: center; font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums; }
 .note { font-size: 13px; color: var(--slate); }
 .plan-pro .note { color: rgba(255, 255, 255, 0.5); }
-#seat-max { flex-basis: 100%; margin: 0; font-size: 12px; color: rgba(255, 255, 255, 0.8); }
-#seat-max a { color: inherit; }
 .cta { margin-top: 16px; }
 .cta .pill { width: 100%; height: 52px; font-size: 15px; }
 .plan-pro .cta .pill { background: #fff; color: var(--ink); }
@@ -304,8 +279,6 @@ details p a { color: var(--ink); }
 }
 @media (max-width: 480px) {
   .price b { font-size: 46px; }
-  :root[data-cur="idr"] .price b { font-size: 36px; }
-  #pro-was { font-size: 17px; }
 }
 @media (max-width: 420px) {
   .nav-link .label { display: none; }
@@ -346,23 +319,18 @@ __BANNER__
 
     <div class="plans">
       <div class="plan plan-pro" id="pro">
-        <div class="plan-top"><span class="plan-name">__ICON:general/star__Pro</span><span class="tag launch">Launch offer −__OFFER_PCT__%</span></div>
+        <div class="plan-top"><span class="plan-name">__ICON:general/star__Pro</span><span class="tag">Pay once</span></div>
         <div class="price">
-          <b id="pro-price"><span class="launch"><span class="usd">$30</span><span class="idr">Rp395.000</span></span><span class="regular"><span class="usd">$60</span><span class="idr">Rp790.000</span></span></b>
-          <span class="vh launch">Regular price</span>
-          <s id="pro-was" class="launch"><span class="usd">$60</span><span class="idr">Rp790.000</span></s>
+          <b id="pro-price">$29</b>
         </div>
-        <p class="sub" id="pro-sub"><span class="launch"><span class="usd">First year, then $60 a year</span><span class="idr">First year, then Rp790.000 a year</span></span><span class="regular">A year</span></p>
+        <p class="sub" id="pro-sub">One payment, yours to keep</p>
         <div class="seat-row">
-          <div class="seats" role="group" aria-label="Seats"><button type="button" id="seat-down" aria-label="Fewer seats">−</button><output id="seat-n" aria-live="polite">1 seat</output><button type="button" id="seat-up" aria-label="More seats">+</button></div>
-          <span class="note">One seat per person</span>
-          <p id="seat-max" hidden>Need more than 50 seats? Write to <a href="mailto:hello@meyalab.com">hello@meyalab.com</a>.</p>
-          <p class="vh" id="seat-summary" aria-live="polite"></p>
+          <span class="note">One person · No subscription</span>
         </div>
         <div class="cta">
           <div class="buy" data-hide-pro>
             <a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro">Get Pro</a>
-            <p class="reassure">Checkout by Polar · Cancel anytime</p>
+            <p class="reassure">Checkout by Polar · No renewals</p>
             <button type="button" class="login-link" id="login-link" data-acct-open hidden>Already have Pro? Log in</button>
           </div>
           <div id="have-pro" hidden><span>You have Pro.</span><a class="pill" href="./#stroke">Browse Pro icons</a></div>
@@ -374,12 +342,13 @@ __BANNER__
           <li>__ICON:shapes/check__<span>__ALL_COUNT__ icons in all</span></li>
           <li>__ICON:shapes/check__<span>Live strokes, any weight</span></li>
           <li>__ICON:shapes/check__<span>New icons as they ship</span></li>
+          <li>__ICON:shapes/check__<span>Pay once, keep it for good</span></li>
         </ul>
       </div>
 
       <div class="plan plan-free">
         <div class="plan-top"><span class="plan-name">__ICON:general/user__Free</span></div>
-        <div class="price"><b><span class="usd">$0</span><span class="idr">Rp0</span></b></div>
+        <div class="price"><b>$0</b></div>
         <p class="sub">Forever</p>
         <div class="seat-row"><span class="note">No account needed</span></div>
         <div class="cta">
@@ -441,7 +410,7 @@ __BANNER__
         <div class="cmp-row cmp-head" role="row">
           <div role="columnheader"><span class="vh">Feature</span></div>
           <div role="columnheader" class="cmp-plan"><b>Free</b><span>Free forever</span><a class="pill pill-white" href="./#icons">Browse icons</a></div>
-          <div role="columnheader" class="cmp-plan cmp-pro"><b>Pro</b><span><span class="launch"><span class="usd">$30</span><span class="idr">Rp395.000</span> first year</span><span class="regular">From <span class="usd">$60</span><span class="idr">Rp790.000</span> a year</span></span><a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro-cmp" data-hide-pro>Get Pro</a></div>
+          <div role="columnheader" class="cmp-plan cmp-pro"><b>Pro</b><span>$29 once</span><a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro-cmp" data-hide-pro>Get Pro</a></div>
         </div>
         <div class="cmp-row" role="row"><div role="rowheader">Styles</div><div role="cell" class="txt">Outline, Duotone</div><div role="cell" class="cmp-pro txt">All __STYLE_WORD__</div></div>
         <div class="cmp-row" role="row"><div role="rowheader">Icons<small>Cursors and flags in both</small></div><div role="cell" class="txt">__COUNT__</div><div role="cell" class="cmp-pro txt">__ALL_COUNT__</div></div>
@@ -449,7 +418,8 @@ __BANNER__
         <div class="cmp-row" role="row"><div role="rowheader">Copy as SVG or React from the site</div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
         <div class="cmp-row" role="row"><div role="rowheader">npm package and Figma plugin<small>They carry Outline and Duotone</small></div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
         <div class="cmp-row" role="row"><div role="rowheader">Personal and client work</div><div role="cell">__YES__</div><div role="cell" class="cmp-pro">__YES__</div></div>
-        <div class="cmp-row" role="row"><div role="rowheader">License</div><div role="cell" class="txt">MIT</div><div role="cell" class="cmp-pro txt">Pro, per seat</div></div>
+        <div class="cmp-row" role="row"><div role="rowheader">License</div><div role="cell" class="txt">MIT</div><div role="cell" class="cmp-pro txt">Pro, one person</div></div>
+        <div class="cmp-row" role="row"><div role="rowheader">Payment</div><div role="cell" class="txt">None</div><div role="cell" class="cmp-pro txt">Once, no subscription</div></div>
         <div class="cmp-row cmp-last" role="row"><div role="rowheader">New icons as they ship</div><div role="cell" class="txt">Free styles</div><div role="cell" class="cmp-pro txt">Every style</div></div>
       </div>
     </section>
@@ -457,11 +427,11 @@ __BANNER__
     <section aria-labelledby="steps-title">
       <h2 class="center" id="steps-title">From checkout to copy in three steps</h2>
       <ol class="steps">
-        <li><div class="top"><span class="num">1</span>__ICON:finance-ecommerce/credit-card__</div><b>Check out with Polar</b><p>Pay in Polar's secure checkout.<span class="launch"> The launch discount is already applied.</span></p></li>
+        <li><div class="top"><span class="num">1</span>__ICON:finance-ecommerce/credit-card__</div><b>Check out with Polar</b><p>Pay once in Polar's secure checkout. There's nothing to renew.</p></li>
         <li><div class="top"><span class="num">2</span>__ICON:communication/email__</div><b>Log in with an email code</b><p>Use the email you bought with. Polar emails you a 6-character code, or use your license key.</p></li>
         <li><div class="top"><span class="num">3</span>__ICON:development/code__</div><b>Copy any Pro icon</b><p>Open an icon in any Pro style and copy it as SVG or React, right on the site.</p></li>
       </ol>
-      <p class="team-line">Buying for a team? Each teammate accepts Polar's invitation email, then logs in with their own email.</p>
+      <p class="team-line">Buying for a team? Each person needs their own Pro. For one invoice, write to <a href="mailto:hello@meyalab.com">hello@meyalab.com</a>.</p>
     </section>
 
     <section id="faq" class="faq-grid" aria-labelledby="faq-title">
@@ -470,14 +440,11 @@ __BANNER__
         <p>Still deciding? Write to <a href="mailto:hello@meyalab.com">hello@meyalab.com</a>.</p>
       </div>
       <div class="faq">
-        <details><summary>What counts as a seat?__ICON:shapes/plus__</summary><p>One seat for each person who uses the Pro icons. Each teammate accepts Polar's invitation email, then logs in here with their own email.</p></details>
-        <details><summary>How is a team price worked out?__ICON:shapes/plus__</summary><p><span class="usd">Each seat has its own yearly rate: the first seat is $60, seats 2 to 5 are $22 each, and every seat from the 6th is $10. Three seats cost $60 + $22 + $22 = $104 a year.</span><span class="idr">Each seat has its own yearly rate: the first seat is Rp790.000, seats 2 to 5 are Rp290.000 each, and every seat from the 6th is Rp130.000. Three seats cost Rp790.000 + Rp290.000 + Rp290.000 = Rp1.370.000 a year.</span></p></details>
-        <details class="launch"><summary>How does the launch offer work?__ICON:shapes/plus__</summary><p>Every Get Pro button on this page applies the launch discount for you, so there's no code to type: __OFFER_PCT__% off your first year. From your second year, Pro renews at the regular price shown on the card.</p></details>
+        <details><summary>Is Pro a subscription?__ICON:shapes/plus__</summary><p>No. You pay $29 once and keep Pro for good: no yearly fee and nothing to cancel. New Pro icons are included as they ship.</p></details>
+        <details><summary>Who can use one Pro purchase?__ICON:shapes/plus__</summary><p>One person. Everyone who uses the Pro icons buys their own Pro and logs in with their own email. Buying for a team? Write to <a href="mailto:hello@meyalab.com">hello@meyalab.com</a> for one invoice.</p></details>
         <details><summary>How do I get the Pro icons after I buy?__ICON:shapes/plus__</summary><p>Log in on this site with the email you bought with. Polar, our payment provider, emails you a 6-character sign-in code, or you can use your license key. Then open any Pro icon and copy it as SVG or React.</p></details>
         <details><summary>Can I use the icons in client work?__ICON:shapes/plus__</summary><p>Yes. Pro icons can be used in personal and client work. Outline and Duotone are MIT licensed for personal and commercial work; credit is appreciated but not required.</p></details>
-        <details><summary>Can I cancel anytime?__ICON:shapes/plus__</summary><p>Yes. Cancel from the Polar customer portal linked in your receipt email. Pro stays active until the end of the year you paid for; after that it doesn't renew and copying Pro icons stops.</p></details>
         <details><summary>Are Pro icons in the npm package or the Figma plugin?__ICON:shapes/plus__</summary><p>No. The npm package and the <a href="https://www.figma.com/community/plugin/1685393903679180914" target="_blank" rel="noopener">free Figma plugin</a> carry Outline and Duotone. Pro icons are copied from this site as SVG or React.</p></details>
-        <details><summary><span class="usd">Why are prices in US dollars?</span><span class="idr">Why are prices in Rupiah?</span>__ICON:shapes/plus__</summary><p>Prices show in one currency, chosen by where you are: Rupiah in Indonesia, US dollars everywhere else.</p></details>
       </div>
     </section>
 
@@ -491,13 +458,13 @@ __BANNER__
           <span><span class="pv c" style="--u:url(pro/glass/ai/sparkle.webp)"></span></span>
           <span class="anim"><span class="pv" style="--u:url(pro/animated/alerts-feedback/notification.tile.webp)"></span><span class="g-still" style="--x:10;--y:1"></span></span>
         </div>
-        <h2>All __STYLE_WORD__ styles, one yearly price.</h2>
-        <p><span class="launch"><span class="usd">$30 for your first year, then $60 a year.</span><span class="idr">Rp395.000 for your first year, then Rp790.000 a year.</span></span><span class="regular"><span class="usd">$60 a year for one person.</span><span class="idr">Rp790.000 a year for one person.</span></span> Each extra seat costs less.</p>
+        <h2>All __STYLE_WORD__ styles, one payment.</h2>
+        <p>$29 once for one person. No subscription, and new Pro icons are included.</p>
         <div class="end-actions">
           <a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro-end" data-hide-pro>Get Pro</a>
           <a class="pill pill-white" href="./#icons">Browse free icons</a>
         </div>
-        <small>Secure checkout by Polar · Cancel anytime</small>
+        <small>Secure checkout by Polar · Pay once, no subscription</small>
       </div>
     </section>
   </div>
@@ -507,52 +474,15 @@ __ACCOUNT__
 __FOOTER__
 
 <div class="buybar" id="buybar" aria-hidden="true" inert>
-  <div><small>Meya Icons Pro</small><b id="bar-price"></b></div>
+  <div><small>Meya Icons Pro</small><b id="bar-price">$29 once</b></div>
   <a data-polar href="#" data-tip="Coming soon" class="pill soon" id="get-pro-bar">Get Pro</a>
 </div>
+__POLAR_EMBED__
 
 <script>
 (() => {
   const $ = (s) => document.querySelector(s);
-  const root = document.documentElement;
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  // ---------- Price ----------
-  // Pro is priced per seat, yearly and graduated: seat 1, seats 2–5 each, seat 6 onward each. During the launch the
-  // checkout links apply OFF % to the first year, so the card shows that charge, with the regular price struck.
-  const MAX = 50;
-  const RATES = { usd: [60, 22, 10], idr: [790000, 290000, 130000] };
-  const OFF = root.dataset.offer ? +"__OFFER_PCT__" : 0;
-  const cur = () => (root.dataset.cur === "idr" ? "idr" : "usd");
-  const total = (n) => { const [a, b, c] = RATES[cur()]; return a + b * Math.min(Math.max(n - 1, 0), 4) + c * Math.max(n - 5, 0); };
-  const first = (list) => (OFF ? (cur() === "idr" ? Math.round((list * (100 - OFF)) / 100) : Math.round(list * (100 - OFF)) / 100) : list);
-  const fmt = (x) => cur() === "idr"
-    ? "Rp" + Math.round(x).toLocaleString("id-ID")
-    : "$" + (Number.isInteger(x) ? x.toLocaleString("en-US") : x.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-  let seats = 1;
-  // The card shows the total for the chosen seats; how a team price is worked out is in the FAQ.
-  function show() {
-    const n = seats, list = total(n), now = first(list), per = OFF ? "first year" : "a year";
-    const who = n === 1 ? "" : `${n} seats · `;
-    $("#seat-n").textContent = n + (n === 1 ? " seat" : " seats");
-    $("#pro-was").textContent = fmt(list);
-    $("#pro-price").textContent = fmt(now);
-    $("#pro-sub").textContent = who + (OFF ? `${n === 1 ? "F" : "f"}irst year, then ${fmt(list)} a year` : `${n === 1 ? "A" : "a"} year`);
-    $("#seat-max").hidden = n < MAX;
-    $("#bar-price").textContent = who + `${fmt(now)} ${per}`;
-    $("#seat-summary").textContent = `${n} ${n === 1 ? "seat" : "seats"}. ` + (OFF ? `${fmt(now)} for the first year, then ${fmt(list)} a year.` : `${fmt(list)} a year.`);
-    $("#seat-down").disabled = n <= 1; $("#seat-up").disabled = n >= MAX;
-  }
-  $("#seat-down").addEventListener("click", () => { seats = Math.max(1, seats - 1); show(); });
-  $("#seat-up").addEventListener("click", () => { seats = Math.min(MAX, seats + 1); show(); });
-  show();
-  // the head script guessed the currency from the time zone; the visitor's country settles it
-  fetch("/api/geo").then((r) => (r.ok ? r.json() : null)).then((g) => {
-    if (!g || !g.country) return;
-    const c = g.country === "ID" ? "idr" : "usd";
-    try { sessionStorage.setItem("meya-cur", c); } catch {}
-    if (c !== cur()) { root.dataset.cur = c; show(); }
-  }, () => {});
 
   // ---------- Style gallery ----------
   // The same twelve icons in every style: inline SVG for the free styles, the site's Pro previews for the rest.

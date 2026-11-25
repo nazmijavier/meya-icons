@@ -182,7 +182,7 @@ It writes `dist/`, which is what gets published.
 
 The website is static pages in [`docs/`](./docs) plus a few functions in [`api/`](./api), hosted on Cloudflare Workers (see [`wrangler.jsonc`](./wrangler.jsonc) and [`worker.js`](./worker.js)). Workers static assets serve `docs/` and nothing else from the repository; requests to `/api/*` run the functions:
 
-- `api/geo` tells the pricing page the visitor's country, so it shows Rupiah in Indonesia and US dollars elsewhere.
+- `api/geo` returns the visitor's country. The pricing page no longer calls it: Pro is $29 paid once, shown in US dollars to everyone.
 - `api/auth/*` is the Pro login. Customers get a sign-in code from Polar by email (or use their Pro license key); the functions check with Polar that they hold the Meya Icons Pro benefit and keep a signed session cookie. Access is re-checked daily.
 - `api/pro` serves one Pro SVG at a time to signed-in customers, read from the private `meya-icons-pro` repository, so they can copy Pro icons from the site.
 - An access code opens Pro without a Polar purchase (the owner's own): it goes in the license-key field, on the site and in the Figma plugin. `PRO_ACCESS_CODES` in `wrangler.jsonc` lists the allowed codes as `label:hash` pairs, only their SHA-256 hashes, so the codes themselves are never in the repository (see `api/_lib/access.js`). `node scripts/access-code.mjs <label>` makes a new code and its pair; remove a pair and deploy to revoke a code, which ends its sessions on their next request.
