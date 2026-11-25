@@ -22,6 +22,17 @@ class Outage extends Error {
   constructor(what, status) { super(`${what} failed (${status})`); this.outage = !status || status >= 500; this.status = status; }
 }
 
+// Polar refused the organization token (expired, revoked or missing a scope): the site's fault, not the customer's.
+// Logins fall back to the customer-facing endpoints, and sessions keep their grace period, until it is replaced.
+const refused = (r) => r.status === 401 || r.status === 403;
+function tokenRefused(what, status) {
+  console.error(`POLAR_ACCESS_TOKEN refused by the ${what} (${status}): replace it (README.md, Deploy workflow)`);
+  const e = new Outage(what, status);
+  e.outage = true;
+  e.refused = true;
+  return e;
+}
+
 async function call(path, { token, method = "GET", body } = {}) {
   let r;
   try {
@@ -43,6 +54,7 @@ async function call(path, { token, method = "GET", body } = {}) {
 export async function proGrantedTo({ member_id, customer_id }) {
   const q = member_id ? `member_id=${encodeURIComponent(member_id)}` : `customer_id=${encodeURIComponent(customer_id)}`;
   const r = await call(`/v1/benefits/${encodeURIComponent(BENEFIT())}/grants?is_granted=true&limit=1&${q}`, { token: ORG_TOKEN() });
+  if (refused(r)) throw tokenRefused("Polar grants check", r.status);
   if (r.status !== 200 || !r.json) throw new Outage("Polar grants check", r.status);
   return (r.json.items || []).length > 0;
 }
@@ -53,10 +65,11 @@ export async function whoHoldsPro(token) {
   if (user.status === 401 || user.status === 403) return { error: "invalid" };
   if (user.status !== 200 || !user.json) throw new Outage("Polar user lookup", user.status);
   const who = { email: user.json.email, customer_id: user.json.customer_id, member_id: user.json.member_id || null };
-  let held;
+  let held = null;
   if (ORG_TOKEN()) {
-    held = await proGrantedTo(who);
-  } else {
+    try { held = await proGrantedTo(who); } catch (e) { if (!e.refused) throw e; }
+  }
+  if (held === null) {
     // without an organization token, ask with the customer's own token: lists only that member's grants of
     // benefits with public visibility (License Keys benefits are public by default)
     const g = await call(`/v1/customer-portal/benefit-grants/?benefit_id=${encodeURIComponent(BENEFIT())}&limit=10`, { token });
@@ -70,21 +83,24 @@ export async function whoHoldsPro(token) {
 export async function licenseHolder(key) {
   // With the organization token Polar counts these calls against the organization, not against the function's
   // shared IP, which Polar's public endpoint limits to 3 a second.
-  const r = ORG_TOKEN()
-    ? await call("/v1/license-keys/validate", { method: "POST", token: ORG_TOKEN(), body: { key, organization_id: ORG() } })
-    : await call("/v1/customer-portal/license-keys/validate", { method: "POST", body: { key, organization_id: ORG(), benefit_id: BENEFIT() } });
+  let r = ORG_TOKEN() ? await call("/v1/license-keys/validate", { method: "POST", token: ORG_TOKEN(), body: { key, organization_id: ORG() } }) : null;
+  if (r && refused(r)) { tokenRefused("Polar license check", r.status); r = null; }
+  const viaOrg = !!r;
+  if (!r) r = await call("/v1/customer-portal/license-keys/validate", { method: "POST", body: { key, organization_id: ORG(), benefit_id: BENEFIT() } });
   if (r.status === 404 || r.status === 422) return { error: "invalid" };
   if (r.status !== 200 || !r.json) throw new Outage("Polar license check", r.status);
   if (r.json.status !== "granted") return { error: "invalid" };
   // a seat holder's own email when the key belongs to a seat, else the buyer's
   const who = { email: r.json.member?.email || r.json.customer?.email || "", customer_id: r.json.customer_id, member_id: r.json.member_id || null, key_id: r.json.id, key_hash: keyHash(key) };
-  const pro = ORG_TOKEN() ? await proGrantedTo(who) : r.json.benefit_id === BENEFIT();
+  const byKey = r.json.benefit_id === BENEFIT();
+  const pro = viaOrg ? await proGrantedTo(who).catch((e) => { if (e.refused) return byKey; throw e; }) : byKey;
   return pro ? { who } : { error: "invalid" };
 }
 
 // Daily re-check for a session started with a license key: is that key still active and unrotated?
 export async function licenseKeyActive(id, hash) {
   const r = await call(`/v1/license-keys/${encodeURIComponent(id)}`, { token: ORG_TOKEN() });
+  if (refused(r)) throw tokenRefused("Polar license key check", r.status);
   if (r.status === 404) return false;
   if (r.status !== 200 || !r.json) throw new Outage("Polar license key check", r.status);
   const k = r.json;

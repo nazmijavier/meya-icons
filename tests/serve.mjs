@@ -39,6 +39,7 @@ const tokens = new Map(); // token -> email
 export const log = [];
 let revoked = false; // flips the daily re-check
 let keyDisabled = false;
+let orgTokenRefused = false; // Polar refuses the organization token (expired or revoked)
 const polar = http.createServer(async (req, res) => {
   const cors = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "content-type, authorization", "Access-Control-Allow-Methods": "GET, POST, OPTIONS" };
   if (req.method === "OPTIONS") { res.writeHead(204, cors); return res.end(); }
@@ -46,6 +47,7 @@ const polar = http.createServer(async (req, res) => {
   const body = raw ? JSON.parse(raw) : {};
   const url = new URL(req.url, "http://x"), p = url.pathname, auth = (req.headers.authorization || "").replace("Bearer ", "");
   log.push(`${req.method} ${p}${url.search}`);
+  const orgAuth = () => !orgTokenRefused && auth === process.env.POLAR_ACCESS_TOKEN;
   const send = (code, obj) => { res.writeHead(code, { ...cors, "Content-Type": "application/json" }); res.end(obj === undefined ? "" : JSON.stringify(obj)); };
   if (p === "/v1/customer-portal/customer-session/request") {
     if (body.organization_id !== ORG) return send(202);
@@ -73,16 +75,16 @@ const polar = http.createServer(async (req, res) => {
   }
   // organization endpoints for license keys (org token)
   if (p === "/v1/license-keys/validate") {
-    if (auth !== process.env.POLAR_ACCESS_TOKEN) return send(401, {});
+    if (!orgAuth()) return send(401, {});
     if (body.key === "MEYA-GOOD-KEY-1234" && body.organization_id === ORG) return send(200, { id: "lk1", status: keyDisabled ? "disabled" : "granted", customer_id: "c1", member_id: "m1", customer: { email: "boss@x.com" }, member: { email: "seat@x.com" }, benefit_id: BENEFIT, key: body.key });
     return send(404, { error: "not found" });
   }
   if (p === "/v1/license-keys/lk1") {
-    if (auth !== process.env.POLAR_ACCESS_TOKEN) return send(401, {});
+    if (!orgAuth()) return send(401, {});
     return send(200, { id: "lk1", status: keyDisabled ? "disabled" : "granted", key: "MEYA-GOOD-KEY-1234", expires_at: null });
   }
   if (p === `/v1/benefits/${BENEFIT}/grants`) {
-    if (auth !== process.env.POLAR_ACCESS_TOKEN) return send(401, {});
+    if (!orgAuth()) return send(401, {});
     const m = url.searchParams.get("member_id"), c = url.searchParams.get("customer_id");
     const person = Object.values(PEOPLE).find((x) => (m && x.member_id === m) || (!m && c && x.customer_id === c));
     return send(200, { items: revoked || !person || !person.pro ? [] : [{ id: "g1" }], pagination: {} });
@@ -167,3 +169,4 @@ export function start() {
 export function stop() { polar.close(); github.close(); if (dev) dev.kill(); else site.close(); }
 export function revoke(v) { revoked = v; }
 export function disableKey(v) { keyDisabled = v; }
+export function refuseOrgToken(v) { orgTokenRefused = v; }
