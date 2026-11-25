@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
-import { start, stop, log, revoke, disableKey, missing, ACCESS_CODE, MODE, REPO, PRO } from "./serve.mjs";
+import { start, stop, log, revoke, disableKey, refuseOrgToken, missing, ACCESS_CODE, MODE, REPO, PRO } from "./serve.mjs";
 
 // Playwright from this folder's node_modules, or from PWDIR (a folder that has it); CHROMIUM_PATH for a browser of
 // your own. Usage: node tests/login.test.mjs <screenshot folder>   (SITE=workerd: under wrangler dev, see serve.mjs)
@@ -280,6 +280,24 @@ if (MODE === "node") {
   ok(res.status === 401 && /Max-Age=0/.test(res.headers.get("set-cookie") || ""), "access code taken off the list → its sessions end");
   process.env.PRO_ACCESS_CODES = keep;
 }
+
+// 15c. Polar refuses the organization token (expired or revoked): logins use the customer-facing endpoints, and
+// sessions keep their grace period, until the token is replaced
+refuseOrgToken(true);
+res = await fetch("http://localhost:4100/api/auth/license", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ key: "MEYA-GOOD-KEY-1234" }) });
+ok(res.status === 200 && (await res.json()).email === "pro@x.com", `token refused: a license key still signs in (${res.status})`);
+res = await fetch("http://localhost:4100/api/auth/license", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ key: "MEYA-BAD-KEY-0000" }) });
+ok(res.status === 401, `token refused: a wrong key is still refused (${res.status})`);
+await fetch("http://localhost:4200/v1/customer-portal/customer-session/request", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: "pro@x.com", organization_id: "11111111-1111-4111-8111-111111111111" }) });
+const portal = await (await fetch("http://localhost:4200/v1/customer-portal/customer-session/authenticate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code: "ABC123" }) })).json();
+res = await fetch("http://localhost:4100/api/auth/session", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ token: portal.token }) });
+ok(res.status === 200, `token refused: the email code still signs in (${res.status})`);
+// a member no earlier re-check has a verdict for
+const data5 = Buffer.from(JSON.stringify({ e: "grace@x.com", c: "c5", m: "m5", chk: old2, exp: old2 + 30 * 86400 })).toString("base64url");
+const mac5 = crypto.createHmac("sha256", process.env.SESSION_SECRET).update(data5).digest("base64url");
+res = await fetch("http://localhost:4100/api/pro?style=sharp&icon=general/home", { headers: { cookie: `__Host-meya_pro=${data5}.${mac5}` } });
+ok(res.status === 200, `token refused: a session due for its re-check keeps its grace period (${res.status})`);
+refuseOrgToken(false);
 
 // 16. the host: functions, unknown paths, and (on Cloudflare) clean URLs; GitHub gets a User-Agent
 res = await fetch("http://localhost:4100/api/auth/logout");
