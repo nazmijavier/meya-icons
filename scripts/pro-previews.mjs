@@ -71,6 +71,12 @@ for (const st of STYLES.filter((s) => s.showcase && (!only.length || only.includ
   let icons = previewIcons(st.id);
   if (!icons.length) { console.log(`${st.label}: no icons in ${path.join(PRO_DIR, st.id)}, skipped`); continue; }
   const had = ADD && manifest[st.id] ? manifest[st.id].icons : null;
+  // An icon keeps the cell it has: the published Figma plugin holds the cell numbers and loads the sprite from the
+  // site, so moving a cell would show it the wrong icon. New icons go after the known ones.
+  if (!had && manifest[st.id]) {
+    const at = new Map(manifest[st.id].icons.map(([k], n) => [k, n]));
+    icons = icons.map((i, n) => [at.has(i.k) ? at.get(i.k) : at.size + n, i]).sort((x, y) => x[0] - y[0]).map(([, i]) => i);
+  }
   if (had) {
     const known = new Set(had.map(([k]) => k));
     icons = icons.filter((i) => !known.has(i.k));
